@@ -5,15 +5,17 @@ var methodOverride = require('method-override');
 
 const app = express()
 
+
+// allow overriding methods in query (?_method=put)
+//app.use(methodOverride('X-HTTP-Method-Override'))
+app.use(methodOverride('_method'));
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
 
-// allow overriding methods in query (?_method=put)
-app.use(methodOverride('X-HTTP-Method-Override'))
-app.use(methodOverride('_method'));
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -25,5 +27,7 @@ app.listen(process.env.PORT, () => {
 
 //Routes 
 const authRoutes=require("./routes/auth");
+const userRoutes=require("./routes/user");
 
 app.use("/auth",authRoutes);
+app.use("/user",userRoutes);
