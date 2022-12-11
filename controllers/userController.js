@@ -1,10 +1,26 @@
 const express = require("express");
+const { getPaginate } = require("../lib/helpers");
+const User = require("../models/User.model");
 const userController = class {
-  index(req, res) {
-    res.send(req.query);
+  async index(req, res) {
+    await User
+      .findAndCountAll()
+      .then((result) => {
+        res.send(getPaginate(result));
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+      });
   }
-  store(req, res) {
-    res.send(req.body);
+  async store(req, res) {
+    await User
+      .create(req.body)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+      });
   }
   show(req, res) {
     res.send(req.params.id);
