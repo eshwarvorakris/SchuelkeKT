@@ -4,9 +4,9 @@ const User = require("../models/User.model");
 const userController = class {
   async index(req, res) {
     await User
-      .findAndCountAll()
+      .findAndCountAll({offset:req.query.page,limit:2})
       .then((result) => {
-        res.send(getPaginate(result));
+        res.send(getPaginate(result,req.query.page ?? 1,2));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -22,14 +22,18 @@ const userController = class {
         console.error("Failed to retrieve data : ", error);
       });
   }
-  show(req, res) {
-    res.send(req.params.id);
+  async show(req, res) {
+    const user=await User.findByPk(req.params.id);
+    res.send({data:user});
   }
   update(req, res) {
     res.send(req.body);
   }
-  destroy(req, res) {
-    res.send(req.body);
+  async destroy(req, res) {
+   const user= await User.destroy({where:{id:req.body.id}}).then((result)=>{
+    return {message:"user Deteletd"};
+   });
+    res.send(user);
   }
 };
 
