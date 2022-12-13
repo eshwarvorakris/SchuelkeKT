@@ -6,6 +6,12 @@ import Navbar from "./components/navbar";
 import Router from "next/router";
 import thumbnaila from "../../public/trainer-images/dashboard images/thumbnails/thumbnaila.png"
 const editcourse = () => {
+  const [proName, setProName] = useState("");
+    const { data, error, isLoading } = useSWR('/', async () => await auth.profile());
+    if (error) {
+        console.log(error);
+        Router.replace("login");
+    }
   return (
     <>
       <div>

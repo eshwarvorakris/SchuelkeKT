@@ -6,6 +6,12 @@ import Router from "next/router";
 import Navbar from "./components/navbar";
 
 const mycourse = () => {
+  const [proName, setProName] = useState("");
+    const { data, error, isLoading } = useSWR('/', async () => await auth.profile());
+    if (error) {
+        console.log(error);
+        Router.replace("login");
+    }
   return (
     <>
       <div>
