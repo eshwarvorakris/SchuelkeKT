@@ -4,6 +4,7 @@ import Sidebar from "./components/sidebar";
 import Navbar from "./components/navbar";
 import { useRouter } from "next/router";
 import auth from "../../model/auth.model";
+import Router from "next/router";
 import Cookies from 'js-cookie';
 import thumbnaila from "../../public/trainer-images/dashboard images/thumbnails/thumbnaila.png"
 function Index() {
