@@ -17,6 +17,24 @@ function Index() {
       console.log(error);
       Router.replace("login");
   }
+
+  useEffect(() => {
+    let curCookie = Cookies.get('loggedInUser');
+    if (curCookie !== undefined) {
+      Cookies.set('loggedInUser', curCookie, { expires: 1 / 1440 });
+    }
+    else
+    {
+      router.push('/login');
+    }
+    setInterval(() => {
+      let curCookie = Cookies.get('loggedInUser');
+      //console.log(curCookie);
+      if (curCookie === undefined) {
+        router.push('login');
+      }
+    }, 5000);
+  }, []);
   
   return (
     <>
