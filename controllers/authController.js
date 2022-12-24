@@ -23,12 +23,11 @@ exports.login = function (req, res) {
   };
   const validation = validator.make(req.body, rules);
   if (validation.fails()) {
-    res.send(
+   return res.status(422).send(
       {
         message: _.chain(validation.getErrors()).flatMap().head(),
         errors: validation.getErrors(),
-      },
-      422
+      }
     );
   }
   var access_token = auth.generateToken(req.body);
@@ -38,13 +37,11 @@ exports.login = function (req, res) {
 exports.registration = function (req, res) {
   const data = req.body;
   const rules = {
-    first_name: "required",
-    last_name: "required",
+    name: "required",
     email: "required|email",
     mobile: "required",
-    // password: 'required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$|confirmed|',
     password:
-      "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed|",
+      "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
   };
   const validation = validator.make(req.body, rules, {
     "password.regex":
@@ -52,15 +49,14 @@ exports.registration = function (req, res) {
   });
   validation.extend(
     "unique",customValidation.unique,
-    ":attr already exisitdd"
+    ":attr already existed"
   );
   if (validation.fails()) {
-    res.send(
+    res.status(422).send(
       {
         message: _.chain(validation.getErrors()).flatMap().head(),
         errors: validation.getErrors(),
-      },
-      422
+      }
     );
   }
   req.body.password = bcrypt.hashSync(req.body.password, salt);

@@ -1,9 +1,9 @@
 const express = require("express");
 const { getPaginate } = require("../lib/helpers");
-const User = require("../models/User.model");
-const userController = class {
+const Course = require("../models/Course.model");
+const courseController = class {
   async index(req, res) {
-    await User
+    await Course
       .findAndCountAll({offset:req.query.page,limit:2})
       .then((result) => {
         res.send(getPaginate(result,req.query.page ?? 1,2));
@@ -13,7 +13,7 @@ const userController = class {
       });
   }
   async store(req, res) {
-    await User
+    await Course
       .create(req.body)
       .then((result) => {
         res.send(result);
@@ -23,18 +23,18 @@ const userController = class {
       });
   }
   async show(req, res) {
-    const user=await User.findByPk(req.params.id);
-    res.send({data:user});
+    const course=await Course.findByPk(req.params.id);
+    res.send({data:Course});
   }
   update(req, res) {
     res.send(req.body);
   }
   async destroy(req, res) {
-   const user= await User.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"user Deleted"};
+   const course= await Course.destroy({where:{id:req.body.id}}).then((result)=>{
+    return {message:"Course Deleted"};
    });
-    res.send(user);
+    res.send(Course);
   }
 };
 
-module.exports = new userController();
+module.exports = new courseController();

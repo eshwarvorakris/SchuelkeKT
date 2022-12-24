@@ -1,9 +1,9 @@
 const express = require("express");
 const { getPaginate } = require("../lib/helpers");
-const User = require("../models/User.model");
-const userController = class {
+const QuestionOption = require("../models/Question_option.model");
+const questionOptionController = class {
   async index(req, res) {
-    await User
+    await QuestionOption
       .findAndCountAll({offset:req.query.page,limit:2})
       .then((result) => {
         res.send(getPaginate(result,req.query.page ?? 1,2));
@@ -13,7 +13,7 @@ const userController = class {
       });
   }
   async store(req, res) {
-    await User
+    await QuestionOption
       .create(req.body)
       .then((result) => {
         res.send(result);
@@ -23,18 +23,18 @@ const userController = class {
       });
   }
   async show(req, res) {
-    const user=await User.findByPk(req.params.id);
-    res.send({data:user});
+    const questionOption=await QuestionOption.findByPk(req.params.id);
+    res.send({data:questionOption});
   }
   update(req, res) {
     res.send(req.body);
   }
   async destroy(req, res) {
-   const user= await User.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"user Deleted"};
+   const questionOption= await QuestionOption.destroy({where:{id:req.body.id}}).then((result)=>{
+    return {message:"Question Option Deleted"};
    });
-    res.send(user);
+    res.send(questionOption);
   }
 };
 
-module.exports = new userController();
+module.exports = new questionOptionController();

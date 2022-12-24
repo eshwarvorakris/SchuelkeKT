@@ -1,19 +1,19 @@
 const express = require("express");
 const { getPaginate } = require("../lib/helpers");
-const User = require("../models/User.model");
-const userController = class {
+const Question = require("../models/Question.model");
+const questionController = class {
   async index(req, res) {
-    await User
-      .findAndCountAll({offset:req.query.page,limit:2})
+    await Question
+      .findAndCountAll({ offset: req.query.page, limit: 2 })
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,2));
+        res.send(getPaginate(result, req.query.page ?? 1, 2));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
       });
   }
   async store(req, res) {
-    await User
+    await Question
       .create(req.body)
       .then((result) => {
         res.send(result);
@@ -23,18 +23,18 @@ const userController = class {
       });
   }
   async show(req, res) {
-    const user=await User.findByPk(req.params.id);
-    res.send({data:user});
+    const question = await Question.findByPk(req.params.id);
+    res.send({ data: question });
   }
   update(req, res) {
     res.send(req.body);
   }
   async destroy(req, res) {
-   const user= await User.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"user Deleted"};
-   });
-    res.send(user);
+    const question = await Question.destroy({ where: { id: req.body.id } }).then((result) => {
+      return { message: "Question Deleted" };
+    });
+    res.send(Question);
   }
 };
 
-module.exports = new userController();
+module.exports = new questionController();

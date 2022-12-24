@@ -31,8 +31,11 @@ app.listen(process.env.PORT, () => {
 })
 
 //Routes 
-const authRoutes=require("./routes/auth");
-const userRoutes=require("./routes/user");
-
-app.use("/auth",authRoutes);
-app.use("/user",userRoutes);
+app.use("/auth",require("./routes/auth"));
+app.use("/user",require("./routes/user"));
+app.use("/category",require("./routes/category"));
+app.use("/course",require("./routes/course"));
+app.use("/module",require("./routes/module"));
+app.use("/content",require("./routes/content"));
+app.use("/question",require("./routes/question"));
+app.use("/assignment",require("./routes/assignment"));

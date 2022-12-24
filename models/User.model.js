@@ -1,36 +1,42 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
-const sequelize =require("../lib/dbConnection");
-class User extends Model {}
+const sequelize = require("../lib/dbConnection");
+class User extends Model { }
 
 User.init({
   // Model attributes are defined here
-  first_name: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  last_name: {
-    type: DataTypes.STRING
-    // allowNull defaults to true
   },
   email: {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true,
-    // allowNull defaults to true
   },
   mobile: {
-    type: DataTypes.CHAR
-    // allowNull defaults to true
+    type: DataTypes.CHAR,
+    allowNull: false,
+    unique: true
+  },
+  role: {
+    type: DataTypes.CHAR,
+    defaultValue: "trainee",
+  },
+  education: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  country: {
+    type: DataTypes.CHAR,
+    allowNull: false,
+  },
+  status: {
+    type: DataTypes.CHAR,
+    defaultValue: "active",
   },
   password: {
     type: DataTypes.STRING
-    // allowNull defaults to true
   },
-  deletedAt: {
-    type: DataTypes.DATE,
-    allowNull:true
-    // allowNull defaults to true
-  }
 }, {
   // Other model options go here
   sequelize, // We need to pass the connection instance
@@ -38,9 +44,10 @@ User.init({
   defaultScope: {
     attributes: { exclude: ['password'] },
   },
-  updatedAt:"updated_at",
-  createdAt:"created_at",
-  //deletedAt:"deleted_at",
+  updatedAt: "updated_at",
+  createdAt: "created_at",
+  deletedAt: "deleted_at",
+  paranoid: true
 });
 sequelize.sync();
-module.exports=User;
+module.exports = User;
