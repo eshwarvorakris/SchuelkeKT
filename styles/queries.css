@@ -1,0 +1,209 @@
+/* section-1 */
+
+@media only screen and (max-width: 1200px) {
+  .header h1 {
+    line-height: 5rem;
+  }
+}
+
+@media only screen and (max-width: 1006px) {
+  .header h1 {
+    font-size: 45px;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .header h1 {
+    font-size: 40px;
+  }
+
+  .header span {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (max-width: 805px) {
+  .header h1 {
+    font-size: 41px;
+    line-height: 2rem;
+  }
+
+  .header span {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 705px) {
+  .header h1 {
+    font-size: 30px;
+    line-height: 2rem;
+  }
+
+  .header span {
+    font-size: 0.9rem;
+  }
+}
+
+@media only screen and (max-width: 805px) {
+  .header h1 {
+    font-size: 40px;
+    line-height: 50px;
+  }
+}
+
+/* menu bars */
+
+@media only screen and (max-width: 991px) {
+  .menu-bars {
+    display: inline;
+    border: 2px solid #006ea9;
+    background-color: aliceblue;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 10px;
+  }
+
+  .scroll-unlock {
+    position: absolute;
+  }
+}
+
+@media only screen and (max-width: 705px) {
+  .menu-bars {
+    right: 3rem;
+  }
+}
+
+@media only screen and (max-width: 705px) {
+  .menu-bars {
+    right: 1rem;
+  }
+}
+
+/* ////////////////////////////////////////////////// */
+
+/* section-2 */
+
+
+@media only screen and (max-width: 1200px) {
+
+  .story-illustration-img,
+  .story-illustration-img-2 {
+    width: 25rem;
+    height: 25rem;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+
+  .story-illustration-img,
+  .story-illustration-img-2 {
+    width: 20rem;
+    height: 20rem;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+
+  .section2,
+  .main-heading h1 {
+    text-align: center;
+  }
+
+  .col-right {
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .story-header {
+    justify-content: center;
+  }
+
+  .info-1 {
+    margin-bottom: 4rem;
+  }
+
+  .info-2 {
+    order: 1;
+  }
+
+  .picture-2 {
+    order: 2;
+  }
+
+  .section2 ul li p {
+    padding-left: 0%;
+  }
+}
+
+/* ////////////////////////////////////////////////// */
+
+/* section-3 */
+
+@media only screen and (max-width: 767px) {
+  .training-topics-cards {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .training-topics-cards {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .training-card {
+    margin-top: 4rem;
+  }
+}
+
+@media only screen and (max-width: 438px) {
+  .training-topics p {
+    font-size: 12px;
+  }
+}
+
+/* ////////////////////////////////////////////////// */
+
+/* section-4 */
+
+@media only screen and (max-width: 767px) {
+  .training-thumbnail {
+    height: 20rem;
+    width: 30rem;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .training-thumbnail {
+    height: 15rem;
+    width: 20rem;
+  }
+}
+
+/* ////////////////////////////////////////////////// */
+
+/* footer */
+
+@media only screen and (max-width: 991px) {
+  .brand-footer-logo {
+    height: 1.5rem;
+    width: 9.5rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .brand-footer-logo {
+    align-self: center;
+  }
+
+  .footer-brand-info {
+    align-self: center;
+  }
+
+  footer .social-logos {
+    justify-content: center;
+  }
+}
