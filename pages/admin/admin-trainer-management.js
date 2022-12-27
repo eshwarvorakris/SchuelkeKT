@@ -61,7 +61,10 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>1</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                          </svg>                          
                           <span>348334</span>
                         </td>
                         <td>Thomas</td>
@@ -76,8 +79,11 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>2</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
-                          <span>348335</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                            </svg>                          
+                            <span>348335</span>
                         </td>
                         <td>Pearleen</td>
                         <td>sameple@gmail.com</td>
@@ -91,7 +97,10 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>3</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                          </svg>                          
                           <span>348336</span>
                         </td>
                         <td>Thomas</td>
@@ -106,7 +115,10 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>4</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                          </svg>                          
                           <span>348337</span>
                         </td>
                         <td>Pearleen</td>
@@ -121,8 +133,11 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>5</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
-                          <span>348338</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                          </svg>                         
+                           <span>348338</span>
                         </td>
                         <td>Thomas</td>
                         <td>sameple@gmail.com</td>
@@ -136,8 +151,11 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>6</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
-                          <span>348339</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                          </svg>                         
+                           <span>348339</span>
                         </td>
                         <td>Pearleen</td>
                         <td>sameple@gmail.com</td>
@@ -151,8 +169,11 @@ const admintrainermanagement = () => {
                       <tr>
                         <td>7</td>
                         <td class="d-flex gap-2 profile-icon">
-                          <ion-icon class="person-icon" name="person-circle-outline"></ion-icon>
-                          <span>348340</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="lightgrey" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                          </svg>
+                            <span>348340</span>
                         </td>
                         <td>Pearleen</td>
                         <td>sameple@gmail.com</td>

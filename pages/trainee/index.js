@@ -106,7 +106,7 @@ const index = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div class="card-body">
-                                                                    <div class="card-topic-heading">
+                                                                    <div class="card-topic-heading cardspan">
                                                                         Gastroestrology
                                                                     </div>
                                                                     <div class="card-topic-info d-flex justify-content-between">
@@ -116,7 +116,7 @@ const index = () => {
                                                                                     alt="icon"/>
                                                                             </div>
                                                                             <div class="chapter-info">
-                                                                                <span>54 Chapters</span>
+                                                                                <span className="cardspan">54 Chapters</span>
                                                                             </div>
                                                                         </div>
                                                                         <div class="card-time-info d-flex gap-1">

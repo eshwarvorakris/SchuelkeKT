@@ -453,17 +453,17 @@ h6 {
     font-weight: 600;
 }
 
-.trainee-list {
+.trainee-admincoursemanagement {
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
         rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
-.box-1 {
-    box-shadow: rgb(0 0 0 / 2%) 0px 0px 3px 0px,
+.box-1-admincoursemanagement {
+    box-shadow: rgb(0 0 0 / 0.02) 0px 0px 3px 0px,
 table        rgb(27 31 35 / 15%) -1px -1px 0px 0px;
 }
 
-.box-2 {
+.box-2-admincoursemanagement {
     box-shadow: rgb(0 0 0 / 2%) 0px 0px 3px 0px,
         rgb(27 31 35 / 15%) 0px -2px 0px -1px;
 }
@@ -530,7 +530,7 @@ select {
     border: 1px solid rgba(0, 0, 0, 0.192);
     border-radius: 5px;
     outline: none;
-    -webkit-appearance: none;
+  
     background-color: #fff;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
@@ -577,7 +577,7 @@ select {
 
 .wrapper-class,
 .wrapper-class-header {
-    padding: 1rem 2rem 1rem 2rem;
+    padding: -1rem 2rem 1rem 2rem;
     font-size: 12px;
     text-align: left;
     justify-content: center;
@@ -591,7 +591,7 @@ select {
     background-color: #e2e2e2;
 }
 
-.table-data {
+.table-dataa {
     padding: 2rem 1rem 2rem 2rem;
 }
 
