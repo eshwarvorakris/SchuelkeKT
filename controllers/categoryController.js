@@ -1,4 +1,3 @@
-const express = require("express");
 const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
@@ -6,7 +5,7 @@ const Category = require("../models/Category.model");
 const categoryController = class {
   async index(req, res) {
     await Category
-      .findAndCountAll({include:['courses'], offset: req.query.page, limit: 2 })
+      .findAndCountAll({ offset: req.query.page, limit: 2 })
       .then((result) => {
         res.send(getPaginate(result, req.query.page ?? 1, 2));
       })

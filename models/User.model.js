@@ -24,11 +24,11 @@ User.init({
   },
   education: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   country: {
     type: DataTypes.CHAR,
-    allowNull: false,
+    allowNull: true,
   },
   status: {
     type: DataTypes.CHAR,

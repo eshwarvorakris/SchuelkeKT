@@ -1,6 +1,6 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
-const Course = require("./Course.model");
+//const Course = require("./Course.model");
 class Category extends Model { }
 
 Category.init({
@@ -27,6 +27,6 @@ Category.init({
   underscored:true
 });
 
-Category.hasMany(Course,{foreignKey:"category_id",as:"courses"});
+//Category.hasMany(Course,{foreignKey:"category_id",as:"courses"});
 sequelize.sync();
 module.exports = Category;

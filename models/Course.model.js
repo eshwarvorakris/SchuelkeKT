@@ -18,7 +18,7 @@ Course.init({
   },
   category_id: {
     type: DataTypes.INTEGER,
-    references:{model:"categories",key:"id"}
+    references: { model: "categories", key: "id" }
   },
   total_modules: {
     type: DataTypes.INTEGER
@@ -34,7 +34,7 @@ Course.init({
   },
   trainer_id: {
     type: DataTypes.INTEGER,
-    references:{model:"users",key:"id"}
+    references: { model: "users", key: "id" }
   },
   status: {
     type: DataTypes.CHAR,
@@ -48,11 +48,13 @@ Course.init({
   createdAt: "created_at",
   deletedAt: "deleted_at",
   paranoid: true,
-  underscored:true
-});
+  underscored: true,
+  //trainer: Course.belongsTo(User, { foreignKey: "trainer_id", as: "trainer" }),
+  //category: Course.belongsTo(Category, { foreignKey: "category_id", as: "category" })
+}
+);
+Course.belongsTo(User, { foreignKey: "trainer_id", as: "trainer" });
+ Course.belongsTo(Category, { foreignKey: "category_id", as: "category" });
 sequelize.sync();
-
-Course.belongsTo(Category,{foreignKey:"category_id",as:"category"});
-Course.belongsTo(User,{foreignKey:"trainer_id",as:"trainer"});
 
 module.exports = Course;

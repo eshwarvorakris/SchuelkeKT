@@ -6,7 +6,7 @@ const Course = require("../models/Course.model");
 const courseController = class {
   async index(req, res) {
     await Course
-      .findAndCountAll({include:["category","trainer"], offset: req.query.page, limit: 2 })
+      .findAndCountAll({include:["category","trainer"], offset: req.query.page, limit: 2,where:req.query })
       .then((result) => {
         res.send(getPaginate(result, req.query.page ?? 1, 2));
       })
@@ -39,17 +39,35 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course = await Course.findByPk(req.params.id);
-    res.send({ data: Course });
+    const course=await Course.findByPk(req.params.id);
+    if(course)
+    {
+    return res.send({data:course});
+    }
+    return res.status(422).send(
+      {
+        message:"Course not Found" ,
+      }
+    );
   }
-  update(req, res) {
-    res.send(req.body);
+  async update(req, res) {
+    const course=await Course.findByPk(req.params.id);
+    if(course)
+    {
+      course.update(req.body);
+    return  res.send({data:course});
+    }
+    return res.status(422).send(
+      {
+        message:"Course not update" ,
+      }
+    );
   }
   async destroy(req, res) {
-    const course = await Course.destroy({ where: { id: req.body.id } }).then((result) => {
+    const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
       return { message: "Course Deleted" };
     });
-    res.send(Course);
+    res.send(course);
   }
 };
 

@@ -7,6 +7,6 @@ router.get("/", courceController.index);
 router.get("/:id", courceController.show);
 router.post("/", courceController.store);
 router.put("/:id", courceController.update);
-router.delete("/", courceController.destroy);
+router.delete("/:id", courceController.destroy);
 
 module.exports = router;

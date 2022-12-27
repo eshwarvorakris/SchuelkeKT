@@ -4,9 +4,9 @@ const User = require("../models/User.model");
 const userController = class {
   async index(req, res) {
     await User
-      .findAndCountAll({offset:req.query.page,limit:2})
+      .findAndCountAll({offset:req.query.page,limit:15})
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,2));
+        res.send(getPaginate(result,req.query.page ?? 1,15));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);

@@ -1,19 +1,34 @@
-const express = require("express");
+const validator = require("Validator");
+const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
-const Course = require("../models/Course.model");
-const courseController = class {
+const Content = require("../models/Module_content.model");
+const contentController = class {
   async index(req, res) {
-    await Course
-      .findAndCountAll({offset:req.query.page,limit:2})
+    await Content
+      .findAndCountAll({offset:req.query.page,limit:15})
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,2));
+        res.send(getPaginate(result,req.query.page ?? 1,15));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
       });
   }
   async store(req, res) {
-    await Course
+    const data = req.body;
+    const rules = {
+      name: "required",
+     // description: "required"
+    };
+    const validation = validator.make(data, rules);
+    if (validation.fails()) {
+      return res.status(422).send(
+        {
+          message: _.chain(validation.getErrors()).flatMap().head(),
+          errors: validation.getErrors(),
+        }
+      );
+    }
+    await Content
       .create(req.body)
       .then((result) => {
         res.send(result);
@@ -23,18 +38,18 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course=await Course.findByPk(req.params.id);
-    res.send({data:Course});
+    const content=await Content.findByPk(req.params.id);
+    res.send({data:content});
   }
   update(req, res) {
     res.send(req.body);
   }
   async destroy(req, res) {
-   const course= await Course.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"Course Deleted"};
+   const content= await Content.destroy({where:{id:req.body.id}}).then((result)=>{
+    return {message:"Content Deleted"};
    });
-    res.send(Course);
+    res.send(content);
   }
 };
 
-module.exports = new courseController();
+module.exports = new contentController();

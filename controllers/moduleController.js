@@ -1,19 +1,34 @@
-const express = require("express");
+const validator = require("Validator");
+const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
-const Course = require("../models/Course.model");
-const courseController = class {
+const Module = require("../models/Module.model");
+const moduleController = class {
   async index(req, res) {
-    await Course
-      .findAndCountAll({offset:req.query.page,limit:2})
+    await Module
+      .findAndCountAll({include:['course'], offset:req.query.page,limit:15,where:req.query})
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,2));
+        res.send(getPaginate(result,req.query.page ?? 1,15));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
       });
   }
   async store(req, res) {
-    await Course
+    const data = req.body;
+    const rules = {
+      name: "required",
+      //description: "required"
+    };
+    const validation = validator.make(data, rules);
+    if (validation.fails()) {
+      return res.status(422).send(
+        {
+          message: _.chain(validation.getErrors()).flatMap().head(),
+          errors: validation.getErrors(),
+        }
+      );
+    }
+    await Module
       .create(req.body)
       .then((result) => {
         res.send(result);
@@ -23,18 +38,36 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course=await Course.findByPk(req.params.id);
-    res.send({data:Course});
+    const module=await Module.findByPk(req.params.id);
+    if(module)
+    {
+    return res.send({data:module});
+    }
+    return res.status(422).send(
+      {
+        message:"Module not Found" ,
+      }
+    );
   }
-  update(req, res) {
-    res.send(req.body);
+  async update(req, res) {
+    const module=await Module.findByPk(req.params.id);
+    if(module)
+    {
+      module.update(req.body);
+    return  res.send({data:module});
+    }
+    return res.status(422).send(
+      {
+        message:"Module not update" ,
+      }
+    );
   }
   async destroy(req, res) {
-   const course= await Course.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"Course Deleted"};
+   const module= await Module.destroy({where:{id:req.params.id}}).then((result)=>{
+    return {message:"Module Deleted"};
    });
-    res.send(Course);
+    res.send(Module);
   }
 };
 
-module.exports = new courseController();
+module.exports = new moduleController();

@@ -7,6 +7,6 @@ router.get("/", moduleContentController.index);
 router.get("/:id", moduleContentController.show);
 router.post("/", moduleContentController.store);
 router.put("/:id", moduleContentController.update);
-router.delete("/", moduleContentController.destroy);
+router.delete("/:id", moduleContentController.destroy);
 
 module.exports = router;

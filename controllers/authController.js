@@ -38,8 +38,8 @@ exports.registration = function (req, res) {
   const data = req.body;
   const rules = {
     name: "required",
-    email: "required|email",
-    mobile: "required",
+    email: "required|email|unique:users,email",
+    mobile: "required|unique:users,mobile",
     password:
       "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
   };
@@ -52,7 +52,7 @@ exports.registration = function (req, res) {
     ":attr already existed"
   );
   if (validation.fails()) {
-    res.status(422).send(
+   return res.status(422).send(
       {
         message: _.chain(validation.getErrors()).flatMap().head(),
         errors: validation.getErrors(),

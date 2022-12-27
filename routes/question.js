@@ -7,6 +7,6 @@ router.get("/", questionController.index);
 router.get("/:id", questionController.show);
 router.post("/", questionController.store);
 router.put("/:id", questionController.update);
-router.delete("/", questionController.destroy);
+router.delete("/:id", questionController.destroy);
 
 module.exports = router;
