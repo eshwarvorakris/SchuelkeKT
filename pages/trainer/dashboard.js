@@ -85,10 +85,10 @@ function Index() {
                   <option value="Product">Product</option>
                 </select>
               </div>
-              <div class="create-course-btn">
+              <div class="create-course-btnn">
                 <div class="create-course">
                   <a href="./addcourse">
-                    <button class="btn btn-primary create-course-btn"
+                    <button class="btn btn-primary create-course-btnn"
                       style={{ backgroundColor: "#008bd6" }}>Create
                       Course <strong>+</strong></button>
                   </a>

@@ -10,7 +10,7 @@ function navbar() {
       <div className="container">
         <a className="navbar-brand d-flex flex-column fs-2 fw-bold text-light" href="#" style={{width: 'max-content'}}>
           <img src="site_img/Schuelke_Logo 1-min.png" alt="shulke brand logo picture" style={{width:'fit-content'}} />
-          <span className="brand-info">Knowledge Transfer</span>
+          <span className="brand-info-header">Knowledge Transfer</span>
         </a>
 
         <Navbar.Toggle aria-controls="navbarNavAltMarkup" />

@@ -310,18 +310,25 @@ button {
   border-radius: 0px;
 }
 
-.big-logo {
+.big-logoindex {
   position: absolute;
   bottom: 23%;
   left: 5%;
 }
-
+.brand-info-header{
+  text-align: left;
+  font-size: 10px;
+  font-family: myriad-regular;
+  margin-left: -25px;
+}
 .medium-logo {
   position: absolute;
   bottom: 5%;
   right: 5%;
 }
-
+.indexcard{
+  box-shadow: none !important;
+}
 .small-logo {
   position: absolute;
   top: 10%;
@@ -1101,4 +1108,7 @@ font-weight: 500;
 .table-data
 {
   width: 100%;
+}
+.text-reset{
+  text-decoration:none ;
 }

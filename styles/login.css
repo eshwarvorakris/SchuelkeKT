@@ -212,6 +212,8 @@ html {
   font-size: 15px !important; 
   font-weight: 500 !important;
   font-family: myriad-regular !important;
+  color: #fff !important;
+  text-align: left !important;
 }
 
 .social-logos {
