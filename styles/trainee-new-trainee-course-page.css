@@ -547,10 +547,10 @@ h6 {
     color: #5a656b;
 }
 
-.module-anchor:hover {
+/* .module-anchor:hover {
     text-decoration: none;
     color: #5a656b;
-}
+} */
 
 .progress {
     height: 10px;
@@ -611,9 +611,9 @@ h6 {
     box-shadow: 0rem 2px 5px rgba(0, 0, 0, 0.253);
 }
 
-.start-learning-btn:hover {
+/* .start-learning-btn:hover {
     background-color: #0297e7;
-}
+} */
 
 .start-learning-btn:active {
     background-color: #007fc4;

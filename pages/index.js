@@ -252,7 +252,7 @@ function index() {
               <h1 className='mt-5 pt-5'>On what you will be trained!</h1>
             </div>
           </div>
-          <div className="col-md-12 mb-5">
+          <div className="col-md-12 ">
             <div className="story-content">
               <p>Schulke knowledge Transfer will cover the following topics.</p>
             </div>
@@ -260,8 +260,8 @@ function index() {
         </div>
 
         <div className="container">
-          <div className="row training-topics-cards">
-            <div className="col-lg-4 col-md-6 mt-sm-5">
+          <div className="row training-topics-cards " style={{marginLeft:'50px'}}>
+            <div className="col-lg-4 col-md-6 mt-sm-5 ml-5 pl-5">
               <div className="card training-card ml-md-5 p-3 text-center" style={{width: '17rem', height: "17rem"}}>
                 <div className="card-body" id="bed-sheets">
                   <div className="card-icon">
@@ -273,7 +273,7 @@ function index() {
                   <p className="card-text training-info text-light">
                     Applicable <br /> to all
                   </p>
-                  <a href="#" className="btn btn-light training-card-btn" data-toggle="modal" data-target="#myModal">Know
+                  <a href="#" className="btn btn-light training-card-btn mt-3" data-toggle="modal" data-target="#myModal">Know
                     More</a>
                 </div>
               </div>
@@ -290,7 +290,7 @@ function index() {
                   </h5>
                   <p className="card-text training-info text-light">
                     Information of the different products in your region </p>
-                  <a href="#" className="btn btn-light training-card-btn" data-toggle="modal" data-target="#myModal-2">Know
+                  <a href="#" className="btn btn-light training-card-btn mt-3" data-toggle="modal" data-target="#myModal-2">Know
                     More</a>
                 </div>
               </div>
@@ -306,7 +306,7 @@ function index() {
                   </h5>
                   <p className="card-text training-info text-light">
                     Information specific to your region of interest </p>
-                  <a href="#" className="btn btn-light training-card-btn" data-toggle="modal" data-target="#myModal-3">Know
+                  <a href="#" className="btn btn-light training-card-btn mt-3" data-toggle="modal" data-target="#myModal-3">Know
                     More</a>
                 </div>
               </div>

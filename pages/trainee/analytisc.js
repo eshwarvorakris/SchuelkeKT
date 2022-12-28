@@ -166,16 +166,16 @@ const analytisc = () => {
                         <div class="container">
                             <div class="row d-flex flex-column gap-5">
                                 <div class="col-12 d-flex justify-content-around">
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/2.png"
                                                     alt="Card image cap"/>
                                                 {/* <!-- <img class="card-tag" src="/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
                                                 <div class="card-text-tag">
                                                     <span class="success-text-tag text-success">Completed</span>
-                                                </div>Gastroestrology
+                                                </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="card-topic-heading">
@@ -215,10 +215,10 @@ const analytisc = () => {
                                     </a>
 
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                     alt="Card image cap"/>
                                                 {/* <!-- <img class="card-tag" src="/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -264,10 +264,10 @@ const analytisc = () => {
                                     </a>
 
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                     alt="Card image cap"/>
                                                 <img class="card-tag"
@@ -312,10 +312,10 @@ const analytisc = () => {
                                     </a>
 
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                     alt="Card image cap"/>
                                                 <img class="card-tag"
@@ -363,10 +363,10 @@ const analytisc = () => {
                                 </div>
                                 <div class="col-12 d-flex justify-content-around">
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                     alt="Card image cap"/>
                                                 <img class="card-tag"
@@ -411,10 +411,10 @@ const analytisc = () => {
                                     </a>
 
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                     alt="Card image cap"/>
                                                 {/* <!-- <img class="card-tag" src="/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -460,10 +460,10 @@ const analytisc = () => {
                                     </a>
 
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                     alt="Card image cap"/>
                                                 <img class="card-tag"
@@ -508,10 +508,10 @@ const analytisc = () => {
                                     </a>
 
 
-                                    <a href="/trainee/new-trainee-course-page.html">
+                                    <a href="/trainee/new-trainee-course-page.html"  classname="cardspan">
                                         <div class="trainee-card card" style={{width: "14rem"}}>
                                             <div class="card-thumbnail">
-                                                <img class="card-img card-img-top"
+                                                <img class="card-imgg card-img-topp"
                                                     src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                     alt="Card image cap"/>
                                                 <img class="card-tag"

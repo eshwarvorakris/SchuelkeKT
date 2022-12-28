@@ -8,11 +8,11 @@ function topnavbar() {
     return (
         <nav class="navbar navbar-expand-lg navbar-light sticky-nav" style={{ width: '79.5vw', border: "none" }}>
             <a class="navbar-brand d-flex flex-column" style={{ fontWeight: " 500" }} href="#">
-                <p className='text-dark'>Dashboard</p> <span className='text-dark'>Welcome Back!</span>
+                <p className='text-dark'>Traniee Dashboard</p> 
             </a>
             <div class="collapse navbar-collapse flex-row-reverse">
                 <ul class="navbar-nav align-content-center">
-                    <li>
+                    {/* <li>
                         <div class="SearchandSort-topnav">
                             <div class="search-button-topnav d-flex">
                                 <ion-icon name="search-outline" class="search-icon"></ion-icon>
@@ -20,7 +20,7 @@ function topnavbar() {
                                     placeholder="Search" /></div>
                             </div>
                         </div>
-                    </li>
+                    </li> */}
                     {/* <li class="notify-btn nav-item active">
                     <a class="nav-link" href="#">
                       <ion-icon class="trainee-nav-icon" name="notifications"></ion-icon>

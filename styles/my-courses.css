@@ -568,27 +568,18 @@ td {
   font-size: 10px;
 }
 
-.table-mycourse tr:nth-child(1) {
-  background-color: rgb(255, 255, 255);
-  height: 10px;
-}
-
-.table-mycourse tr:nth-child(3) {
-  background-color: #f0f0f0;
-}
-
-.table-mycourse tr:nth-child(5) {
-  background-color: rgb(240, 240, 240);
+.table-mycourse tr:nth-child(odd) {
+  background-color: rgb(255, 255, 255) !important;
 }
 .table-mycourse tr:nth-child(even) {
-  background-color: #fff;
+  background-color: rgb(240, 240, 240) !important;
 }
 .table {
   width: 60rem;
 }
 
 .table-data-mycourse {
-  padding: 2rem 1rem 0 2rem;
+  padding: 2rem 2.5rem 0 2rem;
 }
 
 /* Edit n Delete buttons  */
@@ -602,7 +593,9 @@ td {
   height: 1rem;
   cursor: pointer;
 }
-
+.cardleaern{
+  width: auto !important;
+}
 /* pagination  */
 
 .pagination-container {

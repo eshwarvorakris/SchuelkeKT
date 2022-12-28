@@ -534,14 +534,14 @@ h6 {
     border-radius: 5px;
 }
 
-.cancel-btn:hover {
+/* .cancel-btn:hover {
     background-color: rgb(236, 234, 234);
     border: 1px solid rgb(236, 234, 234);
-}
+} */
 
-.create-btn:hover {
+/* .create-btn:hover {
     background-color: #0398e9;
-}
+} */
 
 .cancel-btn:active {
     box-shadow: none;

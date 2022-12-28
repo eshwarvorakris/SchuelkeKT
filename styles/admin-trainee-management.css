@@ -474,9 +474,9 @@ select {
     right: 3%;
 }
 
-.add-trainee:hover {
+/* .add-trainee:hover {
     background-color: #027fc2;
-}
+} */
 
 .add-trainee:active {
     box-shadow: none;

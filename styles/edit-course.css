@@ -532,10 +532,10 @@ select {
   border-radius: 7.5px;
 }
 
-.right-col-btns button:hover {
+/* .right-col-btns button:hover {
   background-color: #fff;
   color: #008bd6;
-}
+} */
 
 .right-col-btns button span {
   color: #008bd6;

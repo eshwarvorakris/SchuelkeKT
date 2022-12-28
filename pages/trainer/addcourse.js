@@ -40,7 +40,7 @@ const addcourse = () => {
                             </div>
                             <div class="category">
                                 <h6 for="category">Category</h6>
-                                <select name="category" id="cars">
+                                <select name="category" id="cars" className="selectaddcourse">
                                     <option value="Country">Country</option>
                                     <option value="Blanket">Blanket</option>
                                     <option value="Product">Product</option>

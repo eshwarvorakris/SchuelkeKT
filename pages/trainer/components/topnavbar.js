@@ -6,7 +6,7 @@ import Link from "next/link";
 
 function topnavbar() {
     return (
-        <nav class="navbar navbar-expand-lg navbar-light sticky-nav" style={{ width: '79.5vw', border: "none" }}>
+        <nav class="navbar navbar-expand-lg navbar-light sticky-nav topnavbarr" style={{ width: '79.5vw', border: "none" }}>
             <a class="navbar-brand d-flex flex-column" style={{ fontWeight: " 500" }} href="#">
                 <p className='text-dark'>Dashboard</p> <span className='text-dark'>Welcome Back!</span>
             </a>
@@ -15,7 +15,10 @@ function topnavbar() {
                     <li>
                         <div class="SearchandSort-topnav">
                             <div class="search-button-topnav d-flex">
-                                <ion-icon name="search-outline" class="search-icon"></ion-icon>
+                                {/* <ion-icon name="search-outline" class="search-icon"></ion-icon> */}
+                                <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" fill="currentColor" class="bi bi-search " viewBox="-2 0 20 10">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
                                 <div class="search-trainer"><input class="search" type="text"
                                     placeholder="Search" /></div>
                             </div>

@@ -12,7 +12,7 @@ const myprofile = () => {
                 <div class="section1">
                     <div class="blank-class"></div>
                     <Sidebar />
-                    <div class="container-2">
+                    <div class="container-2 myprofilee">
                         <div class="col-md-12 trainee-right" style={{ backgrounColor: '#fff' }}>
                             <div class="blank-nav-class"></div>
                             <Topnavbar/>

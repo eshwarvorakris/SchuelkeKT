@@ -584,7 +584,7 @@ h6 {
     padding: 1rem;
     padding-top: 0%;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 4.5fr 1fr;
     align-items: center;
 }
 
@@ -614,9 +614,9 @@ h6 {
     box-shadow: 0rem 2px 5px rgba(0, 0, 0, 0.253);
 }
 
-.learning-btn:hover {
+/* .learning-btn:hover {
     background-color: #0396e6;
-}
+} */
 
 
 .learning-btn:active {

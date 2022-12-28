@@ -93,10 +93,10 @@ const index = () => {
                                             <div class="container">
                                                 <div class="row d-flex flex-column gap-5">
                                                     <div class="col-12 d-flex justify-content-around">
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/2.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -143,13 +143,13 @@ const index = () => {
                                                         </a>
 
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                                         alt="Card image cap"/>
-                                                                    {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
+                                                                        {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
                                                                     <div class="card-text-tag">
                                                                         <span class="on-going-text-tag text-danger">On
                                                                             Going</span>
@@ -193,16 +193,19 @@ const index = () => {
                                                         </a>
 
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
                                                                 alt=""> --> */}
-                                                                    <ion-icon class="card-tag" name="lock-closed-outline">
-                                                                    </ion-icon>
+                                                                    <i class="card-tag bi bi-lock" >
+                                                                    </i>
+                                                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                                                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+                                                                        </svg> */}
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <div class="card-topic-heading">
@@ -242,10 +245,10 @@ const index = () => {
                                                         </a>
 
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
@@ -295,10 +298,10 @@ const index = () => {
                                                     </div>
                                                     <div class="col-12 d-flex justify-content-around">
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                                         alt="Card image cap"/>
                                                                     <ion-icon class="card-tag" name="lock-closed-outline">
@@ -342,10 +345,10 @@ const index = () => {
                                                         </a>
 
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -392,10 +395,10 @@ const index = () => {
                                                         </a>
 
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html"className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
 
@@ -441,10 +444,10 @@ const index = () => {
                                                         </a>
 
 
-                                                        <a href="/trainee/new-trainee-course-page.html">
+                                                        <a href="/trainee/new-trainee-course-page.html" className="cardspan">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
@@ -505,7 +508,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/2.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -555,7 +558,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -605,7 +608,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
@@ -654,7 +657,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="s/image/trainee-images/trainee-dashboard/tags/Group.png"
@@ -707,7 +710,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                                         alt="Card image cap"/>
                                                                     <ion-icon class="card-tag" name="lock-closed-outline">
@@ -754,7 +757,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card"style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail"> 
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -804,7 +807,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
 
@@ -853,7 +856,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
@@ -914,7 +917,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/2.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -964,7 +967,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -1014,7 +1017,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
@@ -1063,7 +1066,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/4.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"
@@ -1116,7 +1119,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card"style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/1.png"
                                                                         alt="Card image cap"/>
                                                                     <ion-icon class="card-tag" name="lock-closed-outline">
@@ -1163,7 +1166,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png" alt=""> --> */}
@@ -1213,7 +1216,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card" style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
 
@@ -1262,7 +1265,7 @@ const index = () => {
                                                         <a href="/trainee/new-trainee-course-page.html">
                                                             <div class="trainee-card card"style={{width: "14rem"}}>
                                                                 <div class="card-thumbnail">
-                                                                    <img class="card-img card-img-top"
+                                                                    <img class="card-imgg card-img-topp"
                                                                         src="/trainee-images/trainee-dashboard/card-thumbnails/3.png"
                                                                         alt="Card image cap"/>
                                                                     {/* <!-- <img class="card-tag" src="/images/trainee-images/trainee-dashboard/tags/Group.png"

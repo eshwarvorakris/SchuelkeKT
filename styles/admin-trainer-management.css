@@ -474,9 +474,9 @@ select {
     right: 3%;
 }
 
-.add-trainer:hover {
+/* .add-trainer:hover {
     background-color: #027fc2;
-}
+} */
 
 .add-trainer:active {
     box-shadow: none;

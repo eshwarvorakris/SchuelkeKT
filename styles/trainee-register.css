@@ -539,9 +539,9 @@ h6 {
     border: 1px solid rgb(236, 234, 234);
 }
 
-.create-btn:hover {
+/* .create-btn:hover {
     background-color: #0398e9;
-}
+} */
 
 .cancel-btn:active {
     box-shadow: none;
