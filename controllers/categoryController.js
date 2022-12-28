@@ -16,7 +16,7 @@ const categoryController = class {
   async store(req, res) {
     const data = req.body;
     const rules = {
-      name: "required",
+      category_name: "required",
       description: "required"
     };
     const validation = validator.make(data, rules);

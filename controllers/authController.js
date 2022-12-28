@@ -30,16 +30,42 @@ exports.login = function (req, res) {
       }
     );
   }
-  var access_token = auth.generateToken(req.body);
-  res.send({ data: req.body, access_token });
+  User.findOne({ attributes: [
+    'id', 'full_name', 'contact_no', 'dob', 'address', 'role', 'password'],
+    where: { email: req.body.email, status:'active' } }).then(async (result) => {
+    const validPassword = await bcrypt.compare(req.body.password, result.password);
+    if(!validPassword)
+    {
+      return res.status(401).json("Email Or Password is incorect");
+    }
+    var userData = {
+      id : result.dataValues.id,
+      full_name : result.dataValues.full_name,
+      contact_no : result.dataValues.contact_no,
+      dob : result.dataValues.dob,
+      address : result.dataValues.address,
+      role : result.dataValues.role
+    };
+    //console.log(userData);
+    var access_token = auth.generateToken(userData);
+    res.send({ data: userData, access_token });
+  }).catch((error) => {
+    console.error("Unable To Find User : ", error);
+    res.status(422).send(
+      {
+        message: "Unable To Find User",
+        errors: error.errors,
+      }
+    );
+  });
 };
 
 exports.registration = function (req, res) {
   const data = req.body;
   const rules = {
-    name: "required",
+    full_name: "required",
     email: "required|email|unique:users,email",
-    mobile: "required|unique:users,mobile",
+    contact_no: "required|unique:users,contact_no",
     password:
       "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
   };
@@ -49,7 +75,7 @@ exports.registration = function (req, res) {
   });
   validation.extend(
     "unique",customValidation.unique,
-    ":attr already existed"
+    ":attr already exists"
   );
   if (validation.fails()) {
    return res.status(422).send(
@@ -63,5 +89,13 @@ exports.registration = function (req, res) {
 
   User.create(req.body).then((result) => {
     res.send({ data: result });
+  }).catch((error) => {
+    console.error("Unable To Add User : ", error);
+    res.status(422).send(
+      {
+        message: "Unable To Add User",
+        errors: error.errors,
+      }
+    );
   });
 };

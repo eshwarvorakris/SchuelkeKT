@@ -17,8 +17,8 @@ const courseController = class {
   async store(req, res) {
     const data = req.body;
     const rules = {
-      name: "required",
-      description: "required"
+      course_name: "required",
+      course_description: "required"
     };
     const validation = validator.make(req.body, rules);
     if (validation.fails()) {
