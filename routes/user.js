@@ -5,7 +5,7 @@ const userController = require("../controllers/userController");
 const verifyAuth = require("../middleware/authorization");
 
 router.get("/", verifyAuth.verifyAdmin, userController.index);
-router.get("/getTrainee", verifyAuth.verifyTrainer, userController.getTrainee);
+router.get("/getTrainee", verifyAuth.verifyAdminTrainer, userController.getTrainee);
 router.get("/getTrainer", verifyAuth.verifyAdmin, userController.getTrainer);
 router.get("/:id", userController.show);
 router.post("/", userController.store);

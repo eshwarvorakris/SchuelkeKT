@@ -49,6 +49,31 @@ const Authorization = class {
     }
   }
 
+  async verifyAdminTrainer(req, res, next) {
+    try {
+      //console.log(req.headers["authorization"]);
+      const authHeader = req.headers["authorization"];
+      const token = authHeader && authHeader.split(" ")[1];
+      if(!token){
+        console.log("Token Not Found");
+        return res.status(401).json("You Are Not Authorized");
+      }
+  
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      if(payload.role != "trainer" || payload.role != "admin")
+      {
+        console.log("Not Admin Or Trainer");
+        return res.status(401).json("You Are Not Authorized To Perform This Operation");
+      }
+      req.userId = payload.id;
+      req.userRole = payload.role;
+      next();
+    } catch (err) {
+      console.error(err.message);
+      return res.status(401).json("You Are Not Authorized");
+    }
+  }
+
   async verifyTrainer(req, res, next) {
     try {
       //console.log(req.headers["authorization"]);
