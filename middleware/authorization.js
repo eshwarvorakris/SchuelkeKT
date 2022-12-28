@@ -60,14 +60,16 @@ const Authorization = class {
       }
   
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      if(payload.role != "trainer" || payload.role != "admin")
+      if(payload.role == "trainer" || payload.role == "admin")
       {
-        console.log("Not Admin Or Trainer");
+        req.userId = payload.id;
+        req.userRole = payload.role;
+        next();
+      }
+      else{
+        console.log("Not Admin Or Trainer current role : "+payload.role);
         return res.status(401).json("You Are Not Authorized To Perform This Operation");
       }
-      req.userId = payload.id;
-      req.userRole = payload.role;
-      next();
     } catch (err) {
       console.error(err.message);
       return res.status(401).json("You Are Not Authorized");
