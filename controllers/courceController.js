@@ -6,7 +6,7 @@ const Course = require("../models/Course.model");
 const courseController = class {
   async index(req, res) {
     await Course
-      .findAndCountAll({include:["category","trainer"], offset: req.query.page, limit: 2,where:req.query })
+      .findAndCountAll({include:["category","trainer"], offset: req.query.page, limit: 2 })
       .then((result) => {
         res.send(getPaginate(result, req.query.page ?? 1, 2));
       })
@@ -29,6 +29,7 @@ const courseController = class {
         }
       );
     }
+    req.body.trainer_id = req.userId;
     await Course
       .create(req.body)
       .then((result) => {

@@ -99,3 +99,84 @@ exports.registration = function (req, res) {
     );
   });
 };
+
+
+exports.addTrainer = function (req, res) {
+  const data = req.body;
+  const rules = {
+    full_name: "required",
+    email: "required|email|unique:users,email",
+    contact_no: "required|unique:users,contact_no",
+    password:
+      "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
+  };
+  const validation = validator.make(req.body, rules, {
+    "password.regex":
+      "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
+  });
+  validation.extend(
+    "unique",customValidation.unique,
+    ":attr already exists"
+  );
+  if (validation.fails()) {
+   return res.status(422).send(
+      {
+        message: _.chain(validation.getErrors()).flatMap().head(),
+        errors: validation.getErrors(),
+      }
+    );
+  }
+  req.body.password = bcrypt.hashSync(req.body.password, salt);
+  req.body.role = "trainer";
+  User.create(req.body).then((result) => {
+    res.send({ data: result });
+  }).catch((error) => {
+    console.error("Unable To Add User : ", error);
+    res.status(422).send(
+      {
+        message: "Unable To Add User",
+        errors: error.errors,
+      }
+    );
+  });
+};
+
+exports.addTrainee = function (req, res) {
+  const data = req.body;
+  const rules = {
+    full_name: "required",
+    email: "required|email|unique:users,email",
+    contact_no: "required|unique:users,contact_no",
+    password:
+      "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
+  };
+  const validation = validator.make(req.body, rules, {
+    "password.regex":
+      "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
+  });
+  validation.extend(
+    "unique",customValidation.unique,
+    ":attr already exists"
+  );
+  if (validation.fails()) {
+   return res.status(422).send(
+      {
+        message: _.chain(validation.getErrors()).flatMap().head(),
+        errors: validation.getErrors(),
+      }
+    );
+  }
+  req.body.password = bcrypt.hashSync(req.body.password, salt);
+  req.body.role = "trainee";
+  User.create(req.body).then((result) => {
+    res.send({ data: result });
+  }).catch((error) => {
+    console.error("Unable To Add User : ", error);
+    res.status(422).send(
+      {
+        message: "Unable To Add User",
+        errors: error.errors,
+      }
+    );
+  });
+};

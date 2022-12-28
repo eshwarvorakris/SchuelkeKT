@@ -1,10 +1,37 @@
 const express = require("express");
 const { getPaginate } = require("../lib/helpers");
 const User = require("../models/User.model");
+const { Op } = require("sequelize");
 const userController = class {
   async index(req, res) {
     await User
-      .findAndCountAll({offset:req.query.page,limit:15})
+      .findAndCountAll({where: {
+        role: { [Op.ne]: "admin"},
+      },offset:req.query.page,limit:15})
+      .then((result) => {
+        res.send(getPaginate(result,req.query.page ?? 1,15));
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+      });
+  }
+  async getTrainee(req, res) {
+    await User
+      .findAndCountAll({where: {
+        role: "trainee"
+      },offset:req.query.page,limit:15})
+      .then((result) => {
+        res.send(getPaginate(result,req.query.page ?? 1,15));
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+      });
+  }
+  async getTrainer(req, res) {
+    await User
+      .findAndCountAll({where: {
+        role: "trainer"
+      },offset:req.query.page,limit:15})
       .then((result) => {
         res.send(getPaginate(result,req.query.page ?? 1,15));
       })
