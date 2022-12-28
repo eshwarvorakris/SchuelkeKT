@@ -9,9 +9,8 @@ const app = express()
 // allow overriding methods in query (?_method=put)
 //app.use(methodOverride('X-HTTP-Method-Override'))
 app.use(methodOverride('_method'));
-
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
