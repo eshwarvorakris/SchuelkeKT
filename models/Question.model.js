@@ -1,6 +1,7 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
 const Course = require("./Course.model");
+const QuestionOption = require("./Question_option.model");
 class Question extends Model { }
 
 Question.init({
@@ -14,13 +15,13 @@ Question.init({
     allowNull: false
   },
   question_type: {
-    type: DataTypes.CHAR
+    type: DataTypes.STRING(30)
   },
   sequence_no: {
     type: DataTypes.INTEGER
   },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: "active",
   },
 }, {
@@ -34,6 +35,6 @@ Question.init({
   underscored:true
 });
 Question.belongsTo(Course,{foreignKey:"course_id",as:"course"});
-
+Question.hasMany(QuestionOption,{foreignKey:"question_id",as:"options"});
 sequelize.sync();
 module.exports = Question;

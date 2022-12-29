@@ -1,5 +1,6 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
+const Module = require("./Module.model");
 class ModuleContent extends Model { }
 
 ModuleContent.init({
@@ -18,7 +19,7 @@ ModuleContent.init({
     type: DataTypes.INTEGER
   },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: "active",
   },
 }, {
@@ -31,5 +32,6 @@ ModuleContent.init({
   paranoid: true,
   underscored:true
 });
+ModuleContent.belongsTo(Module,{foreignKey:"module_id",as:"module"});
 sequelize.sync();
 module.exports = ModuleContent;

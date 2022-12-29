@@ -5,7 +5,7 @@ const Question = require("../models/Question.model");
 const questionController = class {
   async index(req, res) {
     await Question
-      .findAndCountAll({include:['course'], offset:req.query.page,limit:15,where:req.query??[]})
+      .findAndCountAll({include:['course','options'], offset:req.query.page,limit:15,where:req.query??[]})
       .then((result) => {
         res.send(getPaginate(result,req.query.page ?? 1,15));
       })
@@ -16,8 +16,10 @@ const questionController = class {
   async store(req, res) {
     const data = req.body;
     const rules = {
+      course_id: "required",
       question: "required",
-      //description: "required"
+      question_type: "required",
+      options: "required|array",
     };
     const validation = validator.make(data, rules);
     if (validation.fails()) {
@@ -29,7 +31,9 @@ const questionController = class {
       );
     }
     await Question
-      .create(req.body)
+      .create(req.body, {
+        include: "options"
+      })
       .then((result) => {
         res.send(result);
       })

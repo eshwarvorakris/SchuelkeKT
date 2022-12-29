@@ -1,7 +1,8 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
-const Question = require("./Question.model");
+//const Question = require("./Question.model");
 class QuestionOption extends Model { }
+
 
 QuestionOption.init({
   // Model attributes are defined here
@@ -17,7 +18,7 @@ QuestionOption.init({
     type: DataTypes.BOOLEAN
   },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: "active",
   },
 }, {
@@ -31,7 +32,7 @@ QuestionOption.init({
   underscored:true
 });
 
-QuestionOption.belongsTo(Question);
+//QuestionOption.belongsTo(Question);
 
 sequelize.sync();
 module.exports = QuestionOption;
