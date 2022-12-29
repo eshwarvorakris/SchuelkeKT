@@ -49,18 +49,46 @@ const userController = class {
         console.error("Failed to retrieve data : ", error);
       });
   }
+  async updateProfile(req, res) {
+    const user=await User.findByPk(req.userId);
+    if(user)
+    {
+      user.update(req.body);
+      return  res.send({data:user});
+    }
+    return res.status(422).send(
+      {
+        message:"Unable to find user" ,
+      }
+    );
+  }
   async show(req, res) {
     const user=await User.findByPk(req.params.id);
     res.send({data:user});
   }
-  update(req, res) {
-    res.send(req.body);
+  async update(req, res) {
+    const user=await User.findByPk(req.params.id);
+    if(user)
+    {
+      user.update(req.body);
+      return  res.send({data:user});
+    }
+    return res.status(422).send(
+      {
+        message:"Unable to find user" ,
+      }
+    );
   }
+
   async destroy(req, res) {
-   const user= await User.destroy({where:{id:req.body.id}}).then((result)=>{
+   const user= await User.destroy({where:{id:req.params.id}}).then((result)=>{
     return {message:"user Deleted"};
    });
-    res.send(user);
+    return res.status(422).send(
+      {
+        message:"Unable to find user" ,
+      }
+    );
   }
 };
 

@@ -10,6 +10,8 @@ router.get("/getTrainer", verifyAuth.verifyAdmin, userController.getTrainer);
 router.get("/:id", userController.show);
 router.post("/", userController.store);
 router.put("/:id", userController.update);
-router.delete("/", userController.destroy);
+router.delete("/:id", userController.destroy);
+
+router.put("/", verifyAuth.verifyUser, userController.updateProfile);
 
 module.exports = router;
