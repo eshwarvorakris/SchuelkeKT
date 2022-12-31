@@ -32,7 +32,7 @@ exports.login = function (req, res) {
   }
   User.findOne({
     attributes: [
-      'id', 'full_name', 'contact_no', 'dob', 'address', 'role', 'password'],
+      'id', 'full_name', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'password'],
     where: { email: req.body.email, status: 'active' }
   }).then(async (result) => {
     const validPassword = await bcrypt.compare(req.body.password, result.password);
@@ -42,13 +42,17 @@ exports.login = function (req, res) {
     var userData = {
       id: result.dataValues.id,
       full_name: result.dataValues.full_name,
+      email: req.body.email,
       contact_no: result.dataValues.contact_no,
       dob: result.dataValues.dob,
       address: result.dataValues.address,
+      edu_background: result.dataValues.edu_background,
       role: result.dataValues.role
     };
     //console.log(userData);
     var access_token = auth.generateToken(userData);
+    console.clear();
+    console.log("Login Token : ", access_token);
     res.send({ data: userData, access_token });
   }).catch((error) => {
     console.error("Unable To Find User : ", error);
