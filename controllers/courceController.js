@@ -6,7 +6,7 @@ const Course = require("../models/Course.model");
 const courseController = class {
   async index(req, res) {
     await Course
-      .findAndCountAll({include:["category","trainer"], offset: req.query.page, limit: 2 })
+      .findAndCountAll({ include: ["category", "trainer"], offset: req.query.page, limit: 2 })
       .then((result) => {
         res.send(getPaginate(result, req.query.page ?? 1, 2));
       })
@@ -40,27 +40,25 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course=await Course.findByPk(req.params.id);
-    if(course)
-    {
-    return res.send({data:course});
+    const course = await Course.findByPk(req.params.id, { include: ['category'] });
+    if (course) {
+      return res.send({ data: course });
     }
     return res.status(422).send(
       {
-        message:"Course not Found" ,
+        message: "Course not Found",
       }
     );
   }
   async update(req, res) {
-    const course=await Course.findByPk(req.params.id);
-    if(course)
-    {
+    const course = await Course.findByPk(req.params.id);
+    if (course) {
       course.update(req.body);
-    return  res.send({data:course});
+      return res.send({ data: course });
     }
     return res.status(422).send(
       {
-        message:"Course not update" ,
+        message: "Course not update",
       }
     );
   }

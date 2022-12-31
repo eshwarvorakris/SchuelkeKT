@@ -1,20 +1,26 @@
 const express = require('express');
+const app = express()
 var bodyParser = require('body-parser')
 require('dotenv').config();
 var methodOverride = require('method-override');
 
-const app = express()
 
+var multer = require('multer');
+var upload = multer();
 
 // allow overriding methods in query (?_method=put)
-//app.use(methodOverride('X-HTTP-Method-Override'))
+app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(methodOverride('_method'));
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
-
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+// for parsing application/xwww-
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+// for parsing multipart/form-data
+app.use(upload.array()); 
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -27,7 +33,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}`)
+  console.log(`App listening on port ${process.env.PORT}`)
 })
 
 //Routes 

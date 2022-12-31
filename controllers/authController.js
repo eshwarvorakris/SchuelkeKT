@@ -23,28 +23,29 @@ exports.login = function (req, res) {
   };
   const validation = validator.make(req.body, rules);
   if (validation.fails()) {
-   return res.status(422).send(
+    return res.status(422).send(
       {
         message: _.chain(validation.getErrors()).flatMap().head(),
         errors: validation.getErrors(),
       }
     );
   }
-  User.findOne({ attributes: [
-    'id', 'full_name', 'contact_no', 'dob', 'address', 'role', 'password'],
-    where: { email: req.body.email, status:'active' } }).then(async (result) => {
+  User.findOne({
+    attributes: [
+      'id', 'full_name', 'contact_no', 'dob', 'address', 'role', 'password'],
+    where: { email: req.body.email, status: 'active' }
+  }).then(async (result) => {
     const validPassword = await bcrypt.compare(req.body.password, result.password);
-    if(!validPassword)
-    {
+    if (!validPassword) {
       return res.status(401).json("Email Or Password is incorect");
     }
     var userData = {
-      id : result.dataValues.id,
-      full_name : result.dataValues.full_name,
-      contact_no : result.dataValues.contact_no,
-      dob : result.dataValues.dob,
-      address : result.dataValues.address,
-      role : result.dataValues.role
+      id: result.dataValues.id,
+      full_name: result.dataValues.full_name,
+      contact_no: result.dataValues.contact_no,
+      dob: result.dataValues.dob,
+      address: result.dataValues.address,
+      role: result.dataValues.role
     };
     //console.log(userData);
     var access_token = auth.generateToken(userData);
@@ -60,7 +61,7 @@ exports.login = function (req, res) {
   });
 };
 
-exports.registration = function (req, res) {
+exports.registration = async function (req, res) {
   const data = req.body;
   const rules = {
     full_name: "required",
@@ -74,34 +75,35 @@ exports.registration = function (req, res) {
       "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
   });
   validation.extend(
-    "unique",customValidation.unique,
+    "unique", customValidation.unique,
     ":attr already exists"
   );
-  if (validation.fails()) {
-   return res.status(422).send(
-      {
-        message: _.chain(validation.getErrors()).flatMap().head(),
-        errors: validation.getErrors(),
-      }
-    );
-  }
-  req.body.password = bcrypt.hashSync(req.body.password, salt);
+  
+  if (await validation.passes()) {
+    req.body.password = bcrypt.hashSync(req.body.password, salt);
 
-  User.create(req.body).then((result) => {
-    res.send({ data: result });
-  }).catch((error) => {
-    console.error("Unable To Add User : ", error);
-    res.status(422).send(
-      {
-        message: "Unable To Add User",
-        errors: error.errors,
-      }
-    );
-  });
+    User.create(req.body).then((result) => {
+      res.send({ data: result });
+    }).catch((error) => {
+      console.error("Unable To Add User : ", error);
+      res.status(422).send(
+        {
+          message: "Unable To Add User",
+          errors: error.errors,
+        }
+      );
+    });
+  }
+  return res.status(422).send(
+    {
+      message: _.chain(validation.getErrors()).flatMap().head(),
+      errors: validation.getErrors(),
+    }
+  );
 };
 
 
-exports.addTrainer = function (req, res) {
+exports.addTrainer = async function (req, res) {
   const data = req.body;
   const rules = {
     full_name: "required",
@@ -115,33 +117,34 @@ exports.addTrainer = function (req, res) {
       "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
   });
   validation.extend(
-    "unique",customValidation.unique,
+    "unique", customValidation.unique,
     ":attr already exists"
   );
-  if (validation.fails()) {
-   return res.status(422).send(
-      {
-        message: _.chain(validation.getErrors()).flatMap().head(),
-        errors: validation.getErrors(),
-      }
-    );
+
+  if (await validation.passes()) {
+    req.body.password = bcrypt.hashSync(req.body.password, salt);
+    req.body.role = "trainer";
+    User.create(req.body).then((result) => {
+      res.send({ data: result });
+    }).catch((error) => {
+      console.error("Unable To Add User : ", error);
+      res.status(422).send(
+        {
+          message: "Unable To Add User",
+          errors: error.errors,
+        }
+      );
+    });
   }
-  req.body.password = bcrypt.hashSync(req.body.password, salt);
-  req.body.role = "trainer";
-  User.create(req.body).then((result) => {
-    res.send({ data: result });
-  }).catch((error) => {
-    console.error("Unable To Add User : ", error);
-    res.status(422).send(
-      {
-        message: "Unable To Add User",
-        errors: error.errors,
-      }
-    );
-  });
+  return res.status(422).send(
+    {
+      message: _.chain(validation.getErrors()).flatMap().head(),
+      errors: validation.getErrors(),
+    }
+  );
 };
 
-exports.addTrainee = function (req, res) {
+exports.addTrainee = async function (req, res) {
   const data = req.body;
   const rules = {
     full_name: "required",
@@ -155,28 +158,30 @@ exports.addTrainee = function (req, res) {
       "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
   });
   validation.extend(
-    "unique",customValidation.unique,
+    "unique", customValidation.unique,
     ":attr already exists"
   );
-  if (validation.fails()) {
-   return res.status(422).send(
-      {
-        message: _.chain(validation.getErrors()).flatMap().head(),
-        errors: validation.getErrors(),
-      }
-    );
+  
+  if (await validation.passes()) {
+    req.body.password = bcrypt.hashSync(req.body.password, salt);
+    req.body.role = "trainee";
+    User.create(req.body).then((result) => {
+      res.send({ data: result });
+    }).catch((error) => {
+      console.error("Unable To Add User : ", error);
+      res.status(422).send(
+        {
+          message: "Unable To Add User",
+          errors: error.errors,
+        }
+      );
+    });
   }
-  req.body.password = bcrypt.hashSync(req.body.password, salt);
-  req.body.role = "trainee";
-  User.create(req.body).then((result) => {
-    res.send({ data: result });
-  }).catch((error) => {
-    console.error("Unable To Add User : ", error);
-    res.status(422).send(
-      {
-        message: "Unable To Add User",
-        errors: error.errors,
-      }
-    );
-  });
+  return res.status(422).send(
+    {
+      message: _.chain(validation.getErrors()).flatMap().head(),
+      errors: validation.getErrors(),
+    }
+  );
+  
 };
