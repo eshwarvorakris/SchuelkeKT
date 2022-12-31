@@ -39,7 +39,7 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course=await Course.findByPk(req.params.id);
+    const course=await Course.findByPk(req.params.id,{include:['category']});
     if(course)
     {
     return res.send({data:course});
@@ -64,11 +64,12 @@ const courseController = class {
     );
   }
   async destroy(req, res) {
-    const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
-      return { message: "Course Deleted" };
+    console.log(req.params)
+    const course= await Course.destroy({where:{id:req.params.id}}).then((result)=>{
+     return {message:"Course Deleted"};
     });
-    res.send(course);
-  }
+     res.send(course);
+   }
 };
 
 module.exports = new courseController();

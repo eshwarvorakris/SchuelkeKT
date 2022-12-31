@@ -17,13 +17,14 @@ exports.profile = function (req, res) {
 };
 
 exports.login = function (req, res) {
+  console.log(req.body);
   const rules = {
     email: "required|email",
     password: "required",
   };
   const validation = validator.make(req.body, rules);
   if (validation.fails()) {
-   return res.status(422).send(
+    return res.status(422).send(
       {
         message: _.chain(validation.getErrors()).flatMap().head(),
         errors: validation.getErrors(),
@@ -34,7 +35,7 @@ exports.login = function (req, res) {
   res.send({ data: req.body, access_token });
 };
 
-exports.registration = function (req, res) {
+exports.registration = async function (req, res) {
   const data = req.body;
   const rules = {
     name: "required",
@@ -43,25 +44,27 @@ exports.registration = function (req, res) {
     password:
       "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
   };
-  const validation = validator.make(req.body, rules, {
+  const validation =validator.make(req.body, rules, {
     "password.regex":
       "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
   });
-  validation.extend(
-    "unique",customValidation.unique,
+   validation.extend(
+    "unique", customValidation.unique,
     ":attr already existed"
   );
-  if (validation.fails()) {
-   return res.status(422).send(
-      {
-        message: _.chain(validation.getErrors()).flatMap().head(),
-        errors: validation.getErrors(),
-      }
-    );
-  }
-  req.body.password = bcrypt.hashSync(req.body.password, salt);
 
-  User.create(req.body).then((result) => {
-    res.send({ data: result });
-  });
+  if (await validation.passes()) {
+
+    req.body.password = bcrypt.hashSync(req.body.password, salt);
+
+    return User.create(req.body).then((result) => {
+      res.send({ data: result });
+    });
+  }
+  return res.status(422).send(
+    {
+      message: _.chain(validation.getErrors()).flatMap().head(),
+      errors: validation.getErrors(),
+    }
+  );
 };
