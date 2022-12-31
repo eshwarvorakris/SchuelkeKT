@@ -2,6 +2,10 @@ const express = require('express');
 const app = express()
 var bodyParser = require('body-parser')
 require('dotenv').config();
+
+var cors = require('cors');
+app.use(cors());
+
 var methodOverride = require('method-override');
 
 
