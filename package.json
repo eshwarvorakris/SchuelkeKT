@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port=3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -18,8 +18,10 @@
     "next": "^13.0.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
+    "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
+    "sweetalert2": "^11.6.16",
     "swr": "^2.0.0"
   }
 }
