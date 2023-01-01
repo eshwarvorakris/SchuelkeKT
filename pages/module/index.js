@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from "react";
 import useSWR, { mutate } from 'swr';
-import courseModel from "../../model/course.model";
+import moduleModel from "../../model/module.model";
 import DataTable from 'react-data-table-component';
 import Link from 'next/link';
 import { config } from '../../lib/config';
@@ -14,58 +13,42 @@ function Page() {
   QueryParam.order_by = router.query?.order_by || "created_at";
   QueryParam.order_in = router.query?.order_in || "desc";
   
-  const { data:courses, error, isLoading } = useSWR (QueryParam?"courseList":null, async ()=>await courseModel.list(QueryParam),config.swrConfig);
+  const { data:modules, error, isLoading } = useSWR (QueryParam?"moduleList":null, async ()=>await moduleModel.list(QueryParam),config.swrConfig);
 
-  const courseDelete=function(id)
+  const moduleDelete=function(id)
   {
-    helper.sweetalert.confirm("Delete Course","info").then((result) => {
+    helper.sweetalert.confirm("Delete module","info").then((result) => {
       if(result.isConfirmed)
       {
-        courseModel.delete(id).then((res)=>{
+        moduleModel.delete(id).then((res)=>{
           helper.sweetalert.toast(res.data?.message);
-          mutate('courseList');
+          mutate('moduleList');
         })
       }
     })
   }
   const columns = [
     {
-        name: 'Course',
+        name: 'Module',
         selector: row => row.name,
         sortable:true,
         sortField:"name"
     },
     {
-        name: 'Topic',
-        selector: row => row.category?.name,
+        name: 'Course',
+        selector: row => row.course?.name,
         sortable:true,
-        sortField:"category.name"
-    },
-    {
-        name: 'No. of Module',
-        selector: row => row?.module_numbers,
-    },
-    {
-        name: 'Training time',
-        selector: row => row?.timing,
-    },
-    {
-        name: 'Trainee enroll',
-        selector: row => row?.trainee_count,
-    },
-    {
-        name: 'Published By',
-        selector: row => row?.trainer?.full_name,
+        sortField:"module.name"
     },
     {
         name: 'Approval Status',
-        selector: row => row.status,
+        selector: row => row.status        
     },
     {
         name: 'Action',
         cell: row => {return (
-        <div className='btn-group  text-nowrap'><Link className='btn btn-primary btn-sm' href={`/course/${row.id}`}><i className='bi bi-eye'></i></Link>
-        <button className='btn btn-danger btn-sm' type='button' onClick={()=>courseDelete(row.id)}><i className='bi bi-trash'></i></button></div>)},
+        <div className='btn-group  text-nowrap'><Link className='btn btn-primary btn-sm' href={`/module/${row.id}`}><i className='bi bi-eye'></i></Link>
+        <button className='btn btn-danger btn-sm' type='button' onClick={()=>moduleDelete(row.id)}><i className='bi bi-trash'></i></button></div>)},
         
     },
 ];
@@ -89,20 +72,20 @@ const handleSort=function(column, sortDirection){
   return (
     <div className=''>
       <div className=''>
-    <Link className='btn btn-primary float-end' href={'/course/create'}>Create</Link>
-      <h3>Course</h3>
+    <Link className='btn btn-primary float-end' href={'/module/create'}>Create</Link>
+      <h3>Module</h3>
       </div>
     
     <DataTable
             columns={columns}
-            data={courses?.data}
+            data={modules?.data}
             progressPending={isLoading}
             sortServer
             onSort={handleSort}
             pagination
             paginationServer
             paginationComponentOptions={config.paginationComponent}
-            paginationTotalRows={courses?.meta?.total}
+            paginationTotalRows={modules?.meta?.total}
       			//onChangeRowsPerPage={()=>function(){ return 1}}
 			      onChangePage={pagginationHandler}
             paginationPerPage="15"

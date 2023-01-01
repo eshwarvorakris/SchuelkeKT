@@ -1,11 +1,22 @@
 // pages/_app.js
 
-import Layout from '../components/layout'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import Head from 'next/head';
+import Layout from '../components/layout';
+import '/public/css/style.css';
 export default function MyApp({ Component, pageProps }) {
-  return (
-    <Layout>
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>)
+
+  return getLayout(
+    <>
+      <Head>
+        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+
       <Component {...pageProps} />
-    </Layout>
+    </>
   )
 }
