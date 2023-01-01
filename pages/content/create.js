@@ -39,8 +39,8 @@ function Page() {
       <Form.Group className="mb-3">
           <Form.Label>Content Type</Form.Label>
           <Form.Select {...register("content_id")} isInvalid={formErrors?.content_id}>
-            {contents?.data.map((item) => {
-              return (<option value={item.id}>{item.name}</option>)
+            {["title","content","file"].map((item) => {
+              return (<option>{item}</option>)
             })}
           </Form.Select>
           {formErrors?.content_id && <p className="invalid-feedback">{formErrors?.content_id}</p>}
