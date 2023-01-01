@@ -5,9 +5,9 @@ const Module = require("../models/Module.model");
 const moduleController = class {
   async index(req, res) {
     await Module
-      .findAndCountAll({include:['course'], offset:req.query.page,limit:15,where:req.query})
+      .findAndCountAll({include:['course'], offset: pageNumber*pageLimit, limit: pageLimit,where:req.query})
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,15));
+        res.send(getPaginate(result,pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);

@@ -48,7 +48,7 @@ Course.init({
   createdAt: "created_at",
   deletedAt: "deleted_at",
   paranoid: true,
-  underscored: true,
+  //underscored: true,
   //trainer: Course.belongsTo(User, { foreignKey: "trainer_id", as: "trainer" }),
   //category: Course.belongsTo(Category, { foreignKey: "category_id", as: "category" })
 }
