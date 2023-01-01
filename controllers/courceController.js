@@ -5,6 +5,7 @@ const { getPaginate } = require("../lib/helpers");
 const Course = require("../models/Course.model");
 const courseController = class {
   async index(req, res) {
+    console.log(req);
     await Course
       .findAndCountAll({ include: ["category", "trainer"], offset: req.query.page, limit: 2 })
       .then((result) => {
