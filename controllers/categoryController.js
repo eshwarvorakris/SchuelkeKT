@@ -5,7 +5,7 @@ const Category = require("../models/Category.model");
 const categoryController = class {
   async index(req, res) {
     await Category
-      .findAndCountAll({ offset: req.query.page, limit: 2 })
+      .findAndCountAll({ offset: req.query.page, limit: 10 })
       .then((result) => {
         res.send(getPaginate(result, req.query.page ?? 1, 2));
       })
