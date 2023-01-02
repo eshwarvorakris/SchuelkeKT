@@ -136,6 +136,13 @@ h6 {
     color: #9dddff;
 }
 
+.otherLink {
+    color: #9dddff !important;
+}
+.activeLink {
+    color: #fff !important;
+}
+
 .section-1-sidebar ul li:nth-child(1) a {
     color: #fff;
 }

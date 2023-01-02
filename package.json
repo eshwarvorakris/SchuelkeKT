@@ -13,13 +13,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "5.15.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.17",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
     "next": "^13.0.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
+    "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
+    "react-ionicons": "^4.2.0",
+    "sweetalert2": "^11.6.16",
     "swr": "^2.0.0"
   }
 }

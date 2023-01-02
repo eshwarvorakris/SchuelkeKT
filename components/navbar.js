@@ -27,7 +27,7 @@ function navbar() {
               <a className="nav-link text-white" href="#section-3">Trainings</a>
             </li>
             <li className="nav-item">
-              <Link href="trainer/login">
+              <Link href="./login">
                 <button type="button nav-2-get-started" className="btn get-started">
                   Get Started
                 </button>

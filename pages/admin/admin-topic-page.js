@@ -1,7 +1,7 @@
 
 import auth from "../../model/auth.model";
-import Sidebar from "../trainee/components/sidebar";
-import Topnavbar from "../trainee/components/topnavbar";
+import Sidebar from "./component/sidebar";
+import Topnavbar from "./component/topnavbar";
 import admintopicpagetwo from "./admin-topic-page-2";
 const admintopicpage = () => {
   return (
