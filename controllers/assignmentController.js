@@ -4,9 +4,9 @@ const Course = require("../models/Course.model");
 const courseController = class {
   async index(req, res) {
     await Course
-      .findAndCountAll({offset:req.query.page,limit:15})
+      .findAndCountAll({ offset: pageNumber * pageLimit, limit: pageLimit })
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,15));
+        res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -23,16 +23,16 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course=await Course.findByPk(req.params.id);
-    res.send({data:Course});
+    const course = await Course.findByPk(req.params.id);
+    res.send({ data: Course });
   }
   update(req, res) {
     res.send(req.body);
   }
   async destroy(req, res) {
-   const course= await Course.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"Course Deleted"};
-   });
+    const course = await Course.destroy({ where: { id: req.body.id } }).then((result) => {
+      return { message: "Course Deleted" };
+    });
     res.send(Course);
   }
 };

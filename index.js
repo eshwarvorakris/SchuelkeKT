@@ -20,7 +20,7 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.json());
 
 // for parsing application/xwww-
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: false })); 
 
 // for parsing multipart/form-data
 app.use(upload.array()); 
@@ -29,8 +29,27 @@ app.use(upload.array());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Methods", "*");
   next();
 });
+
+app.use(function(req, res, next) {
+  const pageNumber=req.query.page||1;
+  const pageLimit=req.query.limit||15;
+  const order_by=req.query.order_by??"created_at";
+  const order_in=req.query.order_in??"desc";
+  delete req.query.page;
+  delete req.query.order_by;
+  delete req.query.order_in;
+  delete req.query.limit;
+
+  global.pageNumber=pageNumber-1;
+  global.pageLimit=pageLimit;
+  global.orderByColumn=order_by.concat("."+order_in).split(".");
+  console.log(global);
+  next();
+});
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

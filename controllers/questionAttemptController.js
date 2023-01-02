@@ -4,9 +4,9 @@ const QuestionAttempt = require("../models/Question_attempt.model");
 const questionAttemptController = class {
   async index(req, res) {
     await QuestionAttempt
-      .findAndCountAll({offset:req.query.page,limit:15})
+      .findAndCountAll({ offset: pageNumber * pageLimit, limit: pageLimit })
       .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,15));
+        res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -23,16 +23,16 @@ const questionAttemptController = class {
       });
   }
   async show(req, res) {
-    const questionAttempt=await QuestionAttempt.findByPk(req.params.id);
-    res.send({data:questionAttempt});
+    const questionAttempt = await QuestionAttempt.findByPk(req.params.id);
+    res.send({ data: questionAttempt });
   }
   update(req, res) {
     res.send(req.body);
   }
   async destroy(req, res) {
-   const questionAttempt= await QuestionAttempt.destroy({where:{id:req.body.id}}).then((result)=>{
-    return {message:"QuestionAttempt Deleted"};
-   });
+    const questionAttempt = await QuestionAttempt.destroy({ where: { id: req.body.id } }).then((result) => {
+      return { message: "QuestionAttempt Deleted" };
+    });
     res.send(questionAttempt);
   }
 };

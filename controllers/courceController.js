@@ -7,9 +7,9 @@ const courseController = class {
   async index(req, res) {
     console.log(req);
     await Course
-      .findAndCountAll({ include: ["category", "trainer"], offset: req.query.page, limit: 2 })
+      .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
-        res.send(getPaginate(result, req.query.page ?? 1, 2));
+        res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
