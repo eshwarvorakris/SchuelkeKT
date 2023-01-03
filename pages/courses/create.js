@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
-const addcourse = () => {
+const addcourse = ({categories}) => {
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
@@ -18,11 +18,11 @@ const addcourse = () => {
     }
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        console.log(data, formData);
+        //console.log(data, formData);
         await courseModel.create(formData).then((res) => {
             helper.sweetalert.toast("course Created");
             router.push("/courses");
@@ -61,12 +61,9 @@ const addcourse = () => {
                                                 <div className="category">
                                                     <h6 htmlFor="category">Category</h6>
                                                     <select {...register("category_id")} className="selectaddcourse">
-                                                        <option value="1">Country</option>
-                                                        <option value="2">Blanket</option>
-                                                        <option value="3">Product</option>
-                                                        {/* {categories?.data.map((item) => {
-                                                            return (<option value={item.id}>{item.category_name}</option>)
-                                                        })} */}
+                                                        {categories?.map((item) => {
+                                                            return (<option key={item.id} value={item.id}>{item.category_name}</option>)
+                                                        })}
                                                     </select>
                                                 </div>
                                                 <div className="course-completion">
@@ -179,3 +176,13 @@ const addcourse = () => {
     )
 }
 export default addcourse;
+
+export async function getServerSideProps(req, res) {
+    const categories = (await category.list()).data;
+    //console.log(categories);
+    return {
+        props: {
+            categories
+        },
+    }
+}

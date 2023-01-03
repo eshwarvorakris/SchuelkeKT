@@ -1,5 +1,19 @@
+import categoryModel from "../../model/category.modal";
+import courseModel from "../../model/course.model";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import useSWR, { mutate } from 'swr';
+import DataTable from 'react-data-table-component';
+import { config } from '../../lib/config';
+import { helper } from '../../lib/helper';
 export default function adminDashboardGraph() {
-
+  const router = useRouter();
+  const QueryParam = router.query;
+  QueryParam.page = router.query.page || 1;
+  QueryParam.order_by = router.query?.order_by || "created_at";
+  QueryParam.order_in = router.query?.order_in || "desc";
+  const { data: courses, error: courseerror, isLoading: courseisLoading } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
+  const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR(QueryParam ? "categorylist" : null, async () => await categoryModel.list(), config.swrConfig);
   return (
     <>
       <div class="category-create-btn d-flex justify-content-between">
@@ -8,9 +22,9 @@ export default function adminDashboardGraph() {
           <h6 for="category" style={{ color: "#7E878C", fontFamily: "Co-text" }}>Category: </h6>
           <select name="category" id="cars" className='select-dashboard'>
             <option value="Country">-Select-</option>
-            <option value="Country">Country</option>
-            <option value="Blanket">Blanket</option>
-            <option value="Product">Product</option>
+            {categoryData?.data?.map((item) => {
+              return (<option key={item.id} value={item.id}>{item.category_name}</option>)
+            })}
           </select>
         </div>
         <div class="create-course-btnn">
@@ -250,7 +264,8 @@ export default function adminDashboardGraph() {
             </a>
           </div>
         </div>
-      </div><div class="trainer-pagination">
+      </div>
+      <div class="trainer-pagination">
         <nav class="pagination-container-dashboard d-flex justify-content-end">
           <div class="pagination">
             <a class="pagination-newer" href="#">
