@@ -19,7 +19,7 @@ function Index() {
           <div className="blank-class"></div>
           <Sidebar profile={profile} />
           <div className="container-2">
-            <div className="col-md-12 trainee-right">
+            <div className="col-md-12 trainee-right" style={{ backgroundColor: 'unset' }}>
               <div className="blank-nav-class"></div>
 
               <Topnavbar profile={profile} />

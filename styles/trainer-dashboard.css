@@ -712,17 +712,17 @@ html {
 
 /* pagination  */
 
-.pagination-container-dashboard {
+.all-pagination-container {
   text-align: center;
   padding-right: 2rem;
   padding-bottom: 2rem;
 }
 
-.pagination {
+.all-pagination {
   position: relative;
 }
 
-.pagination a {
+.all-pagination a {
   position: relative;
   display: inline-block;
   color: #000;
@@ -731,7 +731,7 @@ html {
   padding: 12px 16px;
 }
 
-.pagination a:before {
+.all-pagination a:before {
   z-index: -1;
   position: absolute;
   height: 100%;
@@ -745,29 +745,29 @@ html {
   transition: all 0.2s;
 }
 
-.pagination a:hover,
-.pagination a .pagination-active {
+.all-pagination a:hover,
+.all-pagination a .all-pagination-active {
   color: rgb(255, 255, 255);
 }
 
-.pagination a:hover:before,
-.pagination a .pagination-active:before {
+.all-pagination a:hover:before,
+.all-pagination a .all-pagination-active:before {
   transform: scale(1);
 }
 
-.pagination .pagination-active {
+.all-pagination .all-pagination-active {
   color: rgb(255, 255, 255);
 }
 
-.pagination .pagination-active:before {
+.all-pagination .all-pagination-active:before {
   transform: scale(1);
 }
 
-.pagination-newer {
+.all-pagination-newer {
   margin-right: 10px;
 }
 
-.pagination-older {
+.all-pagination-older {
   margin-left: 10px;
 }
 

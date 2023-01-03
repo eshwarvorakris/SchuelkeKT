@@ -5,17 +5,20 @@ import { useEffect, useState } from 'react';
 import auth from "../model/auth.model";
 import Link from 'next/link';
 function Login() {
+  const [loading, setLoading] = useState(false);
+  const errorMessage = "Please Check Login Detail";
   const [formErrors, setFormErrors] = useState([]);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log(data, formData);
+    //console.log(data, formData);
     await auth.login(formData).then((res) => {
       sessionStorage.setItem("access_token", res.data.access_token);
       window.location.assign("dashboard");
     }).catch((error) => {
+      console.error(error)
       setFormErrors(error.response?.data?.errors);
     })
   });
@@ -61,28 +64,28 @@ function Login() {
 
         <div className="section-login">
 
-          <form className="form d-flex flex-column"  onSubmit={onSubmit} encType="multipart/form-data" >
-
-
-            <div className="form-group">
+          <Form className="form d-flex flex-column" onSubmit={onSubmit} encType="multipart/form-data" >
+            <Form.Group className="form-group">
               <h1 style={{ fontFamily: `Co-bold-2` }}>Your Journey starts here</h1>
-              <label htmlFor="email" style={{ fontFamily: `Co-bold-2` }}><b>Email</b></label>
-              <input type="email" className="form-control mt-1" {...register("email")} isInvalid={formErrors?.email} aria-describedby="emailHelp"
+              <Form.Label htmlFor="email" style={{ fontFamily: `Co-bold-2` }}><b>Email</b></Form.Label>
+              <Form.Control type="email" className="form-control mt-1" {...register("email")} isInvalid={formErrors?.email}
                 placeholder="thomas@schulke.com" />
               {formErrors?.email && <p className="invalid-feedback">{formErrors?.email}</p>}
-            </div>
-            <div className="form-group">
-              <label htmlFor="password" style={{ fontFamily: `Co-light-2` }}><b>Password</b></label>
-              <input type="password" className="form-control mt-1" placeholder="Enter Your Password" {...register("password")} isInvalid={formErrors?.password} />
+            </Form.Group>
+            <Form.Group className="form-group">
+              <Form.Label htmlFor="password" style={{ fontFamily: `Co-light-2` }}><b>Password</b></Form.Label>
+              <Form.Control type="password" className="form-control mt-1" placeholder="Enter Your Password" {...register("password")} isInvalid={formErrors?.password} />
               {formErrors?.password && <p className="invalid-feedback">{formErrors?.password}</p>}
-            </div>
+            </Form.Group>
 
             <div className="danger-message hide-danger-label">
               <div className="arrow-up-1"></div>
               <label className="danger-label">Your email or password is incorrect.</label>
             </div>
-            <button type='submit' className="log-into-btn mt-3" >Login</button>
-          </form>
+            <Button type='submit' className="log-into-btn mt-3" >
+              Login
+            </Button>
+          </Form>
         </div>
       </div>
     </div>

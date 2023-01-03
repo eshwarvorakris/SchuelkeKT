@@ -3,135 +3,150 @@ import useSWR from 'swr';
 import auth from "../../model/auth.model";
 import Sidebar from "../components/sidebar";
 import Topnavbar from "../components/topnavbar";
-import Router from "next/router";
+import { useRouter } from "next/router";
+import { config } from '../../lib/config';
+import { useForm } from 'react-hook-form';
+import { helper } from '../../lib/helper';
 
 const myprofile = () => {
-
+    const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
-        Router.replace("login");
+        router.replace("login");
     }
 
+    const [formErrors, setFormErrors] = useState([]);
+    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: profile });
     return (
         <>
             <div>
-                <div class="section1">
-                    <div class="blank-class"></div>
+                <div className="section1">
+                    <div className="blank-class"></div>
                     <Sidebar profile={profile} />
-                    <div class="container-2 myprofilee">
-                        <div class="col-md-12 trainee-right" style={{ backgrounColor: '#fff' }}>
-                            <div class="blank-nav-class"></div>
-                            <Topnavbar profile={profile}/>
-                            <div class="trainee-right-body-profile">
-                                <div class="trainee-profile-pic">
-                                    <div class="box-1"></div>
-                                    <div class="box-2"></div>
-                                    <div class="text-tag">
-                                        <h6>My Info</h6>
-                                    </div>
-                                    <img class="profile-picture-profile" src="/trainer-images/trainer.jpg" alt="" />
-                                </div>
-                                <div class="trainee-info">
-                                    <table className="table-myprofile">
-                                        <tbody>
-                                            {(profile?.role == 'trainer' || profile?.role == 'trainee') &&
-                                                <tr>
-                                                    <td style={{ width: "125px" }}>Trainer ID</td>
-                                                    <td style={{ width: "500px", color: "#008bd6" }}>
-                                                        <strong>348334</strong>
-                                                    </td>
-                                                </tr>
-                                            }
+                    <div className="container-2 myprofilee">
+                        <div className="col-md-12 trainee-right" style={{ backgrounColor: '#fff' }}>
+                            <div className="blank-nav-class"></div>
+                            <Topnavbar profile={profile} />
+                            <div className="trainee-right-edit">
+                                <div className="edit-container">
+                                    <div className="trainee-profile-pic">
+                                        <div className="box-1"></div>
+                                        <div className="box-2"></div>
+                                        <div className=" text-tag">
+                                            <h6>Edit Info</h6>
+                                        </div>
+                                        <img className="profile-picture" src="/trainee-images/trainer.jpg" alt="" />
 
-                                            <tr>
-                                                <td>Full Name</td>
-                                                <td><strong>{profile?.full_name}</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Email</td>
-                                                <td><strong>{profile?.email}</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Address</td>
-                                                <td>
-                                                    <strong>
-                                                        {profile?.address}
-                                                    </strong>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Date-of-Birth</td>
-                                                <td><strong>{profile?.dob}</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Contact Number</td>
-                                                <td><strong>{profile?.contact_no}</strong></td>
-                                            </tr>
-                                            {(profile?.role == 'trainer' || profile?.role == 'trainee') &&
-                                                <tr>
-                                                    <td>Education Background</td>
-                                                    <td>
-                                                        <strong>{profile?.edu_background}</strong>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
+                                        <div className="btn-container d-flex flex-column gap-3">
+                                            <div>
+                                                <button type="button" className="btn upload-btn">
+                                                    <img className="btn-icon" src="/images/trainee-images/edit profile/icon-1.png"
+                                                        alt="" />
+                                                    <span className="text-primary">Upload</span>
+                                                </button>
+                                                <input className="file-input" type="file" hidden />
+                                            </div>
 
-                                    </table>
-                                </div>
-                                <div class="edit-profile-btn">
-                                    <div class="notify-popup hide-popup custom-scroll">
-                                        <div class="arrow-up-popup"></div>
-                                        <div class="notifications-header d-flex p-3">
-                                            <div class="main-heading">Notifications</div>
-                                            <div class="mark-as-read">
-                                                <a href="#">Mark as read</a>
+                                            <div>
+                                                <button type="button" className="btn remove-btn">
+                                                    <img className="btn-icon" src="/images/trainee-images/edit profile/icon-2.png"
+                                                        alt="" />
+                                                    <span style={{ color: "rgba(0, 0, 0, 0.534)" }}>Remove</span>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="notifications-body">
-                                            <div class="notify d-flex p-3">
-                                                <div class="profile-face">
-                                                    <ion-icon class="notify-icon" name="person-circle-outline"></ion-icon>
-                                                </div>
-                                                <div class="message d-flex">
-                                                    <p class="message-content">Thomas added a new course on</p>
-                                                    <p class="profession">Cardiology</p>
-                                                    <span class="message-time">3 mins ago</span>
-                                                </div>
-                                            </div>
 
-                                            <div class="notify d-flex p-3">
-                                                <div class="profile-face">
-                                                    <ion-icon class="notify-icon" name="person-circle-outline"></ion-icon>
-                                                </div>
-                                                <div class="message d-flex">
-                                                    <p class="message-content">Thomas added a new course on</p>
-                                                    <p class="profession">Cardiology</p>
-                                                    <span class="message-time">3 mins ago</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="notify d-flex p-3">
-                                                <div class="profile-face">
-                                                    <ion-icon class="notify-icon" name="person-circle-outline"></ion-icon>
-                                                </div>
-                                                <div class="message d-flex">
-                                                    <p class="message-content">Thomas added a new course on</p>
-                                                    <p class="profession">Cardiology</p>
-                                                    <span class="message-time">3 mins ago</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="notifications-footer p-3 d-flex">
-                                            <a href="#">View all</a>
-                                        </div>
                                     </div>
 
-                                    <a href="./profile-edit">
-                                        <button type="button" class="btn edit-btn-profile text-light" style={{ backgroundColor: "#008bd6" }}>
-                                            Edit Profile 🖋
-                                        </button>
-                                    </a>
+                                    <div className="trainee-info">
+                                        <div className="trainer-form">
+                                            <div className="trainer-Name">
+                                                <h6>Full Name</h6>
+                                                <input type="text" placeholder="Thomas" />
+                                            </div>
+
+                                            <div className="trainer-Email">
+                                                <h6>Email</h6>
+                                                <input type="text" placeholder="Thomas@gmail.com" />
+                                            </div>
+
+                                            <div className="trainer-DOB">
+                                                <h6>Date of Birth</h6>
+                                                <input type="date" />
+                                            </div>
+
+                                            <div className="trainer-address">
+                                                <h6>Address</h6>
+                                                <textarea className="address-box"
+                                                    placeholder="1234, Lorem ipsum dolor sit amet, consectetur" cols="30"
+                                                    rows="3"></textarea>
+                                            </div>
+
+                                            <div className="trainer-contact-no">
+                                                <h6>Contact Number</h6>
+                                                <input type="number" placeholder="+01 345 3345" />
+                                            </div>
+
+                                            <div className="trainer-background">
+                                                <h6>Education Background</h6>
+                                                <input type="number" placeholder="PhD. Zoology from XYZ Instiute, City, Country" />
+                                            </div>
+
+                                            <div className="trainer-designation">
+                                                <h6>Designation</h6>
+                                                <input type="text" placeholder="Product Devolopment Head" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div className="edit-profile-btn">
+                                        <div className="notify-popup hide-popup custom-scroll">
+                                            <div className="arrow-up-popup"></div>
+                                            <div className="notifications-header d-flex p-3">
+                                                <div className="main-heading">Notifications</div>
+                                                <div className="mark-as-read">
+                                                    <a href="#">Mark as read</a>
+                                                </div>
+                                            </div>
+                                            <div className="notifications-body">
+                                                <div className="notify d-flex p-3">
+                                                    <div className="profile-face">
+                                                        <ion-icon className="notify-icon" name="person-circle-outline"></ion-icon>
+                                                    </div>
+                                                    <div className="message d-flex">
+                                                        <p className="message-content">Thomas added a new course on</p>
+                                                        <p className="profession">Cardiology</p>
+                                                        <span className="message-time">3 mins ago</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="notify d-flex p-3">
+                                                    <div className="profile-face">
+                                                        <ion-icon className="notify-icon" name="person-circle-outline"></ion-icon>
+                                                    </div>
+                                                    <div className="message d-flex">
+                                                        <p className="message-content">Thomas added a new course on</p>
+                                                        <p className="profession">Cardiology</p>
+                                                        <span className="message-time">3 mins ago</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="notifications-footer p-3 d-flex">
+                                                <a href="#">View all</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div className="button-footer d-flex justify-content-end gap-3">
+                                    <div className="cancel-btn-proflie">
+                                        <a href="#!"><button type="reset" className="btn btn-light">Cancel</button></a>
+                                    </div>
+
+                                    <div className="save-btn-proflie">
+                                        <a href="#!"><button type="submit" className="btn btn-primary">Save</button></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

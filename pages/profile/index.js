@@ -127,7 +127,7 @@ const myprofile = () => {
                                         </div>
                                     </div>
 
-                                    <a href="./profile-edit">
+                                    <a href="/profile/edit">
                                         <button type="button" class="btn edit-btn-profile text-light" style={{ backgroundColor: "#008bd6" }}>
                                             Edit Profile 🖋
                                         </button>
