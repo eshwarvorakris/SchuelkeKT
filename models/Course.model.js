@@ -38,7 +38,7 @@ Course.init({
   },
   status: {
     type: DataTypes.STRING(30),
-    defaultValue: "active",
+    defaultValue: "pending",
   },
 }, {
   // Other model options go here

@@ -3,9 +3,18 @@ const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Course = require("../models/Course.model");
+const { Op } = require("sequelize");
 const courseController = class {
   async index(req, res) {
-    console.log(req);
+    
+    if(req.userRole == "trainer") {
+      req["query"]["trainer_id"]=req.userId;
+    }
+    else if(req.userRole == "trainee") {
+      req["query"]["status"] = {[Op.or]: ['active', 'approved']}
+    }
+    console.clear();
+    console.error("query : ",req.query);
     await Course
       .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
