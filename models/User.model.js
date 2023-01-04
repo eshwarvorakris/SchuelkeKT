@@ -19,7 +19,7 @@ User.init({
     unique: true
   },
   dob: {
-    type: Sequelize.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: true
   },
   address: {

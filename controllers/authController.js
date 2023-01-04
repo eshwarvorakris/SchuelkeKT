@@ -13,7 +13,35 @@ exports.profile = function (req, res) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const user = auth.verify(token, res);
-  res.send({ data: user });
+  
+  User.findOne({
+    attributes: [
+      'id', 'full_name', 'email', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'country', 'password'],
+    where: { id: user.id, status: 'active' }
+  }).then(async (result) => {
+    
+    var userData = {
+      id: result.dataValues.id,
+      full_name: result.dataValues.full_name,
+      email:  result.dataValues.email,
+      contact_no: result.dataValues.contact_no,
+      dob: result.dataValues.dob,
+      address: result.dataValues.address,
+      edu_background: result.dataValues.edu_background,
+      role: result.dataValues.role,
+      country: result.dataValues.country
+    };
+    res.send({ data: userData });
+  }).catch((error) => {
+    console.error("Unable To Find User : ", error);
+    res.status(422).send(
+      {
+        message: "Unable To Find User "+user.id,
+        errors: error.errors,
+      }
+    );
+  });
+  //res.send({ data: user });
 };
 
 exports.login = function (req, res) {
