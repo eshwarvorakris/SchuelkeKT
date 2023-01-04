@@ -16,6 +16,7 @@ function Login() {
     //console.log(data, formData);
     await auth.login(formData).then((res) => {
       sessionStorage.setItem("access_token", res.data.access_token);
+      sessionStorage.setItem("userinfo", res.data.user);
       window.location.assign("dashboard");
     }).catch((error) => {
       console.error(error)

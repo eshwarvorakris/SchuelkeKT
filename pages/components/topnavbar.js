@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
-import { Notifications } from 'react-ionicons'
+
 
 function topnavbar({ profile }) {
 
@@ -27,11 +27,7 @@ function topnavbar({ profile }) {
                     } */}
                     <li className="notify-btn nav-item active">
                         <a className="nav-link" href="#" style={{backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius:'10px', padding:'0.5rem'}}>
-                            <Notifications
-                                color={'#00000'}
-                                height="15px"
-                                width="15px"
-                            />
+                           
                             {/* <IonIcon name="notifications" className="trainee-nav-icon" /> */}
                         </a>
                         <span className="icon-badgeadmin">10+</span>
