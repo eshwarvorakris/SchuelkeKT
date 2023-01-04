@@ -15,13 +15,13 @@ Question.init({
     allowNull: false
   },
   question_type: {
-    type: DataTypes.CHAR
+    type: DataTypes.STRING(30)
   },
   sequence_no: {
     type: DataTypes.INTEGER
   },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: "active",
   },
 }, {

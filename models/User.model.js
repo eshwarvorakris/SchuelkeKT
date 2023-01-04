@@ -4,7 +4,7 @@ class User extends Model { }
 
 User.init({
   // Model attributes are defined here
-  name: {
+  full_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -13,25 +13,33 @@ User.init({
     allowNull: false,
     unique: true,
   },
-  mobile: {
-    type: DataTypes.CHAR,
+  contact_no: {
+    type: DataTypes.STRING(20),
     allowNull: false,
     unique: true
   },
+  dob: {
+    type: DataTypes.DATEONLY,
+    allowNull: true
+  },
+  address: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  edu_background: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   role: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(20),
     defaultValue: "trainee",
   },
-  education: {
+  country: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  country: {
-    type: DataTypes.CHAR,
-    allowNull: true,
-  },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: "active",
   },
   password: {

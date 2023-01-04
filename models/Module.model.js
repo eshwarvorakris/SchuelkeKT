@@ -5,7 +5,7 @@ class Module extends Model { }
 
 Module.init({
   // Model attributes are defined here
-  name: {
+  module_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -17,7 +17,7 @@ Module.init({
     type: DataTypes.INTEGER
   },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: "active",
   },
 }, {

@@ -6,14 +6,14 @@ class Course extends Model { }
 
 Course.init({
   // Model attributes are defined here
-  name: {
+  course_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  description: {
+  course_description: {
     type: DataTypes.TEXT
   },
-  thumbnail: {
+  course_thumbnail: {
     type: DataTypes.TEXT
   },
   category_id: {
@@ -23,22 +23,22 @@ Course.init({
   total_modules: {
     type: DataTypes.INTEGER
   },
-  launch_date: {
+  course_launch_date: {
     type: DataTypes.DATEONLY
   },
-  duration: {
+  week_duration: {
     type: DataTypes.INTEGER
   },
   country: {
-    type: DataTypes.CHAR
+    type: DataTypes.STRING
   },
   trainer_id: {
     type: DataTypes.INTEGER,
     references: { model: "users", key: "id" }
   },
   status: {
-    type: DataTypes.CHAR,
-    defaultValue: "active",
+    type: DataTypes.STRING(30),
+    defaultValue: "pending",
   },
 }, {
   // Other model options go here

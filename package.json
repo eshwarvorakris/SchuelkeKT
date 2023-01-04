@@ -22,6 +22,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.26.0",
     "sequelize-cli": "^6.5.2",
-    "Validator": "^1.1.4"
+    "Validator": "^1.1.4",
+    "cors": "^2.8.5"
   }
 }

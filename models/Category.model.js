@@ -5,7 +5,7 @@ class Category extends Model { }
 
 Category.init({
   // Model attributes are defined here
-  name: {
+  category_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -13,7 +13,7 @@ Category.init({
     type: DataTypes.TEXT
   },
   status: {
-    type: DataTypes.CHAR,
+    type: DataTypes.STRING(30),
     defaultValue: 'active'
   },
 }, {

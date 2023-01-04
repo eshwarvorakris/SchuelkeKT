@@ -5,9 +5,9 @@ const Module = require("../models/Module.model");
 const moduleController = class {
   async index(req, res) {
     await Module
-      .findAndCountAll({include:['course'], offset: pageNumber*pageLimit, limit: pageLimit,where:req.query})
+      .findAndCountAll({ include: ['course'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query })
       .then((result) => {
-        res.send(getPaginate(result,pageNumber, pageLimit));
+        res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -16,7 +16,7 @@ const moduleController = class {
   async store(req, res) {
     const data = req.body;
     const rules = {
-      name: "required",
+      module_name: "required",
       //description: "required"
     };
     const validation = validator.make(data, rules);
@@ -38,34 +38,32 @@ const moduleController = class {
       });
   }
   async show(req, res) {
-    const module=await Module.findByPk(req.params.id);
-    if(module)
-    {
-    return res.send({data:module});
+    const module = await Module.findByPk(req.params.id);
+    if (module) {
+      return res.send({ data: module });
     }
     return res.status(422).send(
       {
-        message:"Module not Found" ,
+        message: "Module not Found",
       }
     );
   }
   async update(req, res) {
-    const module=await Module.findByPk(req.params.id);
-    if(module)
-    {
+    const module = await Module.findByPk(req.params.id);
+    if (module) {
       module.update(req.body);
-    return  res.send({data:module});
+      return res.send({ data: module });
     }
     return res.status(422).send(
       {
-        message:"Module not update" ,
+        message: "Module not update",
       }
     );
   }
   async destroy(req, res) {
-   const module= await Module.destroy({where:{id:req.params.id}}).then((result)=>{
-    return {message:"Module Deleted"};
-   });
+    const module = await Module.destroy({ where: { id: req.params.id } }).then((result) => {
+      return { message: "Module Deleted" };
+    });
     res.send(Module);
   }
 };

@@ -5,9 +5,9 @@ const Content = require("../models/Module_content.model");
 const moduleContentController = class {
   async index(req, res) {
     await Content
-      .findAndCountAll({include:['module'], offset: pageNumber*pageLimit, limit: pageLimit,where:req.query??[]})
+      .findAndCountAll({ include: ['module'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [] })
       .then((result) => {
-        res.send(getPaginate(result,pageNumber, pageLimit));
+        res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -18,7 +18,7 @@ const moduleContentController = class {
     const rules = {
       content: "required",
       content_type: "required",
-      module_id:"required"
+      module_id: "required"
     };
     const validation = validator.make(data, rules);
     if (validation.fails()) {
@@ -39,34 +39,32 @@ const moduleContentController = class {
       });
   }
   async show(req, res) {
-    const content=await Content.findByPk(req.params.id);
-    if(content)
-    {
-    return res.send({data:content});
+    const content = await Content.findByPk(req.params.id);
+    if (content) {
+      return res.send({ data: content });
     }
     return res.status(422).send(
       {
-        message:"Content not Found" ,
+        message: "Content not Found",
       }
     );
   }
   async update(req, res) {
-    const content=await Content.findByPk(req.params.id);
-    if(content)
-    {
+    const content = await Content.findByPk(req.params.id);
+    if (content) {
       content.update(req.body);
-    return  res.send({data:content});
+      return res.send({ data: content });
     }
     return res.status(422).send(
       {
-        message:"Content not update" ,
+        message: "Content not update",
       }
     );
   }
   async destroy(req, res) {
-   const content= await Content.destroy({where:{id:req.params.id}}).then((result)=>{
-    return {message:"Content Deleted"};
-   });
+    const content = await Content.destroy({ where: { id: req.params.id } }).then((result) => {
+      return { message: "Content Deleted" };
+    });
     res.send(content);
   }
 };

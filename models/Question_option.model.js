@@ -3,6 +3,7 @@ const sequelize = require("../lib/dbConnection");
 //const Question = require("./Question.model");
 class QuestionOption extends Model { }
 
+
 QuestionOption.init({
   // Model attributes are defined here
   question_id: {
@@ -17,8 +18,8 @@ QuestionOption.init({
     type: DataTypes.BOOLEAN
   },
   status: {
-    type: DataTypes.STRING,
-    defaultValue: "active"
+    type: DataTypes.STRING(30),
+    defaultValue: "active",
   },
 }, {
   // Other model options go here

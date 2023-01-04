@@ -5,9 +5,9 @@ const Question = require("../models/Question.model");
 const questionController = class {
   async index(req, res) {
     await Question
-      .findAndCountAll({include:['course','options'], offset: pageNumber*pageLimit, limit: pageLimit,where:req.query??[]})
+      .findAndCountAll({ include: ['course', 'options'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [] })
       .then((result) => {
-        res.send(getPaginate(result,pageNumber, pageLimit));
+        res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -42,34 +42,32 @@ const questionController = class {
       });
   }
   async show(req, res) {
-    const question=await Question.findByPk(req.params.id);
-    if(question)
-    {
-    return res.send({data:question});
+    const question = await Question.findByPk(req.params.id);
+    if (question) {
+      return res.send({ data: question });
     }
     return res.status(422).send(
       {
-        message:"Question not Found" ,
+        message: "Question not Found",
       }
     );
   }
   async update(req, res) {
-    const question=await Question.findByPk(req.params.id);
-    if(question)
-    {
-    question.update(req.body);
-    return  res.send({data:question});
+    const question = await Question.findByPk(req.params.id);
+    if (question) {
+      question.update(req.body);
+      return res.send({ data: question });
     }
     return res.status(422).send(
       {
-        message:"Question not update" ,
+        message: "Question not update",
       }
     );
   }
   async destroy(req, res) {
-   const question= await Question.destroy({where:{id:req.params.id}}).then((result)=>{
-    return {message:"Question Deleted"};
-   });
+    const question = await Question.destroy({ where: { id: req.params.id } }).then((result) => {
+      return { message: "Question Deleted" };
+    });
     res.send(question);
   }
 };
