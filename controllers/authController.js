@@ -16,8 +16,7 @@ exports.profile = function (req, res) {
   res.send({ data: user });
 };
 
-exports.login = function (req, res) {
-  console.log(req.body);
+exports.login = async function (req, res) {
   const rules = {
     email: "required|email",
     password: "required",
@@ -31,9 +30,15 @@ exports.login = function (req, res) {
       }
     );
   }
-  var access_token = auth.generateToken(req.body);
-  res.send({ data: req.body, access_token });
+  req.body.password = bcrypt.hashSync(req.body.password, salt);
+  await User.findOne({
+    where: { email:req.body.email}
+  }).then(async (result) => {
+    var access_token = auth.generateToken(_.pick(result?.dataValues,['role','id']));
+    res.send({ data: result?.dataValues, access_token });
+  });
 };
+
 
 exports.registration = async function (req, res) {
   const data = req.body;
