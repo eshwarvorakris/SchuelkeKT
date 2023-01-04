@@ -1,21 +1,21 @@
-import auth from "../../model/auth.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from '../components/topnavbar';
+import auth from "../../../model/auth.model";
+import Sidebar from "../../components/sidebar";
+import Topnavbar from '../../components/topnavbar';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from 'swr';
-import courseModel from "../../model/course.model";
+import userModal from "../../../model/user.model";
 import DataTable from 'react-data-table-component';
-import { config } from '../../lib/config';
-import { helper } from '../../lib/helper';
+import { config } from '../../../lib/config';
+import { helper } from '../../../lib/helper';
 import Link from 'next/link';
 
-const admincoursemanagement = () => {
+const trainer = () => {
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
         //console.log(error);
-        router.replace("login");
+        router.replace("/login");
     }
 
     const QueryParam = router.query;
@@ -23,7 +23,7 @@ const admincoursemanagement = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses, error: courseerror, isLoading: courseisLoading } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
+    const { data: trainer, error: trainererror, isLoading: trainerisLoading } = useSWR(QueryParam ? "trainerList" : null, async () => await userModal.trainerList(QueryParam), config.swrConfig);
 
     const courseDelete = function (id) {
         helper.sweetalert.confirm("Delete Course", "info").then((result) => {
@@ -38,7 +38,7 @@ const admincoursemanagement = () => {
     }
     const columns = [
         {
-            name: '#',
+            name: 'S.No',
             cell: row => {
                 return (
                     <p>#</p>
@@ -46,52 +46,36 @@ const admincoursemanagement = () => {
             },
         },
         {
-            name: 'Course',
-            selector: row => row.course_name,
+            name: 'Trainer Id',
+            selector: row => 100000+row.id,
             sortable: true,
-            sortField: "course_name"
+            sortField: "id"
         },
         {
-            name: 'Topic',
-            selector: row => row.category?.category_name,
+            name: 'Trainer Name',
+            selector: row => row.full_name,
             sortable: true,
-            sortField: "category.category_name"
+            sortField: "full_name"
         },
         {
-            name: 'No. of Module',
-            selector: row => row?.total_modules,
+            name: 'Email',
+            selector: row => row?.email,
         },
         {
-            name: 'Training time',
-            selector: row => row?.week_duration,
-        },
-        {
-            name: 'Trainee enroll',
-            selector: row => row?.trainee_count,
-        },
-        {
-            name: 'Published By',
-            selector: row => row?.trainer?.full_name,
-        },
-        {
-            name: 'Approval Status',
-            selector: row => {
+            name: 'No. of Courses Published',
+            cell: row => {
                 return (
-                    <span>{row.status == 'active' ? <span>Approved</span> : <span>Pending</span>}</span>
+                    <p>0</p>
                 )
             },
         },
         {
-            name: 'Action',
+            name: '',
             cell: row => {
-                //console.log(cell);
                 return (
-                    <div className='btn-group  text-nowrap'>
-                        <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}`}>Edit</Link>
-                        <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}>Delete</button>
-                    </div>)
+                    <Link className='btn btn-outline-primary btn-sm' href={`#`}>Check Status</Link>
+                )
             },
-
         },
     ];
 
@@ -123,47 +107,34 @@ const admincoursemanagement = () => {
                         <div className="col-md-12 trainee-right" style={{ backgroundColor: 'unset' }}>
                             <div className="blank-nav-class"></div>
                             <Topnavbar profile={profile} />
-                            {(profile?.role == 'trainer') &&
+                            
                                 <div class=" SearchandSort ">
-                                    <div class=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " class=" search-icon "></ion-icon>
-                                        <div class=" search-trainer "><input class=" search-mycourse" type=" text " placeholder=" Search " /></div>
-                                    </div>
-
-                                    <div class=" category d-flex gap-3 align-items-center ">
-                                        <select name=" category " id=" cars " className="select-mycourse">
-                                            <option value=" Product ">Filter</option>
-                                            <option value=" Country ">Trainee ID</option>
-                                            <option value=" Country ">Trainee Name</option>
-                                            <option value=" Blanket ">No. of Courses Enrolled</option>
-                                        </select>
-                                    </div>
+                                    
 
                                     <div class=" create-course ">
-                                        <a href="./courses/create">
-                                            <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
-                                                Course <strong>+</strong></button>
+                                        <a href="/users/trainer/add">
+                                            <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainer <strong>+</strong></button>
                                         </a>
                                     </div>
                                 </div>
-                            }
+                            
                             <div className="trainee-body">
                                 <div className="trainee-admincoursemanagement d-flex flex-column">
                                     <div className="box-1-admincoursemanagement"></div>
                                     <div className="box-2-admincoursemanagement"></div>
                                     <div className="trainee-tag-admincoursemanagement">
-                                        <p>Courses</p>
+                                        <p>Trainer List</p>
                                     </div>
                                     <DataTable
                                         columns={columns}
-                                        data={courses?.data}
+                                        data={trainer?.data}
                                         progressPending={isLoading}
                                         sortServer
                                         onSort={handleSort}
                                         pagination
                                         paginationServer
                                         paginationComponentOptions={config.paginationComponent}
-                                        paginationTotalRows={courses?.meta?.total}
+                                        paginationTotalRows={trainer?.meta?.total}
                                         //onChangeRowsPerPage={()=>function(){ return 1}}
                                         onChangePage={pagginationHandler}
                                         paginationPerPage="15"
@@ -200,4 +171,4 @@ const admincoursemanagement = () => {
         </>
     )
 }
-export default admincoursemanagement;
+export default trainer;
