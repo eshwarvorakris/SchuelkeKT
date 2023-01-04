@@ -43,7 +43,14 @@ function sidebar({ profile }) {
                         <span style={{ marginLeft: '10px' }}>Course Management</span>
                       </a>);
                   }
-                  if (profile?.role == 'trainer') {
+                  else if (profile?.role == 'trainer') {
+                    return (
+                      <a href="/courses" className="nav-link ml-4 otherLink">
+                        <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/2.svg" alt="" />
+                        <span style={{ marginLeft: '10px' }}>My Courses</span>
+                      </a>);
+                  }
+                  else {
                     return (
                       <a href="/courses" className="nav-link ml-4 otherLink">
                         <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/2.svg" alt="" />
@@ -68,15 +75,21 @@ function sidebar({ profile }) {
                 }
               })()
             }
+            {
+              (() => {
+                if (profile?.role == 'admin' || profile?.role == 'trainer') {
+                  return (
+                    <><hr className="under_menu_line" /><li>
+                      <a href="/users/trainee" className="nav-link ml-4 otherLink">
+                        <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/4.svg" alt="" />
+                        <span style={{ marginLeft: '10px' }}>Trainess Management</span>
 
-            <hr className="under_menu_line" />
-            <li>
-              <a href="/users/trainee" className="nav-link ml-4 otherLink">
-                <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/4.svg" alt="" />
-                <span style={{ marginLeft: '10px' }}>Trainess Management</span>
-
-              </a>
-            </li>
+                      </a>
+                    </li></>
+                  );
+                }
+              })()
+            }
             <hr className="under_menu_line" />
             <li>
               <a href="/profile" className="nav-link   ml-4 otherLink">

@@ -73,7 +73,7 @@ const trainee = () => {
             name: '',
             cell: row => {
                 return (
-                    <Link className='btn btn-outline-primary btn-sm' href={`/${row.id}`}>Check Status</Link>
+                    <Link className='btn btn-outline-primary btn-sm' href={`#`}>Check Status</Link>
                 )
             },
         },
