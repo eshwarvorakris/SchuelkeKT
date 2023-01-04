@@ -38,7 +38,7 @@ const myprofile = () => {
                                                 <tr>
                                                     <td style={{ width: "125px" }}>Trainer ID</td>
                                                     <td style={{ width: "500px", color: "#008bd6" }}>
-                                                        <strong>348334</strong>
+                                                        <strong>{100000+profile?.id}</strong>
                                                     </td>
                                                 </tr>
                                             }
