@@ -64,7 +64,7 @@ const moduleController = class {
     const module = await Module.destroy({ where: { id: req.params.id } }).then((result) => {
       return { message: "Module Deleted" };
     });
-    res.send(Module);
+    res.send(module);
   }
 };
 

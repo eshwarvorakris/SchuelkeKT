@@ -5,6 +5,7 @@ const courceController = require("../controllers/courceController");
 const verifyAuth = require("../middleware/authorization");
 
 router.get("/", verifyAuth.verifyUser, courceController.index);
+router.get("/:id/module", courceController.modules);
 router.get("/:id", courceController.show);
 router.post("/", verifyAuth.verifyTrainer, courceController.store);
 router.put("/:id", courceController.update);
