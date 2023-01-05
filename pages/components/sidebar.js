@@ -1,4 +1,5 @@
 import Router from "next/router";
+import { helper } from '../../lib/helper';
 function sidebar({ profile }) {
 
   /* const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
@@ -13,6 +14,7 @@ function sidebar({ profile }) {
     sessionStorage.setItem("access_token", "");
     Router.replace("/login");
   }
+  console.log("users",helper.user);
   return (
     <div className="container-1 sticky-side-bar">
       <div className="col-md-2 trainee-sidebar">

@@ -7,6 +7,7 @@ import DataTable from 'react-data-table-component';
 import { config } from '../../lib/config';
 import { helper } from '../../lib/helper';
 import CourseCard from './courseCard';
+import ReactPaginate from 'react-paginate';
 export default function adminDashboardGraph() {
   const router = useRouter();
   const QueryParam = router.query;
@@ -15,6 +16,13 @@ export default function adminDashboardGraph() {
   QueryParam.order_in = router.query?.order_in || "desc";
   const { data: courses, error: courseerror, isLoading: courseisLoading } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
   const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR(QueryParam ? "categorylist" : null, async () => await categoryModel.list(), config.swrConfig);
+  const pagginationHandler = (page) => {
+    QueryParam.page = page.selected + 1;
+    router.push({
+      pathname: router.pathname,
+      query: QueryParam,
+    });
+  };
   return (
     <>
       <div class="category-create-btn d-flex justify-content-between">
@@ -43,24 +51,20 @@ export default function adminDashboardGraph() {
           return (<CourseCard key={item.id} courseData={item} />)
         })}
       </div>
-      <div class="all-trainer-pagination">
-        <nav class="all-pagination-container d-flex justify-content-end">
-          <div class="all-pagination">
-            <a class="all-pagination-newer" href="#">
-              <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon>
-            </a>
-            <span class="all-pagination-inner">
-              <a href="#">1</a>
-              <a class="all-pagination-active" href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-              <a href="#">6</a>
-            </span>
-            <a class="all-pagination-older" href="#">
-              <ion-icon name="chevron-forward-outline" role="img" class="md hydrated" aria-label="chevron forward outline"></ion-icon>
-            </a>
-          </div>
+      <div className="trainer-pagination ">
+        <nav className="pagination-container d-flex justify-content-end">
+          <ReactPaginate
+            threeDots={true}
+            pageCount={courses?.meta?.total_page}
+            initialPage={courses?.meta?.current_page}
+            pageRangeDisplayed={10}
+            prevNext
+            breakLabel="..."
+            onPageChange={pagginationHandler}
+            className="pagination float-end float-right"
+            pageLinkClassName='page-link rounded-circle'
+            pageClassName="page-item border-0"
+          />
         </nav>
       </div>
     </>

@@ -9,6 +9,7 @@ import DataTable from 'react-data-table-component';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import Link from 'next/link';
+import ReactPaginate from 'react-paginate';
 
 const trainee = () => {
     const router = useRouter();
@@ -99,78 +100,55 @@ const trainee = () => {
 
     return (
         <>
-            <div>
-                <div className="section1-enrolledtrainer">
-                    <div className="blank-class"></div>
-                    <Sidebar profile={profile} />
-                    <div className="container-2">
-                        <div className="col-md-12 trainee-right" style={{ backgroundColor: 'unset' }}>
-                            <div className="blank-nav-class"></div>
-                            <Topnavbar profile={profile} />
-                            <div class=" SearchandSort ">
-                                {
-                                    (() => {
-                                        if (profile?.role == 'admin') {
-                                            return (
-                                                <div class=" create-course ">
-                                                    <a href="/users/trainee/add">
-                                                        <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainee <strong>+</strong></button>
-                                                    </a>
-                                                </div>
-                                            );
-                                        }
-                                    })()
-                                }
-                            </div>
-                            <div className="trainee-body">
-                                <div className="trainee-admincoursemanagement d-flex flex-column">
-                                    <div className="box-1-admincoursemanagement"></div>
-                                    <div className="box-2-admincoursemanagement"></div>
-                                    <div className="trainee-tag-admincoursemanagement">
-                                        <p>Trainee List</p>
-                                    </div>
-                                    <DataTable
-                                        columns={columns}
-                                        data={trainee?.data}
-                                        progressPending={isLoading}
-                                        sortServer
-                                        onSort={handleSort}
-                                        pagination
-                                        paginationServer
-                                        paginationComponentOptions={config.paginationComponent}
-                                        paginationTotalRows={trainee?.meta?.total}
-                                        //onChangeRowsPerPage={()=>function(){ return 1}}
-                                        onChangePage={pagginationHandler}
-                                        paginationPerPage="15"
-                                        className='table'
-                                        customStyles={config.dataTableStyle}
-                                    />
-
+            <div class=" SearchandSort ">
+                {
+                    (() => {
+                        if (profile?.role == 'admin') {
+                            return (
+                                <div class=" create-course ">
+                                    <a href="/users/trainee/add">
+                                        <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainee <strong>+</strong></button>
+                                    </a>
                                 </div>
-                            </div>
-                            <div className="trainer-pagination ">
-                                <nav className="pagination-container d-flex justify-content-end">
-                                    <div className="pagination">
-                                        <a className="pagination-newer" href="#">
-                                            <ion-icon name="chevron-back-outline"></ion-icon>
-                                        </a>
-                                        <span className="pagination-inner">
-                                            <a href="#">1</a>
-                                            <a className="pagination-active" href="#">2</a>
-                                            <a href="#">3</a>
-                                            <a href="#">4</a>
-                                            <a href="#">5</a>
-                                            <a href="#">6</a>
-                                        </span>
-                                        <a className="pagination-older" href="#">
-                                            <ion-icon name="chevron-forward-outline"></ion-icon>
-                                        </a>
-                                    </div>
-                                </nav>
-                            </div>
-                        </div>
+                            );
+                        }
+                    })()
+                }
+            </div>
+            <div className="trainee-body">
+                <div className="trainee-admincoursemanagement d-flex flex-column">
+                    <div className="box-1-admincoursemanagement"></div>
+                    <div className="box-2-admincoursemanagement"></div>
+                    <div className="trainee-tag-admincoursemanagement">
+                        <p>Trainee List</p>
                     </div>
+                    <DataTable
+                        columns={columns}
+                        data={trainee?.data}
+                        progressPending={isLoading}
+                        sortServer
+                        onSort={handleSort}
+                        className='table'
+                        customStyles={config.dataTableStyle}
+                    />
+
                 </div>
+            </div>
+            <div className="trainer-pagination ">
+                <nav className="pagination-container d-flex justify-content-end">
+                    <ReactPaginate
+                        threeDots={true}
+                        pageCount={trainee?.meta?.total_page}
+                        initialPage={trainee?.meta?.current_page}
+                        pageRangeDisplayed={10}
+                        prevNext
+                        breakLabel="..."
+                        onPageChange={pagginationHandler}
+                        className="pagination float-end float-right"
+                        pageLinkClassName='page-link rounded-circle'
+                        pageClassName="page-item border-0"
+                    />
+                </nav>
             </div>
         </>
     )
