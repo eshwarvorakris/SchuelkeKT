@@ -29,7 +29,7 @@ const myprofile = () => {
             router.replace("/login");
             console.log(error);
         });
-    }, [reset]);
+    }, [router,reset]);
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -60,7 +60,7 @@ const myprofile = () => {
                             <div className="btn-container d-flex flex-column gap-3">
                                 <div>
                                     <button type="button" className="btn upload-btn">
-                                        <img className="btn-icon" src="/images/trainee-images/edit profile/icon-1.png"
+                                        <img className="btn-icon" src="/trainee-images/edit profile/icon-1.png"
                                             alt="" />
                                         <span className="text-primary">Upload</span>
                                     </button>
@@ -69,7 +69,7 @@ const myprofile = () => {
 
                                 <div>
                                     <button type="button" className="btn remove-btn">
-                                        <img className="btn-icon" src="/images/trainee-images/edit profile/icon-2.png"
+                                        <img className="btn-icon" src="/trainee-images/edit profile/icon-2.png"
                                             alt="" />
                                         <span style={{ color: "rgba(0, 0, 0, 0.534)" }}>Remove</span>
                                     </button>
