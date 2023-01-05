@@ -9,12 +9,6 @@ const _ = require("lodash");
 const userController = class {
   async index(req, res) {
     await User
-      /* .findAndCountAll({where: {
-        role: { [Op.ne]: "admin"},
-      },offset:req.query.page,limit:15})
-      .then((result) => {
-        res.send(getPaginate(result,req.query.page ?? 1,15));
-      }) */
       .findAndCountAll({ offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));

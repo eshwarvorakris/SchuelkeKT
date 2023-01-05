@@ -44,7 +44,7 @@ exports.profile = function (req, res) {
   //res.send({ data: user });
 };
 
-exports.login = function (req, res) {
+exports.login = async function (req, res) {
   const rules = {
     email: "required|email",
     password: "required",
@@ -58,40 +58,15 @@ exports.login = function (req, res) {
       }
     );
   }
-  User.findOne({
-    attributes: [
-      'id', 'full_name', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'password'],
-    where: { email: req.body.email, status: 'active' }
+  req.body.password = bcrypt.hashSync(req.body.password, salt);
+  await User.findOne({
+    where: { email:req.body.email}
   }).then(async (result) => {
-    const validPassword = await bcrypt.compare(req.body.password, result.password);
-    if (!validPassword) {
-      return res.status(401).json("Email Or Password is incorect");
-    }
-    var userData = {
-      id: result.dataValues.id,
-      full_name: result.dataValues.full_name,
-      email: req.body.email,
-      contact_no: result.dataValues.contact_no,
-      dob: result.dataValues.dob,
-      address: result.dataValues.address,
-      edu_background: result.dataValues.edu_background,
-      role: result.dataValues.role
-    };
-    //console.log(userData);
-    var access_token = auth.generateToken(userData);
-    console.clear();
-    console.log("Login Token : ", access_token);
-    res.send({ data: userData, access_token });
-  }).catch((error) => {
-    console.error("Unable To Find User : ", error);
-    res.status(422).send(
-      {
-        message: "Unable To Find User",
-        errors: error.errors,
-      }
-    );
+    var access_token = auth.generateToken(_.pick(result?.dataValues,['role','id']));
+    res.send({ data: result?.dataValues, access_token });
   });
 };
+
 
 exports.registration = async function (req, res) {
   const data = req.body;
@@ -102,7 +77,7 @@ exports.registration = async function (req, res) {
     password:
       "required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$|confirmed",
   };
-  const validation = validator.make(req.body, rules, {
+  const validation =validator.make(req.body, rules, {
     "password.regex":
       "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number",
   });

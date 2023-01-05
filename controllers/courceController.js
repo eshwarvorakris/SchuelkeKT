@@ -3,15 +3,16 @@ const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Course = require("../models/Course.model");
+const Module = require("../models/Module.model");
 const { Op } = require("sequelize");
 const courseController = class {
   async index(req, res) {
     
     if(req.userRole == "trainer") {
-      req["query"]["trainer_id"]=req.userId;
+      //req["query"]["trainer_id"]=req.userId;
     }
     else if(req.userRole == "trainee") {
-      req["query"]["status"] = {[Op.or]: ['active', 'approved']}
+      //req["query"]["status"] = {[Op.or]: ['active', 'approved']}
     }
     
     await Course
@@ -66,6 +67,20 @@ const courseController = class {
       }
     );
   }
+
+  async modules(req, res) {
+    
+    const module = await Module.findAll({where:{course_id:req.params.id}});
+    if (module) {
+      return res.send({ data: module });
+    }
+    return res.status(422).send(
+      {
+        message: "module not Found",
+      }
+    );
+  }
+
   async update(req, res) {
     console.clear();
     console.log("update query ", req.body);
@@ -82,11 +97,12 @@ const courseController = class {
   }
   
   async destroy(req, res) {
-    const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
-      return { message: "Course Deleted" };
+    console.log(req.params)
+    const course= await Course.destroy({where:{id:req.params.id}}).then((result)=>{
+     return {message:"Course Deleted"};
     });
-    res.send(course);
-  }
+     res.send(course);
+   }
 };
 
 module.exports = new courseController();
