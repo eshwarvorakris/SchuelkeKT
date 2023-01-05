@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
 import category from "../../model/category.modal";
 import courseModel from "../../model/course.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from "../components/topnavbar";
 import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
@@ -50,17 +48,13 @@ const editCourse = () => {
             setFormErrors(error.response?.data?.errors);
         })
     });
+    useEffect(()=>{
+        console.log(course);
+        reset(course?.data)
+    },[router.query?.id])
 
     return (
         <>
-            <div>
-                <div className="section1-addcourse">
-                    <div className="blank-class"></div>
-                    <Sidebar profile={profile} />
-                    <div className="container-2">
-                        <div className="col-md-12 trainee-right">
-                            <div className="blank-nav-class"></div>
-                            <Topnavbar profile={profile} />
 
                             <form onSubmit={onSubmit} encType="multipart/form-data" >
                                 <div className="trainee-body">
@@ -161,9 +155,9 @@ const editCourse = () => {
                                             <div className="btn-container d-flex justify-content-between mt-5">
                                                 <div className="left-col">
                                                     <div className="edit-modules-btn">
-                                                        <a href="./editcourse"><button type="button" className="btn"
+                                                        <a href={`/courses/${course?.data?.id}/module`} className="btn"
                                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
-                                                                Module</span></button></a>
+                                                                Module</span></a>
                                                     </div>
                                                 </div>
                                                 <div className="right-col d-flex gap-4">
@@ -188,10 +182,6 @@ const editCourse = () => {
 
                             </form>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
         </>
     )
 }

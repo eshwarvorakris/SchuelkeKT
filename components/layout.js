@@ -1,13 +1,24 @@
-// components/layout.js
-
 import Navbar from './navbar'
+import Sidebar from './sidebar'
 import Footer from './footer'
-import { Container } from 'react-bootstrap'
+import { Container, SSRProvider } from 'react-bootstrap'
 
 export default function Layout({ children }) {
   return (
-    
-      <main>{children}</main>
-    
+
+    <SSRProvider>
+      <div className="section1">
+        <div className="blank-class"></div>
+          <Sidebar />
+          <div className="container-2">
+            <div className='col-12 trainee-right'>
+              <Navbar />
+              {children}
+            </div>
+          
+        </div>
+      </div>
+      <Footer />
+    </SSRProvider>
   )
 }

@@ -33,16 +33,16 @@ function Page() {
       }
     })
   }
-  const columns = React.useMemo(() =>[
+  const columns = React.useMemo(() => [
     {
       name: 'Module',
-      selector: row => row.name,
+      selector: row => row.module_name,
       sortable: true,
       sortField: "name"
     },
     {
       name: 'Course',
-      selector: row => row.course?.name,
+      selector: row => row.course?.course_name,
       sortable: true,
       sortField: "module.name"
     },
@@ -79,49 +79,35 @@ function Page() {
   }
   return (
     <>
-      <div>
-        <div className="section1-enrolledtrainer">
-          <div className="blank-class"></div>
-          <div className="container-2">
-            <div className="col-md-12 trainee-right" style={{ backgroundColor: 'unset' }}>
-              <div className="blank-nav-class"></div>
 
-              <div className="trainee-body">
-                <div className="trainee-admincoursemanagement d-flex flex-column">
-                  <div className="box-1-admincoursemanagement"></div>
-                  <div className="box-2-admincoursemanagement"></div>
-                  <div className="trainee-tag-admincoursemanagement">
-                    <p>Module</p>
-                  </div>
-
-                  <DataTable
-                    columns={columns}
-                    data={modules?.data}
-                    progressPending={isLoading}
-                  />
-                </div>
-                </div>
-                </div>
-                <div className="trainer-pagination ">
-                  <nav className="pagination-container d-flex justify-content-end">
-                    <ReactPaginate
-                      threeDots={true}
-                      pageCount={modules?.meta?.total_page}
-                      initialPage={modules?.meta?.current_page}
-                      pageRangeDisplayed={10}
-                      prevNext
-                      breakLabel="..."
-                      onPageChange={pagginationHandler}
-                      className="pagination float-end float-right"
-                      pageLinkClassName='page-link rounded-circle'
-                      pageClassName="page-item border-0"
-                    />
-                  </nav>
-               
-              
-            </div>
-          </div>
+      <div className="trainee-admincoursemanagement d-flex flex-column">
+        <div className="box-1-admincoursemanagement"></div>
+        <div className="box-2-admincoursemanagement"></div>
+        <div className="trainee-tag-admincoursemanagement">
+          <p>Module</p>
         </div>
+
+        <DataTable
+          columns={columns}
+          data={modules?.data}
+          progressPending={isLoading}
+        />
+      </div>
+      <div className="trainer-pagination ">
+        <nav className="pagination-container d-flex justify-content-end">
+          <ReactPaginate
+            threeDots={true}
+            pageCount={modules?.meta?.total_page}
+            initialPage={modules?.meta?.current_page}
+            pageRangeDisplayed={10}
+            prevNext
+            breakLabel="..."
+            onPageChange={pagginationHandler}
+            className="pagination float-end float-right"
+            pageLinkClassName='page-link rounded-circle'
+            pageClassName="page-item border-0"
+          />
+        </nav>
       </div>
     </>
   );

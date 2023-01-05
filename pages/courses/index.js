@@ -1,6 +1,3 @@
-import auth from "../../model/auth.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from '../components/topnavbar';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from 'swr';
@@ -9,28 +6,25 @@ import DataTable from 'react-data-table-component';
 import { config } from '../../lib/config';
 import { helper } from '../../lib/helper';
 import Link from 'next/link';
+import ReactPaginate from 'react-paginate';
+import authModel from "../../model/auth.model";
 
 const admincoursemanagement = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("login");
-    }
-
+    
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses, error: courseerror, isLoading: courseisLoading } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
+    const { data: courses, error, isLoading } = useSWR(QueryParam, async () => await courseModel.list(QueryParam), config.swrConfig);
 
     const courseDelete = function (id) {
         helper.sweetalert.confirm("Delete Course", "info").then((result) => {
             if (result.isConfirmed) {
                 courseModel.delete(id).then((res) => {
                     helper.sweetalert.toast(res.data?.message);
-                    mutate('courseList');
+                   // mutate('courseList');
                 })
             }
         })
@@ -123,14 +117,13 @@ const admincoursemanagement = () => {
         },
     ];
 
-    //const [brands,setBrands]=useState([]);
     const pagginationHandler = (page) => {
-        QueryParam.page = page;
+        QueryParam.page = page.selected + 1;
         router.push({
-            pathname: router.pathname,
-            query: QueryParam,
+          pathname: router.pathname,
+          query: QueryParam,
         });
-    };
+      };
     const handleSort = function (column, sortDirection) {
         QueryParam.order_by = column.sortField;
         QueryParam.order_in = sortDirection;
@@ -143,19 +136,11 @@ const admincoursemanagement = () => {
 
     return (
         <>
-            <div>
-                <div className="section1-enrolledtrainer">
-                    <div className="blank-class"></div>
-                    <Sidebar profile={profile} />
-                    <div className="container-2">
-                        <div className="col-md-12 trainee-right" style={{ backgroundColor: 'unset' }}>
-                            <div className="blank-nav-class"></div>
-                            <Topnavbar profile={profile} />
-                            {(profile?.role == 'trainer') &&
-                                <div className=" SearchandSort ">
-                                    <div className=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
-                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " placeholder=" Search " /></div>
+                            {(authModel.user()?.role == 'trainer') &&
+                                <div class=" SearchandSort ">
+                                    <div class=" search-button-mycourse d-flex ">
+                                        <ion-icon name=" search-outline " class=" search-icon "></ion-icon>
+                                        <div class=" search-trainer "><input class=" search-mycourse" type=" text " placeholder=" Search " /></div>
                                     </div>
 
                                     <div className=" category d-flex gap-3 align-items-center ">
@@ -182,49 +167,37 @@ const admincoursemanagement = () => {
                                     <div className="trainee-tag-admincoursemanagement">
                                         <p>Courses</p>
                                     </div>
+                                    {isLoading ||
                                     <DataTable
                                         columns={columns}
                                         data={courses?.data}
                                         progressPending={isLoading}
                                         sortServer
                                         onSort={handleSort}
-                                        pagination
-                                        paginationServer
-                                        paginationComponentOptions={config.paginationComponent}
-                                        paginationTotalRows={courses?.meta?.total}
-                                        //onChangeRowsPerPage={()=>function(){ return 1}}
-                                        onChangePage={pagginationHandler}
-                                        paginationPerPage="15"
                                         className='table'
                                         customStyles={config.dataTableStyle}
                                     />
+}
 
                                 </div>
                             </div>
                             <div className="trainer-pagination ">
-                                <nav className="pagination-container d-flex justify-content-end">
-                                    <div className="pagination">
-                                        <a className="pagination-newer" href="#">
-                                            <ion-icon name="chevron-back-outline"></ion-icon>
-                                        </a>
-                                        <span className="pagination-inner">
-                                            <a href="#">1</a>
-                                            <a className="pagination-active" href="#">2</a>
-                                            <a href="#">3</a>
-                                            <a href="#">4</a>
-                                            <a href="#">5</a>
-                                            <a href="#">6</a>
-                                        </span>
-                                        <a className="pagination-older" href="#">
-                                            <ion-icon name="chevron-forward-outline"></ion-icon>
-                                        </a>
-                                    </div>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <nav className="pagination-container d-flex justify-content-end">
+          <ReactPaginate
+            threeDots={true}
+            pageCount={courses?.meta?.total_page}
+            initialPage={courses?.meta?.current_page}
+            pageRangeDisplayed={10}
+            prevNext
+            breakLabel="..."
+            onPageChange={pagginationHandler}
+            className="pagination float-end float-right"
+            pageLinkClassName='page-link rounded-circle'
+            pageClassName="page-item border-0"
+          />
+        </nav>
+      </div>
+                        
         </>
     )
 }

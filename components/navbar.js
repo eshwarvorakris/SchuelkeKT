@@ -3,41 +3,95 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
+import { useState } from 'react';
 
 function navbar() {
+  const [profile,setProfile]=useState({});
   return (
-    <Navbar expand="lg">
-      <div className="container">
-        <a className="navbar-brand d-flex flex-column fs-2 fw-bold text-light" href="#" style={{width: 'max-content'}}>
-          <img src="site_img/Schuelke_Logo 1-min.png" alt="shulke brand logo picture" style={{width:'fit-content'}} />
-          <span className="brand-info-header">Knowledge Transfer</span>
+    <nav className="navbar navbar-expand-lg navbar-light sticky-nav" style={{ width: 'inherit', border: "none" }}>
+        <a className="navbar-brand" style={{ fontWeight: "700", color: 'black' }} href="#">
+            <label className='text-capitalize'>{profile?.role}</label> Dashboard
         </a>
+        <div className="collapse navbar-collapse flex-row-reverse">
+            <ul className="navbar-nav align-content-center">
+                <li className="notify-btn nav-item active">
+                    <a className="nav-link" href="#" style={{backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius:'10px', padding:'0.5rem'}}>
+                       
+                        {/* <IonIcon name="notifications" className="trainee-nav-icon" /> */}
+                    </a>
+                    <span className="icon-badgeadmin">10+</span>
+                </li>
+                <li className="nav-item active face-tag">
+                    <a href="./profile" className="face-name text-light">
+                        <button type="button" className="btn text-light profile-btn"
+                            style={{ backgroundColor: "#008bd6", padding: '7px 10px 7px 10px' }}>
+                            <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />
+                            <strong>{profile?.full_name}</strong>
+                        </button>
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-        <Navbar.Toggle aria-controls="navbarNavAltMarkup" />
-         
-        <Navbar.Collapse className="nav-2-links collapse navbar-collapse flex-row-reverse" id="navbarNavAltMarkup">
-          <ul className="navbar-nav">
-            <li className="nav-item active mx-4">
-              <a className="nav-link text-white" href="#">Home</a>
-            </li>
-            <li className="nav-item mx-4">
-              <a className="nav-link text-white" href="#section-2">About</a>
-            </li>
-            <li className="nav-item mx-4 mr-5">
-              <a className="nav-link text-white" href="#section-3">Trainings</a>
-            </li>
-            <li className="nav-item">
-              <Link href="./login">
-                <button type="button nav-2-get-started" className="btn get-started">
-                  Get Started
-                </button>
-              </Link>
-            </li>
-          </ul>
-        </Navbar.Collapse>
-      </div>
-    </Navbar>
-  );
+        <div className="notify-popup hide-popup custom-scroll">
+            <div className="arrow-up-popup"></div>
+            <div className="notifications-header d-flex p-3">
+                <div className="main-heading">Notifications</div>
+                <div className="mark-as-read">
+                    <a href="#">Mark as read</a>
+                </div>
+            </div>
+            <div className="notifications-body">
+                <div className="notify d-flex p-3">
+                    <div className="profile-face">
+                        <ion-icon className="notify-icon" name="person-circle-outline"></ion-icon>
+                    </div>
+                    <div className="message d-flex">
+                        <p className="message-content">Thomas enrolled a new course on</p>
+                        <p className="profession">Cardiology</p>
+                        <span className="message-time">3 mins ago</span>
+                    </div>
+                </div>
+
+                <div className="notify d-flex p-3">
+                    <div className="profile-face">
+                        <ion-icon className="notify-icon" name="person-circle-outline"></ion-icon>
+                    </div>
+                    <div className="message d-flex">
+                        <p className="message-content">Thomas enrolled a new course on</p>
+                        <p className="profession">Cardiology</p>
+                        <span className="message-time">3 mins ago</span>
+                    </div>
+                </div>
+
+                <div className="notify d-flex p-3">
+                    <div className="profile-face">
+                        <ion-icon className="notify-icon" name="person-circle-outline"></ion-icon>
+                    </div>
+                    <div className="message d-flex">
+                        <p className="message-content">Thomas enrolled a new course on</p>
+                        <p className="profession">Cardiology</p>
+                        <span className="message-time">3 mins ago</span>
+                    </div>
+                </div>
+
+                <div className="notify d-flex p-3">
+                    <div className="profile-face">
+                        <ion-icon className="notify-icon" name="person-circle-outline"></ion-icon>
+                    </div>
+                    <div className="message d-flex">
+                        <p className="message-content">Thomas enrolled a new course on</p>
+                        <p className="profession">Cardiology</p>
+                        <span className="message-time">3 mins ago</span>
+                    </div>
+                </div>
+            </div>
+            <div className="notifications-footer p-3 d-flex">
+                <a href="#">View all</a>
+            </div>
+        </div>
+    </nav>
+);
 }
 
 export default navbar;

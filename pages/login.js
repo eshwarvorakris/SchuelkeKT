@@ -4,6 +4,9 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import auth from "../model/auth.model";
 import Link from 'next/link';
+import authLayout from "../components/authLayout";
+import Layout from "../components/layout";
+
 function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, seterrorMessage] = useState("");
@@ -17,8 +20,10 @@ function Login() {
     //console.log(data, formData);
     await auth.login(formData).then((res) => {
       sessionStorage.setItem("access_token", res.data.access_token);
-      sessionStorage.setItem("userinfo", res.data.user);
-      window.location.assign("dashboard");
+      sessionStorage.setItem("userinfo", JSON.stringify(res.data.data));
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("userinfo", JSON.stringify(res.data.data));
+      //window.location.assign("dashboard");
     }).catch((error) => {
       seterrorMessage(error.response?.data);
       console.error(error.response?.data)
@@ -94,6 +99,11 @@ function Login() {
       </div>
     </div>
   );
+}
+Login.getLayout = function getLayout(page){
+  return (
+    <authLayout>{page}</authLayout>
+  )
 }
 
 export default Login;

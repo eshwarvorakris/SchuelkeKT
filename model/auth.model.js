@@ -1,16 +1,18 @@
 import axiosInstance from "../lib/axiosInstance";
 
-const authModel=class {
+const authModel = class {
 
-    async profile()
-    {
+    async profile() {
         //axiosInstance.defaults.headers.common['Authorization'] = "Bearer "+localStorage.getItem("access_token");
-        return (await axiosInstance.get("/auth/profile")).data?.data||null;
+        return (await axiosInstance.get("/auth/profile")).data?.data || null;
     }
-    async login(data=[])
-    {
-       // console.log(data);
-        return await axiosInstance.post("/auth/login",data);
+    async login(data = []) {
+        // console.log(data);
+        return await axiosInstance.post("/auth/login", data);
+    }
+
+    async user() {
+        return await sessionStorage.getItem("userinfo");
     }
 
 }
