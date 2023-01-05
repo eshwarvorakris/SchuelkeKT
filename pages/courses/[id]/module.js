@@ -8,45 +8,59 @@ import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import ReactPaginate from 'react-paginate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 
 function Page() {
+  const [modalStatus, setModalStatus] = useState(false);
+
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "created_at";
   QueryParam.order_in = router.query?.order_in || "desc";
 
-  const { data: modules, error, isLoading } = useSWR(QueryParam?.id, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
+  const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
 
   const moduleDelete = function (id) {
     helper.sweetalert.confirm("Delete module", "info").then((result) => {
       if (result.isConfirmed) {
         moduleModel.delete(id).then((res) => {
           helper.sweetalert.toast(res.data?.message);
-          //mutate('moduleList');
-          window.location.reload();
+          moduleList();
         })
       }
     })
   }
   const updateModule = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);    
-    await moduleModel.update(formData.get("id"),formData).then((res) => {
-        helper.sweetalert.toast("module Updated");
-        //router.push("/courses");
+    const formData = new FormData(event.target);
+    await moduleModel.update(formData.get("id"), formData).then((res) => {
+      helper.sweetalert.toast("module Updated");
+      moduleList();
     }).catch((error) => {
-        setFormErrors(error.response?.data?.errors);
+      setFormErrors(error.response?.data?.errors);
     })
-};
+  };
 
+  const handleModuleSumit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    await moduleModel.create(formData).then((res) => {
+      helper.sweetalert.toast("module Created");
+      setModalStatus(false);
+      moduleList();
+    }).catch((error) => {
+      setFormErrors(error.response?.data?.errors);
+    })
+  };
   const columns = React.useMemo(() => [
     {
       name: 'Module',
-      cell: (row,index) => {
+      className:'col-1',
+      cell: (row, index) => {
         return (
-            <>Module {index+1}</>
+          <>Module {index + 1}</>
         )
       },
     },
@@ -54,15 +68,21 @@ function Page() {
       name: 'Title',
       cell: row => {
         return (
-          <form onSubmit={updateModule} className="form-inline">
-            <input type="hidden" name="id" value={row.id}/>
-            <input type="text" className='form-control' name="module_name"  defaultValue={row.module_name}/>
-            <button type="submit" className='btn btn-sm btn-primary'>Edit</button>
-            </form>)
+
+          <form onSubmit={updateModule} className="row g-1">
+            <div className="col">
+              <input type="hidden" name="id" value={row.id} />
+              <input type="text" className='form-control form-control-sm' name="module_name" defaultValue={row.module_name} />
+            </div>
+            <div className="col-auto">
+              <button type="submit" className='btn btn-sm btn-primary'>Edit</button>
+            </div>
+          </form>)
       },
     },
     {
       name: 'Approval Status',
+      right: true,
       cell: row => {
         return (
           <div className='btn-group  text-nowrap'>
@@ -71,6 +91,7 @@ function Page() {
     },
     {
       name: 'Action',
+      right: true,
       cell: row => {
         return (
           <div className='btn-group  text-nowrap'>
@@ -79,9 +100,6 @@ function Page() {
 
     },
   ]);
-  const addModuleRow=function(){
-    modules.data.push({module_name:''});
-  }
   return (
     <>
 
@@ -90,17 +108,35 @@ function Page() {
         <div className="box-2-admincoursemanagement"></div>
         <div className="trainee-tag-admincoursemanagement">
           <p>Module</p>
-        </div>
+        
 
         <DataTable
           columns={columns}
           data={modules?.data}
           progressPending={isLoading}
+          className="wrapper custom-scroll"
+          dense
         />
+        </div>
+      <div className='btn-container d-flex justify-content-between gap-3'>
 
+      <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button>
       </div>
-        <button type='button' className='btn btn-primary' onClick={addModuleRow}>Add Module</button>
-      
+      </div>
+      <Modal show={modalStatus} onHide={() => setModalStatus(false)}>
+        <form onSubmit={handleModuleSumit}>
+          <Modal.Header>Add Module</Modal.Header>
+          <Modal.Body>
+            <input type='hidden' name="course_id" value={QueryParam?.id} />
+            <input type='text' placeholder='Create Module' className='form-control' name="module_name" />
+          </Modal.Body>
+          <Modal.Footer>
+            <button type="submit" className='btn btn-primary'>Save</button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+
+
     </>
   );
 }
