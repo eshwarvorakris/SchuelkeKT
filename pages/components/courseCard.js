@@ -41,7 +41,7 @@ export default function courseCard({ courseData }) {
           </div>
         </div>
         <div className="edit-btn">
-          <a href={`/courses/${courseData?.id}`}>
+          <a href={`/courses/${courseData?.id}/edit`}>
             <button className="btn edit">Edit Course</button>
           </a>
         </div>

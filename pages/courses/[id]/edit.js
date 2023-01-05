@@ -16,31 +16,29 @@ const editCourse = () => {
         //console.log(error);
         router.replace("/login");
     }
+    const queryid = router.query.id;
 
     const [courseData, setcourseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: courseData });
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({defaultValues:courseData});
     //const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
-    // const { data: categordt, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
-    // const { data:course, courseerror, courseisLoading, mutate:loadCourse } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
+    //const { data:course, courseerror, courseisLoading, mutate:loadCourse } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
+    
     useEffect(() => {
         courseModel.detail(router.query.id).then((res) => {
-            setcourseData(res.data);
+            //setcourseData(res.data);
             console.log(res.data);
             reset(res.data);
         }).catch((error) => {
             console.log(error.response);
         });
-        // loadCourse();
-        // console.log(course);
-        // reset(course?.data||[]);
         category.list().then((res) => {
             setCategories(res);
         }).catch((error) => {
             console.log(error);
         });
-    }, [reset]);
+    }, [router,reset]);
 
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();

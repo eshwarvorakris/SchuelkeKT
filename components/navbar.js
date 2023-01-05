@@ -23,7 +23,7 @@ function navbar() {
                         <span className="icon-badgeadmin">10+</span>
                     </li>
                     <li className="nav-item active face-tag">
-                        <a href="./profile" className="face-name text-light">
+                        <a href="/profile" className="face-name text-light">
                             <button type="button" className="btn text-light profile-btn"
                                 style={{ backgroundColor: "#008bd6", padding: '7px 10px 7px 10px' }}>
                                 <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />
