@@ -13,8 +13,7 @@ const courseController = class {
     else if(req.userRole == "trainee") {
       req["query"]["status"] = {[Op.or]: ['active', 'approved']}
     }
-    console.clear();
-    console.error("query : ",req.query);
+    
     await Course
       .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
@@ -50,21 +49,30 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    const course = await Course.findByPk(req.params.id, { include: ['category'] });
-    if (course) {
-      return res.send({ data: course });
+    if(req.params.id !== undefined && req.params.id != "undefined"){
+      const course = await Course.findByPk(req.params.id, { include: ['category'] });
+      if (course) {
+        return res.send({ data: course });
+      }
+      return res.status(422).send(
+        {
+          message: "Course not Found",
+        }
+      );
     }
     return res.status(422).send(
       {
-        message: "Course not Found",
+        message: "Please Re-Select Course",
       }
     );
   }
   async update(req, res) {
+    console.clear();
+    console.log("update query ", req.body);
     const course = await Course.findByPk(req.params.id);
     if (course) {
-      course.update(req.body);
-      return res.send({ data: course });
+      const courseup = await course.update(req.body);
+      return res.send({ data: courseup });
     }
     return res.status(422).send(
       {
@@ -72,6 +80,7 @@ const courseController = class {
       }
     );
   }
+  
   async destroy(req, res) {
     const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
       return { message: "Course Deleted" };
