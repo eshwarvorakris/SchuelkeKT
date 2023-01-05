@@ -17,7 +17,7 @@ const admincoursemanagement = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses, error, isLoading } = useSWR(QueryParam, async () => await courseModel.list(QueryParam), config.swrConfig);
+    const { data: courses,mutate:couresList, error, isLoading } = useSWR(QueryParam, async () => await courseModel.list(QueryParam), config.swrConfig);
 
     const courseDelete = function (id) {
         helper.sweetalert.confirm("Delete Course", "info").then((result) => {
@@ -105,17 +105,17 @@ const admincoursemanagement = () => {
         });
     }
 
-
+{console.log(QueryParam)}
     return (
         <>
-                            {(authModel.user()?.role == 'trainer') &&
-                                <div class=" SearchandSort ">
-                                    <div class=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " class=" search-icon "></ion-icon>
-                                        <div class=" search-trainer "><input class=" search-mycourse" type=" text " placeholder=" Search " /></div>
+                            {(authModel.user?.role != 'admin') &&
+                                <div className=" SearchandSort ">
+                                    <div className=" search-button-mycourse d-flex ">
+                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event)=>{QueryParam.search=event.target.value;couresList()}} placeholder=" Search " /></div>
                                     </div>
 
-                                    <div class=" category d-flex gap-3 align-items-center ">
+                                    <div className=" category d-flex gap-3 align-items-center ">
                                         <select name=" category " id=" cars " className="select-mycourse">
                                             <option value=" Product ">Filter</option>
                                             <option value=" Country ">Trainee ID</option>
@@ -124,9 +124,9 @@ const admincoursemanagement = () => {
                                         </select>
                                     </div>
 
-                                    <div class=" create-course ">
+                                    <div className=" create-course ">
                                         <a href="./courses/create">
-                                            <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
+                                            <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
                                                 Course <strong>+</strong></button>
                                         </a>
                                     </div>

@@ -114,8 +114,7 @@ function Page() {
           columns={columns}
           data={modules?.data}
           progressPending={isLoading}
-          className="wrapper custom-scroll"
-          dense
+          className="wrapper custom-scroll"          
         />
         </div>
       <div className='btn-container d-flex justify-content-between gap-3'>
