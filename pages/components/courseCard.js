@@ -9,9 +9,9 @@ export default function courseCard({ courseData }) {
           </div>
           <div className="title">
             <div className="course-title">
-              <h6>{courseData.course_name}</h6>
+              <h6>{courseData?.course_name}</h6>
             </div>
-            <div className="badge-detail text-dark"><span>{courseData.category.category_name}</span></div>
+            <div className="badge-detail text-dark"><span>{courseData?.category?.category_name}</span></div>
           </div>
         </div>
         <div className="statistical-details">
@@ -34,14 +34,14 @@ export default function courseCard({ courseData }) {
         <div className="duration-details">
           <div className="duration-detail">
             <p>Duration : </p>
-            <span>{courseData.week_duration} Weeks</span>
+            <span>{courseData?.week_duration} Weeks</span>
           </div>
           <div className="average-time-detail">
             <p>Average Time Spent: 5 weeks</p>
           </div>
         </div>
         <div className="edit-btn">
-          <a href={`/courses/${courseData.id}`}>
+          <a href={`/courses/${courseData?.id}`}>
             <button className="btn edit">Edit Course</button>
           </a>
         </div>
