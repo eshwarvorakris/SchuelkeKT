@@ -9,10 +9,14 @@ const courseController = class {
   async index(req, res) {
     
     if(req.userRole == "trainer") {
-      //req["query"]["trainer_id"]=req.userId;
+      req["query"]["trainer_id"]=req.userId;
     }
     else if(req.userRole == "trainee") {
-      //req["query"]["status"] = {[Op.or]: ['active', 'approved']}
+      req["query"]["status"] = {[Op.or]: ['active', 'approved']}
+    }
+    if(req.query.search) {
+      req["query"]["course_name"] = {[Op.like]: '%'+req.query.search+'%'};
+      delete req.query.search;
     }
     console.clear();
     console.error("query : ",req.query);
