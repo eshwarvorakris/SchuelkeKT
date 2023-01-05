@@ -1,31 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR, { mutate } from 'swr';
-import auth from "../../model/auth.model";
-import categoryModel from "../../model/category.modal";
-import courseModel from "../../model/course.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from "../components/topnavbar";
+import auth from "../../../model/auth.model";
+import category from "../../../model/category.modal";
+import courseModel from "../../../model/course.model";
+import Sidebar from "../../components/sidebar";
+import Topnavbar from "../../components/topnavbar";
 import { useRouter } from "next/router";
-import { config } from '../../lib/config';
+import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
-import { helper } from '../../lib/helper';
-const addcourse = () => {
+import { helper } from '../../../lib/helper';
+const editCourse = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
+    const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
     if (error) {
         //console.log(error);
-        router.replace("login");
+        router.replace("/login");
     }
-    const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR("categorylist", async () => await categoryModel.list(), config.swrConfig);
+    
+    const [courseData, setcourseData] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: courseData });
+    //const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    
+    useEffect(() => {
+        courseModel.detail(router.query.id).then((res) => {
+            setcourseData(res.data);
+            console.log(res.data);
+            reset(res.data);
+        }).catch((error) => {
+            console.log(error.response);
+        });
 
+        category.list().then((res) => {
+            setCategories(res);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, [reset]);
+    
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        //console.log(data, formData);
-        await courseModel.create(formData).then((res) => {
-            helper.sweetalert.toast("course Created");
+        console.log(data, formData);
+        await courseModel.update(router.query.id, formData).then((res) => {
+            helper.sweetalert.toast("course Updated");
             router.push("/courses");
         }).catch((error) => {
             setFormErrors(error.response?.data?.errors);
@@ -62,8 +81,8 @@ const addcourse = () => {
                                                 <div className="category">
                                                     <h6 htmlFor="category">Category</h6>
                                                     <select {...register("category_id")} className="selectaddcourse">
-                                                        {categoryData?.data?.map((item) => {
-                                                            return (<option key={item.id} value={item.id}>{item.category_name}</option>)
+                                                        {categories?.data?.map((item) => {
+                                                            return (<option  key={item.id} value={item.id}>{item.category_name}</option>)
                                                         })}
                                                     </select>
                                                 </div>
@@ -176,4 +195,4 @@ const addcourse = () => {
         </>
     )
 }
-export default addcourse;
+export default editCourse;

@@ -77,7 +77,35 @@ const admincoursemanagement = () => {
             name: 'Approval Status',
             selector: row => {
                 return (
-                    <span>{row.status == 'active' ? <span>Approved</span> : <span>Pending</span>}</span>
+                    // <span>{row.status == 'active' ? <span className="text-success">Approved</span> : <span>Pending</span>}</span>
+                    <>
+                        {
+                            (() => {
+                                if (row.status == 'active' || row.status == 'approved') {
+                                    return (
+                                        <><span className="text-success">Approved</span></>
+                                    );
+                                }
+                                else if (row.status == 'pending') {
+                                    return (
+                                        <>
+                                            <span><a href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn">Approve</button></a></span>
+                                        </>
+                                    );
+                                }
+                                else if (row.status == 'rejected') {
+                                    return (
+                                        <><span className="text-danger">Rejected</span></>
+                                    );
+                                }
+                                else {
+                                    return (
+                                        <><span className="text-danger">{row.status}</span></>
+                                    );
+                                }
+                            })()
+                        }
+                    </>
                 )
             },
         },
@@ -87,7 +115,7 @@ const admincoursemanagement = () => {
                 //console.log(cell);
                 return (
                     <div className='btn-group  text-nowrap'>
-                        <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}`}>Edit</Link>
+                        <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}>Edit</Link>
                         <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}>Delete</button>
                     </div>)
             },
@@ -124,13 +152,13 @@ const admincoursemanagement = () => {
                             <div className="blank-nav-class"></div>
                             <Topnavbar profile={profile} />
                             {(profile?.role == 'trainer') &&
-                                <div class=" SearchandSort ">
-                                    <div class=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " class=" search-icon "></ion-icon>
-                                        <div class=" search-trainer "><input class=" search-mycourse" type=" text " placeholder=" Search " /></div>
+                                <div className=" SearchandSort ">
+                                    <div className=" search-button-mycourse d-flex ">
+                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " placeholder=" Search " /></div>
                                     </div>
 
-                                    <div class=" category d-flex gap-3 align-items-center ">
+                                    <div className=" category d-flex gap-3 align-items-center ">
                                         <select name=" category " id=" cars " className="select-mycourse">
                                             <option value=" Product ">Filter</option>
                                             <option value=" Country ">Trainee ID</option>
@@ -139,9 +167,9 @@ const admincoursemanagement = () => {
                                         </select>
                                     </div>
 
-                                    <div class=" create-course ">
+                                    <div className=" create-course ">
                                         <a href="./courses/create">
-                                            <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
+                                            <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
                                                 Course <strong>+</strong></button>
                                         </a>
                                     </div>

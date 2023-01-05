@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
-const addTrainee = ({ categories }) => {
+const addTrainee = () => {
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
@@ -110,13 +110,3 @@ const addTrainee = ({ categories }) => {
     )
 }
 export default addTrainee;
-
-export async function getServerSideProps(req, res) {
-    const categories = (await category.list()).data;
-    //console.log(categories);
-    return {
-        props: {
-            categories
-        },
-    }
-}

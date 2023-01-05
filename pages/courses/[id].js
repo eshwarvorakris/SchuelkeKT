@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
 import category from "../../model/category.modal";
@@ -9,22 +9,41 @@ import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
-const editCourse = ({course}) => {
+const editCourse = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
+    const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
     if (error) {
         //console.log(error);
-        router.replace("login");
+        router.replace("/login");
     }
-    //const { data:course, courseerror, courseisLoading } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
+    
+    const [courseData, setcourseData] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: course });
-    const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: courseData });
+    //const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    
+    useEffect(() => {
+        courseModel.detail(router.query.id).then((res) => {
+            setcourseData(res.data);
+            console.log(res.data);
+            reset(res.data);
+        }).catch((error) => {
+            console.log(error.response);
+        });
+
+        category.list().then((res) => {
+            setCategories(res);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, [reset]);
+    
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         console.log(data, formData);
-        await courseModel.update(course.id, formData).then((res) => {
+        await courseModel.update(router.query.id, formData).then((res) => {
             helper.sweetalert.toast("course Updated");
             router.push("/courses");
         }).catch((error) => {
@@ -62,12 +81,9 @@ const editCourse = ({course}) => {
                                                 <div className="category">
                                                     <h6 htmlFor="category">Category</h6>
                                                     <select {...register("category_id")} className="selectaddcourse">
-                                                        <option value="1">Country</option>
-                                                        <option value="2">Blanket</option>
-                                                        <option value="3">Product</option>
-                                                        {/* {categories?.data.map((item) => {
-                                                            return (<option value={item.id}>{item.category_name}</option>)
-                                                        })} */}
+                                                        {categories?.data?.map((item) => {
+                                                            return (<option  key={item.id} value={item.id}>{item.category_name}</option>)
+                                                        })}
                                                     </select>
                                                 </div>
                                                 <div className="course-completion">
@@ -178,13 +194,5 @@ const editCourse = ({course}) => {
             </div>
         </>
     )
-}
-export async function getServerSideProps(req, res) {
-  const course = (await courseModel.detail(req.query.id)).data;
-  return {
-    props: {
-      course
-    },
-  }
 }
 export default editCourse;
