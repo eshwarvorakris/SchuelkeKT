@@ -4,31 +4,18 @@ import Topnavbar from './components/topnavbar';
 import Router from "next/router";
 import { useState, useEffect } from "react";
 import auth from "../model/auth.model";
+import widgetModel from "../model/widget.model";
 import AdminGraph from "./components/adminDashboardGraph";
 import TrainerCourse from "./components/trainerDashboardCourseList";
+import { helper } from '../lib/helper';
 function Index() {
-  const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-  if (error) {
-    //console.log(error);
-    Router.replace("login");
-  }
+  const { data: courseCount } = useSWR('courseCount', async () => await widgetModel.courseCount());
   return (
-    <>
-      <div>
-        <div className="section1-admin">
-          <div className="blank-class"></div>
-          <Sidebar profile={profile} />
-          <div className="container-2">
-            <div className="col-md-12 trainee-right" style={{ backgroundColor: 'unset' }}>
-              <div className="blank-nav-class"></div>
-
-              <Topnavbar profile={profile} />
-
-              <div className="dashboard-info">
+    <>        <div className="dashboard-info">
                 <div className="total-courses">
                   <div className="left-info" style={{ justifySelf: 'unset' }}>
                     <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                      <h1 className="text-light" >46</h1>
+                      <h1 className="text-light" >{courseCount?.total}</h1>
                     </div>
                     <div className="explicit-info text-light">
                       <p>Total Courses</p>
@@ -88,21 +75,17 @@ function Index() {
               </div>
               {
                 (() => {
-                  if (profile?.role == 'admin')
+                  if (helper.user()?.role == 'admin')
                   {
                     return (<AdminGraph />)
                   }
-                  if (profile?.role == 'trainer')
+                  if (helper.user() == 'trainer')
                   {
                     return (<TrainerCourse />)
                   }
                 })()
               }
-              
-            </div>
-          </div>
-        </div>
-      </div>
+           
     </>
   );
 }

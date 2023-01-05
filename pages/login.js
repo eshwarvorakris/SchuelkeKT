@@ -4,6 +4,9 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import auth from "../model/auth.model";
 import Link from 'next/link';
+import authLayout from "../components/authLayout";
+import Layout from "../components/layout";
+
 function Login() {
   const [loading, setLoading] = useState(false);
   const errorMessage = "Please Check Login Detail";
@@ -16,10 +19,11 @@ function Login() {
     //console.log(data, formData);
     await auth.login(formData).then((res) => {
       sessionStorage.setItem("access_token", res.data.access_token);
-      sessionStorage.setItem("userinfo", res.data.user);
-      window.location.assign("dashboard");
+      sessionStorage.setItem("userinfo", JSON.stringify(res.data.data));
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("userinfo", JSON.stringify(res.data.data));
+      //window.location.assign("dashboard");
     }).catch((error) => {
-      console.error(error)
       setFormErrors(error.response?.data?.errors);
     })
   });
@@ -91,6 +95,11 @@ function Login() {
       </div>
     </div>
   );
+}
+Login.getLayout = function getLayout(page){
+  return (
+    <authLayout>{page}</authLayout>
+  )
 }
 
 export default Login;

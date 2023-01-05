@@ -28,6 +28,12 @@ const courseModel=class {
         return await axiosInstance.delete(`${this.baseUrl}/${id}`);
     }
 
+
+    async modules(id)
+    {
+        return (await axiosInstance.get(`${this.baseUrl}/${id}/module`)).data;
+    }
+
 }
 
 export default new courseModel();

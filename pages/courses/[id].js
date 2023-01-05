@@ -1,25 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
 import category from "../../model/category.modal";
 import courseModel from "../../model/course.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from "../components/topnavbar";
 import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
-const editCourse = ({course}) => {
+const editCourse = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("login");
-    }
-    //const { data:course, courseerror, courseisLoading } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
+    console.log(router.query);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: course });
-    const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    const { register, handleSubmit,reset, formState: { errors } } = useForm();
+    const { data: categories } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    const { data:course, error, isLoading } = useSWR (router.query?.id, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -31,17 +25,13 @@ const editCourse = ({course}) => {
             setFormErrors(error.response?.data?.errors);
         })
     });
+    useEffect(()=>{
+        console.log(course);
+        reset(course?.data)
+    },[router.query?.id])
 
     return (
         <>
-            <div>
-                <div className="section1-addcourse">
-                    <div className="blank-class"></div>
-                    <Sidebar profile={profile} />
-                    <div className="container-2">
-                        <div className="col-md-12 trainee-right">
-                            <div className="blank-nav-class"></div>
-                            <Topnavbar profile={profile} />
 
                             <form onSubmit={onSubmit} encType="multipart/form-data" >
                                 <div className="trainee-body">
@@ -62,12 +52,9 @@ const editCourse = ({course}) => {
                                                 <div className="category">
                                                     <h6 htmlFor="category">Category</h6>
                                                     <select {...register("category_id")} className="selectaddcourse">
-                                                        <option value="1">Country</option>
-                                                        <option value="2">Blanket</option>
-                                                        <option value="3">Product</option>
-                                                        {/* {categories?.data.map((item) => {
+                                                         {categories?.data.map((item) => {
                                                             return (<option value={item.id}>{item.category_name}</option>)
-                                                        })} */}
+                                                        })}
                                                     </select>
                                                 </div>
                                                 <div className="course-completion">
@@ -145,9 +132,9 @@ const editCourse = ({course}) => {
                                             <div className="btn-container d-flex justify-content-between mt-5">
                                                 <div className="left-col">
                                                     <div className="edit-modules-btn">
-                                                        <a href="./editcourse"><button type="button" className="btn"
+                                                        <a href={`/courses/${course?.data?.id}/module`} className="btn"
                                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
-                                                                Module</span></button></a>
+                                                                Module</span></a>
                                                     </div>
                                                 </div>
                                                 <div className="right-col d-flex gap-4">
@@ -172,19 +159,7 @@ const editCourse = ({course}) => {
 
                             </form>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
         </>
     )
-}
-export async function getServerSideProps(req, res) {
-  const course = (await courseModel.detail(req.query.id)).data;
-  return {
-    props: {
-      course
-    },
-  }
 }
 export default editCourse;
