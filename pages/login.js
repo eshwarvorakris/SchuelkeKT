@@ -9,12 +9,13 @@ import Layout from "../components/layout";
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const errorMessage = "Please Check Login Detail";
+  const [errorMessage, seterrorMessage] = useState("");
   const [formErrors, setFormErrors] = useState([]);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
+    seterrorMessage("")
     const formData = new FormData(event.target);
     //console.log(data, formData);
     await auth.login(formData).then((res) => {
@@ -24,6 +25,8 @@ function Login() {
       localStorage.setItem("userinfo", JSON.stringify(res.data.data));
       //window.location.assign("dashboard");
     }).catch((error) => {
+      seterrorMessage(error.response?.data);
+      console.error(error.response?.data)
       setFormErrors(error.response?.data?.errors);
     })
   });
@@ -66,20 +69,21 @@ function Login() {
             </div>
           </div>
         </div>
-
-        <div className="section-login">
-
+        
+        <div className="section-login" style={{paddingTop: '0.1rem'}}>
+          
           <Form className="form d-flex flex-column" onSubmit={onSubmit} encType="multipart/form-data" >
+            <b className='text-danger'>{errorMessage}</b>
             <Form.Group className="form-group">
               <h1 style={{ fontFamily: `Co-bold-2` }}>Your Journey starts here</h1>
               <Form.Label htmlFor="email" style={{ fontFamily: `Co-bold-2` }}><b>Email</b></Form.Label>
-              <Form.Control type="email" className="form-control mt-1" {...register("email")} isInvalid={formErrors?.email}
+              <Form.Control type="email" className="form-control mt-1" {...register("email", { required: "Fill Email Address" })} isInvalid={formErrors?.email}
                 placeholder="thomas@schulke.com" />
               {formErrors?.email && <p className="invalid-feedback">{formErrors?.email}</p>}
             </Form.Group>
             <Form.Group className="form-group">
               <Form.Label htmlFor="password" style={{ fontFamily: `Co-light-2` }}><b>Password</b></Form.Label>
-              <Form.Control type="password" className="form-control mt-1" placeholder="Enter Your Password" {...register("password")} isInvalid={formErrors?.password} />
+              <Form.Control type="password" className="form-control mt-1" placeholder="Enter Your Password" {...register("password", { required: "Fill Password" })} isInvalid={formErrors?.password} />
               {formErrors?.password && <p className="invalid-feedback">{formErrors?.password}</p>}
             </Form.Group>
 

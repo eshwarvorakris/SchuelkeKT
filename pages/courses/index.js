@@ -78,6 +78,7 @@ const admincoursemanagement = () => {
         {
             name: 'Action',
             cell: row => {
+                //console.log(cell);
                 return (
                     <div className='btn-group  text-nowrap'>
                         <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}`}>Edit</Link>
