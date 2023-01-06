@@ -86,3 +86,4 @@ app.use("/content",require("./routes/content"));
 app.use("/question",require("./routes/question"));
 app.use("/assignment",require("./routes/assignment"));
 app.use("/widget",require("./routes/widget"));
+app.use("/upload",require("./routes/fileUpload"));

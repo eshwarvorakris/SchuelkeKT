@@ -58,12 +58,27 @@ exports.login = async function (req, res) {
       }
     );
   }
-  req.body.password = bcrypt.hashSync(req.body.password, salt);
   await User.findOne({
-    where: { email:req.body.email}
+    attributes: [
+      'id', 'full_name', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'password'],
+    where: { email: req.body.email, status: 'active' }
   }).then(async (result) => {
-    var access_token = auth.generateToken(_.pick(result?.dataValues,['role','id']));
-    res.send({ data: result?.dataValues, access_token });
+    if(result !== null){
+      //console.log(result);
+      const validPassword = await bcrypt.compare(req.body.password, result.password);
+      if (!validPassword) {
+        return res.status(401).json("Email Or Password is incorect");
+      }
+      result.dataValues.password = "";
+      var access_token = auth.generateToken(_.pick(result?.dataValues,['role','id']));
+      res.send({ data: result?.dataValues, access_token });
+    }
+    else {
+      return res.status(401).json("Email Or Password is incorect");
+    }
+  }).catch((error) => {
+    console.error("Unable To Find User : ", error);
+    return res.status(422).json("Unable To Find User");
   });
 };
 
