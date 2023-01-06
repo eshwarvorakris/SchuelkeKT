@@ -46,7 +46,7 @@ const myprofile = () => {
     });
     return (
         <>
-            <div className="trainee-right-edit" style={{ backgroundColor: 'unset', marginTop: '10rem' }}>
+            <div className="trainee-right-edit" style={{ marginTop: '10rem' }}>
                 <Form onSubmit={onSubmit} encType="multipart/form-data">
                     <div className="edit-container">
                         <div className="trainee-profile-pic">
