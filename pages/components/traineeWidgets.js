@@ -14,7 +14,7 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" class="icon-info"/>
+          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" className="icon-info"/>
         </div>
       </div>
       <div className="enrolled-trainees">
@@ -27,7 +27,7 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" class="icon-info"/>
+          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" className="icon-info"/>
         </div>
       </div>
       <div className="training-hours">
@@ -40,7 +40,7 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" class="icon-info"/>
+          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" className="icon-info"/>
         </div>
       </div>
       <div className="courses-completion">
@@ -53,7 +53,7 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" class="icon-info"/>
+          <img src="/trainee-images/trainee-dashboard/Union.png" alt="" className="icon-info"/>
         </div>
       </div>
     </>

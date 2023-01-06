@@ -86,7 +86,7 @@ function Page() {
       cell: row => {
         return (
           <div className='btn-group  text-nowrap'>
-            <a href={`/module${row.id}/content`} className='btn btn-primary btn-sm' type='button' >Edit Content</a></div>)
+            <a href={`#`} className='btn btn-primary btn-sm' type='button' >Edit Content</a></div>)
       },
     },
     {

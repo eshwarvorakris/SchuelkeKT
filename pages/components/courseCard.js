@@ -1,11 +1,16 @@
 export default function courseCard({ courseData }) {
+  let courseImg = "/trainer-images/dashboard images/thumbnails/thumbnaila.png";
+  if(courseData?.course_thumbnail !== null && courseData?.course_thumbnail != "")
+  {
+    courseImg = courseData?.course_thumbnail;
+  }
   return (
     <>
       <div className="course-info-card-1 course-card">
         <div className="course-details">
           <div className="course-thumbnail">
             <img className="thumbnail"
-              src="/trainer-images/dashboard images/thumbnails/thumbnaila.png" alt="" />
+              src={courseImg} alt="" />
           </div>
           <div className="title">
             <div className="course-title">

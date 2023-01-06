@@ -3,27 +3,40 @@ import useSWR from 'swr';
 import auth from "../../model/auth.model";
 import Sidebar from "../components/sidebar";
 import Topnavbar from "../components/topnavbar";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 const myprofile = () => {
-
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        Router.replace("login");
-    }
-
+    const router = useRouter();
+    // const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
+    // if (error) {
+    //     Router.replace("login");
+    // }
+    const [profile, setprofileData] = useState([]);
+    const [image, setImage] = useState("/trainee-images/trainer.jpg");
+    useEffect(() => {
+        auth.profile().then((res) => {
+            if(res.profile_img !== null) {
+                setImage(res.profile_img);
+            }
+            setprofileData(res);
+            console.log(res);
+        }).catch((error) => {
+            router.replace("/login");
+            console.log(error);
+        });
+    }, [router]);
     return (
         <>
-            <div class="trainee-right-body-profile">
-                <div class="trainee-profile-pic">
-                    <div class="box-1"></div>
-                    <div class="box-2"></div>
-                    <div class="text-tag">
+            <div className="trainee-right-body-profile">
+                <div className="trainee-profile-pic">
+                    <div className="box-1"></div>
+                    <div className="box-2"></div>
+                    <div className="text-tag">
                         <h6>My Info</h6>
                     </div>
-                    <img class="profile-picture-profile" src="/trainer-images/trainer.jpg" alt="" />
+                    <img className="profile-picture-profile" src={image} alt="" />
                 </div>
-                <div class="trainee-info">
+                <div className="trainee-info">
                     
                     <table className="table-myprofile" style={{ height: 'min-content' }}>
                         <tbody>
@@ -60,7 +73,7 @@ const myprofile = () => {
                                 <td><strong>{profile?.contact_no}</strong></td>
                             </tr>
                             {(profile?.role == 'trainer' || profile?.role == 'trainee') &&
-                                <tr style={{ lineHeight: '1px' }}>
+                                <tr >
                                     <td>Education Background</td>
                                     <td>
                                         <strong>{profile?.edu_background}</strong>
@@ -71,9 +84,9 @@ const myprofile = () => {
                     </table>
 
                 </div>
-                <div class="edit-profile-btn">
+                <div className="edit-profile-btn">
                     <a href="/profile/edit">
-                        <button type="button" class="btn edit-btn-profile text-light" style={{ backgroundColor: "#008bd6" }}>
+                        <button type="button" className="btn edit-btn-profile text-light" style={{ backgroundColor: "#008bd6" }}>
                             Edit Profile 🖋
                         </button>
                     </a>

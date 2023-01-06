@@ -35,10 +35,10 @@ export default function adminDashboardGraph() {
   }
   return (
     <>
-      <div class="category-create-btn d-flex justify-content-between">
+      <div className="category-create-btn d-flex justify-content-between">
 
-        <div class="category d-flex gap-3 align-items-center">
-          <h6 for="category" style={{ color: "#7E878C", fontFamily: "Co-text" }}>Category: </h6>
+        <div className="category d-flex gap-3 align-items-center">
+          <h6 htmlFor="category" style={{ color: "#7E878C", fontFamily: "Co-text" }}>Category: </h6>
           <select name="category" id="cars" className='select-dashboard' onChange={() => { changeCategory(event.target.value) }}>
             <option value="Country">-Select-</option>
             {categoryData?.data?.map((item) => {
@@ -46,17 +46,17 @@ export default function adminDashboardGraph() {
             })}
           </select>
         </div>
-        <div class="create-course-btnn">
-          <div class="create-course">
+        <div className="create-course-btnn">
+          <div className="create-course">
             <a href="/courses/create">
-              <button class="btn btn-primary create-course-btnn"
+              <button className="btn btn-primary create-course-btnn"
                 style={{ backgroundColor: "#008bd6" }}>Create
                 Course <strong>+</strong></button>
             </a>
           </div>
         </div>
       </div>
-      <div class="course-info-cards">
+      <div className="course-info-cards">
         {courses?.data?.map((item) => {
           return (<CourseCard key={item.id} courseData={item} />)
         })}

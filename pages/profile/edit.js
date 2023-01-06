@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
+import uploader from "../../model/fileupload.model";
 import user from "../../model/user.model";
 import Sidebar from "../components/sidebar";
 import Topnavbar from "../components/topnavbar";
@@ -9,31 +10,44 @@ import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
 import Form from 'react-bootstrap/Form';
+import moment from 'moment';
 const myprofile = () => {
     const router = useRouter();
     const [profileData, setprofileData] = useState([]);
+    const [isUploaded, setIsUploaded] = useState(false);
+    const inputFileRef = useRef();
+    const [image, setImage] = useState("/trainee-images/trainer.jpg");
+    const [profileUrl, setprofileUrl] = useState("");
     // const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     // if (error) {
     //     router.replace("./login");
     // }
 
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: profileData });
+    const { register, setValue, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: profileData });
 
     useEffect(() => {
         auth.profile().then((res) => {
+            if(res.profile_img !== null) {
+                setImage(res.profile_img);
+                setprofileUrl(res.profile_img);
+            }
             setprofileData(res);
-            //console.log(res);
+            console.log(res);
             reset(res);
         }).catch((error) => {
             router.replace("/login");
             console.log(error);
         });
-    }, [router,reset]);
+    }, [router, reset]);
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        console.log(data, formData);
+        console.clear();
+        if(isUploaded) {
+            formData.delete("uploadfile");
+        }
+        console.log("data ", formData);
         await user.updateProfile(formData).then((res) => {
             helper.sweetalert.toast("Profile Updated");
             console.log(res);
@@ -43,6 +57,29 @@ const myprofile = () => {
             console.error(error.response?.data)
             setFormErrors(error.response?.data?.errors);
         })
+    });
+    const fileClick = () => {
+        /*Collecting node-element and performing click*/
+        inputFileRef.current.click();
+    };
+    const handleChangeImage = (async (e) => {
+        //setValue("uploadfile", e.target.files);
+        var data = new FormData();
+        var imagedata = await e.target.files[0];
+        data.append("uploadFile", imagedata);
+        data.append("filefolder", "profile");
+        setIsUploaded(true);
+        await uploader.upload(data).then((res) => {
+            helper.sweetalert.toast("File Uploaded");
+            
+            console.log(res?.data);
+            setprofileUrl(res?.data?.data?.Location);
+            setImage(res?.data?.data?.Location);
+        }).catch((error) => {
+            helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
+            console.error(error.response)
+        })
+        //setImage(URL.createObjectURL(e.target.files[0]))
     });
     return (
         <>
@@ -55,16 +92,17 @@ const myprofile = () => {
                             <div className=" text-tag">
                                 <h6>Edit Info</h6>
                             </div>
-                            <img className="profile-picture" src="/trainee-images/trainer.jpg" alt="" />
+                            <img className="profile-picture" src={image} alt="" />
 
                             <div className="btn-container d-flex flex-column gap-3">
                                 <div>
-                                    <button type="button" className="btn upload-btn">
+                                    <button type="button" className="btn upload-btn" onClick={fileClick}>
                                         <img className="btn-icon" src="/trainee-images/edit profile/icon-1.png"
                                             alt="" />
                                         <span className="text-primary">Upload</span>
                                     </button>
-                                    <input className="file-input" type="file" hidden />
+                                    <input className="file-input" type="file" ref={inputFileRef} onChange={handleChangeImage} name="uploadfile" hidden />
+                                    <input type="hidden" name="profile_img" value={profileUrl} />
                                 </div>
 
                                 <div>
@@ -94,7 +132,7 @@ const myprofile = () => {
 
                                 <div className="trainer-DOB">
                                     <h6>Date of Birth</h6>
-                                    <input type="date"  {...register("dob", { required: "Fill Date Of Birth" })} />
+                                    <input type="date"  {...register("dob", { required: "Fill Date Of Birth" })} max={moment().format("YYYY-MM-DD")}  />
                                     {formErrors?.dob && <p className="invalid-feedback">{formErrors?.dob}</p>}
                                 </div>
 
@@ -113,7 +151,7 @@ const myprofile = () => {
                                     (() => {
                                         if (profileData?.role != 'admin') {
                                             return (
-                                                <div className="trainer-background">
+                                                <div className="trainer-Name">
                                                     <h6>Education Background</h6>
                                                     <input type="text" {...register("edu_background")} placeholder="PhD. Zoology from XYZ Instiute, City, Country" />
                                                 </div>

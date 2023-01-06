@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
 import category from "../../../model/category.modal";
 import courseModel from "../../../model/course.model";
-import Sidebar from "../../components/sidebar";
-import Topnavbar from "../../components/topnavbar";
+import uploader from "../../../model/fileupload.model";
 import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
+import moment from 'moment';
 const editCourse = () => {
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
@@ -17,7 +17,7 @@ const editCourse = () => {
         router.replace("/login");
     }
     const queryid = router.query.id;
-
+    const [image, setImage] = useState("");
     const [courseData, setcourseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
@@ -27,7 +27,9 @@ const editCourse = () => {
     
     useEffect(() => {
         courseModel.detail(router.query.id).then((res) => {
-            //setcourseData(res.data);
+            if(res.data.course_thumbnail !== null) {
+                setImage(res.data.course_thumbnail);
+            }
             console.log(res.data);
             reset(res.data);
         }).catch((error) => {
@@ -50,6 +52,31 @@ const editCourse = () => {
         }).catch((error) => {
             setFormErrors(error.response?.data?.errors);
         })
+    });
+
+    const inputFileRef = useRef();
+    
+    const [isUploaded, setIsUploaded] = useState(false);
+    const fileClick = () => {
+        inputFileRef.current.click();
+    };
+    const handleChangeImage = (async (e) => {
+        //setValue("uploadfile", e.target.files);
+        var data = new FormData();
+        var imagedata = await e.target.files[0];
+        data.append("uploadFile", imagedata);
+        data.append("filefolder", "course");
+        setIsUploaded(true);
+        await uploader.upload(data).then((res) => {
+            helper.sweetalert.toast("File Uploaded");
+
+            console.log(res?.data);
+            setImage(res?.data?.data?.Location);
+        }).catch((error) => {
+            helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
+            console.error(error.response)
+        })
+        //setImage(URL.createObjectURL(e.target.files[0]))
     });
 
     return (
@@ -84,7 +111,7 @@ const editCourse = () => {
                                 </div>
                                 <div className="launch-date">
                                     <h6>Course Launch Date</h6>
-                                    <input className="min-date" type="date" {...register("course_launch_date")} />
+                                    <input className="min-date" type="date" {...register("course_launch_date")}  max={moment().format("YYYY-MM-DD")}  />
                                 </div>
                             </div>
 
@@ -93,24 +120,33 @@ const editCourse = () => {
 
                                     <h6>Upload Thumbnail image</h6>
                                     <div className="img-container-btns d-flex">
-                                        <div className="pic-container" style={{ width: '100%', height: '161px' }}>
-                                            {/* <img className="thumbnail-pic"
-                                                                src="/trainer-images/dashboard images/thumbnail.png" alt="" /> */}
-                                            <p>Drag and Drop here</p>
-                                        </div>
+                                        {
+                                            (() => {
+                                                if (image.length > 0) {
+                                                    return (
+                                                        <img className="thumbnail-pic" src={image} style={{ width: '100%', height: '161px' }} alt="" />
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <div className="pic-container" style={{ width: '100%', height: '161px' }}>
+                                                            <p>Drag and Drop here</p>
+                                                        </div>
+                                                    );
+                                                }
+                                            })()
+                                        }
                                         <div className="btns d-flex flex-column gap-4">
 
                                             <div className="right-col-btns d-flex flex-column gap-4">
-                                                <a href="#!">
-                                                    <button type="button"
-                                                        className="upload-btn btn d-flex justify-content-center gap-2">
-                                                        <img className="btn-icon"
-                                                            src="/trainer-images/dashboard images/Vector.png"
-                                                            alt="" />
-                                                        <span>Browse</span>
-                                                    </button>
-                                                    <input className="file-input" type="file" hidden />
-                                                </a>
+                                                <button type="button"   onClick={fileClick}
+                                                    className="upload-btn btn d-flex justify-content-center gap-2">
+                                                    <img className="btn-icon"
+                                                        src="/trainer-images/dashboard images/Vector.png"
+                                                        alt="" />
+                                                    <span>Browse</span>
+                                                </button>
+                                                <input className="file-input" type="file"  onChange={handleChangeImage} ref={inputFileRef} hidden />
+                                                <input type="hidden" name="course_thumbnail" value={image} />
                                             </div>
 
                                             {/* <!-- <div className="right-col-btns d-flex flex-column gap-4">

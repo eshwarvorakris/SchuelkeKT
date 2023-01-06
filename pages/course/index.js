@@ -123,13 +123,13 @@ const admincoursemanagement = () => {
                             <div className="blank-nav-class"></div>
                             <Topnavbar profile={profile} />
                             {(profile?.role == 'trainer') &&
-                                <div class=" SearchandSort ">
-                                    <div class=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " class=" search-icon "></ion-icon>
-                                        <div class=" search-trainer "><input class=" search-mycourse" type=" text " placeholder=" Search " /></div>
+                                <div className=" SearchandSort ">
+                                    <div className=" search-button-mycourse d-flex ">
+                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " placeholder=" Search " /></div>
                                     </div>
 
-                                    <div class=" category d-flex gap-3 align-items-center ">
+                                    <div className=" category d-flex gap-3 align-items-center ">
                                         <select name=" category " id=" cars " className="select-mycourse">
                                             <option value=" Product ">Filter</option>
                                             <option value=" Country ">Trainee ID</option>
@@ -138,9 +138,9 @@ const admincoursemanagement = () => {
                                         </select>
                                     </div>
 
-                                    <div class=" create-course ">
+                                    <div className=" create-course ">
                                         <a href="./courses/create">
-                                            <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
+                                            <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
                                                 Course <strong>+</strong></button>
                                         </a>
                                     </div>

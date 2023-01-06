@@ -31,7 +31,7 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainer-images/dashboard images/icon-2.png" alt="" class="icon-info mr-1" />
+          <img src="/trainer-images/dashboard images/icon-2.png" alt="" className="icon-info mr-1" />
         </div>
       </div>
       <div className="training-hours">
@@ -44,8 +44,8 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainer-images/dashboard images/icon-3.png" alt="" class="icon-info" />
-          <img src="/trainer-images/dashboard images/icon-3(2).png" class="vector-fig" alt="" />
+          <img src="/trainer-images/dashboard images/icon-3.png" alt="" className="icon-info" />
+          <img src="/trainer-images/dashboard images/icon-3(2).png" className="vector-fig" alt="" />
         </div>
       </div>
       <div className="courses-completion">
@@ -58,7 +58,7 @@ export default function adminWidgets() {
           </div>
         </div>
         <div className="right-icon">
-          <img src="/trainer-images/dashboard images/icon-4.png" alt="" class="icon-info" />
+          <img src="/trainer-images/dashboard images/icon-4.png" alt="" className="icon-info" />
         </div>
       </div>
     </>

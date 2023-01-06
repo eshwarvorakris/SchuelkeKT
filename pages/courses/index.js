@@ -32,10 +32,10 @@ const admincoursemanagement = () => {
     }
     const columns = [
         {
-            name: '#',
-            cell: row => {
+            name: 'S.No',
+            cell: (row, index) => {
                 return (
-                    <p>#</p>
+                    <p>{index + 1}</p>
                 )
             },
         },
@@ -107,13 +107,13 @@ const admincoursemanagement = () => {
             name: 'Action',
             cell: row => {
                 //console.log(cell);
-                if(profile?.role == 'admin' || profile?.role == 'trainer'){
+                if (profile?.role == 'admin' || profile?.role == 'trainer') {
                     return (
                         <div className='btn-group  text-nowrap'>
                             <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}>Edit</Link>
                             <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}>Delete</button>
                         </div>)
-                }   
+                }
 
             },
 

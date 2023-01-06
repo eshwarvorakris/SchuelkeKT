@@ -45,30 +45,30 @@ const addTrainer = () => {
                         <div className="trainee-tag-enrolledtrainers">
                             <p>Register Trainer</p>
                         </div>
-                        <div class="trainer-ID">
+                        <div className="trainer-ID">
                             <span>Trainer ID -</span>
                             <span style={{ fontWeight: '600', color: '#008bd6' }}> {100000 + userId?.data} </span>
                             <span style={{ color: '#008bd6', fontWeight: '100', fontSize: '12px' }}
-                                class="pl-2">(Auto-generated)</span>
+                                className="pl-2">(Auto-generated)</span>
                         </div>
 
-                        <div class="trainer-name" style={{ display: 'block' }}>
+                        <div className="trainer-name" style={{ display: 'block' }}>
                             <h6>Trainer Name</h6>
                             <input type="text" {...register("full_name", { required: "Fill Name" })} placeholder="Enter Trainer's full name" />
                         </div>
 
-                        <div class="trainer-email">
+                        <div className="trainer-email">
                             <h6>Trainer Email</h6>
                             <input type="email" {...register("email", { required: "Fill Email Address" })} placeholder="Enter Trainer's email address" />
                         </div>
 
-                        <div class="trainer-name" style={{ display: 'block' }}>
+                        <div className="trainer-name" style={{ display: 'block' }}>
                             <h6>Trainer Contact</h6>
                             <input type="text" {...register("contact_no", { required: "Fill Contact Number" })} placeholder="Enter Trainer's full name" />
                         </div>
 
-                        <div class="trainer-email-password">
-                            <div class="d-flex gap-2 text-info">
+                        <div className="trainer-email-password">
+                            <div className="d-flex gap-2 text-info">
                                 <h6>Create password</h6>
                                 <span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                 <span style={{ color: '#008bd6', fontSize: '12px' }}>password strength -
@@ -77,16 +77,16 @@ const addTrainer = () => {
                             <input type="password" {...register("password", { required: "Fill Password" })} placeholder="Enter a Password" />
                         </div>
 
-                        <div class="trainer-email-password-comform">
+                        <div className="trainer-email-password-comform">
                             <h6>Comform Password</h6>
                             <input type="password" {...register("password_confirmation", { required: "Fill Confirm Password" })} placeholder="Re-enter your password" />
                         </div>
 
-                        <div class="btn-container">
+                        <div className="btn-container">
                             <a href="/users/trainer" className="cancel-btn" style={{ textDecoration: 'none' }}>Cancel</a>
                             <a href="#!">
                                 <button type="submit" data-toggle="modal" data-target="#myModal"
-                                    class="create-btn">Create
+                                    className="create-btn">Create
                                     Account</button>
                             </a>
                         </div>

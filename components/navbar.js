@@ -18,7 +18,7 @@ function navbar() {
                 <ul className="navbar-nav align-content-center">
                     <li className="notify-btn nav-item active">
                         <a className="nav-link" href="#" style={{ backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius: '10px', padding: '0.5rem', color:'black' }}>
-                            <i class="fa fa-bell" aria-hidden="true"></i>
+                            <i className="fa fa-bell" aria-hidden="true"></i>
                         </a>
                         <span className="icon-badgeadmin">10+</span>
                     </li>

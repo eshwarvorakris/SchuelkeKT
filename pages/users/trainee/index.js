@@ -40,17 +40,35 @@ const trainee = () => {
     const columns = [
         {
             name: 'S.No',
-            cell: row => {
+            cell: (row, index) => {
                 return (
-                    <p>#</p>
+                    <p>{index + 1}</p>
                 )
             },
         },
         {
             name: 'Trainee Id',
-            selector: row => 100000 + row.id,
-            sortable: true,
-            sortField: "id"
+            cell: row => {
+                return (
+                    <p>
+                        {
+                            (() => {
+                                if(row.profile_img === null || row.profile_img == ""){
+                                    return (
+                                        <i className="fa fa-user-circle-o" aria-hidden="true"></i>
+                                    );
+                                }
+                                else {
+                                    return (
+                                        <img src={row.profile_img} style={{height:'25px', width:'25px', borderRadius:'50%'}} />
+                                    );
+                                }
+                            })()
+                        }
+                        <span>{100000 + row.id}</span>
+                    </p>
+                )
+            },
         },
         {
             name: 'Trainee Name',
@@ -100,14 +118,14 @@ const trainee = () => {
 
     return (
         <>
-            <div class=" SearchandSort ">
+            <div className=" SearchandSort ">
                 {
                     (() => {
                         if (profile?.role == 'admin') {
                             return (
-                                <div class=" create-course ">
+                                <div className=" create-course ">
                                     <a href="/users/trainee/add">
-                                        <button class=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainee <strong>+</strong></button>
+                                        <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainee <strong>+</strong></button>
                                     </a>
                                 </div>
                             );
