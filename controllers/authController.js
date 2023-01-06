@@ -16,13 +16,14 @@ exports.profile = function (req, res) {
   
   User.findOne({
     attributes: [
-      'id', 'full_name', 'email', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'country', 'password'],
+      'id', 'full_name', 'profile_img', 'email', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'country', 'password'],
     where: { id: user.id, status: 'active' }
   }).then(async (result) => {
     
     var userData = {
       id: result.dataValues.id,
       full_name: result.dataValues.full_name,
+      profile_img: result.dataValues.profile_img,
       email:  result.dataValues.email,
       contact_no: result.dataValues.contact_no,
       dob: result.dataValues.dob,

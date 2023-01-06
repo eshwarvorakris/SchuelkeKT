@@ -8,6 +8,10 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  profile_img: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   email: {
     type: Sequelize.STRING,
     allowNull: false,
