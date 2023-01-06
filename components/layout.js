@@ -11,7 +11,7 @@ export default function Layout({ children }) {
         <div className="blank-class"></div>
           <Sidebar />
           <div className="container-2">
-            <div className='col-12 trainee-right'>
+            <div className='col-12 trainee-right' style={{backgroundColor:'unset'}}>
               <Navbar />
               {children}
             </div>

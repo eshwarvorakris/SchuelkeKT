@@ -17,7 +17,7 @@ const admincoursemanagement = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses,mutate:couresList, error, isLoading } = useSWR(QueryParam, async () => await courseModel.list(QueryParam), config.swrConfig);
+    const { data: courses, mutate: couresList, error, isLoading } = useSWR(QueryParam, async () => await courseModel.list(QueryParam), config.swrConfig);
 
     const courseDelete = function (id) {
         helper.sweetalert.confirm("Delete Course", "info").then((result) => {
@@ -71,7 +71,6 @@ const admincoursemanagement = () => {
             name: 'Approval Status',
             selector: row => {
                 return (
-                    // <span>{row.status == 'active' ? <span className="text-success">Approved</span> : <span>Pending</span>}</span>
                     <>
                         {
                             (() => {
@@ -100,12 +99,14 @@ const admincoursemanagement = () => {
                             })()
                         }
                     </>
+
                 )
             },
         },
         {
             name: 'Action',
             cell: row => {
+                //console.log(cell);
                 if(profile?.role == 'admin' || profile?.role == 'trainer'){
                     return (
                         <div className='btn-group  text-nowrap'>
@@ -113,11 +114,11 @@ const admincoursemanagement = () => {
                             <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}>Delete</button>
                         </div>)
                 }   
+
             },
 
-        }
+        },
     ];
-
 
     const pagginationHandler = (page) => {
         QueryParam.page = page.selected + 1;
@@ -135,51 +136,70 @@ const admincoursemanagement = () => {
         });
     }
 
-{console.log(QueryParam)}
+    { console.log(QueryParam) }
     return (
         <>
-                            {(authModel.user?.role != 'admin') &&
-                                <div className=" SearchandSort ">
-                                    <div className=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
-                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event)=>{QueryParam.search=event.target.value;couresList()}} placeholder=" Search " /></div>
-                                    </div>
+            {(profile?.role == 'trainer') &&
+                <div className=" SearchandSort ">
+                    <div className=" search-button-mycourse d-flex ">
+                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
+                    </div>
 
-                                    <div className=" category d-flex gap-3 align-items-center ">
-                                        <select name=" category " id=" cars " className="select-mycourse">
-                                            <option value=" Product ">Filter</option>
-                                            <option value=" Country ">Trainee ID</option>
-                                            <option value=" Country ">Trainee Name</option>
-                                            <option value=" Blanket ">No. of Courses Enrolled</option>
-                                        </select>
-                                    </div>
+                    <div className=" category d-flex gap-3 align-items-center ">
+                        <select name=" category " id=" cars " className="select-mycourse">
+                            <option value=" Product ">Filter</option>
+                            <option value=" Country ">Trainee ID</option>
+                            <option value=" Country ">Trainee Name</option>
+                            <option value=" Blanket ">No. of Courses Enrolled</option>
+                        </select>
+                    </div>
 
-                                    <div className=" create-course ">
-                                        <a href="./courses/create">
-                                            <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
-                                                Course <strong>+</strong></button>
-                                        </a>
-                                    </div>
-                                </div>
-                            }
-                            <div className="trainee-body">
-                                <div className="trainee-admincoursemanagement d-flex flex-column">
-                                    <div className="box-1-admincoursemanagement"></div>
-                                    <div className="box-2-admincoursemanagement"></div>
-                                    <div className="trainee-tag-admincoursemanagement">
-                                        <p>Courses</p>
-                                    </div>
-                                    {isLoading ||
-                                    <DataTable
-                                        columns={columns}
-                                        data={courses?.data}
-                                        progressPending={isLoading}
-                                        sortServer
-                                        onSort={handleSort}
-                                        className='table'
-                                        customStyles={config.dataTableStyle}
-                                    />
-}
+                    <div className=" create-course ">
+                        <a href="./courses/create">
+                            <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
+                                Course <strong>+</strong></button>
+                        </a>
+                    </div>
+                </div>
+            }
+            <div className="trainee-body">
+                <div className="trainee-admincoursemanagement d-flex flex-column">
+                    <div className="box-1-admincoursemanagement"></div>
+                    <div className="box-2-admincoursemanagement"></div>
+                    <div className="trainee-tag-admincoursemanagement">
+                        <p>Courses</p>
+                    </div>
+                    {isLoading ||
+                        <DataTable
+                            columns={columns}
+                            data={courses?.data}
+                            progressPending={isLoading}
+                            sortServer
+                            onSort={handleSort}
+                            className='table'
+                            customStyles={config.dataTableStyle}
+                        />
+                    }
+
+                </div>
+            </div>
+            <div className="trainer-pagination ">
+                <nav className="pagination-container d-flex justify-content-end">
+                    <ReactPaginate
+                        threeDots={true}
+                        pageCount={courses?.meta?.total_page}
+                        initialPage={courses?.meta?.current_page}
+                        pageRangeDisplayed={10}
+                        prevNext
+                        breakLabel="..."
+                        onPageChange={pagginationHandler}
+                        className="pagination float-end float-right"
+                        pageLinkClassName='page-link rounded-circle'
+                        pageClassName="page-item border-0"
+                    />
+                </nav>
+            </div>
 
         </>
     )
