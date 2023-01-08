@@ -1,14 +1,13 @@
 import useSWR from 'swr';
-import Sidebar from "./components/sidebar";
-import Topnavbar from './components/topnavbar';
-import Router from "next/router";
-import { useState, useEffect } from "react";
-import auth from "../model/auth.model";
 import widgetModel from "../model/widget.model";
 import AdminGraph from "./components/adminDashboardGraph";
 import TrainerCourse from "./components/trainerDashboardCourseList";
-import { helper } from '../lib/helper';
+import AppContext from '../lib/appContext';
+import _ from 'lodash';
+import { useContext } from 'react';
 function Index() {
+  const layoutValues=useContext(AppContext);
+  {layoutValues.setPageHeading(_.capitalize(layoutValues?.profile?.role)+" Dashboard")}
   const { data: courseCount } = useSWR('courseCount', async () => await widgetModel.courseCount());
   return (
     <>        <div className="dashboard-info">
@@ -73,18 +72,10 @@ function Index() {
                   </div>
                 </div>
               </div>
-              {
-                (() => {
-                  if (helper.user()?.role == 'admin')
-                  {
-                    return (<AdminGraph />)
-                  }
-                  if (helper.user() == 'trainer')
-                  {
-                    return (<TrainerCourse />)
-                  }
-                })()
-              }
+              {(layoutValues?.profile?.role == 'admin') && <AdminGraph />}
+              
+              {(layoutValues?.profile?.role == 'trainer') && <TrainerCourse />}
+
            
     </>
   );

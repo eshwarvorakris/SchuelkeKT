@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
-import category from "../../model/category.modal";
+import category from "../../model/category.model";
 import courseModel from "../../model/course.model";
 import Sidebar from "../components/sidebar";
 import Topnavbar from "../components/topnavbar";
@@ -9,7 +9,10 @@ import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
+import AppContext from "../../lib/appContext";
 const addcourse = ({categories}) => {
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Create Course")}
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
@@ -33,17 +36,9 @@ const addcourse = ({categories}) => {
 
     return (
         <>
-            <div>
-                <div className="section1-addcourse">
-                    <div className="blank-class"></div>
-                    <Sidebar profile={profile} />
-                    <div className="container-2">
-                        <div className="col-md-12 trainee-right">
-                            <div className="blank-nav-class"></div>
-                            <Topnavbar profile={profile} />
-
-                            <form onSubmit={onSubmit} encType="multipart/form-data" >
+            
                                 <div className="trainee-body">
+                            <form onSubmit={onSubmit} encType="multipart/form-data" >
                                     <div className="trainee-list-createcourse d-flex flex-column">
                                         <div className="box-1-enrolledtrainers"></div>
                                         <div className="box-2-enrolledtrainers"></div>
@@ -164,25 +159,11 @@ const addcourse = ({categories}) => {
                                             </div>
                                         </div>
                                     </div>
+                            </form>
                                 </div>
 
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+                       
         </>
     )
 }
 export default addcourse;
-
-export async function getServerSideProps(req, res) {
-    const categories = (await category.list()).data;
-    //console.log(categories);
-    return {
-        props: {
-            categories
-        },
-    }
-}

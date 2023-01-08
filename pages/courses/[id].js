@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
-import category from "../../model/category.modal";
+import category from "../../model/category.model";
 import courseModel from "../../model/course.model";
 import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
+import Link from "next/link";
 const editCourse = () => {
     const router = useRouter();
     console.log(router.query);
@@ -132,9 +133,9 @@ const editCourse = () => {
                                             <div className="btn-container d-flex justify-content-between mt-5">
                                                 <div className="left-col">
                                                     <div className="edit-modules-btn">
-                                                        <a href={`/courses/${course?.data?.id}/module`} className="btn"
+                                                        <Link href={`/courses/${course?.data?.id}/module`} className="btn"
                                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
-                                                                Module</span></a>
+                                                                Module</span></Link>
                                                     </div>
                                                 </div>
                                                 <div className="right-col d-flex gap-4">

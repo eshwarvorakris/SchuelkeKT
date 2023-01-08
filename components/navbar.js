@@ -3,15 +3,18 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AppContext from '../lib/appContext';
 
 function navbar() {
-  const [profile,setProfile]=useState({});
+  const layoutValues = useContext(AppContext);
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-nav" style={{ width: 'inherit', border: "none" }}>
         <a className="navbar-brand" style={{ fontWeight: "700", color: 'black' }} href="#">
-            <label className='text-capitalize'>{profile?.role}</label> Dashboard
+             {layoutValues?.pageHeading}
         </a>
+        {console.log(layoutValues?.profile?.role)}
         <div className="collapse navbar-collapse flex-row-reverse">
             <ul className="navbar-nav align-content-center">
                 <li className="notify-btn nav-item active">
@@ -26,7 +29,7 @@ function navbar() {
                         <button type="button" className="btn text-light profile-btn"
                             style={{ backgroundColor: "#008bd6", padding: '7px 10px 7px 10px' }}>
                             <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />
-                            <strong>{profile?.full_name}</strong>
+                            <strong>{layoutValues?.profile?.full_name}</strong>
                         </button>
                     </a>
                 </li>

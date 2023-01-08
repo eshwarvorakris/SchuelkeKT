@@ -1,9 +1,13 @@
+import Link from "next/link";
 import Router from "next/router";
+import { useContext } from "react";
+import AppContext from "../lib/appContext";
 function sidebar({profile}) {
-
+  const layoutValues=useContext(AppContext);
+  
   const logout = function (e) {
     e.preventDefault();
-    sessionStorage.setItem("access_token", "");
+    sessionStorage.removeItem("access_token");
     Router.replace("login");
   }
   return (
@@ -20,34 +24,33 @@ function sidebar({profile}) {
           </a>
           <ul className="nav nav-pills flex-column mb-auto text-light">
             <li className="nav-item">
-              <a href="/dashboard" className="nav-link mt-4 ml-4 otherLink" aria-current="page">
+            <Link href="/dashboard" className="nav-link ml-4 otherLink">
                 <img className="sidebar-icon" style={{width: '20px', height: '20px'}} src="/admin-images/sidebar/1.svg" alt="" />
                 <span style={{ marginLeft: '10px' }}>Dashboard</span>
-              </a>
+                    
+            </Link>
+              
             </li>
             <hr className="under_menu_line" />
+            {layoutValues?.profile?.role == 'admin' && 
             <li>
-              {
-                (() => {
-                  if (profile?.role == 'admin')
-                  {
-                    return (
-                    <a href="/courses" className="nav-link ml-4 otherLink">
+            <Link href="/courses" className="nav-link ml-4 otherLink">
                       <img className="sidebar-icon" style={{width: '20px', height: '20px'}} src="/admin-images/sidebar/2.svg" alt="" />
                       <span style={{ marginLeft: '10px' }}>Course Management</span>
-                    </a>);
-                  }
-                  if(profile?.role == 'trainer')
-                  {
-                    return (
-                    <a href="/courses" className="nav-link ml-4 otherLink">
+                    
+            </Link>
+            </li>
+            }
+            {layoutValues?.profile?.role == 'trainer' && 
+            <li>
+            <Link href="/courses" className="nav-link ml-4 otherLink">
                       <img className="sidebar-icon" style={{width: '20px', height: '20px'}} src="/admin-images/sidebar/2.svg" alt="" />
                       <span style={{ marginLeft: '10px' }}>My Courses</span>
-                    </a>);
-                  }
-                })()
-              }
+                    
+            </Link>
             </li>
+            }
+            
             <hr className="under_menu_line" />
             <li>
               <a href="./admin-trainer-management" className="nav-link ml-4 otherLink">
@@ -66,11 +69,12 @@ function sidebar({profile}) {
             </li>
             <hr className="under_menu_line" />
             <li>
-              <a href="/profile" className="nav-link   ml-4 otherLink">
+              
+              <Link href="/profile" className="nav-link   ml-4 otherLink">
                 <img className="sidebar-icon" style={{width: '20px', height: '20px'}} src="/admin-images/sidebar/5.svg" alt="" />
                 <span style={{ marginLeft: '10px' }}>My Profile</span>
 
-              </a>
+              </Link>
             </li>
             <hr className="under_menu_line" />
             <li>
