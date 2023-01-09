@@ -155,11 +155,7 @@ const userController = class {
     const user = await User.destroy({ where: { id: req.params.id } }).then((result) => {
       return { message: "user Deleted" };
     });
-    return res.status(422).send(
-      {
-        message: "Unable to find user",
-      }
-    );
+    res.send(user);
   }
 };
 
