@@ -11,6 +11,11 @@ const widgetModel=class {
         return (await axiosInstance.get(`${this.baseUrl}/trainee/total`)).data;
     }
 
+    async trainerCount()
+    {
+        return (await axiosInstance.get(`${this.baseUrl}/trainer/total`)).data;
+    }
+
     async courseCount()
     {
         return (await axiosInstance.get(`${this.baseUrl}/course/total`)).data;

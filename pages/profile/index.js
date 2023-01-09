@@ -15,7 +15,7 @@ const myprofile = () => {
     const [image, setImage] = useState("/trainee-images/trainer.jpg");
     useEffect(() => {
         auth.profile().then((res) => {
-            if(res.profile_img !== null) {
+            if(res.profile_img !== null && res.profile_img != "") {
                 setImage(res.profile_img);
             }
             setprofileData(res);

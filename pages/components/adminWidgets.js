@@ -6,6 +6,8 @@ export default function adminWidgets() {
   const { data: courseWeek, mutate: loadWeek } = useSWR('courseWeek', async () => await widgetModel.courseWeek());
 
   const { data: totalTrainee, mutate: loadtrainee } = useSWR('totalTrainee', async () => await widgetModel.traineeCount());
+
+  const { data: totalTrainer, mutate: loadtrainer } = useSWR('totalTrainer', async () => await widgetModel.trainerCount());
   return (
     <>
       <div className="total-courses">
@@ -43,10 +45,10 @@ export default function adminWidgets() {
       <div className="training-hours">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-            <h1 className="text-light">1284</h1>
+            <h1 className="text-light">{totalTrainer?.data?.total}</h1>
           </div>
           <div className="explicit-info text-light">
-            <p>Enrolled Training</p>
+            <p>Total Trainers</p>
           </div>
         </div>
         <div className="right-icon">

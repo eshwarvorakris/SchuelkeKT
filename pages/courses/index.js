@@ -11,20 +11,20 @@ import authModel from "../../model/auth.model";
 
 const admincoursemanagement = () => {
     const router = useRouter();
-    const { data: profile, profileerror, profileisLoading } = useSWR('/', async () => await authModel.profile());
+    const { data: profile, profileerror, profileisLoading } = useSWR('userDetail', async () => await authModel.profile());
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses, mutate: couresList, error, isLoading } = useSWR(QueryParam, async () => await courseModel.list(QueryParam), config.swrConfig);
+    const { data: courses, mutate: couresList, error, isLoading } = useSWR(QueryParam ? "couresList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
 
     const courseDelete = function (id) {
-        helper.sweetalert.confirm("Delete Course", "info").then((result) => {
+        helper.sweetalert.confirm("Are you sure you want to delete this course", "info", "true").then((result) => {
             if (result.isConfirmed) {
                 courseModel.delete(id).then((res) => {
+                    mutate('couresList');
                     helper.sweetalert.toast(res.data?.message);
-                    // mutate('courseList');
                 })
             }
         })

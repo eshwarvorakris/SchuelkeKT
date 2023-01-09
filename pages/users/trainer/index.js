@@ -13,7 +13,7 @@ import ReactPaginate from 'react-paginate';
 
 const trainer = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
+    const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
     if (error) {
         //console.log(error);
         router.replace("/login");
@@ -24,14 +24,15 @@ const trainer = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: trainer, error: trainererror, isLoading: trainerisLoading } = useSWR(QueryParam ? "trainerList" : null, async () => await userModal.trainerList(QueryParam), config.swrConfig);
-
-    const courseDelete = function (id) {
-        helper.sweetalert.confirm("Delete Course", "info").then((result) => {
+    const { data: trainer, mutate: trainerList, error: trainererror, isLoading: trainerisLoading } = useSWR(QueryParam ? "trainerList" : null, async () => await userModal.trainerList(QueryParam), config.swrConfig);
+    const userDelete = function (id) {
+        //console.log(id);
+        helper.sweetalert.confirm("Are you sure you want to delete this trainer", "info", true).then((result) => {
             if (result.isConfirmed) {
-                courseModel.delete(id).then((res) => {
+                userModal.delete(id).then((res) => {
                     helper.sweetalert.toast(res.data?.message);
-                    mutate('courseList');
+                    //console.log(res);
+                    mutate('trainerList');
                 })
             }
         })
@@ -93,7 +94,14 @@ const trainer = () => {
             name: '',
             cell: row => {
                 return (
-                    <Link className='btn btn-outline-primary btn-sm' href={`#`}>Check Status</Link>
+                    <>
+                    <div className='btn-group  text-nowrap p-1'>
+                        <Link className='btn btn-outline-primary btn-sm' href={`#`}>Check Status</Link>
+                        <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}`}><i className="fa fa-pencil" aria-hidden="true"></i></Link>
+                        <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => userDelete(row.id)}><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                    </>
+                    
                 )
             },
         },

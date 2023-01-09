@@ -28,7 +28,7 @@ const myprofile = () => {
 
     useEffect(() => {
         auth.profile().then((res) => {
-            if(res.profile_img !== null) {
+            if(res.profile_img !== null && res.profile_img != "") {
                 setImage(res.profile_img);
                 setprofileUrl(res.profile_img);
             }
@@ -143,9 +143,9 @@ const myprofile = () => {
                                         rows="3" {...register("address")}></textarea>
                                 </div>
 
-                                <div className="trainer-contact-no">
+                                <div className="trainer-Name">
                                     <h6>Contact Number</h6>
-                                    <input type="number" placeholder="+01 345 3345" {...register("contact_no")} />
+                                    <input type="text" pattern="\d*" placeholder="+01 345 3345" maxLength={15} {...register("contact_no")} />
                                 </div>
                                 {
                                     (() => {
