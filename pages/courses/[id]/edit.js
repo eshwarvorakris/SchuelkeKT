@@ -111,7 +111,7 @@ const editCourse = () => {
                                 </div>
                                 <div className="launch-date">
                                     <h6>Course Launch Date</h6>
-                                    <input className="min-date" type="date" {...register("course_launch_date")}  max={moment().format("YYYY-MM-DD")}  />
+                                    <input className="min-date" type="date" {...register("course_launch_date")}  min={moment().format("YYYY-MM-DD")}  />
                                 </div>
                             </div>
 
