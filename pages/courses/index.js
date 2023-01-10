@@ -121,7 +121,7 @@ const admincoursemanagement = () => {
     ];
 
     const pagginationHandler = (page) => {
-        QueryParam.page = page.selected + 1;
+        QueryParam.page = page.selected;
         router.push({
             pathname: router.pathname,
             query: QueryParam,
