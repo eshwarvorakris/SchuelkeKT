@@ -15,7 +15,7 @@ const courseController = class {
       req["query"]["status"] = {[Op.or]: ['active', 'approved']}
     }
     if(req.query.search && req.query.search !== "") {
-      req["query"]["course_name"] = {[Op.like]: '%'+req.query.search+'%'};
+      req["query"]["course_name"] = {[Op.iLike]: '%'+req.query.search+'%'};
     }
     delete req.query.search;
     
