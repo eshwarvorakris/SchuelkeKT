@@ -83,7 +83,7 @@ const trainee = () => {
             selector: row => row?.email,
         },
         {
-            name: 'No. of Courses Published',
+            name: 'No. of Courses Enrolled',
             cell: row => {
                 return (
                     <p>0</p>

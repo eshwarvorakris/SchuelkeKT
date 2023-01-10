@@ -18,7 +18,7 @@ const updateStatus = () => {
   }
   const { data:course, courseerror, courseisLoading, mutate:loadCourse } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
   const approveBtn = async () => {
-    helper.sweetalert.confirm(`Are you sure you want to approve this course`).then(async (result) => {
+    helper.sweetalert.confirm(`Are you sure you want to approve this course`, "info", "true").then(async (result) => {
       if (result.isConfirmed) {
         const formData = new FormData();
         formData.append('status', 'approved');
@@ -34,7 +34,7 @@ const updateStatus = () => {
   }
 
   const rejectBtn = async () => {
-    helper.sweetalert.confirm(`Are you sure you want to reject this course`).then(async (result) => {
+    helper.sweetalert.confirm(`Are you sure you want to reject this course`, "info", "true").then(async (result) => {
       if (result.isConfirmed) {
         const formData = new FormData();
         formData.append('status', 'rejected');
