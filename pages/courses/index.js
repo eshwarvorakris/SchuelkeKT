@@ -139,7 +139,7 @@ const admincoursemanagement = () => {
     { console.log(QueryParam) }
     return (
         <>
-            {(profile?.role == 'trainer') &&
+            
                 <div className=" SearchandSort ">
                     <div className=" search-button-mycourse d-flex ">
                         <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
@@ -154,15 +154,15 @@ const admincoursemanagement = () => {
                             <option value=" Blanket ">No. of Courses Enrolled</option>
                         </select>
                     </div>
-
-                    <div className=" create-course ">
-                        <a href="./courses/create">
-                            <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
-                                Course <strong>+</strong></button>
-                        </a>
-                    </div>
+                    {(profile?.role == 'trainer') &&
+                        <div className=" create-course ">
+                            <a href="./courses/create">
+                                <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
+                                    Course <strong>+</strong></button>
+                            </a>
+                        </div>
+                    }
                 </div>
-            }
             <div className="trainee-body">
                 <div className="trainee-admincoursemanagement d-flex flex-column">
                     <div className="box-1-admincoursemanagement"></div>
