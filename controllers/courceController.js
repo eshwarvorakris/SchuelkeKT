@@ -14,10 +14,10 @@ const courseController = class {
     else if(req.userRole == "trainee") {
       req["query"]["status"] = {[Op.or]: ['active', 'approved']}
     }
-    if(req.query.search) {
+    if(req.query.search && req.query.search !== "") {
       req["query"]["course_name"] = {[Op.like]: '%'+req.query.search+'%'};
-      delete req.query.search;
     }
+    delete req.query.search;
     
     await Course
       .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
