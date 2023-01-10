@@ -25,16 +25,22 @@ const addTrainee = () => {
         event.preventDefault();
         seterrorMessage("");
         if(data.password === data.password_confirmation){
-            const formData = new FormData(event.target);
-            //console.log(data, formData);
-            await userModal.addUser(formData).then((res) => {
-                helper.sweetalert.toast("Trainee Added");
-                router.push("/users/trainee");
-            }).catch((error) => {
-                seterrorMessage(error.response?.data?.errors?.[0]?.message);
-                console.error(error.response?.data?.errors?.[0]?.message)
-                setFormErrors(error.response?.data?.errors);
-            })
+            if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)){ 
+                const formData = new FormData(event.target);
+                //console.log(data, formData);
+                await userModal.addUser(formData).then((res) => {
+                    helper.sweetalert.toast("Trainee Added");
+                    router.push("/users/trainee");
+                }).catch((error) => {
+                    seterrorMessage(error.response?.data?.errors?.[0]?.message);
+                    console.error(error.response?.data)
+                    setFormErrors(error.response?.data?.errors);
+                })
+            } else {
+                helper.sweetalert.toast("Password must be at least 8 characters consisting of numbers, uppercase and lowercase letters", "warning");
+                seterrorMessage("Password must be at least 8 characters consisting of numbers, uppercase and lowercase letters");
+            }
+            
         } else {
             helper.sweetalert.toast("Passwords Not Matched", "warning");
             seterrorMessage("Passwords Not Matched");
@@ -59,7 +65,7 @@ const addTrainee = () => {
                             <span style={{ color: '#008bd6', fontWeight: '100', fontSize: '12px' }}
                                 className="pl-2">(Auto-generated)</span>
                         </div>
-                        <b className='text-danger'>{errorMessage}</b>
+                        <div style={{paddingLeft:'2rem'}}><b className='text-danger'>{errorMessage}</b></div>
                         <div className="trainer-name" style={{ display: 'block' }}>
                             <h6>Trainee Name</h6>
                             <input type="text" {...register("full_name", { required: "Fill Name" })} placeholder="Enter Trainee's full name" />

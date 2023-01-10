@@ -26,18 +26,23 @@ const addTrainer = () => {
         event.preventDefault();
         seterrorMessage("");
         if(data.password === data.password_confirmation){
-            const formData = new FormData(event.target);
-            //console.log(data, formData);
-            formData.append('role', 'trainer');
-            //console.log(data.password);
-            await userModal.addUser(formData).then((res) => {
-                helper.sweetalert.toast("Trainer Added");
-                router.push("/users/trainer");
-            }).catch((error) => {
-                seterrorMessage(error.response?.data?.errors?.[0]?.message);
-                console.error(error.response?.data?.errors?.[0]?.message)
-                setFormErrors(error.response?.data?.errors);
-            })
+            if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)){
+                const formData = new FormData(event.target);
+                //console.log(data, formData);
+                formData.append('role', 'trainer');
+                //console.log(data.password);
+                await userModal.addUser(formData).then((res) => {
+                    helper.sweetalert.toast("Trainer Added");
+                    router.push("/users/trainer");
+                }).catch((error) => {
+                    seterrorMessage(error.response?.data?.errors?.[0]?.message);
+                    console.error(error.response?.data)
+                    setFormErrors(error.response?.data?.errors);
+                })
+            } else {
+                helper.sweetalert.toast("Password must be at least 8 characters consisting of numbers, uppercase and lowercase letters", "warning");
+                seterrorMessage("Password must be at least 8 characters consisting of numbers, uppercase and lowercase letters");
+            }
         } else {
             helper.sweetalert.toast("Passwords Not Matched", "warning");
             seterrorMessage("Passwords Not Matched");
