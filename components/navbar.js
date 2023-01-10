@@ -8,6 +8,7 @@ import authModel from "../model/auth.model";
 import useSWR, { mutate } from 'swr';
 
 function navbar() {
+    const [image, setImage] = useState("/trainee-images/trainer.jpg");
     const { data: profile, error, isLoading } = useSWR('/', async () => await authModel.profile());
     return (
         <nav className="navbar navbar-expand-lg navbar-light sticky-nav" style={{ width: 'inherit', border: "none" }}>
@@ -26,7 +27,19 @@ function navbar() {
                         <a href="/profile" className="face-name text-light">
                             <button type="button" className="btn text-light profile-btn"
                                 style={{ backgroundColor: "#008bd6", padding: '7px 10px 7px 10px' }}>
-                                <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />
+                                    {
+                                        (() => {
+                                        if (profile?.profile_img == '' || profile?.profile_img === null) {
+                                            return (
+                                                <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />);
+                                        }
+                                        else {
+                                            return (
+                                                <img className="img-tag" src={profile?.profile_img} alt="" />);
+                                        }
+                                        })()
+                                    }
+                                
                                 <strong>{profile?.full_name}</strong>
                             </button>
                         </a>
