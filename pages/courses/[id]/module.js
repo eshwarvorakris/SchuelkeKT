@@ -57,7 +57,7 @@ function Page() {
   const columns = React.useMemo(() => [
     {
       name: 'Module',
-      className:'col-1',
+      className: 'col-1',
       cell: (row, index) => {
         return (
           <>Module {index + 1}</>
@@ -81,12 +81,12 @@ function Page() {
       },
     },
     {
-      name: 'Approval Status',
+      name: 'Edit Content',
       right: true,
       cell: row => {
         return (
           <div className='btn-group  text-nowrap'>
-            <a href={`#`} className='btn btn-primary btn-sm' type='button' >Edit Content</a></div>)
+            <Link href={`/module/${row.id}/content`} className='btn btn-primary btn-sm' type='button' >Edit Content</Link></div>)
       },
     },
     {
@@ -103,24 +103,27 @@ function Page() {
   return (
     <>
 
-      <div className="trainee-admincoursemanagement">
-        <div className="box-1-admincoursemanagement"></div>
-        <div className="box-2-admincoursemanagement"></div>
-        <div className="trainee-tag-admincoursemanagement">
-          <p>Module</p>
-        
+      <div className="trainee-body">
+        <div className="trainee-list-createcourse d-flex flex-column">
+          <div className="box-1-enrolledtrainers"></div>
+          <div className="box-2-enrolledtrainers"></div>
 
-        <DataTable
-          columns={columns}
-          data={modules?.data}
-          progressPending={isLoading}
-          className="wrapper custom-scroll"          
-        />
+          <div className="trainee-tag-enrolledtrainers">
+            <p>Create Course</p>
+          </div>
+
+
+          <DataTable
+            columns={columns}
+            data={modules?.data}
+            progressPending={isLoading}
+            className="wrapper custom-scroll"
+          />
+          <div className='btn-container d-flex justify-content-between gap-3'>
+
+            <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button>
+          </div>
         </div>
-      <div className='btn-container d-flex justify-content-between gap-3'>
-
-      <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button>
-      </div>
       </div>
       <Modal show={modalStatus} onHide={() => setModalStatus(false)}>
         <form onSubmit={handleModuleSumit}>

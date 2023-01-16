@@ -3,44 +3,44 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
-import { useState } from 'react';
-import authModel from "../model/auth.model";
-import useSWR, { mutate } from 'swr';
+import { useContext, useEffect, useState } from 'react';
+import AppContext from '../lib/appContext';
 
 function navbar() {
-    const [image, setImage] = useState("/trainee-images/trainer.jpg");
-    const { data: profile, error, isLoading } = useSWR('/', async () => await authModel.profile());
+    const layoutValues = useContext(AppContext);
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light sticky-nav" style={{ width: 'inherit', border: "none" }}>
             <a className="navbar-brand" style={{ fontWeight: "700", color: 'black' }} href="#">
-                <label className='text-capitalize'>{profile?.role}</label> Dashboard
+                {layoutValues?.pageHeading}
             </a>
+            {console.log(layoutValues?.profile?.role)}
             <div className="collapse navbar-collapse flex-row-reverse">
                 <ul className="navbar-nav align-content-center">
-                    {/* <li className="notify-btn nav-item active">
-                        <a className="nav-link" href="#" style={{ backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius: '10px', padding: '0.5rem', color:'black' }}>
-                            <i className="fa fa-bell" aria-hidden="true"></i>
+                    <li className="notify-btn nav-item active">
+                        <a className="nav-link" href="#" style={{ backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius: '10px', padding: '0.5rem' }}>
+
+                            {/* <IonIcon name="notifications" className="trainee-nav-icon" /> */}
                         </a>
                         <span className="icon-badgeadmin">10+</span>
-                    </li> */}
+                    </li>
                     <li className="nav-item active face-tag">
-                        <a href="/profile" className="face-name text-light">
+                        <a href="./profile" className="face-name text-light">
                             <button type="button" className="btn text-light profile-btn"
                                 style={{ backgroundColor: "#008bd6", padding: '7px 10px 7px 10px' }}>
-                                    {
-                                        (() => {
-                                        if (profile?.profile_img == '' || profile?.profile_img === null) {
+                                {
+                                    (() => {
+                                        if (layoutValues?.profile?.profile_img == '' || layoutValues?.profile?.profile_img === null) {
                                             return (
                                                 <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />);
                                         }
                                         else {
                                             return (
-                                                <img className="img-tag" src={profile?.profile_img} alt="" />);
+                                                <img className="img-tag" src={layoutValues?.profile?.profile_img} alt="" />);
                                         }
-                                        })()
-                                    }
-                                
-                                <strong>{profile?.full_name}</strong>
+                                    })()
+                                }
+                                <strong>{layoutValues?.profile?.full_name}</strong>
                             </button>
                         </a>
                     </li>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import courseModel from "../../model/course.model";
 import DataTable from 'react-data-table-component';
@@ -8,8 +8,11 @@ import { helper } from '../../lib/helper';
 import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
 import authModel from "../../model/auth.model";
+import AppContext from "../../lib/appContext";
 
 const admincoursemanagement = () => {
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Courses List")}
     const router = useRouter();
     const { data: profile, profileerror, profileisLoading } = useSWR('userDetail', async () => await authModel.profile());
     const QueryParam = router.query;

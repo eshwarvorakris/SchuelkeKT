@@ -1,15 +1,17 @@
-import { useState, useRef } from "react";
+import { useContext, useState } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
-import categoryModel from "../../model/category.modal";
+import category from "../../model/category.model";
 import courseModel from "../../model/course.model";
 import uploader from "../../model/fileupload.model";
 import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
-import moment from 'moment';
-const addcourse = () => {
+import AppContext from "../../lib/appContext";
+const addcourse = ({ categories }) => {
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Create Course") }
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
@@ -57,16 +59,15 @@ const addcourse = () => {
     });
     return (
         <>
-            <form onSubmit={onSubmit} encType="multipart/form-data" >
-                <div className="trainee-body">
+
+            <div className="trainee-body">
+                <form onSubmit={onSubmit} encType="multipart/form-data" >
                     <div className="trainee-list-createcourse d-flex flex-column">
                         <div className="box-1-enrolledtrainers"></div>
                         <div className="box-2-enrolledtrainers"></div>
-
                         <div className="trainee-tag-enrolledtrainers">
                             <p>Create Course</p>
                         </div>
-
                         <div className="trainee-course-form d-grid">
                             <div className="course-form d-flex flex-column justify-content-between">
                                 <div className="course-name">
@@ -117,7 +118,7 @@ const addcourse = () => {
 
                                             <div className="right-col-btns d-flex flex-column gap-4">
                                                 <a href="#!">
-                                                    <button type="button"  onClick={fileClick}
+                                                    <button type="button" onClick={fileClick}
                                                         className="upload-btn btn d-flex justify-content-center gap-2">
                                                         <img className="btn-icon"
                                                             src="/trainer-images/dashboard images/Vector.png"
@@ -157,8 +158,8 @@ const addcourse = () => {
                                     <h6>Weeks Required for Completion</h6>
                                     <input type="number" {...register("week_duration")} />
                                 </div>
-                            </div>
-                        </div>
+                            </div >
+                        </div >
                         <div className="text-box">
                             <div className="text-heading">
                                 <h6>Course Description</h6>
@@ -191,10 +192,11 @@ const addcourse = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div >
+                </form >
+            </div >
 
-            </form>
+
         </>
     )
 }

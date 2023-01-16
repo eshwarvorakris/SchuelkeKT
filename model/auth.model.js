@@ -11,10 +11,6 @@ const authModel = class {
         return await axiosInstance.post("/auth/login", data);
     }
 
-    async user() {
-        return await sessionStorage.getItem("userinfo");
-    }
-
 }
 
 export default new authModel();

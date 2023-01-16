@@ -1,4 +1,4 @@
-import categoryModel from "../../model/category.modal";
+import categoryModel from "../../model/category.model";
 import courseModel from "../../model/course.model";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";

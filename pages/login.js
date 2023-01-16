@@ -21,12 +21,9 @@ function Login() {
     await auth.login(formData).then((res) => {
       sessionStorage.setItem("access_token", res.data.access_token);
       sessionStorage.setItem("userinfo", JSON.stringify(res.data.data));
-      localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem("userinfo", JSON.stringify(res.data.data));
       window.location.assign("dashboard");
     }).catch((error) => {
       seterrorMessage(error.response?.data);
-      console.error(error.response?.data)
       setFormErrors(error.response?.data?.errors);
     })
   });

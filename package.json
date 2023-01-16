@@ -22,6 +22,7 @@
     "bootstrap-icons": "^1.10.3",
     "font-awesome": "^4.7.0",
     "moment": "^2.29.4",
+    "lodash": "^4.17.21",
     "next": "^13.0.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",

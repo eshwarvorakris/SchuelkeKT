@@ -1,21 +1,25 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from "react";
+import { useContext } from 'react';
 import useSWR from 'swr';
-import auth from "../model/auth.model";
+import AppContext from '../lib/appContext';
 function Profile() {
-  const router=useRouter();
-
-  
-  const { data:profile, error, isLoading } = useSWR ('/', async ()=>await auth.profile());
-  console.log(error);
-  if(error)
-  {
+  const layoutValues = useContext(AppContext);
+  { layoutValues.setPageHeading("Profile") }
+  if (!layoutValues?.profile) {
     return (<>Please Login</>)
   }
   return (
     <>
-    {console.log(profile)}
-      Profile:{profile?.email}
+      <div className="trainee-body">
+        <div className="trainee-admincoursemanagement d-flex flex-column">
+          <div className="box-1-admincoursemanagement"></div>
+          <div className="box-2-admincoursemanagement"></div>
+          <div className="trainee-tag-admincoursemanagement">
+            <p>{layoutValues?.profile?.full_name}</p>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 }
