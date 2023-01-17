@@ -113,7 +113,10 @@ const userController = class {
       await User
         .update(req.body, { where: { id: req.userId } })
         .then((result) => {
-          res.send(result);
+          User.findByPk(req.userId).then(function (updateUser) {
+            res.send(updateUser);
+          });
+          //res.send(updateUser);
         })
         .catch((error) => {
           console.error("Unable To Update Profile : ", error);
