@@ -4,21 +4,27 @@ const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Course = require("../models/Course.model");
 const Module = require("../models/Module.model");
-const { Op } = require("sequelize");
+const {Sequelize, Op, DataTypes } = require("sequelize");
 const courseController = class {
   async index(req, res) {
-    
-    if(req.userRole == "trainer") {
-      req["query"]["trainer_id"]=req.userId;
-    }
-    else if(req.userRole == "trainee") {
-      req["query"]["status"] = {[Op.or]: ['active', 'approved']}
-    }
-    if(req.query.search) {
-      req["query"]["course_name"] = {[Op.like]: '%'+req.query.search+'%'};
+
+    if (req.query.search) {
+      req["query"][Op.or] = [
+        { 'course_name': { [Op.iLike]: `%${req.query.search}%` } },
+        //{ ['category.category_name']: { [Op.iLike]: `%${req.query.search}%` } },
+        { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+        //Sequelize.cast(Sequelize.col('courses.trainer_id'),"Char"),
+        //{'trainer_id':`%${req.query.search}%`}
+      ];
       delete req.query.search;
     }
-    
+    if (req.userRole == "trainer") {
+      req["query"]["trainer_id"] = req.userId;
+    }
+    else if (req.userRole == "trainee") {
+      req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
+    }
+
     await Course
       .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
@@ -54,7 +60,7 @@ const courseController = class {
       });
   }
   async show(req, res) {
-    if(req.params.id !== undefined && req.params.id != "undefined"){
+    if (req.params.id !== undefined && req.params.id != "undefined") {
       const course = await Course.findByPk(req.params.id, { include: ['category'] });
       if (course) {
         return res.send({ data: course });
@@ -73,8 +79,8 @@ const courseController = class {
   }
 
   async modules(req, res) {
-    
-    const module = await Module.findAll({where:{course_id:req.params.id}});
+
+    const module = await Module.findAll({ where: { course_id: req.params.id } });
     if (module) {
       return res.send({ data: module });
     }
@@ -99,14 +105,14 @@ const courseController = class {
       }
     );
   }
-  
+
   async destroy(req, res) {
     console.log(req.params)
-    const course= await Course.destroy({where:{id:req.params.id}}).then((result)=>{
-     return {message:"Course Deleted"};
+    const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
+      return { message: "Course Deleted" };
     });
-     res.send(course);
-   }
+    res.send(course);
+  }
 };
 
 module.exports = new courseController();
