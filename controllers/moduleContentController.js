@@ -15,6 +15,7 @@ const moduleContentController = class {
   }
   async store(req, res) {
     const data = req.body;
+    console.log(req.body,req.files);
     const rules = {
       content: "required",
       content_type: "required",
