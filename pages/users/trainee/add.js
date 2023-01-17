@@ -1,22 +1,19 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
-import category from "../../../model/category.modal";
 import userModal from "../../../model/user.model";
-import Sidebar from "../../components/sidebar";
-import Topnavbar from "../../components/topnavbar";
 import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
+import AppContext from "../../../lib/appContext";
+import Link from "next/link";
 const addTrainee = () => {
     const router = useRouter();
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Add Trainee") }
     const [errorMessage, seterrorMessage] = useState("");
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("/login");
-    }
+
     const { data: userId, userIderror, userIdisLoading } = useSWR('nextUserId', async () => await userModal.getNextUserId());
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -24,8 +21,8 @@ const addTrainee = () => {
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         seterrorMessage("");
-        if(data.password === data.password_confirmation){
-            if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)){ 
+        if (data.password === data.password_confirmation) {
+            if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)) {
                 const formData = new FormData(event.target);
                 //console.log(data, formData);
                 await userModal.addUser(formData).then((res) => {
@@ -40,7 +37,7 @@ const addTrainee = () => {
                 helper.sweetalert.toast("Password must be at least 8 characters consisting of numbers, uppercase and lowercase letters", "warning");
                 seterrorMessage("Password must be at least 8 characters consisting of numbers, uppercase and lowercase letters");
             }
-            
+
         } else {
             helper.sweetalert.toast("Passwords Not Matched", "warning");
             seterrorMessage("Passwords Not Matched");
@@ -65,7 +62,7 @@ const addTrainee = () => {
                             <span style={{ color: '#008bd6', fontWeight: '100', fontSize: '12px' }}
                                 className="pl-2">(Auto-generated)</span>
                         </div>
-                        <div style={{paddingLeft:'2rem'}}><b className='text-danger'>{errorMessage}</b></div>
+                        <div style={{ paddingLeft: '2rem' }}><b className='text-danger'>{errorMessage}</b></div>
                         <div className="trainer-name" style={{ display: 'block' }}>
                             <h6>Trainee Name</h6>
                             <input type="text" {...register("full_name", { required: "Fill Name" })} placeholder="Enter Trainee's full name" />
@@ -97,12 +94,10 @@ const addTrainee = () => {
                         </div>
 
                         <div className="btn-container">
-                            <a href="/users/trainee" className="cancel-btn" style={{ textDecoration: 'none' }}>Cancel</a>
-                            <a href="#!">
-                                <button type="submit" data-toggle="modal" data-target="#myModal"
-                                    className="create-btn">Create
-                                    Account</button>
-                            </a>
+                            <Link href="/users/trainee" className="cancel-btn" style={{ textDecoration: 'none' }}>Cancel</Link>
+                            <button type="submit" data-toggle="modal" data-target="#myModal"
+                                className="create-btn">Create
+                                Account</button>
                         </div>
                     </div>
                 </div>

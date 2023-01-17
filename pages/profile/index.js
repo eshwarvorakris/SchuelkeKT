@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import useSWR from 'swr';
 import auth from "../../model/auth.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from "../components/topnavbar";
 import { useRouter } from "next/router";
-
+import Link from "next/link";
+import AppContext from "../../lib/appContext";
 const myprofile = () => {
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Profile")}
     const router = useRouter();
     // const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     // if (error) {
@@ -85,11 +86,11 @@ const myprofile = () => {
 
                 </div>
                 <div className="edit-profile-btn">
-                    <a href="/profile/edit">
+                    <Link href="/profile/edit">
                         <button type="button" className="btn edit-btn-profile text-light" style={{ backgroundColor: "#008bd6" }}>
                             Edit Profile 🖋
                         </button>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </>

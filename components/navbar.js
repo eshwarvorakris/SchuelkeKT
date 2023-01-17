@@ -14,18 +14,17 @@ function navbar() {
             <a className="navbar-brand" style={{ fontWeight: "700", color: 'black' }} href="#">
                 {layoutValues?.pageHeading}
             </a>
-            {console.log(layoutValues?.profile?.role)}
+            {console.log("profile data",layoutValues?.profile?.role)}
             <div className="collapse navbar-collapse flex-row-reverse">
                 <ul className="navbar-nav align-content-center">
                     <li className="notify-btn nav-item active">
-                        <a className="nav-link" href="#" style={{ backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius: '10px', padding: '0.5rem' }}>
-
-                            {/* <IonIcon name="notifications" className="trainee-nav-icon" /> */}
-                        </a>
+                        <Link className="nav-link" href="#"  style={{ backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius: '10px', padding: '0.5rem', color:'black' }}>
+                            <i className="fa fa-bell" aria-hidden="true"></i>
+                        </Link>
                         <span className="icon-badgeadmin">10+</span>
                     </li>
                     <li className="nav-item active face-tag">
-                        <a href="./profile" className="face-name text-light">
+                        <Link href="/profile" className="face-name text-light">
                             <button type="button" className="btn text-light profile-btn"
                                 style={{ backgroundColor: "#008bd6", padding: '7px 10px 7px 10px' }}>
                                 {
@@ -42,7 +41,7 @@ function navbar() {
                                 }
                                 <strong>{layoutValues?.profile?.full_name}</strong>
                             </button>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

@@ -1,23 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../lib/appContext";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
-import category from "../../../model/category.modal";
 import userModal from "../../../model/user.model";
-import Sidebar from "../../components/sidebar";
-import Topnavbar from "../../components/topnavbar";
 import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
+import Link from 'next/link';
 const addTrainer = () => {
     const router = useRouter();
-
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Add Trainer") }
     const [errorMessage, seterrorMessage] = useState("");
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("/login");
-    }
+
     const { data: userId, userIderror, userIdisLoading } = useSWR('nextUserId', async () => await userModal.getNextUserId());
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -25,8 +21,8 @@ const addTrainer = () => {
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         seterrorMessage("");
-        if(data.password === data.password_confirmation){
-            if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)){
+        if (data.password === data.password_confirmation) {
+            if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)) {
                 const formData = new FormData(event.target);
                 //console.log(data, formData);
                 formData.append('role', 'trainer');
@@ -57,7 +53,7 @@ const addTrainer = () => {
                     <div className="trainee-list-createcourse d-flex flex-column">
                         <div className="box-1-enrolledtrainers"></div>
                         <div className="box-2-enrolledtrainers"></div>
-                        
+
                         <div className="trainee-tag-enrolledtrainers">
                             <p>Register Trainer</p>
                         </div>
@@ -99,12 +95,12 @@ const addTrainer = () => {
                         </div>
 
                         <div className="btn-container">
-                            <a href="/users/trainer" className="cancel-btn" style={{ textDecoration: 'none' }}>Cancel</a>
-                            <a href="#!">
-                                <button type="submit" data-toggle="modal" data-target="#myModal"
-                                    className="create-btn">Create
-                                    Account</button>
-                            </a>
+                            <Link href="/users/trainer" className="cancel-btn" style={{ textDecoration: 'none' }}>Cancel</Link>
+
+                            <button type="submit" data-toggle="modal" data-target="#myModal"
+                                className="create-btn">Create
+                                Account</button>
+
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../lib/appContext";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
-import category from "../../../model/category.modal";
 import userModal from "../../../model/user.model";
 import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
@@ -10,6 +10,9 @@ import { helper } from '../../../lib/helper';
 import Link from 'next/link';
 const editTrainer = () => {
     const router = useRouter();
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Edit Trainer")}
+
     const [profileData, setprofileData] = useState([]);
     const [errorMessage, seterrorMessage] = useState("");
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());

@@ -7,14 +7,13 @@ import { config } from '../../lib/config';
 import { helper } from '../../lib/helper';
 import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
-import authModel from "../../model/auth.model";
 import AppContext from "../../lib/appContext";
 
 const admincoursemanagement = () => {
     const layoutValues=useContext(AppContext);
     {layoutValues.setPageHeading("Courses List")}
     const router = useRouter();
-    const { data: profile, profileerror, profileisLoading } = useSWR('userDetail', async () => await authModel.profile());
+    
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
     QueryParam.order_by = router.query?.order_by || "created_at";
@@ -82,10 +81,10 @@ const admincoursemanagement = () => {
                                         <><span className="text-success">Approved</span></>
                                     );
                                 }
-                                else if (row.status == 'pending' && profile?.role == 'admin') {
+                                else if (row.status == 'pending' && layoutValues?.profile?.role == 'admin') {
                                     return (
                                         <>
-                                            <span><a href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn">Approve</button></a></span>
+                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn">Approve</button></Link></span>
                                         </>
                                     );
                                 }
@@ -110,7 +109,7 @@ const admincoursemanagement = () => {
             name: 'Action',
             cell: row => {
                 //console.log(cell);
-                if (profile?.role == 'admin' || profile?.role == 'trainer') {
+                if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
                         <div className='btn-group  text-nowrap'>
                             <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}>Edit</Link>
@@ -157,12 +156,11 @@ const admincoursemanagement = () => {
                             <option value=" Blanket ">No. of Courses Enrolled</option>
                         </select>
                     </div>
-                    {(profile?.role == 'trainer') &&
+                    {(layoutValues?.profile?.role == 'trainer') &&
                         <div className=" create-course ">
-                            <a href="./courses/create">
-                                <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Create
-                                    Course <strong>+</strong></button>
-                            </a>
+                            <Link href="./courses/create" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>
+                                Create Course <strong>+</strong>
+                            </Link>
                         </div>
                     }
                 </div>

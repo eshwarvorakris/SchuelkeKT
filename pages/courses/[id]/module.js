@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import ReactPaginate from 'react-paginate';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 

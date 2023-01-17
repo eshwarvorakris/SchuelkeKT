@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
-import category from "../../../model/category.modal";
+import category from "../../../model/category.model";
 import courseModel from "../../../model/course.model";
 import uploader from "../../../model/fileupload.model";
 import { useRouter } from "next/router";
@@ -9,6 +9,7 @@ import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
 import moment from 'moment';
+import Link from "next/link";
 const editCourse = () => {
     const router = useRouter();
     const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
@@ -196,12 +197,9 @@ const editCourse = () => {
                                 </div>
                                 <div className="right-col d-flex gap-4">
                                     <div className="back-btn">
-                                        <a href="./mycourse">
-                                            <button type="button" className="btn" data-toggle="modal"
-                                                data-target="#myModal"><span
-                                                    style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
-                                            </button>
-                                        </a>
+                                        <Link href="/courses" style={{textDecoration:'none'}} className="btn">
+                                            <span style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
+                                        </Link>
                                     </div>
 
                                     <div className="save-btn">

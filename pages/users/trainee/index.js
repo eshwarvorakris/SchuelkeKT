@@ -1,8 +1,6 @@
 import auth from "../../../model/auth.model";
-import Sidebar from "../../components/sidebar";
-import Topnavbar from '../../components/topnavbar';
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import userModal from "../../../model/user.model";
 import DataTable from 'react-data-table-component';
@@ -10,14 +8,12 @@ import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
+import AppContext from "../../../lib/appContext";
 
 const trainee = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("/login");
-    }
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Trainee List")}
 
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
@@ -129,12 +125,12 @@ const trainee = () => {
             <div className=" SearchandSort ">
                 {
                     (() => {
-                        if (profile?.role == 'admin') {
+                        if (layoutValues?.profile?.role == 'admin') {
                             return (
                                 <div className=" create-course ">
-                                    <a href="/users/trainee/add">
-                                        <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainee <strong>+</strong></button>
-                                    </a>
+                                    <Link href="/users/trainee/add" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>
+                                        Add Trainee <strong>+</strong>
+                                    </Link>
                                 </div>
                             );
                         }
@@ -151,7 +147,7 @@ const trainee = () => {
                     <DataTable
                         columns={columns}
                         data={trainee?.data}
-                        progressPending={isLoading}
+                        progressPending={traineeisLoading}
                         sortServer
                         onSort={handleSort}
                         className='table'

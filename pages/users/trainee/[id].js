@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import AppContext from "../../../lib/appContext";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
-import category from "../../../model/category.modal";
 import userModal from "../../../model/user.model";
 import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
@@ -10,16 +10,13 @@ import { helper } from '../../../lib/helper';
 import Link from 'next/link';
 const editTrainee = () => {
     const router = useRouter();
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Trainee Edit") }
     const [profileData, setprofileData] = useState([]);
     const [errorMessage, seterrorMessage] = useState("");
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("/login");
-    }
-    
+
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({defaultValues:profileData});
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: profileData });
 
     useEffect(() => {
         userModal.detail(router.query.id).then((res) => {
@@ -54,7 +51,7 @@ const editTrainee = () => {
                     <div className="trainee-list-createcourse d-flex flex-column">
                         <div className="box-1-enrolledtrainers"></div>
                         <div className="box-2-enrolledtrainers"></div>
-                        
+
                         <div className="trainee-tag-enrolledtrainers">
                             <p>Edit Trainee</p>
                         </div>
@@ -92,9 +89,9 @@ const editTrainee = () => {
                         <div className="btn-container">
                             <Link href={`/users/trainee`} className="cancel-btn" style={{ textDecoration: 'none' }}>Cancel</Link>
                             <button type="submit" data-toggle="modal" data-target="#myModal"
-                                    className="create-btn">Update
-                                    Account</button>
-                            
+                                className="create-btn">Update
+                                Account</button>
+
                         </div>
                     </div>
                 </div>

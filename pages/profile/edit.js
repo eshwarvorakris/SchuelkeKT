@@ -1,18 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
 import uploader from "../../model/fileupload.model";
 import user from "../../model/user.model";
-import Sidebar from "../components/sidebar";
-import Topnavbar from "../components/topnavbar";
 import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
 import Form from 'react-bootstrap/Form';
+import AppContext from '../../lib/appContext';
 import moment from 'moment';
 const myprofile = () => {
     const router = useRouter();
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Courses List")}
+
     const [profileData, setprofileData] = useState([]);
     const [isUploaded, setIsUploaded] = useState(false);
     const inputFileRef = useRef();
@@ -47,10 +49,12 @@ const myprofile = () => {
         if(isUploaded) {
             formData.delete("uploadfile");
         }
-        console.log("data ", formData);
+        //console.log("data ", formData);
         await user.updateProfile(formData).then((res) => {
             helper.sweetalert.toast("Profile Updated");
-            console.log(res);
+            sessionStorage.setItem("userinfo", JSON.stringify(res.data));
+            {layoutValues.setProfile(res.data)}
+            console.log(res.data);
             router.push("/profile");
         }).catch((error) => {
             helper.sweetalert.warningToast("Unable To Update Profile");

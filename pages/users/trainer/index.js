@@ -1,8 +1,7 @@
 import auth from "../../../model/auth.model";
-import Sidebar from "../../components/sidebar";
-import Topnavbar from '../../components/topnavbar';
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../lib/appContext";
 import useSWR, { mutate } from 'swr';
 import userModal from "../../../model/user.model";
 import DataTable from 'react-data-table-component';
@@ -13,11 +12,8 @@ import ReactPaginate from 'react-paginate';
 
 const trainer = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("/login");
-    }
+    const layoutValues=useContext(AppContext);
+    {layoutValues.setPageHeading("Trainer Lists")}
 
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
@@ -130,12 +126,12 @@ const trainer = () => {
             <div className=" SearchandSort ">
                 {
                     (() => {
-                        if (profile?.role == 'admin') {
+                        if (layoutValues?.profile?.role == 'admin') {
                             return (
                                 <div className=" create-course ">
-                                    <a href="/users/trainer/add">
-                                        <button className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>Add Trainer <strong>+</strong></button>
-                                    </a>
+                                    <Link href="/users/trainer/add" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>
+                                        Add Trainer <strong>+</strong>
+                                    </Link>
                                 </div>
                             );
                         }
@@ -152,7 +148,7 @@ const trainer = () => {
                     <DataTable
                         columns={columns}
                         data={trainer?.data}
-                        progressPending={isLoading}
+                        progressPending={trainerisLoading}
                         sortServer
                         onSort={handleSort}
                         className='table'

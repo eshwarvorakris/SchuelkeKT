@@ -1,6 +1,4 @@
 import auth from "../../../model/auth.model";
-import Sidebar from "../../components/sidebar";
-import Topnavbar from '../../components/topnavbar';
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from 'swr';

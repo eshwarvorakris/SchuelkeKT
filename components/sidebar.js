@@ -8,7 +8,7 @@ function sidebar({ profile }) {
   const logout = function (e) {
     e.preventDefault();
     sessionStorage.removeItem("access_token");
-    Router.replace("login");
+    Router.replace("/login");
   }
   return (
     <div className="container-1 sticky-side-bar">
@@ -31,80 +31,79 @@ function sidebar({ profile }) {
               </Link>
 
             </li>
-            <hr className="under_menu_line" />
             {layoutValues?.profile?.role == 'admin' &&
-              <li>
+              <><hr className="under_menu_line" /><li>
                 <Link href="/courses" className="nav-link ml-4 otherLink">
                   <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/2.svg" alt="" />
                   <span style={{ marginLeft: '10px' }}>Course Management</span>
 
                 </Link>
-              </li>
+              </li></>
             }
-            {layoutValues?.profile?.role == 'trainer' &&
-              <li>
+            {(layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'trainee') &&
+              <><hr className="under_menu_line" /><li>
                 <Link href="/courses" className="nav-link ml-4 otherLink">
                   <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/2.svg" alt="" />
                   <span style={{ marginLeft: '10px' }}>My Courses</span>
 
                 </Link>
-              </li>
+              </li></>
             }
 
             {layoutValues?.profile?.role == 'admin' &&
               <><hr className="under_menu_line" /><li>
-                <a href="./admin-trainer-management" className="nav-link ml-4 otherLink">
+                <Link href="/users/trainer" className="nav-link ml-4 otherLink">
                   <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/3.svg" alt="" />
                   <span style={{ marginLeft: '10px' }}>Trainers Management</span>
 
-                </a>
+                </Link>
               </li></>
             }
 
             {
               (() => {
-                if (profile?.role == 'trainer' || profile?.role == 'admin') {
+                if (layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin') {
                   return (
                     <><hr className="under_menu_line" />
                       <li>
-                        <a href="/users/trainee" className="nav-link ml-4 otherLink">
+                        <Link href="/users/trainee" className="nav-link ml-4 otherLink">
                           <img className="sidebar-icon" style={{ width: '20px', height: '20px' }} src="/admin-images/sidebar/4.svg" alt="" />
                           <span style={{ marginLeft: '10px' }}>
                             {
                               (() => {
-                                if (profile?.role == 'admin') {
+                                if (layoutValues?.profile?.role == 'admin') {
                                   return (<>Trainee Management</>)
                                 }
-                                if (profile?.role == 'trainer') {
+                                if (layoutValues?.profile?.role == 'trainer') {
                                   return (<>Trainees Enrolled</>)
                                 }
                               })()
                             }
                           </span>
 
-                        </a>
+                        </Link>
                       </li></>);
                 }
               })()
             }
             {
               (() => {
-                if (profile?.role == 'trainee') {
+                if (layoutValues?.profile?.role == 'trainee') {
                   return (
                     <>
                       <hr className="under_menu_line" /><li>
-                        <a href="#" className="nav-link ml-4 otherLink">
+                        <Link href="#" className="nav-link ml-4 otherLink">
                           <i className="fa fa-line-chart" aria-hidden="true"></i>
                           <span style={{ marginLeft: '10px' }}>Analytic Board</span>
 
-                        </a>
+                        </Link>
                       </li>
                       <hr className="under_menu_line" /><li>
-                        <a href="#" className="nav-link ml-4 otherLink">
+                        <Link href="#" className="nav-link ml-4 otherLink">
                           <i className="fa fa-graduation-cap" aria-hidden="true"></i>
                           <span style={{ marginLeft: '10px' }}>My Grades</span>
 
-                        </a>
+                        </Link>
                       </li>
                     </>);
                 }

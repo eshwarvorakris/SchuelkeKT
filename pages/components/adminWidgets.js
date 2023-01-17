@@ -2,7 +2,7 @@ import widgetModel from "../../model/widget.model";
 import useSWR from 'swr';
 export default function adminWidgets() {
   const { data: courseCount, mutate: loadTotal } = useSWR('courseCount', async () => await widgetModel.courseCount());
-
+  
   const { data: courseWeek, mutate: loadWeek } = useSWR('courseWeek', async () => await widgetModel.courseWeek());
 
   const { data: totalTrainee, mutate: loadtrainee } = useSWR('totalTrainee', async () => await widgetModel.traineeCount());

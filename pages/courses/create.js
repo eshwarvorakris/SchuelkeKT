@@ -1,23 +1,21 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
-import category from "../../model/category.model";
 import courseModel from "../../model/course.model";
+import categoryModel from "../../model/category.model";
 import uploader from "../../model/fileupload.model";
 import { useRouter } from "next/router";
 import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
 import AppContext from "../../lib/appContext";
+import moment from 'moment';
+import Link from "next/link";
 const addcourse = ({ categories }) => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Create Course") }
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("login");
-    }
+    
     const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR("categorylist", async () => await categoryModel.list(), config.swrConfig);
     const [formErrors, setFormErrors] = useState([]);
     const { register, setValue, handleSubmit, formState: { errors } } = useForm();
@@ -177,12 +175,9 @@ const addcourse = ({ categories }) => {
                                 </div>
                                 <div className="right-col d-flex gap-4">
                                     <div className="back-btn">
-                                        <a href="./mycourse">
-                                            <button type="button" className="btn" data-toggle="modal"
-                                                data-target="#myModal"><span
-                                                    style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
-                                            </button>
-                                        </a>
+                                        <Link href="/courses" style={{textDecoration:'none'}} className="btn">
+                                            <span style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
+                                        </Link>
                                     </div>
 
                                     <div className="save-btn">
