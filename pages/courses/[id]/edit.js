@@ -190,9 +190,9 @@ const editCourse = () => {
                             <div className="btn-container d-flex justify-content-between mt-5">
                                 <div className="left-col">
                                     <div className="edit-modules-btn">
-                                        <a href="./module"><button type="button" className="btn"
+                                        <Link href={`/courses/${queryid}/module`} className="btn"
                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
-                                                Module</span></button></a>
+                                                Module</span></Link>
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">
