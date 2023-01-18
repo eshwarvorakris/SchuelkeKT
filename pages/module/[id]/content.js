@@ -11,11 +11,12 @@ import { Modal } from 'react-bootstrap';
 import AppContext from '../../../lib/appContext';
 import { useForm } from 'react-hook-form';
 
-function Page() {
+const Page=()=> {
   const layoutValues = useContext(AppContext);
+  const [formErrors, setFormErrors] = useState([]);
   { layoutValues.setPageHeading("Edit Module Content") }
   const [modalStatus, setModalStatus] = useState(false);
-  const [moduleContent, setModuleContent] = useState([]);
+  const [moduleContent, setModuleContent] = useState([{ content_type: "title" }, { content_type: "paragraph" }, { content_type: "file" }, { content_type: "paragraph" }, { content_type: "paragraph" }]);
 
   const router = useRouter();
   const QueryParam = router.query;
@@ -31,9 +32,9 @@ function Page() {
     event.preventDefault();
     const formData = new FormData(event.target);
     console.log(data, formData);
-    await courseModule.create(formData).then((res) => {
+    await moduleModel.createContent(formData).then((res) => {
       helper.sweetalert.toast("Content Created");
-      router.push("/dashboard");
+      //router.push("/dashboard");
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
     })
@@ -50,143 +51,155 @@ function Page() {
     })
   }
 
-  const addContent=function()
-  {
-    setModuleContent([...moduleContent,{content_type:"paragraph"}]);
+  const addContent = function () {
+    //setModuleContent([...moduleContent,{content_type:"paragraph"}]);
   }
   return (
     <>
       <div className="trainer-body">
         <div className="trainer-list d-flex flex-column">
-          <form onSubmit={handleSubmit}>
-            <input type="hidden" {...register("module_id")} defaultValue={QueryParam?.id} />
+          <form onSubmit={onSubmit}>
             <div className="box-1"></div>
             <div className="box-2"></div>
 
             <div className="trainer-tag">
               <p>Edit Module Content</p>
             </div>
+            <div className="header">
+                                <div className="trainer-header">
+                                    <div className="trainer-header-left d-flex">
+                                        <a href="#">
+                                            
+                                        </a>
 
+                                        <div className="icon-content-1">
+                                            <a href="#">
+                                                <p>PREVIOUS</p>
+                                            </a>
+                                            <span>Module 1 - introduction</span>
+                                        </div>
+                                    </div>
+                                    <div className="trainer-header-right d-flex">
+                                        <div className="icon-content-2">
+                                            <a href="#">
+                                                <p>NEXT</p>
+                                            </a>
+                                            <span>Module 2</span>
+                                        </div>
+                                        <a href="#">
+                                            
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+            <div className="wrapper d-flex flex-column gap-5">
 
-
-
-            <div className="wrapper d-flex flex-column">
-
+              {moduleContent.map((item, index) => {
+                return (<>
+                <input type="hidden" {...register(`content[${index}][module_id]`)} defaultValue={QueryParam?.id} />
+          
+                 <input type="hidden" {...register("content["+{index}+"][content_type]")} defaultValue={item.content_type} />
+           
+                  {item.content_type == "title" &&
+            <div className="module-title">
+              <div className="draggable-area">
+                <img src="/images/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+              </div>
 
               <div className="module-title">
-                <div className="draggable-area">
-                  <img src="/trainer-images/edit-module/Vector (Stroke).png"
-                    className="drag-icon" alt="" />
-                </div>
+                <span className="content-title">Title -</span>
+              </div>
 
-                <div className="module-title">
-                  <span className="content-title">Title -</span>
-                </div>
-
-                <div className="input-container">
-                  <input className="input-box" {...register("content[content_type][title]", { required: true })} type="text" placeholder="Content Title" />
-                  <div class="edit-box edit-text-remove">
-                                            <div class="edit-text">
-                                                <button type="button"  class="edit-button bold-btn">
-                                                    <i class="fa-solid fa-bold edit-icon"></i>
-                                                </button>
-                                                <button type="button"  class="edit-button italic-btn">
-                                                    <i class="fa-solid fa-italic edit-icon"></i>
-                                                </button>
-                                                <button type="button"  class="edit-button underline-btn">
-                                                    <i class="fa-solid fa-underline edit-icon"></i>
-                                                </button>
-                                                <button type="button"  class="edit-button left-btn">
-                                                    <i class="fa-solid fa-align-left edit-icon"></i>
-                                                </button>
-                                                <button type="button"  class="edit-button jcenter-btn">
-                                                    <i class="fa-solid fa-align-justify edit-icon"></i>
-                                                </button>
-                                                <button type="button"  class="edit-button right-btn">
-                                                    <i class="fa-solid fa-align-right edit-icon"></i>
-                                                </button>
-                                                <button type="button"  class="edit-button center-btn">
-                                                    <i class="fa-solid fa-align-center edit-icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+              <div className="input-container">
+                <input className="input-box" {...register(`content[${index}][content]`)}  type="text" placeholder="" />
+                <div className="edit-box edit-text-remove">
+                  <div className="edit-text">
+                    <button type="button" className="edit-button bold-btn">
+                      <i className="fa-solid fa-bold edit-icon"></i>
+                    </button>
+                    <button type="button" className="edit-button italic-btn">
+                      <i className="fa-solid fa-italic edit-icon"></i>
+                    </button>
+                    <button type="button" className="edit-button underline-btn">
+                      <i className="fa-solid fa-underline edit-icon"></i>
+                    </button>
+                    <button type="button" className="edit-button left-btn">
+                      <i className="fa-solid fa-align-left edit-icon"></i>
+                    </button>
+                    <button type="button" className="edit-button jcenter-btn">
+                      <i className="fa-solid fa-align-justify edit-icon"></i>
+                    </button>
+                    <button type="button" className="edit-button right-btn">
+                      <i className="fa-solid fa-align-right edit-icon"></i>
+                    </button>
+                    <button type="button" className="edit-button center-btn">
+                      <i className="fa-solid fa-align-center edit-icon"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
-              {console.log(moduleContent)}
-              {moduleContent.map((item) => {
-                return (<>
-                {item.content_type=='paragraph' &&
-                  <div className="module-paragraph-1">
-
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png"
-                        className="drag-icon" alt="" />
-                      <button type="button" className="delete-icon"><img className="delete"
-                        src="/trainer-images/edit-module/Vector delete black.png"
-                        alt="" /></button>
-                    </div>
-
-                    <span className="content-title"><select {...register("")}></span>
-
-                    <div className="input-container">
-                      <textarea name="paragraph 1" className="content-paragraph" cols="100" rows="5"
-                        placeholder=""></textarea>
-                    </div>
-                  </div>
-                  }
-                  {item.content_type=='file' &&
-                
-                  <div className="module-upload">
-
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png"
-                        className="drag-icon" alt="" />
-                      <button type="button" className="delete-icon"><img className="delete"
-                        src="/trainer-images/edit-module/Vector delete black.png"
-                        alt="" /></button>
-                    </div>
-
-                    <span className="content-title">Upload PPT/PDF</span>
-
-                    <div className="upload-container">
-                      <p className="drag-text">Drag and Drop here</p>
-                      {/* <!-- <input type="file"> --> */}
-                    </div>
-
-                    <div className="btns d-flex flex-column gap-2">
-
-                      <div className="right-col-btns d-flex flex-column gap-4">
-
-                        <button type="button"
-                          className="upload-btn btn d-flex justify-content-center gap-2">
-                          <img className="btn-icon"
-                            src="/trainer-images/dashboard images/Vector (1).png" alt="" />
-                          <span>Upload</span>
-                        </button>
-                        <input className="file-input" type="file" hidden />
-
-                      </div>
-
-                      <div className="right-col-btns black-border d-flex flex-column gap-4">
-                        <a href="#!">
-                          <button type="button"
-                            className="btn d-flex justify-content-center gap-2">
-                            <img className="btn-icon"
-                              src="/trainer-images/dashboard images/Vector (2).png"
-                              alt="" />
-                            <span style={{ color: "rgba(0, 0, 0, 0.568)" }}>Remove</span>
-                          </button>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-              }
-                </>)
-              })}
-
             </div>
+          }
 
-            {/* <!-- add module --> */}
+          {item.content_type == 'paragraph' &&  <div className="module-paragraph-1">
+
+              <div className="draggable-area">
+                <img src="/images/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                <button type="button" className="delete-icon"><img className="delete" src="/images/trainer-images/edit-module/Vector delete black.png" alt="" /></button>
+              </div>
+
+              <span className="content-title">Paragraph 1 -</span>
+
+              <div className="input-container">
+                <textarea {...register(`content[${index}][content]`)} className="content-paragraph" cols="100" rows="5" placeholder=""></textarea>
+              </div>
+            </div> }
+
+ {item.content_type == 'file' &&
+
+            <div className="module-upload">
+
+              <div className="draggable-area">
+                <img src="/images/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                <button type="button" className="delete-icon"><img className="delete" src="/images/trainer-images/edit-module/Vector delete black.png" alt="" /></button>
+              </div>
+
+              <span className="content-title">Upload PPT/PDF</span>
+
+              <div className="upload-container">
+                <p className="drag-text">Drag and Drop here</p>
+
+              </div>
+
+              <div className="btns d-flex flex-column gap-2">
+
+                <div className="right-col-btns d-flex flex-column gap-4">
+
+                  <button type="button" className="upload-btn btn d-flex justify-content-center gap-2">
+                    <img className="btn-icon" src="/images/trainer-images/dashboard images/Vector (1).png" alt="" />
+                    <span>Upload</span>
+                  </button>
+                  <input className="file-input" {...register(`content[${index}][content]`)} type="file" hidden="" />
+
+                </div>
+
+                <div className="right-col-btns black-border d-flex flex-column gap-4">
+                  <a href="#!">
+                    <button type="button" className="btn d-flex justify-content-center gap-2">
+                      <img className="btn-icon" src="./images/trainer-images/dashboard images/Vector (2).png" alt="" />
+                      <span style={{ color: "rgba(0, 0, 0, 0.568)" }}>Remove</span>
+                    </button>
+                  </a>
+                </div>
+          
+              </div>
+            </div>
+          }
+          </>) })}
+
+          </div>
+           
+            {/* <!-- add module --> */ }
 
             <div className="add-module d-flex gap-3">
               <div className="add-btn">
@@ -197,36 +210,21 @@ function Page() {
               <hr className="line" />
             </div>
 
-           
-            {/* 
-                            <!-- add module --> */}
-
-            <div className="add-module d-flex gap-3">
-              <div className="add-btn">
-                <button type="button" className="btn btn-light">
-                  <img src="/trainer-images/edit-module/+.png" alt="" />
-                </button>
-              </div>
-              <hr className="line" />
-            </div>
-
-            {/* <!-- footer buttons --> */}
-
             <div className="footer-btn-container d-flex justify-content-end gap-4">
-              <div className="back-btn">
-                <a href="prepare-modules.html">
-                  <button type="button" className="btn btn-light"
-                    style={{ backgroundColor: "#efefef" }}>Back</button>
-                </a>
+            
+            <div className="back-btn">
+                <button type="button" className="btn btn-light"
+                  style={{ backgroundColor: "#efefef" }}>Back</button>
               </div>
 
-              <div className="Save-btn">
-                <a href="final-assessment.html">
-                  <button type="button" className="btn btn-primary"
-                    style={{ backgroundColor: "#008bd6" }}>Save</button>
-                </a>
-              </div>
+            <div className="Save-btn">
+                <button type="submit" className="btn btn-primary"
+                  style={{ backgroundColor: "#008bd6" }}>Save</button>
+             
             </div>
+
+                                </div>
+
           </form>
         </div>
       </div>

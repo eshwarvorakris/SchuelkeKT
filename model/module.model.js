@@ -18,6 +18,10 @@ const moduleModel=class {
     {
         return await axiosInstance.post(this.baseUrl,data);
     }
+    async createContent(data=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/content`,data);
+    }
     async update(id,data=[])
     {
         return await axiosInstance.put(`${this.baseUrl}/${id}`,data);
