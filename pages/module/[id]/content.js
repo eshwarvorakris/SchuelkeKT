@@ -10,6 +10,7 @@ import React, { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from '../../../lib/appContext';
 import { useForm } from 'react-hook-form';
+import _ from 'lodash';
 
 const Page=()=> {
   const layoutValues = useContext(AppContext);
@@ -51,8 +52,21 @@ const Page=()=> {
     })
   }
 
-  const addContent = function () {
-    //setModuleContent([...moduleContent,{content_type:"paragraph"}]);
+  const addContent =function () {
+    let tempComponent=_.merge(moduleContent,{});
+    //console.log(tempComponent);
+    tempComponent.push({ content_type: "title" });
+    tempComponent.push({ content_type: "paragraph" });
+    tempComponent.push({ content_type: "file" });
+    tempComponent.push({ content_type: "paragraph" });
+    tempComponent.push({ content_type: "paragraph" });
+
+    setModuleContent([...moduleContent,tempComponent]);
+    //await setModuleContent([...moduleContent, { content_type: "title" }]);
+    //await setModuleContent([...moduleContent, { content_type: "file" }]);
+    //setModuleContent([...moduleContent, { content_type: "paragraph" }]);
+    //await setModuleContent([...moduleContent, { content_type: "paragraph" }]);
+    console.log(moduleContent);
   }
   return (
     <>
