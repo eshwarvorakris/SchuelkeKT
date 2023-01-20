@@ -7,12 +7,13 @@ import Link from 'next/link';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import ReactPaginate from 'react-paginate';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal } from 'react-bootstrap';
-
+import AppContext from "../../../lib/appContext";
 function Page() {
   const [modalStatus, setModalStatus] = useState(false);
-
+  const layoutValues = useContext(AppContext);
+  { layoutValues.setPageHeading("Course Modules") }
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
@@ -35,7 +36,7 @@ function Page() {
     event.preventDefault();
     const formData = new FormData(event.target);
     await moduleModel.update(formData.get("id"), formData).then((res) => {
-      helper.sweetalert.toast("module Updated");
+      helper.sweetalert.toast("Module Updated");
       moduleList();
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
@@ -46,7 +47,7 @@ function Page() {
     event.preventDefault();
     const formData = new FormData(event.target);
     await moduleModel.create(formData).then((res) => {
-      helper.sweetalert.toast("module Created");
+      helper.sweetalert.toast("Module Added");
       setModalStatus(false);
       moduleList();
     }).catch((error) => {
@@ -111,46 +112,46 @@ function Page() {
             <p>Edit Module</p>
           </div>
 
-          <div class="module-heading">
+          <div className="module-heading">
             <h6>Modules Name</h6>
           </div>
 
-          <div class="wrapper custom-scroll" style={{ padding: 'unset', height: 'fit-content' }}>
+          <div className="wrapper custom-scroll" style={{ padding: 'unset', height: 'fit-content' }}>
             {modules?.data?.map((item, index) => {
               return (
                 <>
-                  <div key={item.id} class="module-card module-card-1 d-flex">
-                    <div class="left-side-card d-flex">
-                      <div class="drag-container">
-                        <img class=""
+                  <div key={item.id} className="module-card module-card-1 d-flex">
+                    <div className="left-side-card d-flex">
+                      <div className="drag-container">
+                        <img className=""
                           src="/trainer-images/edit-module/Vector (Stroke).png"
                           alt="drag here" />
                       </div>
-                      <div class="input-container d-flex gap-2">
-                        <div class="module-card-name">
+                      <div className="input-container d-flex gap-2">
+                        <div className="module-card-name">
                           <span>Module {index + 1} -</span>
                         </div>
                         <form onSubmit={updateModule}>
-                          <div class="module-input d-flex">
-                            <div class="search-wrap">
+                          <div className="module-input d-flex">
+                            <div className="search-wrap">
                               <input type="hidden" name="id" value={item.id} />
                               <input type="text" placeholder="Lorem ipsum dolor sit amet" name="module_name" defaultValue={item.module_name} />
                             </div>
                             <button type='submit' style={{ border: 'none' }}>
-                              <div class="edit" style={{ backgroundColor: '#fff' }}><span style={{ color: '#1a86d0' }}>Update</span></div>
+                              <div className="edit" style={{ backgroundColor: '#fff' }}><span style={{ color: '#1a86d0' }}>Update</span></div>
                             </button>
                           </div>
                         </form>
                       </div>
                     </div>
-                    <div class="right-side-card d-flex">
-                      <div class="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
-                        <Link href="#"><button type="button" class="btn"><span>Edit Content
+                    <div className="right-side-card d-flex">
+                      <div className="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
+                        <Link href="#"><button type="button" className="btn"><span>Edit Content
                           🖊</span></button></Link>
                       </div>
-                      <div class="delete-btn" style={{ height: 'unset' }}>
+                      <div className="delete-btn" style={{ height: 'unset' }}>
                         <a href="#!">
-                          <img class="delete-icon" src="/trainer-images/edit-module/Vector.png" alt="delete button" onClick={() => moduleDelete(item.id)} />
+                          <img className="delete-icon" src="/trainer-images/edit-module/Vector.png" alt="delete button" onClick={() => moduleDelete(item.id)} />
                         </a>
                       </div>
                     </div>
@@ -169,11 +170,11 @@ function Page() {
           /> */}
           <div className='btn-container d-flex justify-content-between gap-3'>
             <div>
-              <button type="button" class="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
+              <button type="button" className="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
             </div>
-            <div class="back-save-btn d-flex gap-4">
-              <Link href={`/courses/${router.query.id}/edit`}><button type="button" class="back-btn">Back</button></Link>
-              <a href="#!"><button type="submit" class="save-btn">Save</button></a>
+            <div className="back-save-btn d-flex gap-4">
+              <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn">Back</button></Link>
+              <a href="#!"><button type="submit" className="save-btn">Save</button></a>
             </div>
             {/* <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button> */}
           </div>

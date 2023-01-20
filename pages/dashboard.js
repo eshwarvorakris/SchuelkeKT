@@ -5,6 +5,7 @@ import TrainerCourse from "./components/trainerDashboardCourseList";
 import AdminWidgets from './components/adminWidgets';
 import TrainerWidgets from './components/trainerWidgets';
 import TraineeWidgets from './components/traineeWidgets';
+import TabCourseList from './components/tabCourseList';
 import AppContext from '../lib/appContext';
 import _ from 'lodash';
 import { useContext } from 'react';
@@ -23,6 +24,7 @@ function Index() {
 
       {(layoutValues?.profile?.role == 'trainer') && <TrainerCourse />}
 
+      {(layoutValues?.profile?.role == 'trainee') && <TabCourseList />}
 
     </>
   );

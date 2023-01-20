@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../../model/auth.model";
 import category from "../../../model/category.model";
@@ -10,25 +10,23 @@ import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
 import moment from 'moment';
 import Link from "next/link";
+import AppContext from "../../../lib/appContext";
 const editCourse = () => {
     const router = useRouter();
-    const { data: profile, error, isLoading } = useSWR('profile', async () => await auth.profile());
-    if (error) {
-        //console.log(error);
-        router.replace("/login");
-    }
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Edit Course") }
     const queryid = router.query.id;
     const [image, setImage] = useState("");
     const [courseData, setcourseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({defaultValues:courseData});
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: courseData });
     //const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
     //const { data:course, courseerror, courseisLoading, mutate:loadCourse } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
-    
+
     useEffect(() => {
         courseModel.detail(router.query.id).then((res) => {
-            if(res.data.course_thumbnail !== null) {
+            if (res.data.course_thumbnail !== null) {
                 setImage(res.data.course_thumbnail);
             }
             console.log(res.data);
@@ -41,7 +39,7 @@ const editCourse = () => {
         }).catch((error) => {
             console.log(error);
         });
-    }, [router,reset]);
+    }, [router, reset]);
 
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
@@ -56,7 +54,7 @@ const editCourse = () => {
     });
 
     const inputFileRef = useRef();
-    
+
     const [isUploaded, setIsUploaded] = useState(false);
     const fileClick = () => {
         inputFileRef.current.click();
@@ -112,7 +110,7 @@ const editCourse = () => {
                                 </div>
                                 <div className="launch-date">
                                     <h6>Course Launch Date</h6>
-                                    <input className="min-date" type="date" {...register("course_launch_date")}  min={moment().format("YYYY-MM-DD")}  />
+                                    <input className="min-date" type="date" {...register("course_launch_date")} min={moment().format("YYYY-MM-DD")} />
                                 </div>
                             </div>
 
@@ -139,14 +137,14 @@ const editCourse = () => {
                                         <div className="btns d-flex flex-column gap-4">
 
                                             <div className="right-col-btns d-flex flex-column gap-4">
-                                                <button type="button"   onClick={fileClick}
+                                                <button type="button" onClick={fileClick}
                                                     className="upload-btn btn d-flex justify-content-center gap-2">
                                                     <img className="btn-icon"
                                                         src="/trainer-images/dashboard images/Vector.png"
                                                         alt="" />
                                                     <span>Browse</span>
                                                 </button>
-                                                <input className="file-input" type="file"  onChange={handleChangeImage} ref={inputFileRef} hidden />
+                                                <input className="file-input" type="file" onChange={handleChangeImage} ref={inputFileRef} hidden />
                                                 <input type="hidden" name="course_thumbnail" value={image} />
                                             </div>
 
@@ -197,7 +195,7 @@ const editCourse = () => {
                                 </div>
                                 <div className="right-col d-flex gap-4">
                                     <div className="back-btn">
-                                        <Link href="/courses" style={{textDecoration:'none'}} className="btn">
+                                        <Link href="/courses" style={{ textDecoration: 'none' }} className="btn">
                                             <span style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
                                         </Link>
                                     </div>

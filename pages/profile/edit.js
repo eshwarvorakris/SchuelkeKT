@@ -10,6 +10,7 @@ import { helper } from '../../lib/helper';
 import Form from 'react-bootstrap/Form';
 import AppContext from '../../lib/appContext';
 import moment from 'moment';
+import Link from "next/link";
 const myprofile = () => {
     const router = useRouter();
     const layoutValues=useContext(AppContext);
@@ -176,7 +177,7 @@ const myprofile = () => {
                     </div>
                     <div className="button-footer d-flex justify-content-end gap-3">
                         <div className="cancel-btn-proflie">
-                            <a href="/profile" className="btn btn-light">Cancel</a>
+                            <Link href="/profile" className="btn btn-light">Cancel</Link>
                         </div>
 
                         <div className="save-btn-proflie">
