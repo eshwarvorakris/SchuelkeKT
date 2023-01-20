@@ -8,7 +8,7 @@ export default function moduleCard({ moduleData, moduleIndex }) {
         <div>
           <a href="#" className="module-anchor" style={{ textDecoration: 'none' }}>
             <div className="module-card card-1" style={{ backgroundColor: '#F3F3F3' }}>
-              <span>{moduleIndex+1} . {moduleData.module_name}</span>
+              <span>{moduleIndex+1} . {moduleData?.module_name}</span>
             </div>
           </a>
         </div>

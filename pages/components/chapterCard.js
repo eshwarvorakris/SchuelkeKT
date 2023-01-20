@@ -7,7 +7,7 @@ export default function moduleCard({ chapterData, chapterIndex }) {
     <>
       <a className="topic-link" href="#" style={{ textDecoration: 'none' }}>
         <div className="chapter-1">
-          <span>Chapter {chapterIndex + 1}: {chapterData.title}</span>
+          <span>Chapter {chapterIndex + 1}: {chapterData?.title}</span>
 
           <span className="remaining-info">2hrs 30mins
             <i className="fa fa-solid fa-chevron-down " style={{ paddingLeft: '0.5rem' }}></i>

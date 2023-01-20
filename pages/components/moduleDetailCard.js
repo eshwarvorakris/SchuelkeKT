@@ -18,7 +18,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
         </div>
 
         <div className="body-heading" style={{ textShadow: 'unset', padding: '0rem 0rem 1rem 2rem', marginBottom: 'unset' }}>
-          <span style={{ fontSize: '25px', padding: 'unset', fontWeight: '600', fontFamily: 'myriad-regular' }}>{moduleData.module_name}</span>
+          <span style={{ fontSize: '25px', padding: 'unset', fontWeight: '600', fontFamily: 'myriad-regular' }}>{moduleData?.module_name}</span>
         </div>
 
         <div className="heading-content">

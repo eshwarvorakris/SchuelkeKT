@@ -126,7 +126,7 @@ function Page() {
                         alt="" /></button>
                     </div>
 
-                    <span className="content-title"><select {...register("")}></span>
+                    <span className="content-title"></span>
 
                     <div className="input-container">
                       <textarea name="paragraph 1" className="content-paragraph" cols="100" rows="5"
