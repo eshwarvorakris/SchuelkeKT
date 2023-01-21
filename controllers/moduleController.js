@@ -2,6 +2,7 @@ const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Module = require("../models/Module.model");
+const Content = require("../models/Module_content.model");
 const moduleController = class {
   async index(req, res) {
     await Module
@@ -65,6 +66,35 @@ const moduleController = class {
       return { message: "Module Deleted" };
     });
     res.send(module);
+  }
+
+  async storeModuleContent(req, res) {
+    var allContentCount = 0;
+    var addedContentCount = 0;
+    req.body.content.forEach(async (element) => {
+      allContentCount++;
+      if(element?.id != "") {
+        const contentDet = await Content.findByPk(element.id);
+        if (contentDet) {
+          contentDet.update(element);
+        }
+        else {
+          delete element.id;
+          await Content.create(element).then((result) => {
+            addedContentCount++;
+          })
+        }
+      }
+      else {
+        delete element.id;
+        await Content.create(element).then((result) => {
+          addedContentCount++;
+        })
+      }
+    });
+    console.clear();
+    console.log("allcontents = "+allContentCount+" added content = "+addedContentCount);
+    res.send("allcontents = "+allContentCount+" added content = "+addedContentCount);
   }
 };
 

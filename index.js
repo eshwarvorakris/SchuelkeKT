@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const _ = require("lodash");
 var bodyParser = require('body-parser');
-const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 var cors = require('cors');
@@ -12,7 +11,53 @@ var methodOverride = require('method-override');
 const auth = require('./lib/auth');
 
 var multer = require('multer');
-var upload = multer();
+var upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+      fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: function (req, file, done) {
+      if (
+          file.mimetype === "image/jpeg" ||
+          file.mimetype === "image/png" ||
+          file.mimetype === "image/jpg" ||
+          file.mimetype === "application/pdf" ||
+          file.mimetype === "application/ppt" ||
+          file.mimetype === "application/pptx"
+      ) {
+          done(null, true);
+      } else {
+          //prevent the upload
+          var newError = new Error("File type is incorrect");
+          newError.name = "MulterError";
+          done(newError, false);
+      }
+  },
+});
+
+var uploadFile = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+      fileSize: 1024 * 1024 * 10,
+  },
+  fileFilter: function (req, file, done) {
+      if (
+          file.mimetype === "image/jpeg" ||
+          file.mimetype === "image/png" ||
+          file.mimetype === "image/jpg" ||
+          file.mimetype === "application/pdf" ||
+          file.mimetype === "application/ppt" ||
+          file.mimetype === "application/pptx"
+      ) {
+          done(null, true);
+      } else {
+          //prevent the upload
+          var newError = new Error("File type is incorrect - " +file.mimetype);
+          newError.name = "MulterError";
+          done(newError, false);
+      }
+  },
+});
 
 
 // allow overriding methods in query (?_method=put)
@@ -27,9 +72,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // for parsing multipart/form-data
 //app.use(upload.array()); 
-app.use(fileUpload({
+/* app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
-}));
+})); */
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -66,15 +111,15 @@ app.listen(process.env.PORT, () => {
 })
 
 //Routes 
-app.use("/auth",require("./routes/auth"));
+app.use("/auth",upload.array(),require("./routes/auth"));
 //const authenticateRouter=app.routes();
 //authenticateRouter.use(auth);
-app.use("/user",require("./routes/user"));
-app.use("/category",require("./routes/category"));
-app.use("/course",require("./routes/course"));
-app.use("/module",require("./routes/module"));
-app.use("/content",require("./routes/content"));
-app.use("/question",require("./routes/question"));
-app.use("/assignment",require("./routes/assignment"));
-app.use("/widget",require("./routes/widget"));
+app.use("/user",upload.array(),require("./routes/user"));
+app.use("/category",upload.array(),require("./routes/category"));
+app.use("/course",upload.array(),require("./routes/course"));
+app.use("/module",upload.array(),require("./routes/module"));
+app.use("/content",upload.array(),require("./routes/content"));
+app.use("/question",upload.array(),require("./routes/question"));
+app.use("/assignment",upload.array(),require("./routes/assignment"));
+app.use("/widget",upload.array(),require("./routes/widget"));
 app.use("/upload",upload.single('uploadFile'),require("./routes/fileUpload"));
