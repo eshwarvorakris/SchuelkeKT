@@ -9,10 +9,19 @@ ModuleContent.init({
     type: DataTypes.INTEGER,
     references:{model:"modules",key:"id"}
   },
-  content_type: {
+  title: {
     type: DataTypes.STRING,
   },
-  content: {
+  paragraph1: {
+    type: DataTypes.TEXT,
+  },
+  paragraph2: {
+    type: DataTypes.TEXT,
+  },
+  file_url: {
+    type: DataTypes.STRING,
+  },
+  paragraph3: {
     type: DataTypes.TEXT,
   },
   sequence_no: {

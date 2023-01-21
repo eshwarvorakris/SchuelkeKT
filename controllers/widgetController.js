@@ -52,6 +52,17 @@ const widgetController = class {
     }
   }
 
+  async trainer(req, res) {
+    req["query"]["role"]="trainer";
+    switch (req.params.type) {
+      case "total":
+        let trainerCount = await User.count({where: req.query});
+        console.log("total trainer:",trainerCount);
+        res.send({ data: { total: trainerCount || 0 } });
+        break;
+    }
+  }
+
 };
 
 module.exports = new widgetController();

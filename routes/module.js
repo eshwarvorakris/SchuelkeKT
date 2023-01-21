@@ -6,6 +6,7 @@ const moduleController = require("../controllers/moduleController");
 router.get("/", moduleController.index);
 router.get("/:id", moduleController.show);
 router.post("/", moduleController.store);
+router.post("/content", moduleController.storeModuleContent);
 router.put("/:id", moduleController.update);
 router.delete("/:id", moduleController.destroy);
 

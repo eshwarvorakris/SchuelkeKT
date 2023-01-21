@@ -79,14 +79,21 @@ const courseController = class {
   }
 
   async modules(req, res) {
-
-    const module = await Module.findAll({ where: { course_id: req.params.id } });
-    if (module) {
-      return res.send({ data: module });
+    if(req.params.id !== undefined && req.params.id != "undefined")
+    {
+      const module = await Module.findAll({ where: { course_id: req.params.id } });
+      if (module) {
+        return res.send({ data: module });
+      }
+      return res.status(422).send(
+        {
+          message: "module not Found",
+        }
+      );
     }
     return res.status(422).send(
       {
-        message: "module not Found",
+        message: "Please Re-Select Course",
       }
     );
   }
