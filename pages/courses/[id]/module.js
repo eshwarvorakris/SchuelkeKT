@@ -7,18 +7,18 @@ import Link from 'next/link';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import ReactPaginate from 'react-paginate';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal } from 'react-bootstrap';
-
+import AppContext from "../../../lib/appContext";
 function Page() {
   const [modalStatus, setModalStatus] = useState(false);
-
+  const layoutValues = useContext(AppContext);
+  { layoutValues.setPageHeading("Course Modules") }
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
-  QueryParam.order_by = router.query?.order_by || "created_at";
-  QueryParam.order_in = router.query?.order_in || "desc";
+  QueryParam.order_by = router.query?.order_by || "id";
+  QueryParam.order_in = router.query?.order_in || "asc";
 
   const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
 
@@ -36,7 +36,7 @@ function Page() {
     event.preventDefault();
     const formData = new FormData(event.target);
     await moduleModel.update(formData.get("id"), formData).then((res) => {
-      helper.sweetalert.toast("module Updated");
+      helper.sweetalert.toast("Module Updated");
       moduleList();
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
@@ -47,7 +47,7 @@ function Page() {
     event.preventDefault();
     const formData = new FormData(event.target);
     await moduleModel.create(formData).then((res) => {
-      helper.sweetalert.toast("module Created");
+      helper.sweetalert.toast("Module Added");
       setModalStatus(false);
       moduleList();
     }).catch((error) => {
@@ -104,25 +104,80 @@ function Page() {
     <>
 
       <div className="trainee-body">
-        <div className="trainee-list-createcourse d-flex flex-column">
+        <div className="trainee-list-createcourse d-flex flex-column" style={{ padding: '2.5rem' }}>
           <div className="box-1-enrolledtrainers"></div>
           <div className="box-2-enrolledtrainers"></div>
 
           <div className="trainee-tag-enrolledtrainers">
-            <p>Create Course</p>
+            <p>Edit Module</p>
           </div>
 
+          <div className="module-heading">
+            <h6>Modules Name</h6>
+          </div>
 
-          <DataTable
+          <div className="wrapper custom-scroll" style={{ padding: 'unset', height: 'fit-content' }}>
+            {modules?.data?.map((item, index) => {
+              return (
+                <>
+                  <div key={item.id} className="module-card module-card-1 d-flex">
+                    <div className="left-side-card d-flex">
+                      <div className="drag-container">
+                        <img className=""
+                          src="/trainer-images/edit-module/Vector (Stroke).png"
+                          alt="drag here" />
+                      </div>
+                      <div className="input-container d-flex gap-2">
+                        <div className="module-card-name">
+                          <span>Module {index + 1} -</span>
+                        </div>
+                        <form onSubmit={updateModule}>
+                          <div className="module-input d-flex">
+                            <div className="search-wrap">
+                              <input type="hidden" name="id" value={item.id} />
+                              <input type="text" placeholder="Lorem ipsum dolor sit amet" name="module_name" defaultValue={item.module_name} />
+                            </div>
+                            <button type='submit' style={{ border: 'none' }}>
+                              <div className="edit" style={{ backgroundColor: '#fff' }}><span style={{ color: '#1a86d0' }}>Update</span></div>
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div className="right-side-card d-flex">
+                      <div className="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
+                        <Link href={`/module/${item.id}/content?course=${QueryParam?.id}`}><button type="button" className="btn"><span>Edit Content
+                          🖊</span></button></Link>
+                      </div>
+                      <div className="delete-btn" style={{ height: 'unset' }}>
+                        <a href="#!">
+                          <img className="delete-icon" src="/trainer-images/edit-module/Vector.png" alt="delete button" onClick={() => moduleDelete(item.id)} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )
+            })}
+
+          </div>
+
+          {/* <DataTable
             columns={columns}
             data={modules?.data}
             progressPending={isLoading}
             className="wrapper custom-scroll"
-          />
-        <div className='btn-container d-flex justify-content-between gap-3'>
-
-          <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button>
-        </div>
+          /> */}
+          <div className='btn-container d-flex justify-content-between gap-3'>
+            <div>
+              <button type="button" className="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
+            </div>
+            <div className="back-save-btn d-flex gap-4">
+              <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn">Back</button></Link>
+              <a href="#!"><button type="submit" className="save-btn">Save</button></a>
+            </div>
+            {/* <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button> */}
+          </div>
         </div>
       </div>
       <Modal show={modalStatus} onHide={() => setModalStatus(false)}>

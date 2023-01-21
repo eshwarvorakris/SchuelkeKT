@@ -20,7 +20,7 @@ export default function Layout({ children }) {
   return (
     <AppContext.Provider value={layoutValues}>
     <SSRProvider>
-      <div className="section1">
+      <div className="section1" style={{height:"unset"}}>
         <div className="blank-class"></div>
           <Sidebar />
           <div className="container-2">

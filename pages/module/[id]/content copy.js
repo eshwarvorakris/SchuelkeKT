@@ -17,18 +17,24 @@ const Page = () => {
   const layoutValues = useContext(AppContext);
   const [formErrors, setFormErrors] = useState([]);
   { layoutValues.setPageHeading("Edit Module Content") }
+  const initialContent = [{ content_type: "title", content_title: "Title", id: "", content: "" },
+  { content_type: "paragraph", content_title: "Paragraph 1", id: "", content: "" },
+  { content_type: "paragraph", content_title: "Paragraph 2", id: "", content: "" },
+  { content_type: "file", content_title: "Upload PPT/PDF", id: "", content: "" },
+  { content_type: "paragraph", content_title: "Paragraph 3", id: "", content: "" }];
+  const [modalStatus, setModalStatus] = useState(false);
   const inputFileRef = useRef();
   const [contentUrl, setcontentUrl] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [nextModule, setNextModule] = useState([]);
   const [prevModule, setPrevModule] = useState([]);
-  const initialContent = [{ id: "", sequence_no : "1", title: "", paragraph1: "", paragraph2: "", file_url: "", paragraph3: "" }];
+
   const [moduleContent, setModuleContent] = useState(initialContent);
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "sequence_no";
-  QueryParam.order_in = router.query?.order_in || "desc";
+  QueryParam.order_in = router.query?.order_in || "asc";
   console.log(QueryParam);
   const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
   const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course), config.swrConfig);
@@ -61,16 +67,22 @@ const Page = () => {
 
   useEffect(() => {
     reset();
+    setModuleContent(initialContent);
     contentList();
     moduleList();
-    setModuleContent(initialContent);
+
   }, [QueryParam?.id]);
 
   useEffect(() => {
-    //console.log("fetched contents = ", moduleContent);
+    //console.log("fetched contents = ", contents?.data);
     if (contents?.data !== undefined) {
       if ((contents?.data).length > 0) {
         setModuleContent(contents?.data);
+        contents?.data.map((item, index) => {
+          if (item.content_type == "file") {
+            setcontentUrl(item.content);
+          }
+        });
         reset(contents?.data);
       }
     }
@@ -105,7 +117,16 @@ const Page = () => {
   }, [modules, QueryParam?.id]);
 
   const addContent = function () {
-    setModuleContent([...moduleContent, initialContent]);
+    let tempComponent = _.merge(moduleContent);
+    //console.log("initial = ", tempComponent);
+    tempComponent.push({ content_type: "title", content_title: "Title", id: "" });
+    tempComponent.push({ content_type: "paragraph", content_title: "Paragraph 1", id: "" });
+    tempComponent.push({ content_type: "paragraph", content_title: "Paragraph 2", id: "" });
+    tempComponent.push({ content_type: "file", content_title: "Upload PPT/PDF", id: "" });
+    tempComponent.push({ content_type: "paragraph", content_title: "Paragraph 3", id: "" });
+
+    setModuleContent([...moduleContent, tempComponent]);
+    //console.log(moduleContent);
   }
 
   const fileClick = () => {
@@ -176,85 +197,93 @@ const Page = () => {
                 </div>
               </div>
             </div>
-            {moduleContent.map((item, index) => {
-              return(
-                <div className="wrapper d-flex flex-column gap-5" key={`form${index}`} style={{ height: 'unset', width: 'unset', marginBottom: 'unset', overflow: 'unset' }}>
-                  <input type="hidden" {...register(`content[${index}][module_id]`)} defaultValue={QueryParam?.id} />
-                  <input type="hidden" {...register(`content[${index}][sequence_no]`)} defaultValue={index+1} />
-                  <input type="hidden" {...register(`content[${index}][id]`)} defaultValue={item.id} />
-                  <div className="module-title">
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
-                    </div>
-                    <div className="module-title">
-                      <span className="content-title">Title -</span>
-                    </div>
-                    <div className="input-container">
-                      <input className="input-box" {...register(`content[${index}][title]`)} defaultValue={item.title} type="text" placeholder="" />
-                    </div>
-                  </div>
+            <div className="wrapper d-flex flex-column gap-5" style={{ height: 'unset', width: 'unset', marginBottom: 'unset', overflow: 'unset' }}>
 
-                  <div className="module-paragraph-1">
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
-                      {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
-                    </div>
-                    <span className="content-title">Paragraph 1 -</span>
-                    <div className="input-container">
-                      <textarea {...register(`content[${index}][paragraph1]`)} defaultValue={item.paragraph1} className="content-paragraph" cols="100" rows="5" placeholder=""></textarea>
-                    </div>
-                  </div>
-                  <div className="module-paragraph-1">
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
-                      {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
-                    </div>
-                    <span className="content-title">Paragraph 2 -</span>
-                    <div className="input-container">
-                      <textarea {...register(`content[${index}][paragraph2]`)} defaultValue={item.paragraph2} className="content-paragraph" cols="100" rows="5" placeholder=""></textarea>
-                    </div>
-                  </div>
-                  <div className="module-upload">
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
-                      {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
-                    </div>
-                    <span className="content-title">Upload PPT/PDF</span>
-                    <div className="upload-container">
-                      <p className="drag-text">Drag and Drop here</p>
-                    </div>
-                    <div className="btns d-flex flex-column gap-2" style={{ width: 'unset' }}>
-                      <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} />
-                      <div className="right-col-btns d-flex flex-column gap-4">
-                        <button type="button" className="upload-btn btn d-flex justify-content-center gap-2" onClick={fileClick}>
-                          <img className="btn-icon" src="/trainer-images/dashboard images/Vector (1).png" alt="" />
-                          <span>Upload</span>
-                        </button>
-                        <input className="file-input" {...register(`content[${index}][file_url]`)} defaultValue={contentUrl} type="text" hidden={true} />
+              {moduleContent.map((item, index) => {
+                //console.log(item);
+                return (<>
+                  <input type="hidden" {...register(`content[${index}][module_id]`)} defaultValue={QueryParam?.id} />
+                  <input type="hidden" {...register(`content[${index}][content_type]`)} defaultValue={item.content_type} />
+                  <input type="hidden" {...register(`content[${index}][sequence_no]`)} defaultValue={index + 1} />
+                  <input type="hidden" {...register(`content[${index}][content_title]`)} defaultValue={item.content_title} />
+                  {item.id &&
+                    <input type="hidden" {...register(`content[${index}][id]`)} defaultValue={item.id} />
+                  }
+                  {item.content_type == "title" &&
+                    <div className="module-title">
+                      <div className="draggable-area">
+                        <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
                       </div>
-                      <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>
-                        <a href="#!">
-                          <button type="button" className="btn d-flex justify-content-center gap-2">
-                            <img className="btn-icon" src="/trainer-images/dashboard images/Vector (2).png" alt="" />
-                            <span style={{ color: "rgba(0, 0, 0, 0.568)" }}>Remove</span>
+
+                      <div className="module-title">
+                        <span className="content-title">{item.content_title} -</span>
+                      </div>
+
+                      <div className="input-container">
+                        <input className="input-box" {...register(`content[${index}][content]`)} defaultValue={item?.content} type="text" placeholder="" />
+
+                      </div>
+                    </div>
+                  }
+
+                  {item.content_type == 'paragraph' && <div className="module-paragraph-1">
+
+                    <div className="draggable-area">
+                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                      {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
+                    </div>
+
+                    <span className="content-title">{item.content_title} -</span>
+
+                    <div className="input-container">
+                      <textarea {...register(`content[${index}][content]`)} defaultValue={item?.content} className="content-paragraph" cols="100" rows="5" placeholder=""></textarea>
+                    </div>
+                  </div>}
+
+                  {item.content_type == 'file' &&
+
+                    <div className="module-upload">
+
+                      <div className="draggable-area">
+                        <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                        {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
+                      </div>
+
+                      <span className="content-title">{item.content_title}</span>
+
+                      <div className="upload-container">
+                        <p className="drag-text">Drag and Drop here</p>
+
+                      </div>
+
+                      <div className="btns d-flex flex-column gap-2" style={{ width: 'unset' }}>
+                        <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} />
+                        <div className="right-col-btns d-flex flex-column gap-4">
+
+                          <button type="button" className="upload-btn btn d-flex justify-content-center gap-2" onClick={fileClick}>
+                            <img className="btn-icon" src="/trainer-images/dashboard images/Vector (1).png" alt="" />
+                            <span>Upload</span>
                           </button>
-                        </a>
+                          <input className="file-input" {...register(`content[${index}][content]`)} defaultValue={contentUrl} type="text" hidden={true} />
+                        </div>
+
+                        <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>
+                          <a href="#!">
+                            <button type="button" className="btn d-flex justify-content-center gap-2">
+                              <img className="btn-icon" src="/trainer-images/dashboard images/Vector (2).png" alt="" />
+                              <span style={{ color: "rgba(0, 0, 0, 0.568)" }}>Remove</span>
+                            </button>
+                          </a>
+                        </div>
+
                       </div>
                     </div>
-                  </div>
-                  <div className="module-paragraph-1">
-                    <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
-                      {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
-                    </div>
-                    <span className="content-title">Paragraph 3 -</span>
-                    <div className="input-container">
-                      <textarea {...register(`content[${index}][paragraph3]`)} defaultValue={item.paragraph3} className="content-paragraph" cols="100" rows="5" placeholder=""></textarea>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                  }
+                </>)
+              })}
+
+            </div>
+
             {/* <!-- add module --> */}
 
             <div className="add-module d-flex gap-3">

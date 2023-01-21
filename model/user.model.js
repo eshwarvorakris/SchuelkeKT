@@ -27,5 +27,17 @@ const User = class {
         axiosInstance.defaults.headers.common['Authorization'] = "Bearer " + sessionStorage.getItem("access_token");
         return (await axiosInstance.put(this.baseUrl, data));
     }
+    async detail(id)
+    {
+        return (await axiosInstance.get(`${this.baseUrl}/${id}`)).data;
+    }
+    async update(id,data=[])
+    {
+        return await axiosInstance.put(`${this.baseUrl}/${id}`,data);
+    }
+    async delete(id)
+    {
+        return await axiosInstance.delete(`${this.baseUrl}/${id}`);
+    }
 }
 export default new User();

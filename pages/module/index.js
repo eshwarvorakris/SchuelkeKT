@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router'
 import useSWR, { mutate } from 'swr';
-import Sidebar from "../components/sidebar";
-import Topnavbar from '../components/topnavbar';
 import moduleModel from "../../model/module.model";
 import auth from "../../model/auth.model";
 import DataTable from 'react-data-table-component';

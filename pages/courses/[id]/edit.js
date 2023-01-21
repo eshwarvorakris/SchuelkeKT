@@ -1,38 +1,60 @@
-import { useContext, useState, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import useSWR, { mutate } from 'swr';
-import auth from "../../model/auth.model";
-import courseModel from "../../model/course.model";
-import categoryModel from "../../model/category.model";
-import uploader from "../../model/fileupload.model";
+import auth from "../../../model/auth.model";
+import category from "../../../model/category.model";
+import courseModel from "../../../model/course.model";
+import uploader from "../../../model/fileupload.model";
 import { useRouter } from "next/router";
-import { config } from '../../lib/config';
+import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
-import { helper } from '../../lib/helper';
-import AppContext from "../../lib/appContext";
+import { helper } from '../../../lib/helper';
 import moment from 'moment';
 import Link from "next/link";
-const addcourse = ({ categories }) => {
-    const layoutValues = useContext(AppContext);
-    { layoutValues.setPageHeading("Create Course") }
+import AppContext from "../../../lib/appContext";
+const editCourse = () => {
     const router = useRouter();
-    
-    const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR("categorylist", async () => await categoryModel.list(), config.swrConfig);
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Edit Course") }
+    const queryid = router.query.id;
+    const [image, setImage] = useState("");
+    const [courseData, setcourseData] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, setValue, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: courseData });
+    //const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
+    //const { data:course, courseerror, courseisLoading, mutate:loadCourse } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
+
+    useEffect(() => {
+        courseModel.detail(router.query.id).then((res) => {
+            if (res.data.course_thumbnail !== null) {
+                setImage(res.data.course_thumbnail);
+            }
+            console.log(res.data);
+            reset(res.data);
+        }).catch((error) => {
+            console.log(error.response);
+        });
+        category.list().then((res) => {
+            setCategories(res);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, [router, reset]);
 
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        //console.log(data, formData);
-        await courseModel.create(formData).then((res) => {
-            helper.sweetalert.toast("course Created");
+        console.log(data, formData);
+        await courseModel.update(router.query.id, formData).then((res) => {
+            helper.sweetalert.toast("course Updated");
             router.push("/courses");
         }).catch((error) => {
             setFormErrors(error.response?.data?.errors);
         })
     });
+
     const inputFileRef = useRef();
-    const [image, setImage] = useState("");
+
     const [isUploaded, setIsUploaded] = useState(false);
     const fileClick = () => {
         inputFileRef.current.click();
@@ -55,17 +77,19 @@ const addcourse = ({ categories }) => {
         })
         //setImage(URL.createObjectURL(e.target.files[0]))
     });
+
     return (
         <>
-
-            <div className="trainee-body">
-                <form onSubmit={onSubmit} encType="multipart/form-data" >
+            <form onSubmit={onSubmit} encType="multipart/form-data" >
+                <div className="trainee-body">
                     <div className="trainee-list-createcourse d-flex flex-column">
                         <div className="box-1-enrolledtrainers"></div>
                         <div className="box-2-enrolledtrainers"></div>
+
                         <div className="trainee-tag-enrolledtrainers">
-                            <p>Create Course</p>
+                            <p>Edit Course</p>
                         </div>
+
                         <div className="trainee-course-form d-grid">
                             <div className="course-form d-flex flex-column justify-content-between">
                                 <div className="course-name">
@@ -75,7 +99,7 @@ const addcourse = ({ categories }) => {
                                 <div className="category">
                                     <h6 htmlFor="category">Category</h6>
                                     <select {...register("category_id")} className="selectaddcourse">
-                                        {categoryData?.data?.map((item) => {
+                                        {categories?.data?.map((item) => {
                                             return (<option key={item.id} value={item.id}>{item.category_name}</option>)
                                         })}
                                     </select>
@@ -110,22 +134,18 @@ const addcourse = ({ categories }) => {
                                                 }
                                             })()
                                         }
-
-
                                         <div className="btns d-flex flex-column gap-4">
 
                                             <div className="right-col-btns d-flex flex-column gap-4">
-                                                <a href="#!">
-                                                    <button type="button" onClick={fileClick}
-                                                        className="upload-btn btn d-flex justify-content-center gap-2">
-                                                        <img className="btn-icon"
-                                                            src="/trainer-images/dashboard images/Vector.png"
-                                                            alt="" />
-                                                        <span>Browse</span>
-                                                    </button>
-                                                    <input className="file-input" type="file" onChange={handleChangeImage} ref={inputFileRef} hidden />
-                                                    <input type="hidden" name="course_thumbnail" value={image} />
-                                                </a>
+                                                <button type="button" onClick={fileClick}
+                                                    className="upload-btn btn d-flex justify-content-center gap-2">
+                                                    <img className="btn-icon"
+                                                        src="/trainer-images/dashboard images/Vector.png"
+                                                        alt="" />
+                                                    <span>Browse</span>
+                                                </button>
+                                                <input className="file-input" type="file" onChange={handleChangeImage} ref={inputFileRef} hidden />
+                                                <input type="hidden" name="course_thumbnail" value={image} />
                                             </div>
 
                                             {/* <!-- <div className="right-col-btns d-flex flex-column gap-4">
@@ -156,8 +176,8 @@ const addcourse = ({ categories }) => {
                                     <h6>Weeks Required for Completion</h6>
                                     <input type="number" {...register("week_duration")} />
                                 </div>
-                            </div >
-                        </div >
+                            </div>
+                        </div>
                         <div className="text-box">
                             <div className="text-heading">
                                 <h6>Course Description</h6>
@@ -168,14 +188,14 @@ const addcourse = ({ categories }) => {
                             <div className="btn-container d-flex justify-content-between mt-5">
                                 <div className="left-col">
                                     <div className="edit-modules-btn">
-                                        <a href="./editcourse"><button type="button" className="btn"
+                                        <Link href={`/courses/${queryid}/module`} className="btn"
                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
-                                                Module</span></button></a>
+                                                Module</span></Link>
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">
                                     <div className="back-btn">
-                                        <Link href="/courses" style={{textDecoration:'none'}} className="btn">
+                                        <Link href="/courses" style={{ textDecoration: 'none' }} className="btn">
                                             <span style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
                                         </Link>
                                     </div>
@@ -187,12 +207,11 @@ const addcourse = ({ categories }) => {
                                 </div>
                             </div>
                         </div>
-                    </div >
-                </form >
-            </div >
+                    </div>
+                </div>
 
-
+            </form>
         </>
     )
 }
-export default addcourse;
+export default editCourse;

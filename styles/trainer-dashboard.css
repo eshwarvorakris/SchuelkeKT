@@ -797,3 +797,9 @@ html {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #008bd650;
 }
+
+.headerContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 2rem;
+}
