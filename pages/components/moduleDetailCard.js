@@ -1,15 +1,26 @@
 import moment from 'moment';
 import Link from 'next/link';
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { config } from '../../lib/config';
+import { helper } from '../../lib/helper';
+import { useRouter } from 'next/router'
+import useSWR, { mutate } from 'swr';
 import ChapterCard from "./chapterCard"
+import contentModel from "../../model/content.model";
 export default function moduleDetailCard({ moduleData, moduleIndex }) {
+  const router = useRouter();
+  const QueryParam = router.query;
+  QueryParam.page = router.query.page || 1;
+  QueryParam.order_by = router.query?.order_by || "sequence_no";
+  QueryParam.order_in = router.query?.order_in || "title";
+  //QueryParam.content_type = "asc";
   const rand = 1 + Math.random() * (100 - 1);
   const moduleStatus = "ongoing";
-  const chapters = [
-    {id: 1, title: 'What Is Pulmonlogy', time: '2hr'},
-    {id: 2, title: 'The Skull (Facial bones, Skeletal structures)', time: '3hr'},
-    {id: 3, title: 'Appendicular Skeleton-Girdles', time: '4hr'}
-  ];
-  console.log(chapters);
+  const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id, async () => await contentModel.list({ module_id: moduleData?.id}), config.swrConfig);
+  //console.log(chapters);
+  useEffect(() => {
+    console.log("all chapters => ", contents?.data)
+  }, [contents]);
   return (
     <>
       <div className="module-1">
@@ -30,7 +41,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
         <div className="button-progress-container">
           {moduleStatus == "ongoing" &&
             <>
-              <a className="topic-link" href="/trainee/topic-page.html">
+              <Link className="topic-link" href="#">
                 <button type="button" className="start-learning-btn d-flex gap-2">
                   <div className="blank-class">
 
@@ -39,7 +50,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
                   <span>Continue Learning</span>
 
                 </button>
-              </a>
+              </Link>
 
               <div className="learning-progress-bar d-flex flex-column gap-2">
                 <div className="d-flex justify-content-between">
@@ -65,7 +76,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
 
         <div className="topic-chapter-container">
 
-          {chapters?.map((item, index) => {
+          {contents?.data?.map((item, index) => {
             return (
               <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
             )

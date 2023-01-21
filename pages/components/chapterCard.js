@@ -1,11 +1,14 @@
 import moment from 'moment';
 import Link from 'next/link';
-export default function moduleCard({ chapterData, chapterIndex }) {
+import { useRouter } from 'next/router'
+export default function chapterCard({ chapterData, chapterIndex }) {
+  const router = useRouter();
+  const QueryParam = router.query;
   const rand = 1 + Math.random() * (100 - 1);
   const chapterStatus = "locked"; // ongoing / completed / locked
   return (
     <>
-      <a className="topic-link" href="#" style={{ textDecoration: 'none' }}>
+      <Link className="topic-link" href={`/chapter/${chapterData?.id}?course=${QueryParam?.id}&module=${chapterData?.module_id}`} style={{ textDecoration: 'none' }}>
         <div className="chapter-1">
           <span>Chapter {chapterIndex + 1}: {chapterData?.title}</span>
 
@@ -50,7 +53,7 @@ export default function moduleCard({ chapterData, chapterIndex }) {
           </div>
 
         </div>
-      </a>
+      </Link>
     </>
   );
 }

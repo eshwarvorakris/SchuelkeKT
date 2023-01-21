@@ -146,7 +146,7 @@ function Page() {
                     </div>
                     <div className="right-side-card d-flex">
                       <div className="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
-                        <Link href="#"><button type="button" className="btn"><span>Edit Content
+                        <Link href={`/module/${item.id}/content?course=${QueryParam?.id}`}><button type="button" className="btn"><span>Edit Content
                           🖊</span></button></Link>
                       </div>
                       <div className="delete-btn" style={{ height: 'unset' }}>

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function courseCard({ courseData }) {
   let courseImg = "/trainer-images/dashboard images/thumbnails/thumbnaila.png";
   if(courseData?.course_thumbnail !== null && courseData?.course_thumbnail != "")
@@ -46,9 +48,9 @@ export default function courseCard({ courseData }) {
           </div>
         </div>
         <div className="edit-btn">
-          <a href={`/courses/${courseData?.id}/edit`}>
+          <Link href={`/courses/${courseData?.id}/edit`}>
             <button className="btn edit">Edit Course</button>
-          </a>
+          </Link>
         </div>
       </div>
     </>

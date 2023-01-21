@@ -8,6 +8,7 @@ import { config } from '../../lib/config';
 import { helper } from '../../lib/helper';
 import CourseCard from './courseCard';
 import ReactPaginate from 'react-paginate';
+import Link from "next/link";
 export default function adminDashboardGraph() {
   const router = useRouter();
   const QueryParam = router.query;
@@ -17,7 +18,7 @@ export default function adminDashboardGraph() {
   const { data: courses, error: courseerror, isLoading: courseisLoading, mutate:loadCourse } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
   const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR(QueryParam ? "categorylist" : null, async () => await categoryModel.list(), config.swrConfig);
   const pagginationHandler = (page) => {
-    QueryParam.page = page.selected + 1;
+    QueryParam.page = page.selected ;
     router.push({
       pathname: router.pathname,
       query: QueryParam,
@@ -48,11 +49,11 @@ export default function adminDashboardGraph() {
         </div>
         <div className="create-course-btnn">
           <div className="create-course">
-            <a href="/courses/create">
+            <Link href="/courses/create">
               <button className="btn btn-primary create-course-btnn"
                 style={{ backgroundColor: "#008bd6" }}>Create
                 Course <strong>+</strong></button>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
