@@ -26,6 +26,10 @@ Course.init({
   course_launch_date: {
     type: DataTypes.DATEONLY
   },
+  total_training_hour: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
   week_duration: {
     type: DataTypes.INTEGER
   },

@@ -19,7 +19,19 @@ const userController = class {
   }
 
   async getNexUserId(req, res) {
-    const userId = await User.max('id');
+    console.log("request = ",req?.query);
+    var userId = await User.max('user_id', {where: { role: "trainee" }});
+    var userIdInitial = 50000000;
+    if (req.query.role !== undefined) {
+      userIdInitial = 10000000;
+      userId = await User.max('user_id', { where: req?.query });
+    }
+
+    if(userId == 0) {
+      userId = userIdInitial;
+    }
+    userId++;
+    //const userId = await User.max('id');
     res.send({ data: userId });
   }
   async getTrainee(req, res) {
@@ -71,6 +83,19 @@ const userController = class {
     );
 
     if (await validation.passes()) {
+
+      var userId = await User.max('user_id', { where: { role: "trainee" } });
+      var userIdInitial = 50000000;
+      if (req.body.role) {
+        userIdInitial = 10000000;
+        userId = await User.max('user_id', { where: { role: req.body.role } });
+      }
+
+      if(userId == 0) {
+        userId = userIdInitial;
+      }
+      userId++;
+      req.body.user_id = userId;
       const saltRounds = 10;
       const salt = bcrypt.genSaltSync(saltRounds);
       req.body.password = bcrypt.hashSync(req.body.password, salt);
@@ -138,8 +163,16 @@ const userController = class {
     }
   }
   async show(req, res) {
-    const user = await User.findByPk(req.params.id);
-    res.send({ data: user });
+    if(req.params.id !== undefined && req.params.id !== "undefined") {
+      const user = await User.findByPk(req.params.id);
+      res.send({ data: user });
+    } else {
+      return res.status(422).send(
+        {
+          message: "Please Re-Select User",
+        }
+      );
+    }
   }
   async update(req, res) {
     const user = await User.findByPk(req.params.id);

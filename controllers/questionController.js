@@ -15,31 +15,44 @@ const questionController = class {
   }
   async store(req, res) {
     const data = req.body;
-    const rules = {
-      course_id: "required",
-      question: "required",
-      question_type: "required",
-      options: "required|array",
-    };
-    const validation = validator.make(data, rules);
-    if (validation.fails()) {
-      return res.status(422).send(
-        {
-          message: _.chain(validation.getErrors()).flatMap().head(),
-          errors: validation.getErrors(),
+    console.clear();
+    req.body.questions.forEach(async (curQuestion) => {
+
+      curQuestion?.options?.map((item, index) => {
+        //console.log(curQuestion?.options[index]?.is_answer);
+        if((item?.is_answer === "false" || item?.is_answer === "true" || item?.is_answer === true) && curQuestion?.options[index]?.is_answer !== undefined) {
+          curQuestion.options[index].is_answer = "true";
+        } else {
+          curQuestion.options[index].is_answer = "false";
         }
-      );
-    }
-    await Question
-      .create(req.body, {
-        include: "options"
-      })
-      .then((result) => {
-        res.send(result);
-      })
-      .catch((error) => {
-        console.error("Failed to retrieve data : ", error);
       });
+      //console.log(curQuestion?.options);
+      const rules = {
+        course_id: "required",
+        question: "required",
+        question_type: "required",
+        options: "required|array",
+      };
+      const validation = validator.make(curQuestion, rules);
+      if (validation.fails()) {
+        return res.status(422).send(
+          {
+            message: _.chain(validation.getErrors()).flatMap().head(),
+            errors: validation.getErrors(),
+          }
+        );
+      }
+      await Question
+        .create(curQuestion, {
+          include: "options"
+        })
+        .then((result) => {
+          res.send(result);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    });
   }
   async show(req, res) {
     const question = await Question.findByPk(req.params.id);

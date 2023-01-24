@@ -43,12 +43,20 @@ User.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
+  joining_year: {
+    type: DataTypes.STRING(4),
+    allowNull: true,
+  },
   status: {
     type: DataTypes.STRING(30),
     defaultValue: "active",
   },
   password: {
     type: DataTypes.STRING
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
   },
 }, {
   // Other model options go here
