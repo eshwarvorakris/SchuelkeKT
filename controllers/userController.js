@@ -113,7 +113,10 @@ const userController = class {
       await User
         .update(req.body, { where: { id: req.userId } })
         .then((result) => {
-          res.send(result);
+          User.findByPk(req.userId).then(function (updateUser) {
+            res.send(updateUser);
+          });
+          //res.send(updateUser);
         })
         .catch((error) => {
           console.error("Unable To Update Profile : ", error);
@@ -155,11 +158,7 @@ const userController = class {
     const user = await User.destroy({ where: { id: req.params.id } }).then((result) => {
       return { message: "user Deleted" };
     });
-    return res.status(422).send(
-      {
-        message: "Unable to find user",
-      }
-    );
+    res.send(user);
   }
 };
 
