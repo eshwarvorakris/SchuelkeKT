@@ -2,11 +2,14 @@ const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Question = require("../models/Question.model");
+const { query } = require("express");
+const QuestionOption = require("../models/Question_option.model");
 const questionController = class {
   async index(req, res) {
     await Question
-      .findAndCountAll({ include: ['course', 'options'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [] })
+      .findAndCountAll({distinct: true, include: ['course', 'options'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [] })
       .then((result) => {
+        console.log(result);
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
@@ -42,7 +45,7 @@ const questionController = class {
       });
   }
   async show(req, res) {
-    const question = await Question.findByPk(req.params.id);
+    const question = await Question.findByPk(req.params.id,{include:["course","options"]});
     if (question) {
       return res.send({ data: question });
     }
@@ -55,7 +58,9 @@ const questionController = class {
   async update(req, res) {
     const question = await Question.findByPk(req.params.id);
     if (question) {
-      question.update(req.body);
+      question.update(req.body)
+      const updateQuery=await QuestionOption.bulkCreate(req.body.options,{fields:['id','option','is_answer'],updateOnDuplicate:["id","option",'is_answer']});
+      console.log(updateQuery);
       return res.send({ data: question });
     }
     return res.status(422).send(
