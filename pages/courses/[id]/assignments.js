@@ -16,7 +16,7 @@ function Page() {
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "id";
   QueryParam.order_in = router.query?.order_in || "asc";
-  const { data: assignment, mutate: assignmentList, error, isLoading } = useSWR("assignmentList", async () => await questionModel.list({ course_id: QueryParam?.id }), config.swrConfig);
+  const { data: assignment, mutate: assignmentList, error, isLoading } = useSWR("assignmentList", async () => await questionModel.list({ course_id: router?.query?.id }), config.swrConfig);
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue  } = useForm();
   const [formErrors, setFormErrors] = useState([]);
   const watchAllFields = watch();

@@ -97,7 +97,7 @@ const trainer = () => {
                 return (
                     <>
                     <div className='btn-group  text-nowrap p-1'>
-                        <Link className='btn btn-outline-primary btn-sm' href={`#`}>Check Status</Link>
+                        <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}/status`}>Check Status</Link>
                         <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}`}><i className="fa fa-pencil" aria-hidden="true"></i></Link>
                         <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => userDelete(row.id)}><i className="fa fa-trash" aria-hidden="true"></i></button>
                     </div>
