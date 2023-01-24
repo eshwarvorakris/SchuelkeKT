@@ -21,8 +21,8 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "font-awesome": "^4.7.0",
-    "moment": "^2.29.4",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "next": "^13.0.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
@@ -31,6 +31,7 @@
     "react-hook-form": "^7.40.0",
     "react-ionicons": "^1.5.7",
     "react-paginate": "^8.1.4",
+    "react-select": "^5.7.0",
     "sweetalert2": "^11.4.8",
     "swr": "^2.0.0"
   }

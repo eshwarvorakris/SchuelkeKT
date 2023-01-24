@@ -29,10 +29,10 @@ const Page = () => {
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "desc";
-  console.log(QueryParam);
+  //console.log(QueryParam);
   const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
   const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course), config.swrConfig);
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -113,7 +113,9 @@ const Page = () => {
     inputFileRef.current.click();
   };
   const handleChangeImage = (async (e) => {
-    //setValue("uploadfile", e.target.files);
+    let curId = e?.target?.attributes?.dataid?.value;
+    //setValue('content['+curId+'][file_url]', "checking");
+    //console.log(curId);
     var data = new FormData();
     var imagedata = await e.target.files[0];
     data.append("uploadFile", imagedata);
@@ -121,7 +123,8 @@ const Page = () => {
     setIsUploaded(true);
     await uploader.upload(data).then((res) => {
       helper.sweetalert.toast("File Uploaded");
-      setcontentUrl(res?.data?.data?.Location);
+      setValue('content['+curId+'][file_url]', res?.data?.data?.Location);
+      //setcontentUrl(res?.data?.data?.Location);
       console.log(res?.data);
     }).catch((error) => {
       helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -129,6 +132,13 @@ const Page = () => {
     })
     //setImage(URL.createObjectURL(e.target.files[0]))
   });
+
+  useEffect(() => {
+    const subscription = watch((data) => {
+      console.log(data.content);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
   return (
     <>
       <div className="trainer-body">
@@ -224,13 +234,15 @@ const Page = () => {
                       <p className="drag-text">Drag and Drop here</p>
                     </div>
                     <div className="btns d-flex flex-column gap-2" style={{ width: 'unset' }}>
-                      <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} />
+                      <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} dataId={index} id={`inputGroupFile0${index}`} />
                       <div className="right-col-btns d-flex flex-column gap-4">
-                        <button type="button" className="upload-btn btn d-flex justify-content-center gap-2" onClick={fileClick}>
-                          <img className="btn-icon" src="/trainer-images/dashboard images/Vector (1).png" alt="" />
-                          <span>Upload</span>
+                        <button type="button" className="upload-btn btn d-flex justify-content-center gap-2">
+                          <label style={{width:'100%'}} htmlFor={`inputGroupFile0${index}`}>
+                            <img className="btn-icon" src="/trainer-images/dashboard images/Vector (1).png" alt="" />
+                            <span>Upload</span>
+                          </label>
                         </button>
-                        <input className="file-input" {...register(`content[${index}][file_url]`)} defaultValue={contentUrl} type="text" hidden={true} />
+                        <input className="file-input" {...register(`content[${index}][file_url]`)} defaultValue={item.file_url} type="text" hidden={true} />
                       </div>
                       <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>
                         <a href="#!">

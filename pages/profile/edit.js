@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
+import baseModel from "../../model/base.model";
 import uploader from "../../model/fileupload.model";
 import user from "../../model/user.model";
 import { useRouter } from "next/router";
@@ -11,31 +12,33 @@ import Form from 'react-bootstrap/Form';
 import AppContext from '../../lib/appContext';
 import moment from 'moment';
 import Link from "next/link";
+import Select from 'react-select'
 const myprofile = () => {
     const router = useRouter();
-    const layoutValues=useContext(AppContext);
-    {layoutValues.setPageHeading("Courses List")}
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Courses List") }
 
     const [profileData, setprofileData] = useState([]);
     const [isUploaded, setIsUploaded] = useState(false);
     const inputFileRef = useRef();
     const [image, setImage] = useState("/trainee-images/trainer.jpg");
     const [profileUrl, setprofileUrl] = useState("");
-    // const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
-    // if (error) {
-    //     router.replace("./login");
-    // }
+    const { data: countryLists, error, isLoading, mutate: countryListMutate } = useSWR('countryList', async () => await baseModel.countrylist());
+
+    const [countryOptions, setCountryOptions] = useState([]);
+    const [selectCountry, setSelectCountry] = useState(null);
 
     const [formErrors, setFormErrors] = useState([]);
     const { register, setValue, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: profileData });
 
     useEffect(() => {
         auth.profile().then((res) => {
-            if(res.profile_img !== null && res.profile_img != "") {
+            if (res.profile_img !== null && res.profile_img != "") {
                 setImage(res.profile_img);
                 setprofileUrl(res.profile_img);
             }
             setprofileData(res);
+            setSelectCountry({ label: res.country, value: res.country })
             console.log(res);
             reset(res);
         }).catch((error) => {
@@ -43,18 +46,37 @@ const myprofile = () => {
             console.log(error);
         });
     }, [router, reset]);
+
+    useEffect(() => {
+        console.clear();
+        //console.log("countries", countryLists);
+        const opt = [];
+        countryLists?.map((item, index) => {
+            //console.log(item.flags.png);
+            //console.log(item.name.common);
+            opt.push({ value: item.name.common, label: item.name.common })
+        });
+        if (opt.length > 0) {
+            setCountryOptions(opt);
+        }
+    }, [countryLists]);
+
+    const onCountrySelect = (e) => {
+        setSelectCountry(e);
+    };
+
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         console.clear();
-        if(isUploaded) {
+        if (isUploaded) {
             formData.delete("uploadfile");
         }
         //console.log("data ", formData);
         await user.updateProfile(formData).then((res) => {
             helper.sweetalert.toast("Profile Updated");
             sessionStorage.setItem("userinfo", JSON.stringify(res.data));
-            {layoutValues.setProfile(res.data)}
+            { layoutValues.setProfile(res.data) }
             console.log(res.data);
             router.push("/profile");
         }).catch((error) => {
@@ -76,7 +98,7 @@ const myprofile = () => {
         setIsUploaded(true);
         await uploader.upload(data).then((res) => {
             helper.sweetalert.toast("File Uploaded");
-            
+
             console.log(res?.data);
             setprofileUrl(res?.data?.data?.Location);
             setImage(res?.data?.data?.Location);
@@ -90,11 +112,11 @@ const myprofile = () => {
         <>
             <div className="trainee-right-edit" style={{ marginTop: '10rem' }}>
                 <Form onSubmit={onSubmit} encType="multipart/form-data">
-                    <div className="edit-container">
+                    <div className="edit-container" >
                         <div className="trainee-profile-pic">
                             <div className="box-1"></div>
                             <div className="box-2"></div>
-                            <div className=" text-tag">
+                            <div className=" text-tag" style={{zIndex:'1'}}>
                                 <h6>Edit Info</h6>
                             </div>
                             <img className="profile-picture" src={image} alt="" />
@@ -121,7 +143,7 @@ const myprofile = () => {
 
                         </div>
 
-                        <div className="trainee-info">
+                        <div className="trainee-info" style={{paddingBottom:'unset'}}>
                             <div className="trainer-form">
                                 <Form.Group className="trainer-Name">
                                     <h6>Full Name</h6>
@@ -137,7 +159,7 @@ const myprofile = () => {
 
                                 <div className="trainer-DOB">
                                     <h6>Date of Birth</h6>
-                                    <input type="date"  {...register("dob", { required: "Fill Date Of Birth" })} max={moment().format("YYYY-MM-DD")}  />
+                                    <input type="date"  {...register("dob", { required: "Fill Date Of Birth" })} max={moment().format("YYYY-MM-DD")} />
                                     {formErrors?.dob && <p className="invalid-feedback">{formErrors?.dob}</p>}
                                 </div>
 
@@ -164,7 +186,21 @@ const myprofile = () => {
                                         }
                                     })()
                                 }
-
+                                <div className="trainer-Name ">
+                                    <h6>Country Of Origin</h6>
+                                    <Select
+                                        isSearchable
+                                        options={countryOptions}
+                                        name={"country"}
+                                        placeholder="Select Country"
+                                        value={selectCountry}
+                                        onChange={onCountrySelect}
+                                    />
+                                </div>
+                                <div className="trainer-Name">
+                                    <h6>Year Of Joining</h6>
+                                    <input type="text" pattern="\d*" placeholder="2023" maxLength={4} {...register("joining_year")} />
+                                </div>
 
                                 {/* <div className="trainer-designation">
                                                     <h6>Designation</h6>

@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import AppContext from "../../lib/appContext";
 const myprofile = () => {
-    const layoutValues=useContext(AppContext);
-    {layoutValues.setPageHeading("Profile")}
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Profile") }
     const router = useRouter();
     // const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     // if (error) {
@@ -16,7 +16,7 @@ const myprofile = () => {
     const [image, setImage] = useState("/trainee-images/trainer.jpg");
     useEffect(() => {
         auth.profile().then((res) => {
-            if(res.profile_img !== null && res.profile_img != "") {
+            if (res.profile_img !== null && res.profile_img != "") {
                 setImage(res.profile_img);
             }
             setprofileData(res);
@@ -32,20 +32,20 @@ const myprofile = () => {
                 <div className="trainee-profile-pic">
                     <div className="box-1"></div>
                     <div className="box-2"></div>
-                    <div className="text-tag">
+                    <div className="text-tag" style={{zIndex:'1'}}>
                         <h6>My Info</h6>
                     </div>
                     <img className="profile-picture-profile" src={image} alt="" />
                 </div>
                 <div className="trainee-info">
-                    
+
                     <table className="table-myprofile" style={{ height: 'min-content' }}>
                         <tbody>
                             {(profile?.role == 'trainer' || profile?.role == 'trainee') &&
                                 <tr style={{ lineHeight: '1px' }}>
                                     <td style={{ width: "125px" }}>Trainer ID</td>
                                     <td style={{ width: "500px", color: "#008bd6" }}>
-                                        <strong>{100000 + profile?.id}</strong>
+                                        <strong>{profile?.user_id}</strong>
                                     </td>
                                 </tr>
                             }
@@ -74,13 +74,27 @@ const myprofile = () => {
                                 <td><strong>{profile?.contact_no}</strong></td>
                             </tr>
                             {(profile?.role == 'trainer' || profile?.role == 'trainee') &&
-                                <tr >
-                                    <td>Education Background</td>
-                                    <td>
-                                        <strong>{profile?.edu_background}</strong>
-                                    </td>
-                                </tr>
+                                <>
+                                    <tr >
+                                        <td>Education Background</td>
+                                        <td>
+                                            <strong>{profile?.edu_background}</strong>
+                                        </td>
+                                    </tr>
+                                </>
                             }
+                            <tr >
+                                <td>Country</td>
+                                <td>
+                                    <strong>{profile?.country}</strong>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>Year Of Joining</td>
+                                <td>
+                                    <strong>{profile?.joining_year}</strong>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 

@@ -147,17 +147,6 @@ const editCourse = () => {
                                                 <input className="file-input" type="file" onChange={handleChangeImage} ref={inputFileRef} hidden />
                                                 <input type="hidden" name="course_thumbnail" value={image} />
                                             </div>
-
-                                            {/* <!-- <div className="right-col-btns d-flex flex-column gap-4">
-                                        <a href="#!">
-                                            <button className="btn d-flex justify-content-center gap-2">
-                                                <img className="btn-icon"
-                                                    src="/images/trainer-images/dashboard images/Vector (1).png" alt="">
-                                                <span>Upload</span>
-                                            </button>
-                                        </a>
-                                    </div> --> */}
-
                                             <div className="right-col-btns black-border d-flex flex-column gap-4">
                                                 <a href="#!">
                                                     <button className="btn d-flex justify-content-center gap-2">
@@ -176,6 +165,10 @@ const editCourse = () => {
                                     <h6>Weeks Required for Completion</h6>
                                     <input type="number" {...register("week_duration")} />
                                 </div>
+                                <div className="course-completion">
+                                    <h6>Total Training Hour</h6>
+                                    <input type="number" {...register("total_training_hour")} />
+                                </div>
                             </div>
                         </div>
                         <div className="text-box">
@@ -186,11 +179,16 @@ const editCourse = () => {
 
 
                             <div className="btn-container d-flex justify-content-between mt-5">
-                                <div className="left-col">
+                                <div className="left-col d-flex gap-4">
                                     <div className="edit-modules-btn">
                                         <Link href={`/courses/${queryid}/module`} className="btn"
                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
                                                 Module</span></Link>
+                                    </div>
+
+                                    <div className="edit-modules-btn">
+                                        <Link href={`/courses/${queryid}/assignments`} className="btn"
+                                            style={{ backgroundColor: "#008bd6" }}><span>Edit Assignment</span></Link>
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">

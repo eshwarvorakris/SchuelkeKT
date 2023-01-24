@@ -58,7 +58,7 @@ const addTrainee = () => {
                         </div>
                         <div className="trainer-ID">
                             <span>Trainee ID -</span>
-                            <span style={{ fontWeight: '600', color: '#008bd6' }}> {100000 + userId?.data} </span>
+                            <span style={{ fontWeight: '600', color: '#008bd6' }}> {userId?.data} </span>
                             <span style={{ color: '#008bd6', fontWeight: '100', fontSize: '12px' }}
                                 className="pl-2">(Auto-generated)</span>
                         </div>

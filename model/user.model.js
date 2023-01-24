@@ -5,7 +5,7 @@ const User = class {
     }
 
     async getNextUserId(query = []) {
-        return (await axiosInstance.get(`${this.baseUrl}/userNextId`)).data;
+        return (await axiosInstance.get(`${this.baseUrl}/userNextId?${new URLSearchParams(query)}`)).data;
     }
 
     async traineeList(query = []) {

@@ -14,7 +14,7 @@ const addTrainer = () => {
     { layoutValues.setPageHeading("Add Trainer") }
     const [errorMessage, seterrorMessage] = useState("");
 
-    const { data: userId, userIderror, userIdisLoading } = useSWR('nextUserId', async () => await userModal.getNextUserId());
+    const { data: userId, userIderror, userIdisLoading } = useSWR('nextUserId', async () => await userModal.getNextUserId({role:"trainer"}));
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -59,7 +59,7 @@ const addTrainer = () => {
                         </div>
                         <div className="trainer-ID">
                             <span>Trainer ID -</span>
-                            <span style={{ fontWeight: '600', color: '#008bd6' }}> {100000 + userId?.data} </span>
+                            <span style={{ fontWeight: '600', color: '#008bd6' }}> {userId?.data} </span>
                             <span style={{ color: '#008bd6', fontWeight: '100', fontSize: '12px' }}
                                 className="pl-2">(Auto-generated)</span>
                         </div>

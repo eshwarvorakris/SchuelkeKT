@@ -17,7 +17,7 @@ const trainer = () => {
 
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
-    QueryParam.order_by = router.query?.order_by || "created_at";
+    QueryParam.order_by = router.query?.order_by || "id";
     QueryParam.order_in = router.query?.order_in || "desc";
 
     const { data: trainer, mutate: trainerList, error: trainererror, isLoading: trainerisLoading } = useSWR(QueryParam ? "trainerList" : null, async () => await userModal.trainerList(QueryParam), config.swrConfig);
@@ -34,6 +34,11 @@ const trainer = () => {
         })
 
     }
+    /* useEffect(() => {
+        console.clear();
+        console.log("trainers : ", trainer);
+    }, [trainer]); */
+    
     const columns = [
         {
             name: 'S.No',
@@ -63,7 +68,7 @@ const trainer = () => {
                             })()
                         }
                         
-                        <span>{100000 + row.id}</span>
+                        <span> {row.user_id}</span>
                     </p>
                 )
             },

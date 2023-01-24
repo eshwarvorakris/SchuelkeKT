@@ -128,16 +128,6 @@ const addcourse = ({ categories }) => {
                                                 </a>
                                             </div>
 
-                                            {/* <!-- <div className="right-col-btns d-flex flex-column gap-4">
-                                        <a href="#!">
-                                            <button className="btn d-flex justify-content-center gap-2">
-                                                <img className="btn-icon"
-                                                    src="/images/trainer-images/dashboard images/Vector (1).png" alt="">
-                                                <span>Upload</span>
-                                            </button>
-                                        </a>
-                                    </div> --> */}
-
                                             <div className="right-col-btns black-border d-flex flex-column gap-4">
                                                 <a href="#!">
                                                     <button className="btn d-flex justify-content-center gap-2">
@@ -155,6 +145,10 @@ const addcourse = ({ categories }) => {
                                 <div className="course-completion">
                                     <h6>Weeks Required for Completion</h6>
                                     <input type="number" {...register("week_duration")} />
+                                </div>
+                                <div className="course-completion">
+                                    <h6>Total Training Hour</h6>
+                                    <input type="number" {...register("total_training_hour")} />
                                 </div>
                             </div >
                         </div >
