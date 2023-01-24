@@ -94,8 +94,8 @@ function Page() {
     const formData = new FormData(event.target);
     console.log('data',data.questions);
     await questionModel.create(formData).then((res) => {
-      console.log(res)
-      //helper.sweetalert.toast("Content Created");
+      //console.log(res)
+      helper.sweetalert.toast("Assignment Added");
       //router.push("/dashboard");
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
