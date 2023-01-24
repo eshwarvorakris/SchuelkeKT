@@ -92,7 +92,7 @@ function Page() {
     event.preventDefault();
     console.clear();
     const formData = new FormData(event.target);
-    console.log('data',data.questions);
+    //console.log('data',data.questions);
     await questionModel.create(formData).then((res) => {
       //console.log(res)
       helper.sweetalert.toast("Assignment Added");
