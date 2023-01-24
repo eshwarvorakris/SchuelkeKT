@@ -56,32 +56,32 @@ const editTrainee = () => {
 
     return (
         <>
-            <div class="trainee-body">
-                <div class="trainee-list d-flex flex-column" style={{ padding: 'unset', height: 'unset' }}>
-                    <div class="box-1"></div>
-                    <div class="box-2"></div>
+            <div className="trainee-body">
+                <div className="trainee-list d-flex flex-column" style={{ padding: 'unset', height: 'unset' }}>
+                    <div className="box-1"></div>
+                    <div className="box-2"></div>
 
-                    <div class="trainee-tag" style={{ zIndex: '1' }}>
+                    <div className="trainee-tag" style={{ zIndex: '1' }}>
                         <p>Trainee Status</p>
                     </div>
 
-                    <div class="trainee-info">
-                        <div class="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
+                    <div className="trainee-info">
+                        <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
-                        <div class="trainee-name d-flex gap-2 justify-self-center"><span>Trainee-name :</span>
+                        <div className="trainee-name d-flex gap-2 justify-self-center"><span>Trainee-name :</span>
                             <h6><strong>{profileData?.full_name}</strong></h6>
                         </div>
-                        <div class="courses-enrolled d-flex gap-2 justify-self-center "><span>No. of courses
+                        <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>No. of courses
                             Enrolled :</span>
                             <h6> <strong>6</strong></h6>
                         </div>
-                        <div class="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
+                        <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
                             <h6><strong>{profileData?.email}</strong></h6>
                         </div>
                     </div>
 
-                    <div class="trainee-topic-cards justify-content-around row">
+                    <div className="trainee-topic-cards justify-content-around row">
                         {courses?.data?.map((item, index) => {
                             console.log(item);
                             return (
@@ -90,42 +90,42 @@ const editTrainee = () => {
                         })}
                     </div>
 
-                    <div class="assignment-table">
-                        <div class="table-header d-flex justify-content-between">
-                            <div class="trainee-main-heading d-flex">
-                                <div class="trainee-assignment-heading">Gastroentrology</div>
-                                <div class="label-info d-flex text-warning gap-2">
-                                    <div class="blank-dot-class"></div>
-                                    <div class="dot-label" style={{ backgroundColor: '#ffc50f' }}></div>
+                    <div className="assignment-table">
+                        <div className="table-header d-flex justify-content-between">
+                            <div className="trainee-main-heading d-flex">
+                                <div className="trainee-assignment-heading">Gastroentrology</div>
+                                <div className="label-info d-flex text-warning gap-2">
+                                    <div className="blank-dot-class"></div>
+                                    <div className="dot-label" style={{ backgroundColor: '#ffc50f' }}></div>
                                     <span>In Progress</span>
                                 </div>
                             </div>
-                            <div class="assignment-filter">
+                            <div className="assignment-filter">
 
-                                <div class="dropdown">
-                                    <button type="button" class="btn dropdown-toggle dropdown-btn"
+                                <div className="dropdown">
+                                    <button type="button" className="btn dropdown-toggle dropdown-btn"
                                         id="book-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                         Filter
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="book-dropdown">
-                                        <div class="dropdown-content">
-                                            <div class="d-flex flex-column">
-                                                <div class="heading">
+                                    <div className="dropdown-menu" aria-labelledby="book-dropdown">
+                                        <div className="dropdown-content">
+                                            <div className="d-flex flex-column">
+                                                <div className="heading">
                                                     <p>Submission Status</p>
                                                 </div>
-                                                <div class="checkbox-items d-flex gap-2">
-                                                    <div class="CB">
+                                                <div className="checkbox-items d-flex gap-2">
+                                                    <div className="CB">
                                                         <input type="checkbox" id="vehicle1" name="vehicle1"
                                                             value="Bike" />
                                                         <label for="vehicle1">Submited</label><br />
                                                     </div>
-                                                    <div class="CB">
+                                                    <div className="CB">
                                                         <input type="checkbox" id="vehicle2" name="vehicle2"
                                                             value="Car" />
                                                         <label for="vehicle2">Pending</label><br />
                                                     </div>
-                                                    <div class="CB">
+                                                    <div className="CB">
                                                         <input type="checkbox" id="vehicle3" name="vehicle3"
                                                             value="Boat" />
                                                         <label for="vehicle3">Not Started</label><br /><br />
@@ -133,14 +133,14 @@ const editTrainee = () => {
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex flex-column gap-1">
-                                                <div class="heading">
+                                            <div className="d-flex flex-column gap-1">
+                                                <div className="heading">
                                                     <p>Obtained Score</p>
                                                 </div>
-                                                <div class="progressbar d-flex">
+                                                <div className="progressbar d-flex">
                                                     <span>0%</span>
-                                                    <div class="progress" style={{ height: '5px', width: '100%' }}>
-                                                        <div class="progress-bar" role="progressbar"
+                                                    <div className="progress" style={{ height: '5px', width: '100%' }}>
+                                                        <div className="progress-bar" role="progressbar"
                                                             style={{ width: '90%' }} aria-valuenow="75" aria-valuemin="0"
                                                             aria-valuemax="100">
                                                         </div>
@@ -149,17 +149,17 @@ const editTrainee = () => {
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex flex-column gap-2">
-                                                <div class="heading">
+                                            <div className="d-flex flex-column gap-2">
+                                                <div className="heading">
                                                     <p>Passing Status</p>
                                                 </div>
-                                                <div class="checkbox-items d-flex gap-2">
-                                                    <div class="CB">
+                                                <div className="checkbox-items d-flex gap-2">
+                                                    <div className="CB">
                                                         <input type="checkbox" id="vehicle1" name="vehicle1"
                                                             value="Bike" />
                                                         <label for="vehicle1">Pass</label><br />
                                                     </div>
-                                                    <div class="CB">
+                                                    <div className="CB">
                                                         <input type="checkbox" id="vehicle2" name="vehicle2"
                                                             value="Car" />
                                                         <label for="vehicle2">Fail</label><br />
@@ -167,14 +167,14 @@ const editTrainee = () => {
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex flex-column gap-1">
-                                                <div class="heading">
+                                            <div className="d-flex flex-column gap-1">
+                                                <div className="heading">
                                                     <p>No. of Attempts</p>
                                                 </div>
-                                                <div class="progressbar d-flex">
+                                                <div className="progressbar d-flex">
                                                     <span>0%</span>
-                                                    <div class="progress" style={{ height: '5px', width: '100%' }}>
-                                                        <div class="progress-bar" role="progressbar"
+                                                    <div className="progress" style={{ height: '5px', width: '100%' }}>
+                                                        <div className="progress-bar" role="progressbar"
                                                             style={{ width: '25%' }} aria-valuenow="25" aria-valuemin="0"
                                                             aria-valuemax="100">
                                                         </div>
@@ -188,7 +188,7 @@ const editTrainee = () => {
                             </div>
                         </div>
                         {(layoutValues?.profile?.role == 'admin') &&
-                            <div class="dashboard-info" style={{ padding: '2rem 0rem', marginTop: 'unset' }}>
+                            <div className="dashboard-info" style={{ padding: '2rem 0rem', marginTop: 'unset' }}>
                                 <div className="total-courses" style={{ padding: '1rem 2rem' }}>
                                     <div className="left-info" style={{ justifySelf: 'unset' }}>
                                         <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
@@ -241,14 +241,14 @@ const editTrainee = () => {
                                         </div>
                                     </div>
                                     <div className="right-icon">
-                                        <img src="/trainer-images/dashboard images/icon-3.png" alt="" class="icon-info" />
-                                        <img src="/trainer-images/dashboard images/icon-3(2).png" class="vector-fig" alt="" />
+                                        <img src="/trainer-images/dashboard images/icon-3.png" alt="" className="icon-info" />
+                                        <img src="/trainer-images/dashboard images/icon-3(2).png" className="vector-fig" alt="" />
                                     </div>
                                 </div>
                             </div>
                         }
 
-                        <div class="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
+                        <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
                             <table>
                                 <tbody>
                                     <tr>
@@ -262,18 +262,18 @@ const editTrainee = () => {
                                     </tr>
                                     <tr>
                                         <td>Assignment 1</td>
-                                        <td class="text-success">
+                                        <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
                                         <td>1</td>
                                         <td>2</td>
                                         <td>92%</td>
-                                        <td class="text-success">97%</td>
-                                        <td class="text-success">Pass</td>
+                                        <td className="text-success">97%</td>
+                                        <td className="text-success">Pass</td>
                                     </tr>
                                     <tr>
                                         <td>Assignment 2</td>
-                                        <td class="text-danger">
+                                        <td className="text-danger">
                                             <span>Not Submitted</span>
                                         </td>
                                         <td>-</td>
@@ -284,29 +284,29 @@ const editTrainee = () => {
                                     </tr>
                                     <tr>
                                         <td>Assignment 3</td>
-                                        <td class="text-success">
+                                        <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
                                         <td>2</td>
                                         <td>2</td>
                                         <td>94%</td>
-                                        <td class="text-warning">86%</td>
-                                        <td class="text-success">Pass</td>
+                                        <td className="text-warning">86%</td>
+                                        <td className="text-success">Pass</td>
                                     </tr>
                                     <tr>
                                         <td>Assignment 4</td>
-                                        <td class="text-success">
+                                        <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
                                         <td>1</td>
                                         <td>1</td>
                                         <td>93%</td>
-                                        <td class="text-danger">24%</td>
-                                        <td class="text-danger">Fail</td>
+                                        <td className="text-danger">24%</td>
+                                        <td className="text-danger">Fail</td>
                                     </tr>
                                     <tr>
                                         <td>Final Assignment</td>
-                                        <td class="">
+                                        <td className="">
                                             <span>Not Started</span>
                                         </td>
                                         <td>-</td>

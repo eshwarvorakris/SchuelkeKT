@@ -55,34 +55,34 @@ const editTrainee = () => {
 
     return (
         <>
-            <div class="trainee-body">
-                <div class="trainee-list d-flex flex-column" style={{ padding: 'unset', height: 'unset' }}>
-                    <div class="box-1"></div>
-                    <div class="box-2"></div>
+            <div className="trainee-body">
+                <div className="trainee-list d-flex flex-column" style={{ padding: 'unset', height: 'unset' }}>
+                    <div className="box-1"></div>
+                    <div className="box-2"></div>
 
-                    <div class="trainee-tag" style={{ zIndex: '1' }}>
+                    <div className="trainee-tag" style={{ zIndex: '1' }}>
                         <p>Trainer Status</p>
                     </div>
 
-                    <div class="trainee-info">
-                        <div class="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
+                    <div className="trainee-info">
+                        <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
-                        <div class="trainee-name d-flex gap-2 justify-self-center"><span>Trainer-name :</span>
+                        <div className="trainee-name d-flex gap-2 justify-self-center"><span>Trainer-name :</span>
                             <h6><strong>{profileData?.full_name}</strong></h6>
                         </div>
-                        <div class="courses-enrolled d-flex gap-2 justify-self-center "><span>Courses
+                        <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>Courses
                             Submitted :</span>
                             <h6> <strong>6</strong></h6>
                         </div>
-                        <div class="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
+                        <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
                             <h6><strong>{profileData?.email}</strong></h6>
                         </div>
                     </div>
 
-                    <div class="assignment-table">
+                    <div className="assignment-table">
                         
-                        <div class="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
+                        <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
                             <table>
                                 <tbody>
                                     <tr>
@@ -96,18 +96,18 @@ const editTrainee = () => {
                                     </tr>
                                     <tr>
                                         <td>Assignment 1</td>
-                                        <td class="text-success">
+                                        <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
                                         <td>1</td>
                                         <td>2</td>
                                         <td>92%</td>
-                                        <td class="text-success">97%</td>
-                                        <td class="text-success">Pass</td>
+                                        <td className="text-success">97%</td>
+                                        <td className="text-success">Pass</td>
                                     </tr>
                                     <tr>
                                         <td>Assignment 2</td>
-                                        <td class="text-danger">
+                                        <td className="text-danger">
                                             <span>Not Submitted</span>
                                         </td>
                                         <td>-</td>
@@ -118,29 +118,29 @@ const editTrainee = () => {
                                     </tr>
                                     <tr>
                                         <td>Assignment 3</td>
-                                        <td class="text-success">
+                                        <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
                                         <td>2</td>
                                         <td>2</td>
                                         <td>94%</td>
-                                        <td class="text-warning">86%</td>
-                                        <td class="text-success">Pass</td>
+                                        <td className="text-warning">86%</td>
+                                        <td className="text-success">Pass</td>
                                     </tr>
                                     <tr>
                                         <td>Assignment 4</td>
-                                        <td class="text-success">
+                                        <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
                                         <td>1</td>
                                         <td>1</td>
                                         <td>93%</td>
-                                        <td class="text-danger">24%</td>
-                                        <td class="text-danger">Fail</td>
+                                        <td className="text-danger">24%</td>
+                                        <td className="text-danger">Fail</td>
                                     </tr>
                                     <tr>
                                         <td>Final Assignment</td>
-                                        <td class="">
+                                        <td className="">
                                             <span>Not Started</span>
                                         </td>
                                         <td>-</td>

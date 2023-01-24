@@ -170,7 +170,7 @@ const admincoursemanagement = () => {
                                     }
                                 </div>
                                 <div className="trainee-body">
-                                    <div className="trainee-admincoursemanagement d-flex flex-column">
+                                    <div className="trainee-admincoursemanagement d-flex flex-column" style={{minHeight:'70vh', height:'unset'}}>
                                         <div className="box-1-admincoursemanagement"></div>
                                         <div className="box-2-admincoursemanagement"></div>
                                         <div className="trainee-tag-admincoursemanagement">

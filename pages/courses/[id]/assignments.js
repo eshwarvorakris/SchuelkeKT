@@ -16,8 +16,9 @@ function Page() {
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "id";
   QueryParam.order_in = router.query?.order_in || "asc";
-  const { data: assignment, mutate: assignmentList, error, isLoading } = useSWR("assignmentList", async () => await questionModel.list({ course_id: router?.query?.id }), config.swrConfig);
-  const { register, handleSubmit, formState: { errors }, reset, watch, setValue  } = useForm();
+  const [assignment, setAssignment] = useState([]);
+  //const { data: assignment, mutate: loadassignment, error, isLoading } = useSWR(QueryParam?"assignmentList":null, async () => await questionModel.list({ course_id: router?.query?.id }), config.swrConfig);
+  const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm();
   const [formErrors, setFormErrors] = useState([]);
   const watchAllFields = watch();
   //console.log(watch());
@@ -71,7 +72,7 @@ function Page() {
   useEffect(() => {
     const subscription = watch((data) => {
       //console.log(data.questions);
-      if(data.questions !== undefined) {
+      if (data.questions !== undefined) {
         setQuestions(data.questions);
       }
     });
@@ -79,12 +80,16 @@ function Page() {
   }, [watch]);
 
   useEffect(() => {
-    setCourseId(QueryParam?.id);
-    assignmentList();
-    //console.log("assignmnets ", assignment?.data);
-    if(assignment?.data !== undefined) {
-      setQuestions(assignment?.data);
-      reset(assignment?.data);
+    if(router?.query?.id !== undefined) {
+      questionModel.list({ course_id: router?.query?.id }).then((res) => {
+        if(res.data.length > 0) {
+          setQuestions(res.data);
+          reset(res.data);
+        }
+        //console.log(res.data)
+      }).catch((error) => {
+        console.log(error);
+      });
     }
   }, [router]);
 
@@ -139,7 +144,7 @@ function Page() {
 
                           <span className="content-title">Question {index + 1} -</span>
                           <input type="hidden" {...register(`questions[${index}][course_id]`)} defaultValue={courseId} />
-                          <input type="hidden" {...register(`questions[${index}][sequence_no]`)} defaultValue={index+1} />
+                          <input type="hidden" {...register(`questions[${index}][sequence_no]`)} defaultValue={index + 1} />
                           <div className="input-container d-flex flex-column gap-4">
                             <textarea {...register(`questions[${index}][question]`)} defaultValue={item?.question} required className="content-paragraph" cols="45" rows="0"
                               placeholder="Lorem ipstum dolor sit amet, consectetur aaipiscing eint. Integer mattis purus eu semper l0Dortis lacus, tristique et er. Eu ductor rusceodio enim morbi turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer mattis purus eu semper lobortis lacus, tristique eteros. Eu auctor fusce ultrices viverra arcu purus viverra vitae, aliquet. Sollicitudin ipsum mi condimentum orci tincidunt pretiumel. Magna ultrices odio enim morbi turpis.es"></textarea>
@@ -155,18 +160,18 @@ function Page() {
                                     </div>
                                     {
                                       (() => {
-                                          if(optionitem?.is_answer == "true" || optionitem?.is_answer === true) {
-                                            return (
-                                              <><input type="checkbox" {...register(`questions[${index}][options][${optionindex}][is_answer]`)} 
+                                        if (optionitem?.is_answer == "true" || optionitem?.is_answer === true) {
+                                          return (
+                                            <><input type="checkbox" {...register(`questions[${index}][options][${optionindex}][is_answer]`)}
                                               defaultValue={optionitem?.is_answer} checked /></>
-                                            );
-                                          } else {
-                                            return (
-                                              <><input type="checkbox" {...register(`questions[${index}][options][${optionindex}][is_answer]`)} 
+                                          );
+                                        } else {
+                                          return (
+                                            <><input type="checkbox" {...register(`questions[${index}][options][${optionindex}][is_answer]`)}
                                               defaultValue={optionitem?.is_answer} /></>
-                                            );
-                                          }
-                                      })()  
+                                          );
+                                        }
+                                      })()
                                     }
                                   </div>
                                 );
