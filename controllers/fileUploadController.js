@@ -44,7 +44,7 @@ exports.uploadFile = async function (req, res) {
     if (req.body?.filename) {
       fileName = req.body?.filename + '.' + fileExt;
     }
-    fileName = req.userId + '/' + fileFolder + '/' + fileName;
+    let fileNameFull = req.userId + '/' + fileFolder + '/' + fileName;
     // if (req.body?.filename) {
     //   fileName = req.userId + '/' + req.body?.filename + '.' + fileExt;
     // }
@@ -53,7 +53,9 @@ exports.uploadFile = async function (req, res) {
     // }
     
     console.log(fileName);
-    const s3out = await uploadToS3(req.file.buffer, fileName);
+    const s3out = await uploadToS3(req.file.buffer, fileNameFull);
+    s3out.fileExt = fileExt;
+    s3out.fileName = fileName;
     res.send({data:s3out});
   }
   else {

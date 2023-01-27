@@ -24,6 +24,15 @@ ModuleContent.init({
   paragraph3: {
     type: DataTypes.TEXT,
   },
+  file_ext: {
+    type: DataTypes.STRING(50),
+  },
+  file_name: {
+    type: DataTypes.STRING(100),
+  },
+  file_key: {
+    type: DataTypes.STRING(50),
+  },
   sequence_no: {
     type: DataTypes.INTEGER
   },

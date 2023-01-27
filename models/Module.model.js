@@ -9,6 +9,9 @@ Module.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  description: {
+    type: DataTypes.STRING(400)
+  },
   course_id: {
     type: DataTypes.INTEGER,
     references:{model:"courses",key:"id"}
