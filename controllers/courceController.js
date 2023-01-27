@@ -4,17 +4,29 @@ const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Course = require("../models/Course.model");
 const Module = require("../models/Module.model");
-const {Sequelize, Op, DataTypes } = require("sequelize");
+const { Sequelize, Op, DataTypes } = require("sequelize");
+const Category = require("../models/Category.model");
 const courseController = class {
   async index(req, res) {
-
+    let search = req.query.search;
     if (req.query.search) {
       req["query"][Op.or] = [
-        { 'course_name': { [Op.iLike]: `%${req.query.search}%` } },
-        //{ ['category.category_name']: { [Op.iLike]: `%${req.query.search}%` } },
+        { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
+        { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
         { 'status': { [Op.iLike]: `%${req.query.search}%` } },
-        //Sequelize.cast(Sequelize.col('courses.trainer_id'),"Char"),
-        //{'trainer_id':`%${req.query.search}%`}
+        Sequelize.where(
+          Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
+          {[Op.iLike]: `%${req.query.search}%`}
+        ),
+        Sequelize.where(
+          Sequelize.cast(Sequelize.col('total_module'), 'varchar'),
+          {[Op.iLike]: `%${req.query.search}%`}
+        ),
+        /* Sequelize.where(
+          Sequelize.cast(Sequelize.col('trainer.contact_no'), 'varchar'),
+          {[Op.iLike]: `%${req.query.search}%`}
+        ), */
       ];
       delete req.query.search;
     }
@@ -26,7 +38,7 @@ const courseController = class {
     }
 
     await Course
-      .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
+      .findAndCountAll({ include: ["category","trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
@@ -79,8 +91,7 @@ const courseController = class {
   }
 
   async modules(req, res) {
-    if(req.params.id !== undefined && req.params.id != "undefined")
-    {
+    if (req.params.id !== undefined && req.params.id != "undefined") {
       const module = await Module.findAll({ where: { course_id: req.params.id } });
       if (module) {
         return res.send({ data: module });
