@@ -57,7 +57,7 @@ function Page() {
   };
   //console.clear();
   const [questions, setQuestions] = useState([initialQuestion]);
-  const [courseId, setCourseId] = useState(QueryParam?.id);
+  const [courseId, setCourseId] = useState(router?.id);
   const addQuestion = function () {
     setQuestions([...questions, initialQuestion]);
   }
@@ -81,7 +81,8 @@ function Page() {
 
   useEffect(() => {
     if(router?.query?.id !== undefined) {
-      questionModel.list({ course_id: router?.query?.id }).then((res) => {
+      setCourseId(router?.query?.id)
+      questionModel.list({ course_id: router?.query?.id, order_by:"sequence_no", order_in:"asc" }).then((res) => {
         if(res.data.length > 0) {
           setQuestions(res.data);
           reset(res.data);
@@ -125,7 +126,7 @@ function Page() {
 
               <div className="wrapper-exercise d-flex flex-column gap-3">
                 {questions?.map((item, index) => {
-                  console.log("question - ", item?.question_type)
+                  console.log("question - ", item)
                   return (
                     <>
                       <section key={`question${index}`}>
@@ -143,6 +144,7 @@ function Page() {
                           </div>
 
                           <span className="content-title">Question {index + 1} -</span>
+                          <input type="hidden" {...register(`questions[${index}][id]`)} defaultValue={item.id} />
                           <input type="hidden" {...register(`questions[${index}][course_id]`)} defaultValue={courseId} />
                           <input type="hidden" {...register(`questions[${index}][sequence_no]`)} defaultValue={index + 1} />
                           <div className="input-container d-flex flex-column gap-4">
@@ -156,6 +158,8 @@ function Page() {
                                     <label htmlFor="vehicle1">Option {optionindex + 1} -</label>
                                     <div className="input-container">
                                       <input className="input-box" type="text" {...register(`questions[${index}][options][${optionindex}][option]`)} required defaultValue={optionitem?.option}
+                                        placeholder="Add the content here" />
+                                      <input  type="hidden" {...register(`questions[${index}][options][${optionindex}][id]`)} defaultValue={optionitem?.id}
                                         placeholder="Add the content here" />
                                     </div>
                                     {
@@ -182,9 +186,28 @@ function Page() {
                           <span className="drop-box-question">Type of Question -</span>
 
                           <div className={`category ${item?.question_type}`} >
-                            <select {...register(`questions[${index}][question_type]`)} defaultValue={item?.question_type}>
-                              <option value="multiple">Multiple Options Correct</option>
-                              <option value="single">Single Option Correct</option>
+                            <select {...register(`questions[${index}][question_type]`)} defaultValue={item.question_type}>
+                              {
+                                (() => {
+                                  if (item?.question_type == 'multiple') {
+                                    return (
+                                      <>
+                                        <option value="multiple" selected>Multiple Options Correct</option>
+                                        <option value="single">Single Option Correct</option>
+                                      </>
+                                    );
+                                  } else {
+                                    return (
+                                      <>
+                                        <option value="multiple">Multiple Options Correct</option>
+                                        <option value="single" selected>Single Option Correct</option>
+                                      </>
+                                    );
+                                  }
+                                })()
+                              }
+                              {/* <option value="multiple">Multiple Options Correct</option>
+                              <option value="single">Single Option Correct</option> */}
                             </select>
                           </div>
                         </div>

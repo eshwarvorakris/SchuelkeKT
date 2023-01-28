@@ -96,6 +96,9 @@ const Page = () => {
             <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} />
           )
         })}
+        <div className="p-4" style={{marginLeft:'3rem'}}>
+          <Link href={`/courses/${router?.query?.id}/quizzes`} type="button" className="btn btn-primary">Course Assignment</Link>
+        </div>
         
       </form>
     </>

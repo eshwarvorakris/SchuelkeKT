@@ -22,7 +22,7 @@ const Page = () => {
   const [isUploaded, setIsUploaded] = useState(false);
   const [nextModule, setNextModule] = useState([]);
   const [prevModule, setPrevModule] = useState([]);
-  const initialContent = [{ id: "", sequence_no : "1", title: "", paragraph1: "", paragraph2: "", file_url: "", paragraph3: "" }];
+  const initialContent = [{ id: "", sequence_no: "1", title: "", paragraph1: "", paragraph2: "", file_url: "", paragraph3: "" }];
   const [moduleContent, setModuleContent] = useState(initialContent);
   const router = useRouter();
   const QueryParam = router.query;
@@ -30,7 +30,7 @@ const Page = () => {
   QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "desc";
   //console.log(QueryParam);
-  const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
+  const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
   const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course), config.swrConfig);
   const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
   const onSubmit = handleSubmit(async (data) => {
@@ -39,10 +39,11 @@ const Page = () => {
     if (isUploaded) {
       formData.delete("uploadfile");
     }
-    console.log(data, formData);
+    //console.log(data, formData);
     await moduleModel.createContent(formData).then((res) => {
       helper.sweetalert.toast("Content Created");
-      //router.push("/dashboard");
+      //console.log(res);
+      router.push("/courses/"+QueryParam?.course+"/module");
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
     })
@@ -115,7 +116,7 @@ const Page = () => {
   const handleChangeImage = (async (e) => {
     let curId = e?.target?.attributes?.dataid?.value;
     //setValue('content['+curId+'][file_url]', "checking");
-    //console.log(curId);
+    //console.log(e.target.files[0].name);
     var data = new FormData();
     var imagedata = await e.target.files[0];
     data.append("uploadFile", imagedata);
@@ -123,7 +124,11 @@ const Page = () => {
     setIsUploaded(true);
     await uploader.upload(data).then((res) => {
       helper.sweetalert.toast("File Uploaded");
-      setValue('content['+curId+'][file_url]', res?.data?.data?.Location);
+      setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
+
+      setValue('content[' + curId + '][file_ext]', res?.data?.data?.fileExt);
+      setValue('content[' + curId + '][file_name]', res?.data?.data?.fileName);
+      setValue('content[' + curId + '][file_key]', res?.data?.data?.key);
       //setcontentUrl(res?.data?.data?.Location);
       console.log(res?.data);
     }).catch((error) => {
@@ -187,11 +192,12 @@ const Page = () => {
               </div>
             </div>
             {moduleContent.map((item, index) => {
-              return(
+              return (
                 <div className="wrapper d-flex flex-column gap-5" key={`form${index}`} style={{ height: 'unset', width: 'unset', marginBottom: 'unset', overflow: 'unset' }}>
                   <input type="hidden" {...register(`content[${index}][module_id]`)} defaultValue={QueryParam?.id} />
-                  <input type="hidden" {...register(`content[${index}][sequence_no]`)} defaultValue={index+1} />
+                  <input type="hidden" {...register(`content[${index}][sequence_no]`)} defaultValue={index + 1} />
                   <input type="hidden" {...register(`content[${index}][id]`)} defaultValue={item.id} />
+
                   <div className="module-title">
                     <div className="draggable-area">
                       <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
@@ -237,11 +243,14 @@ const Page = () => {
                       <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} dataId={index} id={`inputGroupFile0${index}`} />
                       <div className="right-col-btns d-flex flex-column gap-4">
                         <button type="button" className="upload-btn btn d-flex justify-content-center gap-2">
-                          <label style={{width:'100%'}} htmlFor={`inputGroupFile0${index}`}>
+                          <label style={{ width: '100%' }} htmlFor={`inputGroupFile0${index}`}>
                             <img className="btn-icon" src="/trainer-images/dashboard images/Vector (1).png" alt="" />
                             <span>Upload</span>
                           </label>
                         </button>
+                        <input type="hidden" {...register(`content[${index}][file_ext]`)} defaultValue={item?.file_ext} />
+                        <input type="hidden" {...register(`content[${index}][file_name]`)} defaultValue={item?.file_name} />
+                        <input type="hidden" {...register(`content[${index}][file_key]`)} defaultValue={item?.file_key} />
                         <input className="file-input" {...register(`content[${index}][file_url]`)} defaultValue={item.file_url} type="text" hidden={true} />
                       </div>
                       <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>

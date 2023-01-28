@@ -8,7 +8,7 @@ export default function chapterCard({ chapterData, chapterIndex }) {
   const chapterStatus = "locked"; // ongoing / completed / locked
   return (
     <>
-      <Link className="topic-link" href={`/chapter/${chapterData?.id}?course=${QueryParam?.id}&module=${chapterData?.module_id}`} style={{ textDecoration: 'none' }}>
+      <Link className="topic-link" href={`/chapter/${chapterData?.id}`} style={{ textDecoration: 'none' }}>
         <div className="chapter-1">
           <span>Chapter {chapterIndex + 1}: {chapterData?.title}</span>
 
