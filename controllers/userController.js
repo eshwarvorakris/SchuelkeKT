@@ -39,10 +39,10 @@ const userController = class {
       .findAndCountAll({
         where: {
           role: "trainee"
-        }, offset: req.query.page, limit: 15
+        }, offset: req.query.page, limit: pageLimit, order:[orderByColumn] 
       })
       .then((result) => {
-        res.send(getPaginate(result, req.query.page ?? 1, 15));
+        res.send(getPaginate(result, req.query.page ?? pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
@@ -54,10 +54,10 @@ const userController = class {
       .findAndCountAll({
         where: {
           role: "trainer"
-        }, offset: req.query.page, limit: 15
+        }, offset: req.query.page, limit: pageLimit, order:[orderByColumn] 
       })
       .then((result) => {
-        res.send(getPaginate(result, req.query.page ?? 1, 15));
+        res.send(getPaginate(result, req.query.page ?? pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);

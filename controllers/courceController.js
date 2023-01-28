@@ -20,7 +20,7 @@ const courseController = class {
           {[Op.iLike]: `%${req.query.search}%`}
         ),
         Sequelize.where(
-          Sequelize.cast(Sequelize.col('total_module'), 'varchar'),
+          Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
           {[Op.iLike]: `%${req.query.search}%`}
         ),
         /* Sequelize.where(

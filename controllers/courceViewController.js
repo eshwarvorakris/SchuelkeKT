@@ -4,7 +4,7 @@ const Course = require("../models/Course.model");
 const courseController = class {
   async index(req, res) {
     await Course
-      .findAndCountAll({ offset: pageNumber * pageLimit, limit: pageLimit })
+      .findAndCountAll({ offset: pageNumber * pageLimit, limit: pageLimit, order:[orderByColumn]  })
       .then((result) => {
         res.send(getPaginate(result,pageNumber, pageLimit));
       })
