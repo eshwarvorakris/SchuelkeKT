@@ -16,7 +16,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
   //QueryParam.content_type = "asc";
   const rand = 1 + Math.random() * (100 - 1);
   const moduleStatus = "ongoing";
-  const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id, async () => await contentModel.list({ module_id: moduleData?.id}), config.swrConfig);
+  const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id || null, async () => await contentModel.list({ module_id: moduleData?.id}), config.swrConfig);
   //console.log(chapters);
   useEffect(() => {
     console.log("all chapters => ", contents?.data)
@@ -75,12 +75,27 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
         </div>
 
         <div className="topic-chapter-container">
-
-          {contents?.data?.map((item, index) => {
-            return (
-              <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
-            )
-          })}
+          {
+            (() => {
+              if(contents?.data.length > 0)
+              {
+                return(
+                  <>
+                  {contents?.data?.map((item, index) => {
+                    return (
+                      <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
+                    )
+                  })}
+                  </>
+                );
+              }
+            })()
+          }
+            {/* {contents?.data?.map((item, index) => {
+              return (
+                <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
+              )
+            })} */}
         </div>
       </div>
     </>

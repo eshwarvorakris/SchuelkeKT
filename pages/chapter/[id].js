@@ -29,7 +29,7 @@ const topicpage = () => {
         if (contentData?.data !== undefined) {
             setModuleId(contentData?.data?.module_id);
             setCurContent(contentData?.data);
-            //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/course/1/module/Wiraa+Web+UX.pptx");
+            //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
             setContentUrl(contentData?.data?.file_url);
             contentModel.list({ module_id: contentData?.data?.module_id }).then((res) => {
                 //console.log("contents - ", res.data);
