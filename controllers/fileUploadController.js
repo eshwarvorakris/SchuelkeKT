@@ -11,12 +11,13 @@ const awsConfig = {
 const S3 = new AWS.S3(awsConfig);
 
 //upload to s3
-const uploadToS3 = (fileData, fileName) => {
+const uploadToS3 = (fileData, fileName, mimetype) => {
   return new Promise((resolve, reject) => {
     const params = {
       Bucket: bucketName,
       Key: fileName,
       Body: fileData,
+      ContentType: mimetype
     };
     S3.upload(params, (err, data) => {
       if (err) {
@@ -53,7 +54,7 @@ exports.uploadFile = async function (req, res) {
     // }
     
     console.log(fileName);
-    const s3out = await uploadToS3(req.file.buffer, fileNameFull);
+    const s3out = await uploadToS3(req.file.buffer, fileNameFull, req.file.mimetype);
     s3out.fileExt = fileExt;
     s3out.fileName = fileName;
     res.send({data:s3out});
