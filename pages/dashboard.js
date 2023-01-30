@@ -15,17 +15,18 @@ function Index() {
   const { data: courseCount } = useSWR('courseCount', async () => await widgetModel.courseCount());
   return (
     <>
-      <div className="dashboard-info">
-        {(layoutValues?.profile?.role == 'admin') && <AdminWidgets />}
-        {(layoutValues?.profile?.role == 'trainer') && <TrainerWidgets />}
-        {(layoutValues?.profile?.role == 'trainee') && <TraineeWidgets />}
+      <div style={{minHeight:'90vh'}}>
+        <div className="dashboard-info">
+          {(layoutValues?.profile?.role == 'admin') && <AdminWidgets />}
+          {(layoutValues?.profile?.role == 'trainer') && <TrainerWidgets />}
+          {(layoutValues?.profile?.role == 'trainee') && <TraineeWidgets />}
+        </div>
+        {(layoutValues?.profile?.role == 'admin') && <AdminGraph />}
+
+        {(layoutValues?.profile?.role == 'trainer') && <TrainerCourse />}
+
+        {(layoutValues?.profile?.role == 'trainee') && <TabCourseList />}
       </div>
-      {(layoutValues?.profile?.role == 'admin') && <AdminGraph />}
-
-      {(layoutValues?.profile?.role == 'trainer') && <TrainerCourse />}
-
-      {(layoutValues?.profile?.role == 'trainee') && <TabCourseList />}
-
     </>
   );
 }

@@ -32,7 +32,7 @@ const Page = () => {
   //console.log(QueryParam);
   const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
   const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course), config.swrConfig);
-  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset, setValue, getValues, watch } = useForm();
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -115,19 +115,26 @@ const Page = () => {
   };
   const handleChangeImage = (async (e) => {
     let curId = e?.target?.attributes?.dataid?.value;
+    let fileKey = getValues('content[' + curId + '][file_key]');
+    //console.log("fileFkey", fileKey);
     //setValue('content['+curId+'][file_url]', "checking");
     //console.log(e.target.files[0].name);
     var data = new FormData();
     var imagedata = await e.target.files[0];
     data.append("uploadFile", imagedata);
     data.append("filefolder", "Courses");
+    if(fileKey != "" && fileKey != undefined) {
+      data.append("fileKey", fileKey);
+    }
     setIsUploaded(true);
     await uploader.upload(data).then((res) => {
       helper.sweetalert.toast("File Uploaded");
       setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
 
       setValue('content[' + curId + '][file_ext]', res?.data?.data?.fileExt);
-      setValue('content[' + curId + '][file_name]', res?.data?.data?.fileName);
+      if(res?.data?.data?.fileName != "" && res?.data?.data?.fileName != undefined) {
+        setValue('content[' + curId + '][file_name]', res?.data?.data?.fileName);
+      }
       setValue('content[' + curId + '][file_key]', res?.data?.data?.key);
       //setcontentUrl(res?.data?.data?.Location);
       console.log(res?.data);
