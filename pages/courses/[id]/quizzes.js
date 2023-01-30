@@ -8,6 +8,7 @@ import AppContext from "../../../lib/appContext";
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import questionModel from "../../../model/questions.model";
+import courseModel from "../../../model/course.model";
 function Page() {
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Quizzes") }
@@ -22,6 +23,7 @@ function Page() {
   const watchAllFields = watch();
   //console.log(watch());
   const [questions, setQuestions] = useState([]);
+  const [courseName, setCourseName] = useState("");
   const [courseId, setCourseId] = useState(router?.id);
 
   useEffect(() => {
@@ -34,13 +36,20 @@ function Page() {
   }, [watch]);
 
   useEffect(() => {
-    console.log("id = ", router?.query?.id);
+    //console.log("id = ", router?.query?.id);
     if (router?.query?.id !== undefined) {
+      console.log("in");
+      courseModel.detail(router?.query?.id).then((res) => {
+        console.log("course Name = ",res.data);
+        setCourseName(res?.data?.course_name);
+      }).catch((error) => {
+        console.log(error);
+      });
       setCourseId(router?.query?.id)
       questionModel.list({ course_id: router?.query?.id, order_by: "sequence_no", order_in: "asc" }).then((res) => {
         if (res.data.length > 0) {
           setQuestions(res.data);
-          console.log(res.data);
+          //console.log("course Name = ",res.data?.[0]?.course?.course_name);
           reset(res.data);
         }
         //console.log(res.data)
@@ -70,9 +79,9 @@ function Page() {
       <form>
         <div className="header-breadcrumb" style={{ '--bs-breadcrumb-divider': '>' }} aria-label="breadcrumb">
           <ol className="breadcrumb" style={{ backgroundColor: '#F5F6F8', padding: '.75rem 1rem' }}>
-            <li className="breadcrumb-item"><a href="#">Home</a></li>
-            <li className="breadcrumb-item"><a href="#">Courses</a></li>
-            <li className="breadcrumb-item"><a href="#">Cardiology</a></li>
+            <li className="breadcrumb-item"><Link href="/dashboard">Home</Link></li>
+            <li className="breadcrumb-item"><Link href="/courses">Courses</Link></li>
+            <li className="breadcrumb-item"><Link href="#">{courseName}</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Quizzes</li>
           </ol>
         </div>
