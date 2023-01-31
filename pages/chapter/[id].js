@@ -90,22 +90,24 @@ const topicpage = () => {
                 <div className="presentation">
                     {/* <img src="/trainee-images/topic-page/Rectangle 721.png" alt="" /> */}
                     {curContent?.file_url &&
-                        <DocViewer
-                            pluginRenderers={DocViewerRenderers}
-                            documents={
-                                [
-                                    { uri: contentUrl }
-                                ]
-                            }
-                            config={{
-                                header: {
-                                    disableHeader: true,
-                                    disableFileName: true,
-                                    retainURLParams: false
+                        <div key={Math.random()}>
+                            <DocViewer
+                                pluginRenderers={DocViewerRenderers}
+                                documents={
+                                    [
+                                        { uri: contentUrl }
+                                    ]
                                 }
-                            }}
-                            style={{ height: 500 }}
-                        />
+                                config={{
+                                    header: {
+                                        disableHeader: true,
+                                        disableFileName: true,
+                                        retainURLParams: false
+                                    }
+                                }}
+                                style={{ height: 500 }}
+                            />
+                        </div>
                     }
                 </div>
 
@@ -120,14 +122,14 @@ const topicpage = () => {
                     <div className="trainee-footer-left d-flex">
                         {prevContent?.title &&
                             <>
-                                <a href={`/chapter/${prevContent?.id}`}>
+                                <Link href={`/chapter/${prevContent?.id}`}>
                                     <i className="fa fa-arrow-left footer-icon text-light" aria-hidden="true"></i>
-                                </a>
+                                </Link>
 
                                 <div className="icon-content-1">
-                                    <a href={`/chapter/${prevContent?.id}`}>
+                                    <Link href={`/chapter/${prevContent?.id}`}>
                                         <p>PREVIOUS</p>
-                                    </a>
+                                    </Link>
                                     <span>Chapter {prevContent?.sequence_no} - {prevContent?.title}</span>
                                 </div>
                             </>
@@ -137,14 +139,14 @@ const topicpage = () => {
                         {nextContent?.title &&
                             <>
                                 <div className="icon-content-2">
-                                    <a href={`/chapter/${nextContent?.id}`}>
+                                    <Link href={`/chapter/${nextContent?.id}`}>
                                         <p>NEXT</p>
-                                    </a>
+                                    </Link>
                                     <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
                                 </div>
-                                <a href={`/chapter/${nextContent?.id}`}>
+                                <Link href={`/chapter/${nextContent?.id}`}>
                                     <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
-                                </a>
+                                </Link>
                             </>
                         }
                     </div>

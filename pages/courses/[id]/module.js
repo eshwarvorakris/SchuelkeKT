@@ -20,7 +20,7 @@ function Page() {
   QueryParam.order_by = router.query?.order_by || "id";
   QueryParam.order_in = router.query?.order_in || "asc";
   const [formErrors, setFormErrors] = useState([]);
-  const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
+  const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
 
   const moduleDelete = function (id) {
     helper.sweetalert.confirm("Delete module", "info").then((result) => {
