@@ -162,9 +162,9 @@ const addcourse = ({ categories }) => {
                             <div className="btn-container d-flex justify-content-between mt-5">
                                 <div className="left-col">
                                     <div className="edit-modules-btn">
-                                        <a href="./editcourse"><button type="button" className="btn"
+                                        {/* <a href="./editcourse"><button type="button" className="btn"
                                             style={{ backgroundColor: "#008bd6" }}><span>Edit
-                                                Module</span></button></a>
+                                                Module</span></button></a> */}
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">
