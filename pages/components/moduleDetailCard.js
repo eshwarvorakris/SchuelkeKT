@@ -21,7 +21,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
   const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id || null, async () => await contentModel.list({ module_id: moduleData?.id}), config.swrConfig);
   //console.log(chapters);
   useEffect(() => {
-    console.log("all chapters => ", contents?.data)
+    console.log("all contents => ", contents?.data)
   }, [contents]);
   return (
     <>
