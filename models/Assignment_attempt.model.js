@@ -1,5 +1,8 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
+const User = require("./User.model");
+const Course = require("./Course.model");
+const QuestionAttemps = require("./Question_attempt.model");
 class AssignmentAttempt extends Model { }
 
 AssignmentAttempt.init({
@@ -7,6 +10,10 @@ AssignmentAttempt.init({
   trainee_id: {
     type: DataTypes.INTEGER,
     references:{model:"users",key:"id"}
+  },
+  course_id: {
+    type: DataTypes.INTEGER,
+    references:{model:"courses",key:"id"}
   },
   start_date: {
     type: DataTypes.DATE
@@ -26,8 +33,8 @@ AssignmentAttempt.init({
     allowNull:true,
   },
   status: {
-    type: DataTypes.CHAR,
-    defaultValue: "active",
+    type: DataTypes.STRING(30),
+    defaultValue: "drafted",
   },
 }, {
   // Other model options go here
@@ -38,5 +45,8 @@ AssignmentAttempt.init({
   deletedAt: "deleted_at",
   paranoid: true
 });
+AssignmentAttempt.belongsTo(Course,{foreignKey:"course_id",as:"course"});
+AssignmentAttempt.belongsTo(User, { foreignKey: "trainee_id", as: "trainere" });
+AssignmentAttempt.hasMany(QuestionAttemps,{foreignKey:"assignment_attempt_id",as:"question_attempted"});
 sequelize.sync();
 module.exports = AssignmentAttempt;

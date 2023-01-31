@@ -1,5 +1,6 @@
 const express = require("express");
 const { getPaginate } = require("../lib/helpers");
+const AssignmentAttempt = require("../models/Assignment_attempt.model");
 const QuestionAttempt = require("../models/Question_attempt.model");
 const questionAttemptController = class {
   async index(req, res) {
@@ -13,14 +14,14 @@ const questionAttemptController = class {
       });
   }
   async store(req, res) {
-    await QuestionAttempt
-      .create(req.body)
-      .then((result) => {
-        res.send(result);
-      })
-      .catch((error) => {
-        console.error("Failed to retrieve data : ", error);
-      });
+    console.clear();
+    req.body.trainee_id = req.userId;
+    console.log(req.body);
+    await AssignmentAttempt.create(req.body, {
+      include: "question_attempted"
+    });
+    const updateQuery = await QuestionAttempt.bulkCreate(req.body.questions, { fields: ['id', 'question', 'answer'], updateOnDuplicate: ['id', 'question', 'answer'] });
+    res.send("inhere=");
   }
   async show(req, res) {
     const questionAttempt = await QuestionAttempt.findByPk(req.params.id);

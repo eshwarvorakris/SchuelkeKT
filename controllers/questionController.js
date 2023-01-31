@@ -4,6 +4,7 @@ const { getPaginate } = require("../lib/helpers");
 const Question = require("../models/Question.model");
 const { query } = require("express");
 const QuestionOption = require("../models/Question_option.model");
+const sequelize = require("../lib/dbConnection");
 const questionController = class {
   async index(req, res) {
     await Question
@@ -16,6 +17,19 @@ const questionController = class {
         console.error("Failed to retrieve data : ", error);
       });
   }
+
+  async indexrandom(req, res) {
+    await Question
+      .findAndCountAll({ distinct: true, include: ['course', 'options'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order: sequelize.random() })
+      .then((result) => {
+        //console.log(result);
+        res.send(getPaginate(result, pageNumber, pageLimit));
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+      });
+  }
+
   async store(req, res) {
     const data = req.body;
     console.clear();
