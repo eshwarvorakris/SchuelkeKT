@@ -8,7 +8,7 @@ import useSWR, { mutate } from 'swr';
 import ChapterCard from "./chapterCard"
 import contentModel from "../../model/content.model";
 import AppContext from "../../lib/appContext";
-export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLeft=0 }) {
+export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLeft = 0 }) {
   const router = useRouter();
   const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
@@ -18,11 +18,21 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
   //QueryParam.content_type = "asc";
   const rand = 1 + Math.random() * (100 - 1);
   const moduleStatus = "ongoing";
-  const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id || null, async () => await contentModel.list({ module_id: moduleData?.id}), config.swrConfig);
+  const [contents, setContent] = useState([]);
+  //const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id || null, async () => await contentModel.list({ module_id: moduleData?.id }), config.swrConfig);
   //console.log(chapters);
   useEffect(() => {
-    console.log("all contents => ", contents?.data)
-  }, [contents]);
+    if(moduleData?.id !== undefined)
+    {
+      contentModel.list({ module_id: moduleData?.id }).then((res) => {
+        console.log(res);
+        setContent(res);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+    console.log("all contents1111 => ", contents?.data)
+  }, [moduleData]);
   return (
     <>
       <div className="module-1">
@@ -42,7 +52,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
         {
           (() => {
             if (layoutValues?.profile?.role == 'trainee') {
-              return(
+              return (
                 <div className="button-progress-container">
                   {moduleStatus == "ongoing" &&
                     <>
@@ -86,21 +96,20 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
         <div className="topic-chapter-container">
           {
             (() => {
-              if(contents?.data.length > 0)
-              {
-                return(
+              if (contents?.data?.length > 0) {
+                return (
                   <>
-                  {contents?.data?.map((item, index) => {
-                    return (
-                      <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
-                    )
-                  })}
+                    {contents?.data?.map((item, index) => {
+                      return (
+                        <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
+                      )
+                    })}
                   </>
                 );
               }
             })()
           }
-            {/* {contents?.data?.map((item, index) => {
+          {/* {contents?.data?.map((item, index) => {
               return (
                 <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} />
               )

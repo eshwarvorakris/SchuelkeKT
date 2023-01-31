@@ -12,9 +12,9 @@ export default function chapterCard({ chapterData, chapterIndex }) {
         <div className="chapter-1">
           <span>Chapter {chapterIndex + 1}: {chapterData?.title}</span>
 
-          <span className="remaining-info">2hrs 30mins
+          {/* <span className="remaining-info">2hrs 30mins
             <i className="fa fa-solid fa-chevron-down " style={{ paddingLeft: '0.5rem' }}></i>
-          </span>
+          </span> */}
 
           <div className="lastcol">
             {chapterStatus == "completed" &&
