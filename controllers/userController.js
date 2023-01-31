@@ -26,7 +26,7 @@ const userController = class {
       userIdInitial = 10000000;
       userId = await User.max('user_id', { where: req?.query });
     }
-
+    console.log("userid = ", userId);
     if(userId == 0) {
       userId = userIdInitial;
     }
