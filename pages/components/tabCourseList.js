@@ -66,7 +66,7 @@ export default function tabCourseList() {
             <div className="trainee-cards">
               <div className="container">
                 <div className="row d-flex flex-column gap-5">
-                  <div className="row justify-content-around">
+                  <div className="row">
                     {courses?.data?.map((item, index) => {
                       return (
                         <CourseCard key={`course${item.id}`} courseData={item} courseIndex={index} />

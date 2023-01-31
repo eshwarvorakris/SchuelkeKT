@@ -1,16 +1,19 @@
 import auth from "../../../model/auth.model";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import courseModel from "../../../model/course.model";
 import ModuleCard from "../../components/moduleCard";
 import ModuleDetailCard from "../../components/moduleDetailCard"
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
+import AppContext from "../../../lib/appContext";
 import Link from 'next/link';
 const updateStatus = () => {
   const router = useRouter();
-  
+  const layoutValues = useContext(AppContext);
+  const [moduleCount, setModuleCount] = useState(0);
+  { layoutValues.setPageHeading("Update Course Status") }
   const { data: course, courseerror, courseisLoading, mutate: loadCourse } = useSWR(router.query?.id || null, async () => await courseModel.detail(router?.query?.id), config.swrConfig);
   const { data: modules, mutate: loadModule, error: moduleError, isLoading: moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id), config.swrConfig);
   const approveBtn = async () => {
@@ -49,7 +52,11 @@ const updateStatus = () => {
     console.log("called");
     loadModule();
     console.log("modules = ", modules);
-  }, [router, course]);
+    
+    if(modules?.data){
+      setModuleCount(modules.data.length);
+    }
+  }, [router, modules]);
   return (
     <>
       <div style={{ backgroundColor: 'white' }}>
@@ -63,7 +70,7 @@ const updateStatus = () => {
                 <span className="text-capitalize">{course?.data?.course_name}</span>
               </div>
               <div className="remaining-info-card" style={{ color: '#fff' }}>
-                <span>{course?.data?.total_modules} Modules</span>
+                <span>{moduleCount} Modules</span>
               </div>
               <div className="date-assessment-info d-flex gap-2">
                 <div className="date-label-1">

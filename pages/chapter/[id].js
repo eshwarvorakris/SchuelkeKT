@@ -87,7 +87,7 @@ const topicpage = () => {
                     <p>{curContent?.paragraph2}</p>
                 </div>
 
-                <div className="presentation" style={{marginLeft:'-9rem', marginRight:'-9rem'}}>
+                <div className="presentation">
                     {/* <img src="/trainee-images/topic-page/Rectangle 721.png" alt="" /> */}
                     {curContent?.file_url &&
                         <DocViewer

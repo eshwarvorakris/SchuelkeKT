@@ -3,7 +3,7 @@ import axiosInstance from "../lib/axiosInstance";
 const questionModel=class {
 
     constructor(){
-        this.baseUrl="/question";
+        this.baseUrl="/assignment";
     }
 
     async list(query=[])

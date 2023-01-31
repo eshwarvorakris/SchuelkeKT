@@ -7,8 +7,10 @@ import { useRouter } from 'next/router'
 import useSWR, { mutate } from 'swr';
 import ChapterCard from "./chapterCard"
 import contentModel from "../../model/content.model";
-export default function moduleDetailCard({ moduleData, moduleIndex }) {
+import AppContext from "../../lib/appContext";
+export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLeft=0 }) {
   const router = useRouter();
+  const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "sequence_no";
@@ -37,42 +39,49 @@ export default function moduleDetailCard({ moduleData, moduleIndex }) {
             tract
           </span>
         </div>
+        {
+          (() => {
+            if (layoutValues?.profile?.role == 'trainee') {
+              return(
+                <div className="button-progress-container">
+                  {moduleStatus == "ongoing" &&
+                    <>
+                      <Link className="topic-link" href="#">
+                        <button type="button" className="start-learning-btn d-flex gap-2">
+                          <div className="blank-class">
 
-        <div className="button-progress-container">
-          {moduleStatus == "ongoing" &&
-            <>
-              <Link className="topic-link" href="#">
-                <button type="button" className="start-learning-btn d-flex gap-2">
-                  <div className="blank-class">
+                            <i className="fa fa-play play-icon" aria-hidden="true"></i>
+                          </div>
+                          <span>Continue Learning</span>
 
-                    <i className="fa fa-play play-icon" aria-hidden="true"></i>
-                  </div>
-                  <span>Continue Learning</span>
+                        </button>
+                      </Link>
 
-                </button>
-              </Link>
+                      <div className="learning-progress-bar d-flex flex-column gap-2">
+                        <div className="d-flex justify-content-between">
+                          <span>0% Completed</span>
+                          <span>{moduleHourLeft}hrs 0mins left</span>
+                        </div>
+                        <div className="progress" style={{ width: '100%' }}>
+                          <div className="progress-bar" role="progressbar" style={{ width: '0%' }} aria-valuenow="0"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </>
+                  }
 
-              <div className="learning-progress-bar d-flex flex-column gap-2">
-                <div className="d-flex justify-content-between">
-                  <span>61% Completed</span>
-                  <span>9hrs 45mins left</span>
+                  {moduleStatus == "locked" &&
+                    <>
+                      <button type="button" className="start-learning-btn">
+                        Start Learning
+                      </button>
+                    </>
+                  }
                 </div>
-                <div className="progress" style={{ width: '100%' }}>
-                  <div className="progress-bar" role="progressbar" style={{ width: '50%' }} aria-valuenow="50"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div>
-            </>
-          }
-
-          {moduleStatus == "locked" &&
-            <>
-              <button type="button" className="start-learning-btn">
-                Start Learning
-              </button>
-            </>
-          }
-        </div>
+              );
+            }
+          })()
+        }
 
         <div className="topic-chapter-container">
           {

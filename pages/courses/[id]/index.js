@@ -20,20 +20,31 @@ const Page = () => {
   { layoutValues.setPageHeading("Trainee Center") }
   const [image, setImage] = useState("");
   //const [courseData, setcourseData] = useState([]);
+  const [per_module_hour, setper_module_hour] = useState(0);
+  const [moduleCount, setModuleCount] = useState(0);
   const [categories, setCategories] = useState([]);
   const [timeLeft, setTimeLeft] = useState("");
   const { data: courseData, mutate: couresDetail, error, isLoading } = useSWR("coursedetail", async () => await courseModel.detail(router?.query?.id), config.swrConfig);
   const { data: modules, mutate: moduleList, error:moduleError, isLoading:moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id), config.swrConfig);
   useEffect(() => {
-    
-    let time = courseData?.data?.week_duration * 7 * 24;
-    var Hours = Math.floor(time / 60);
-    var minutes = time % 60;
-    var hourOut = Hours + "hrs " + minutes + "mins left";
-    setTimeLeft(hourOut)
+    if(courseData?.data) {
+      setModuleCount(courseData?.data?.total_modules);
+      var total_training_hour = courseData?.data?.total_training_hour;
+      let time = courseData?.data?.week_duration * 7 * 24;
+      var Hours = Math.floor(time / 60);
+      var minutes = time % 60;
+      var hourOut = total_training_hour + "hrs " + 0 + "mins left";
+      setTimeLeft(hourOut);
+    }
     console.log("courseData ", courseData);
     console.log("module ", modules);
-  }, [router, courseData]);
+    
+    if(modules?.data && total_training_hour != undefined){
+      setModuleCount(modules.data.length);
+      setper_module_hour(total_training_hour / modules.data.length);
+      //console.log("module count => ", per_module_hour);
+    }
+  }, [router, courseData, modules]);
 
   return (
     <>
@@ -50,7 +61,7 @@ const Page = () => {
               <span style={{color:'#212529'}}>{courseData?.data?.course_name}</span>
             </div>
             <div className="remaining-info-card">
-              <span>{courseData?.total_modules} Module Remaining</span>
+              <span>{moduleCount} Module Remaining</span>
             </div>
             <div className="date-assessment-info d-flex gap-2">
               <div className="date-label-1">
@@ -63,8 +74,9 @@ const Page = () => {
           </div>
 
           <div className="progress-bar-info">
-            <div className="progress-circle over50 p60">
-              <span>60%</span>
+            {/* <div className="progress-circle over50 p60"> */}
+            <div className="progress-circle over0 p0">
+              <span>0%</span>
               <div className="left-half-clipper">
                 <div className="first50-bar"></div>
                 <div className="value-bar"></div>
@@ -93,7 +105,7 @@ const Page = () => {
 
         {modules?.data?.map((item, index) => {
           return (
-            <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} />
+            <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} moduleHourLeft={per_module_hour} />
           )
         })}
         <div className="p-4" style={{marginLeft:'3rem'}}>
