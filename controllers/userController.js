@@ -27,7 +27,7 @@ const userController = class {
       userId = await User.max('user_id', { where: req?.query });
     }
     console.log("userid = ", userId);
-    if(userId == 0) {
+    if(userId == 0 || userId == null) {
       userId = userIdInitial;
     }
     userId++;
@@ -91,7 +91,7 @@ const userController = class {
         userId = await User.max('user_id', { where: { role: req.body.role } });
       }
 
-      if(userId == 0) {
+      if(userId == 0 || userId == null) {
         userId = userIdInitial;
       }
       userId++;
