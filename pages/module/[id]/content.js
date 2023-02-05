@@ -49,17 +49,6 @@ const Page = () => {
     })
   });
 
-  const contentDelete = function (id) {
-    helper.sweetalert.confirm("Delete module", "info").then((result) => {
-      if (result.isConfirmed) {
-        moduleModel.delete(id).then((res) => {
-          helper.sweetalert.toast(res.data?.message);
-          contentList();
-        })
-      }
-    })
-  }
-
   useEffect(() => {
     reset();
     contentList();
@@ -151,6 +140,17 @@ const Page = () => {
     });
     return () => subscription.unsubscribe();
   }, [watch]);
+
+  const contentDelete = function (indexid, itemid) {
+    helper.sweetalert.confirm("Are you sure you want to delete this content?","info", "true").then((result) => {
+      if (result.isConfirmed) {
+        moduleModel.delete(id).then((res) => {
+          helper.sweetalert.toast(res.data?.message);
+          moduleList();
+        })
+      }
+    })
+  }
   return (
     <>
       <div className="trainer-body">
@@ -207,7 +207,14 @@ const Page = () => {
 
                   <div className="module-title">
                     <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                      {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
+                      {
+                        (() => {
+                          if(index > 0) {
+                            return (<button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="Delete This Chapter" onClick={() => contentDelete(index, item.id)} /></button>);
+                          }
+                        })()
+                      }
                     </div>
                     <div className="module-title">
                       <span className="content-title">Title -</span>
@@ -219,7 +226,7 @@ const Page = () => {
 
                   <div className="module-paragraph-1">
                     <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                      {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
                     <span className="content-title">Paragraph 1 -</span>
@@ -229,7 +236,7 @@ const Page = () => {
                   </div>
                   <div className="module-paragraph-1">
                     <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                      {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
                     <span className="content-title">Paragraph 2 -</span>
@@ -239,7 +246,7 @@ const Page = () => {
                   </div>
                   <div className="module-upload">
                     <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                      {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
                     <span className="content-title">Upload PPT/PDF</span>
@@ -272,7 +279,7 @@ const Page = () => {
                   </div>
                   <div className="module-paragraph-1">
                     <div className="draggable-area">
-                      <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" />
+                      {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
                     <span className="content-title">Paragraph 3 -</span>
