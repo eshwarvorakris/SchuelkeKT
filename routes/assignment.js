@@ -7,6 +7,7 @@ const verifyAuth = require("../middleware/authorization");
 router.get("/", attemptController.index);
 router.get("/:id", attemptController.show);
 router.post("/", verifyAuth.verifyTrainee, attemptController.store);
+router.post("/getSubmitted", verifyAuth.verifyTrainee, attemptController.getSubmitted);
 router.put("/:id", attemptController.update);
 router.delete("/", attemptController.destroy);
 

@@ -14,17 +14,8 @@ QuestionAttempt.init({
     type: DataTypes.INTEGER,
     references:{model:"questions",key:"id"}
   },
-  isA_selected: {
-    type: DataTypes.STRING(30)
-  },
-  isB_selected: {
-    type: DataTypes.STRING(30)
-  },
-  isC_selected: {
-    type: DataTypes.STRING(30)
-  },
-  isD_selected: {
-    type: DataTypes.STRING(30)
+  points_earned: {
+    type: DataTypes.DOUBLE
   },
   answer: {
     type: DataTypes.STRING(100)
