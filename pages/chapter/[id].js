@@ -8,6 +8,7 @@ import { helper } from '../../lib/helper';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from '../../lib/appContext';
+import Checktimer from '../../components/checkTimer';
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 const topicpage = () => {
     const [nextContent, setNextContent] = useState([]);
@@ -63,7 +64,7 @@ const topicpage = () => {
     }, [contentData, QueryParam?.id]);
     return (
         <>
-
+            <Checktimer startTimer={true} />
             <div className="content-header d-flex gap-3 align-items-center">
                 <Link href={`/courses/${courseId}`}>
                     <div className="left-icon">

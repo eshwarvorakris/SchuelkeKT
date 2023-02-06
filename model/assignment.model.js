@@ -22,6 +22,10 @@ const questionModel=class {
     {
         return await axiosInstance.post(this.baseUrl,data);
     }
+    async getSubmitted(data=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/getSubmitted`,data);
+    }
 
     async submitAssignment(data=[])
     {

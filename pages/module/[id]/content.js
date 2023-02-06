@@ -144,10 +144,18 @@ const Page = () => {
   const contentDelete = function (indexid, itemid) {
     helper.sweetalert.confirm("Are you sure you want to delete this content?","info", "true").then((result) => {
       if (result.isConfirmed) {
-        moduleModel.delete(id).then((res) => {
-          helper.sweetalert.toast(res.data?.message);
-          moduleList();
-        })
+        console.log("indexid => ",indexid);
+        console.log("itemid => ",itemid);
+        if(itemid) {
+          contentModel.delete(itemid).then((res) => {
+            helper.sweetalert.toast(res.data?.message);
+            contentList();
+          });
+        } else if(indexid) {
+          var array = [...moduleContent];
+          array.splice(indexid, 1);
+          setModuleContent(array);
+        }
       }
     })
   }

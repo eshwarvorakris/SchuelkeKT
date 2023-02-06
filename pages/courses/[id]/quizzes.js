@@ -27,7 +27,7 @@ function Page() {
   const [courseName, setCourseName] = useState("");
   const [submitButton, setSubmitButton] = useState("");
   const [courseId, setCourseId] = useState(router?.id);
-
+  const [checkedInput, setCheckedInput ]= useState([]);
   useEffect(() => {
     /* const subscription = watch((data) => {
       if (data.questions !== undefined) {
@@ -48,10 +48,28 @@ function Page() {
         console.log(error);
       });
       setCourseId(router?.query?.id)
-      questionModel.traineelist({ course_id: router?.query?.id, order_by: "sequence_no", order_in: "asc" }).then((res) => {
+      questionModel.traineelist({ course_id: router?.query?.id, order_by: "sequence_no", order_in: "asc" }).then(async (res) => {
         if (res.data.length > 0) {
           setQuestions(res.data);
           //console.log("course Name = ",res.data?.[0]?.course?.course_name);
+          const formDataget = new FormData();
+          formDataget.append("course_id", router?.query?.id);
+          await assignmentModel.getSubmitted(formDataget).then((submittedRes) => {
+            //console.log(submittedRes.data);
+            if(submittedRes?.data?.is_attempted === true) {
+              
+              if(submittedRes?.data?.attemptData?.question_attempted) {
+                submittedRes?.data?.attemptData?.question_attempted.map((attempQuestion) => {
+                  if(attempQuestion.answer) {
+                    //console.log(attempQuestion.answer);
+                    //checkedInput.push(attempQuestion.answer);
+                    //setCheckedInput([...checkedInput, attempQuestion.answer]);
+                    setCheckedInput(setCheckedInput => [...setCheckedInput, attempQuestion.answer]);
+                  }
+                });
+              }
+            }
+          });
           reset(res.data);
         }
         //console.log(res.data)
@@ -119,6 +137,7 @@ function Page() {
     setSubmitButton(btnStatus);
   }
   var optionType = "radio";
+  var isChecked = '';
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -179,10 +198,19 @@ function Page() {
                     </div>
                     <div className="question-options" id="group1">
                       {item?.options?.map((optionitem, optionindex) => {
+                        isChecked = '';
+                        if(checkedInput.length > 0) {
+                          const isFound = checkedInput.some(element => {
+                            if(element == optionitem.id) {
+                              isChecked = 'checked';
+                            }
+                          });
+                          //console.log(isFound);
+                        }
                         return (
                           <div className="d-flex justify-content-between option" id={`${item.id}-option-${optionindex}-div`}>
                             <div>
-                              <input type={optionType} className={`${item.id}-questionAlloption`} id={`${index}-option-${optionindex}`} data-id={`${item.id}-option-${optionindex}`} {...register(`questions[${index}][answer]`)} value={optionitem.id} />
+                              <input type={optionType} className={`${item.id}-questionAlloption`} id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`} {...register(`questions[${index}][answer]`)} value={optionitem.id} checked={isChecked} />
                               <label htmlFor={`${index}-option-${optionindex}`} style={{ paddingLeft: '5px' }}> {String.fromCharCode(('A').charCodeAt(0) + optionindex)}. {optionitem?.option}</label><br />
                             </div>
                             <img className="wrong-icon"
