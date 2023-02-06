@@ -27,7 +27,7 @@ function Page() {
   const [courseName, setCourseName] = useState("");
   const [submitButton, setSubmitButton] = useState("");
   const [courseId, setCourseId] = useState(router?.id);
-  const [checkedInput, setCheckedInput ]= useState([]);
+  const [checkedInput, setCheckedInput] = useState([]);
   useEffect(() => {
     /* const subscription = watch((data) => {
       if (data.questions !== undefined) {
@@ -56,11 +56,11 @@ function Page() {
           formDataget.append("course_id", router?.query?.id);
           await assignmentModel.getSubmitted(formDataget).then((submittedRes) => {
             //console.log(submittedRes.data);
-            if(submittedRes?.data?.is_attempted === true) {
-              
-              if(submittedRes?.data?.attemptData?.question_attempted) {
+            if (submittedRes?.data?.is_attempted === true) {
+
+              if (submittedRes?.data?.attemptData?.question_attempted) {
                 submittedRes?.data?.attemptData?.question_attempted.map((attempQuestion) => {
-                  if(attempQuestion.answer) {
+                  if (attempQuestion.answer) {
                     //console.log(attempQuestion.answer);
                     //checkedInput.push(attempQuestion.answer);
                     //setCheckedInput([...checkedInput, attempQuestion.answer]);
@@ -82,7 +82,7 @@ function Page() {
   const onSubmit = async e => {
     e.preventDefault();
     console.clear();
-    
+
     const formData = new FormData(e.target);
     formData.append("status", submitButton);
     await assignmentModel.create(formData).then((res) => {
@@ -92,9 +92,9 @@ function Page() {
       } else {
         document.getElementById('quizTextHead').classList.add("d-none");
         document.getElementById('resultDiv').classList.remove("d-none");
-        if(res.data?.answerPercent) {
-          document.getElementById("gotPercent").innerHTML = res.data?.answerPercent+"%"; 
-          if(res.data?.answerPercent >= 80) {
+        if (res.data?.answerPercent) {
+          document.getElementById("gotPercent").innerHTML = res.data?.answerPercent + "%";
+          if (res.data?.answerPercent >= 80) {
             document.getElementById('gotPercent').classList.remove("text-danger");
             document.getElementById('gotPercent').classList.add("text-success");
           } else {
@@ -199,9 +199,9 @@ function Page() {
                     <div className="question-options" id="group1">
                       {item?.options?.map((optionitem, optionindex) => {
                         isChecked = '';
-                        if(checkedInput.length > 0) {
+                        if (checkedInput.length > 0) {
                           const isFound = checkedInput.some(element => {
-                            if(element == optionitem.id) {
+                            if (element == optionitem.id) {
                               isChecked = 'checked';
                             }
                           });
@@ -210,7 +210,23 @@ function Page() {
                         return (
                           <div className="d-flex justify-content-between option" id={`${item.id}-option-${optionindex}-div`}>
                             <div>
-                              <input type={optionType} className={`${item.id}-questionAlloption`} id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`} {...register(`questions[${index}][answer]`)} value={optionitem.id} checked={isChecked} />
+                              {
+                                (() => {
+                                  if (isChecked == "checked") {
+                                    return (
+                                      <><input type={optionType} className={`${item.id}-questionAlloption`} 
+                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`} 
+                                        {...register(`questions[${index}][answer]`)} value={optionitem.id} checked /></>
+                                    );
+                                  } else {
+                                    return (
+                                      <><input type={optionType} className={`${item.id}-questionAlloption`} 
+                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`} 
+                                        {...register(`questions[${index}][answer]`)} value={optionitem.id} /></>
+                                    );
+                                  }
+                                })()
+                              }
                               <label htmlFor={`${index}-option-${optionindex}`} style={{ paddingLeft: '5px' }}> {String.fromCharCode(('A').charCodeAt(0) + optionindex)}. {optionitem?.option}</label><br />
                             </div>
                             <img className="wrong-icon"
