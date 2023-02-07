@@ -53,7 +53,7 @@ const questionAttemptController = class {
       if (result !== null) {
         is_attempted = true;
       }
-      const data = {is_attempted:is_attempted, attemptData:attemptData};
+      const data = { is_attempted: is_attempted, attemptData: attemptData };
       res.send(data);
     }).catch((error) => {
       return res.status(422).send(
@@ -96,7 +96,7 @@ const questionAttemptController = class {
     }).catch((error) => {
       return res.status(422).send(
         {
-          message: "Question not Found",
+          message: "Unable To Submit Please Try Again Later.",
         }
       );
     });
@@ -165,20 +165,24 @@ const questionAttemptController = class {
       let retResp = async () => {
         await questionResp();
         var resultData = [];
-        var answerPercent = (correctQues.length/totalQuestion)*100;
+        var answerPercent = (correctQues.length / totalQuestion) * 100;
+        console.log("percent = ", answerPercent);
+        await AssignmentAttempt
+          .update({ total_questions: totalQuestion, attempted_questions: answeredQuestion, correct_percentage: answerPercent }, { where: { id: attemptId } })
         if (req.body.status == 'submitted') {
-          resultData = { incorrectQues: incorrectQues,
+          resultData = {
+            incorrectQues: incorrectQues,
             correctQues: correctQues,
-            totalQuestion:totalQuestion,
-            answeredQuestion:answeredQuestion,
-            answerPercent:answerPercent
+            totalQuestion: totalQuestion,
+            answeredQuestion: answeredQuestion,
+            answerPercent: answerPercent
           };
         }
         res.send(resultData);
       };
       retResp();
     }
-    
+
   }
   async show(req, res) {
     const questionAttempt = await QuestionAttempt.findByPk(req.params.id);

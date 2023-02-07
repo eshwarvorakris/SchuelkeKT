@@ -15,12 +15,6 @@ AssignmentAttempt.init({
     type: DataTypes.INTEGER,
     references:{model:"courses",key:"id"}
   },
-  start_date: {
-    type: DataTypes.DATE
-  },
-  end_date: {
-    type: DataTypes.DATE
-  },
   total_questions: {
     type: DataTypes.INTEGER
   },
