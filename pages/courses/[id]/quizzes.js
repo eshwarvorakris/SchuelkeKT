@@ -28,6 +28,7 @@ function Page() {
   const [submitButton, setSubmitButton] = useState("");
   const [courseId, setCourseId] = useState(router?.id);
   const [checkedInput, setCheckedInput] = useState([]);
+  const [showSubmitButton, setShowSubmitButton] = useState(true);
   useEffect(() => {
     /* const subscription = watch((data) => {
       if (data.questions !== undefined) {
@@ -82,7 +83,7 @@ function Page() {
   const onSubmit = async e => {
     e.preventDefault();
     console.clear();
-
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     const formData = new FormData(e.target);
     formData.append("status", submitButton);
     await assignmentModel.create(formData).then((res) => {
@@ -90,9 +91,11 @@ function Page() {
       if (submitButton == "drafted") {
         helper.sweetalert.toast("Assignment saved to draft");
       } else {
+        setShowSubmitButton(false);
         document.getElementById('quizTextHead').classList.add("d-none");
         document.getElementById('resultDiv').classList.remove("d-none");
-        if (res.data?.answerPercent) {
+        if (res.data) {
+
           document.getElementById("gotPercent").innerHTML = res.data?.answerPercent + "%";
           if (res.data?.answerPercent >= 80) {
             document.getElementById('gotPercent').classList.remove("text-danger");
@@ -214,14 +217,14 @@ function Page() {
                                 (() => {
                                   if (isChecked == "checked") {
                                     return (
-                                      <><input type={optionType} className={`${item.id}-questionAlloption`} 
-                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`} 
+                                      <><input type={optionType} className={`${item.id}-questionAlloption`}
+                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`}
                                         {...register(`questions[${index}][answer]`)} value={optionitem.id} checked /></>
                                     );
                                   } else {
                                     return (
-                                      <><input type={optionType} className={`${item.id}-questionAlloption`} 
-                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`} 
+                                      <><input type={optionType} className={`${item.id}-questionAlloption`}
+                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`}
                                         {...register(`questions[${index}][answer]`)} value={optionitem.id} /></>
                                     );
                                   }
@@ -244,19 +247,19 @@ function Page() {
                 );
               })}
             </div>
-
-            <div className="alert-box">
-              <input className="checkbox-box" type="checkbox" required id="checkmark" />
-              <label for="checkmark"><span>Make sure that all the answers are marked</span></label>
-            </div>
-
-            <div className="button-container d-flex">
-
-              <button type="submit" className="submit-btn"
-                style={{ backgroundColor: "#008bd6" }} name="submitbtn1" onClick={() => assignSubmitButton("submitted")} >Submit</button>
-
-              <button type="submit" className="draft-btn" name="submitbtn2" onClick={() => assignSubmitButton("drafted")} >Save Draft</button>
-            </div>
+            {showSubmitButton &&
+              <>
+                <div className="alert-box">
+                  <input className="checkbox-box" type="checkbox" required id="checkmark" />
+                  <label for="checkmark"><span>Make sure that all the answers are marked</span></label>
+                </div>
+                <div className="button-container d-flex">
+                  <button type="submit" className="submit-btn"
+                    style={{ backgroundColor: "#008bd6" }} name="submitbtn1" onClick={() => assignSubmitButton("submitted")}>Submit</button>
+                  <button type="submit" className="draft-btn" name="submitbtn2" onClick={() => assignSubmitButton("drafted")}>Save Draft</button>
+                </div>
+              </>
+            }
           </div>
 
         </div>

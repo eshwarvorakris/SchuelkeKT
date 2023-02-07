@@ -70,18 +70,18 @@ const editTrainee = () => {
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
                         <div className="trainee-name d-flex gap-2 justify-self-center"><span>Trainee-name :</span>
-                            <h6><strong>{profileData?.full_name}</strong></h6>
+                            <h6 style={{color:'#000'}}><strong>{profileData?.full_name}</strong></h6>
                         </div>
                         <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>No. of courses
                             Enrolled :</span>
-                            <h6> <strong>6</strong></h6>
+                            <h6 style={{color:'#000'}}> <strong>6</strong></h6>
                         </div>
                         <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
-                            <h6><strong>{profileData?.email}</strong></h6>
+                            <h6 style={{color:'#000'}}><strong>{profileData?.email}</strong></h6>
                         </div>
                     </div>
 
-                    <div className="trainee-topic-cards justify-content-around row">
+                    <div className="trainee-topic-cards row">
                         {courses?.data?.map((item, index) => {
                             console.log(item);
                             return (
