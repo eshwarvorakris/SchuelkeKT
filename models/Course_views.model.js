@@ -1,5 +1,7 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
+const User = require("./User.model");
+const Course = require("./Course.model");
 class CourseView extends Model { }
 
 CourseView.init({
@@ -12,12 +14,13 @@ CourseView.init({
     type: DataTypes.INTEGER,
     references:{model:"courses",key:"id"}
   },
-  start_date: {
-    type: DataTypes.DATE
-  },
-  viewed_minute: {
+  viewed_seconds: {
     type: DataTypes.INTEGER,
     allowNull:true
+  },
+  status: {
+    type: DataTypes.STRING(30),
+    defaultValue: 'ongoing'
   },
 }, {
   // Other model options go here
@@ -28,5 +31,7 @@ CourseView.init({
   deletedAt: "deleted_at",
   paranoid: true
 });
+CourseView.belongsTo(User, { foreignKey: "trainee_id", as: "trainee" });
+CourseView.belongsTo(Course, { foreignKey: "course_id", as: "course" });
 sequelize.sync();
 module.exports = CourseView;

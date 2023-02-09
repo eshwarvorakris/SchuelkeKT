@@ -117,6 +117,7 @@ app.use("/auth",upload.array(),require("./routes/auth"));
 app.use("/user",upload.array(),require("./routes/user"));
 app.use("/category",upload.array(),require("./routes/category"));
 app.use("/course",upload.array(),require("./routes/course"));
+app.use("/courseView",upload.array(),require("./routes/course_view"));
 app.use("/module",upload.array(),require("./routes/module"));
 app.use("/content",upload.array(),require("./routes/content"));
 app.use("/question",upload.array(),require("./routes/question"));
