@@ -17,7 +17,7 @@ const topicpage = () => {
     const [moduleId, setModuleId] = useState(null);
     const [courseId, setCourseId] = useState(null);
     const [contentUrl, setContentUrl] = useState(null);
-
+    const [chapterId, setChapterId] = useState(null);
     const router = useRouter();
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
@@ -38,6 +38,7 @@ const topicpage = () => {
                     var i = 0;
                     res?.data.map((item, index) => {
                         if (item.id == QueryParam?.id) {
+                            setChapterId(item.id);
                             if (i > 0) {
                                 //console.log("prev");
                                 setPrevContent({ id: res?.data?.[i - 1]?.id, sequence_no: res?.data?.[i - 1]?.sequence_no, title: res?.data?.[i - 1]?.title });
@@ -56,15 +57,20 @@ const topicpage = () => {
 
             moduleModel.detail(contentData?.data?.module_id).then((res) => {
                 console.log("module", res.data);
-                setCourseId(res?.data?.course_id)
+                setCourseId(res?.data?.course_id);
+                console.log("prev=", prevContent.length);
+                console.log("next=", nextContent.length);
             }).catch((error) => {
                 console.log(error);
             });
         }
     }, [contentData, QueryParam?.id]);
     return (
-        <>
-            <Checktimer startTimer={true} />
+        <>  
+            {courseId && 
+                <Checktimer startTimer={true} courseId={courseId} moduleId={moduleId} chapterId={QueryParam?.id} />
+            }
+            
             <div className="content-header d-flex gap-3 align-items-center">
                 <Link href={`/courses/${courseId}`}>
                     <div className="left-icon">

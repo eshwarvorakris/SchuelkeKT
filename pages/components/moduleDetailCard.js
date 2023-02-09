@@ -45,9 +45,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
         </div>
 
         <div className="heading-content">
-          <span>Pulmonology is a medical speciality that deals with diseases involving the respiratory
-            tract
-          </span>
+          <span>{moduleData?.description}</span>
         </div>
         {
           (() => {

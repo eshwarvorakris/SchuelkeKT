@@ -7,11 +7,13 @@ import Link from 'next/link';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import ReactPaginate from 'react-paginate';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from "../../../lib/appContext";
+import { useForm } from "react-hook-form";
 function Page() {
   const [modalStatus, setModalStatus] = useState(false);
+  const [modalUpdateStatus, setModalUpdateStatus] = useState(false);
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Course Modules") }
   const router = useRouter();
@@ -20,24 +22,60 @@ function Page() {
   QueryParam.order_by = router.query?.order_by || "id";
   QueryParam.order_in = router.query?.order_in || "asc";
   const [formErrors, setFormErrors] = useState([]);
-  const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
+  const [moduleData, setModuleData] = useState([]);
+
+  const [updateId, setupdateId] = useState(null);
+  const [updateName, setupdateName] = useState(null);
+  const [updateDesc, setupdateDesc] = useState(null);
+  const [dataUpdated, setdataUpdated] = useState(null);
+  //const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
+  
+  // useEffect(() => {
+  //   console.log("moduleData",moduleData);
+  // }, []);
+
+  const updateList = function () {
+    courseModule.modules(QueryParam?.id).then((res) => {
+      setModuleData(res?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    if(QueryParam?.id !== undefined) {
+      updateList();
+    }
+  }, [QueryParam?.id]);
 
   const moduleDelete = function (id) {
     helper.sweetalert.confirm("Delete module", "info").then((result) => {
       if (result.isConfirmed) {
         moduleModel.delete(id).then((res) => {
           helper.sweetalert.toast(res.data?.message);
-          moduleList();
+          //moduleList();
+          updateList();
         })
       }
     })
   }
+
+  const moduleUpdate = function (id) {
+    console.log(document.getElementById('description'+id).value);
+    setupdateId(id);
+    setupdateName(document.getElementById('name'+id).value);
+    setupdateDesc(document.getElementById('description'+id).value);
+    setModalUpdateStatus(true);
+  }
+
   const updateModule = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    console.log(event.target)
     await moduleModel.update(formData.get("id"), formData).then((res) => {
       helper.sweetalert.toast("Module Updated");
-      moduleList();
+      moduleHide();
+      updateList();
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
     })
@@ -49,11 +87,19 @@ function Page() {
     await moduleModel.create(formData).then((res) => {
       helper.sweetalert.toast("Module Added");
       setModalStatus(false);
-      moduleList();
+      updateList();
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
     })
   };
+
+  const moduleHide = function () {
+    setModalUpdateStatus(false)
+    setupdateId(null);
+    setupdateName(null);
+    setupdateDesc(null);
+  }
+
   const columns = React.useMemo(() => [
     {
       name: 'Module',
@@ -117,7 +163,7 @@ function Page() {
           </div>
 
           <div className="wrapper custom-scroll" style={{ padding: 'unset', height: 'fit-content' }}>
-            {modules?.data?.map((item, index) => {
+            {moduleData?.map((item, index) => {
               return (
                 <>
                   <div key={item.id} className="module-card module-card-1 d-flex">
@@ -131,17 +177,17 @@ function Page() {
                         <div className="module-card-name">
                           <span>Module {index + 1} -</span>
                         </div>
-                        <form onSubmit={updateModule}>
+                        
                           <div className="module-input d-flex">
                             <div className="search-wrap">
                               <input type="hidden" name="id" value={item.id} />
-                              <input type="text" placeholder="Lorem ipsum dolor sit amet" name="module_name" defaultValue={item.module_name} />
+                              <input type="text" placeholder="Lorem ipsum dolor sit amet" name="module_name" id={`name${item.id}`} defaultValue={item.module_name} />
+                              <input type="hidden" name="description" id={`description${item.id}`} defaultValue={item.description} />
                             </div>
-                            <button type='submit' style={{ border: 'none' }}>
+                            <button type='button' style={{ border: 'none' }} onClick={() => moduleUpdate(item.id)}>
                               <div className="edit" style={{ backgroundColor: '#fff' }}><span style={{ color: '#1a86d0' }}>Update</span></div>
                             </button>
                           </div>
-                        </form>
                       </div>
                     </div>
                     <div className="right-side-card d-flex">
@@ -159,7 +205,6 @@ function Page() {
                 </>
               )
             })}
-
           </div>
 
           {/* <DataTable
@@ -185,14 +230,35 @@ function Page() {
           <Modal.Header>Add Module</Modal.Header>
           <Modal.Body>
             <input type='hidden' name="course_id" value={QueryParam?.id} />
-            <input type='text' placeholder='Create Module' className='form-control' name="module_name" />
+            <div className='mb-3'>
+              <input type='text' placeholder='Create Module' className='form-control' name="module_name" />
+            </div>
+            <div className=''>
+              <textarea placeholder='Module Description' className='form-control' name="description" maxLength={380}></textarea>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <button type="submit" className='btn btn-primary'>Save</button>
           </Modal.Footer>
         </form>
       </Modal>
-
+      <Modal show={modalUpdateStatus} onHide={() => moduleHide()}>
+        <form onSubmit={updateModule}>
+          <Modal.Header>Update Module</Modal.Header>
+          <Modal.Body>
+            <input type='hidden' name="id" value={updateId} />
+            <div className='mb-3'>
+              <input type='text' placeholder='Create Module' className='form-control' name="module_name" defaultValue={updateName} />
+            </div>
+            <div className=''>
+              <textarea placeholder='Module Description' className='form-control' name="description" maxLength={380} defaultValue={updateDesc}></textarea>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <button type="submit" className='btn btn-primary'>Update</button>
+          </Modal.Footer>
+        </form>
+      </Modal>
 
     </>
   );

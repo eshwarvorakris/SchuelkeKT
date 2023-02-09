@@ -28,7 +28,7 @@ const Page = () => {
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "sequence_no";
-  QueryParam.order_in = router.query?.order_in || "desc";
+  QueryParam.order_in = router.query?.order_in || "asc";
   //console.log(QueryParam);
   const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
   const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course), config.swrConfig);
@@ -43,7 +43,7 @@ const Page = () => {
     await moduleModel.createContent(formData).then((res) => {
       helper.sweetalert.toast("Content Created");
       //console.log(res);
-      router.push("/courses/"+QueryParam?.course+"/module");
+      router.push("/courses/" + QueryParam?.course + "/module");
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
     })
@@ -107,12 +107,13 @@ const Page = () => {
     let fileKey = getValues('content[' + curId + '][file_key]');
     //console.log("fileFkey", fileKey);
     //setValue('content['+curId+'][file_url]', "checking");
-    //console.log(e.target.files[0].name);
+    console.log(e.target.files[0].name);
+    document.getElementById("uploadOutFileName"+curId).innerHTML = "File Selected : <b>"+e.target.files[0].name+"</b>";
     var data = new FormData();
     var imagedata = await e.target.files[0];
     data.append("uploadFile", imagedata);
     data.append("filefolder", "Courses");
-    if(fileKey != "" && fileKey != undefined) {
+    if (fileKey != "" && fileKey != undefined) {
       data.append("fileKey", fileKey);
     }
     setIsUploaded(true);
@@ -121,7 +122,7 @@ const Page = () => {
       setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
 
       setValue('content[' + curId + '][file_ext]', res?.data?.data?.fileExt);
-      if(res?.data?.data?.fileName != "" && res?.data?.data?.fileName != undefined) {
+      if (res?.data?.data?.fileName != "" && res?.data?.data?.fileName != undefined) {
         setValue('content[' + curId + '][file_name]', res?.data?.data?.fileName);
       }
       setValue('content[' + curId + '][file_key]', res?.data?.data?.key);
@@ -142,16 +143,16 @@ const Page = () => {
   }, [watch]);
 
   const contentDelete = function (indexid, itemid) {
-    helper.sweetalert.confirm("Are you sure you want to delete this content?","info", "true").then((result) => {
+    helper.sweetalert.confirm("Are you sure you want to delete this content?", "info", "true").then((result) => {
       if (result.isConfirmed) {
-        console.log("indexid => ",indexid);
-        console.log("itemid => ",itemid);
-        if(itemid) {
+        console.log("indexid => ", indexid);
+        console.log("itemid => ", itemid);
+        if (itemid) {
           contentModel.delete(itemid).then((res) => {
             helper.sweetalert.toast(res.data?.message);
             contentList();
           });
-        } else if(indexid) {
+        } else if (indexid) {
           var array = [...moduleContent];
           array.splice(indexid, 1);
           setModuleContent(array);
@@ -218,7 +219,7 @@ const Page = () => {
                       {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {
                         (() => {
-                          if(index > 0) {
+                          if (index > 0) {
                             return (<button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="Delete This Chapter" onClick={() => contentDelete(index, item.id)} /></button>);
                           }
                         })()
@@ -259,7 +260,18 @@ const Page = () => {
                     </div>
                     <span className="content-title">Upload PPT/PDF</span>
                     <div className="upload-container">
-                      <p className="drag-text">Drag and Drop here</p>
+                      <p className="drag-text" id={`uploadOutFileName${index}`}>
+                        {
+                          (() => {
+                            console.log(item?.file_name?.length);
+                            if(item?.file_name?.length != 0 && item?.file_name?.length !== undefined) {
+                              return (<>{item?.file_name}</>);
+                            } else {
+                              return (<>Drag and Drop here</>);
+                            }
+                          })()
+                        }
+                      </p>
                     </div>
                     <div className="btns d-flex flex-column gap-2" style={{ width: 'unset' }}>
                       <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} dataId={index} id={`inputGroupFile0${index}`} />
