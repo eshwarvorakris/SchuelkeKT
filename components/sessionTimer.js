@@ -1,11 +1,16 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Swal from "sweetalert2";
 let counts = 0;
 export default function checkTimer({ sessionTimer = false}) {
+
   useEffect(() => {
+    var isSwalFired = false;
     const handleCursor = (e) => {
       counts = 0;
-      Swal.close();
+      //console.log("isSwalFired", isSwalFired);
+      if(isSwalFired) {
+        Swal.close();
+      }
     }
     
     document.addEventListener("mousemove", handleCursor);
@@ -17,6 +22,8 @@ export default function checkTimer({ sessionTimer = false}) {
       }
       const allSession = setInterval(function () {
         if (counts == process.env.NEXT_PUBLIC_TIMEOUT_SECOND) {
+          //console.log("count", counts);
+          isSwalFired = true;
           Swal.fire({
             title: 'Please move your mouse to continue',
             timer: 30000,
@@ -25,6 +32,7 @@ export default function checkTimer({ sessionTimer = false}) {
             showConfirmButton: false
 
           }).then((result) => {
+            isSwalFired = false;
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
               window.location.assign("/login");
