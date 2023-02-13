@@ -14,7 +14,7 @@ var multer = require('multer');
 var upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-      fileSize: 1024 * 1024 * 5,
+      fileSize: 1024 * 1024 * 50,
   },
   fileFilter: function (req, file, done) {
       if (
@@ -23,12 +23,13 @@ var upload = multer({
           file.mimetype === "image/jpg" ||
           file.mimetype === "application/pdf" ||
           file.mimetype === "application/ppt" ||
-          file.mimetype === "application/pptx"
+          file.mimetype === "application/pptx" ||
+          file.mimetype === "video/mp4"
       ) {
           done(null, true);
       } else {
           //prevent the upload
-          var newError = new Error("File type is incorrect");
+          var newError = new Error("File type is incorrect - "+file.mimetype);
           newError.name = "MulterError";
           done(newError, false);
       }
@@ -38,7 +39,7 @@ var upload = multer({
 var uploadFile = multer({
   storage: multer.memoryStorage(),
   limits: {
-      fileSize: 1024 * 1024 * 10,
+      fileSize: 1024 * 1024 * 50,
   },
   fileFilter: function (req, file, done) {
       if (
@@ -47,7 +48,8 @@ var uploadFile = multer({
           file.mimetype === "image/jpg" ||
           file.mimetype === "application/pdf" ||
           file.mimetype === "application/ppt" ||
-          file.mimetype === "application/pptx"
+          file.mimetype === "application/pptx" ||
+          file.mimetype === "video/mp4"
       ) {
           done(null, true);
       } else {
