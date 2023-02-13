@@ -8,7 +8,11 @@ const questionModel=class {
 
     async list(query=[])
     {
-        return (await axiosInstance.get(`${this.baseUrl}?${new URLSearchParams(query)}`)).data;
+        return (await axiosInstance.get(`${this.baseUrl}`)).data;
+    }
+    async traineeAttempts(query=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/traineeAttempts`,query)).data;
     }
     async traineelist(query=[])
     {
@@ -25,6 +29,10 @@ const questionModel=class {
     async getSubmitted(data=[])
     {
         return await axiosInstance.post(`${this.baseUrl}/getSubmitted`,data);
+    }
+    async countAttempt(data=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/countAttempt`,data);
     }
 
     async submitAssignment(data=[])

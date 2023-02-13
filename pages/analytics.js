@@ -15,10 +15,10 @@ const mygrade = () => {
                 <div className="dashboard-info">
                     <TraineeWidgets />
                 </div>
-                <div className="content-heading" style={{ padding: 'unset' }}>
+                {/* <div className="content-heading" style={{ padding: 'unset' }}>
                     <h5 style={{marginTop:'unset'}}>Recent Learning</h5>
                 </div>
-                <RecentLearningCard />
+                <RecentLearningCard /> */}
                 <TabCourseList />
             </div>
         </>

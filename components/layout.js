@@ -1,6 +1,7 @@
 import Navbar from './navbar'
 import Sidebar from './sidebar'
 import Footer from './footer'
+import SessionTimer from './sessionTimer'
 import { Container, SSRProvider } from 'react-bootstrap'
 import AppContext from '../lib/appContext'
 import { useEffect, useState } from 'react'
@@ -10,17 +11,18 @@ export default function Layout({ children }) {
   const [profile,setProfile]=useState(null);
   const layoutValues={pageHeading,setPageHeading,profile,setProfile};
   useEffect(()=>{
-    console.log(1)
+    //console.log(1)
     let tempProfile=JSON.parse(sessionStorage.getItem("userinfo"));
     setProfile(tempProfile);
-    console.log(2)
+    //console.log(2)
     console.log(profile);
-    console.log(3)
+    //console.log(3)
   },[])
   return (
     <AppContext.Provider value={layoutValues}>
     <SSRProvider>
       <div className="section1" style={{height:"unset"}}>
+        <SessionTimer sessionTimer={true} />
         <div className="blank-class"></div>
           <Sidebar />
           <div className="container-2">

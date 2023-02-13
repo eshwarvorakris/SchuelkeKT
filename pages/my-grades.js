@@ -1,11 +1,21 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import useSWR from 'swr';
 import auth from "../model/auth.model";
 import Router from "next/router";
 import AppContext from '../lib/appContext';
+import assignmentModel from "../model/assignment.model";
 const mygrade = () => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("My Grades") }
+    const [allAsignments, setAllAsignments] = useState([]);
+    useEffect(() => {
+        assignmentModel.list().then((submittedRes) => {
+            console.log("list", submittedRes);
+            setAllAsignments(submittedRes);
+        });
+    }, []);
+    var curdate = "";
+    var curImage = "";
     return (
         <>
             <form>
@@ -21,216 +31,40 @@ const mygrade = () => {
                         <div className="body-row">
                             <div><span><strong>Grade Items</strong></span></div>
                             <div><span><strong>Percentage</strong></span></div>
-                            <div><span><strong>Remarks</strong></span></div>
+                            <div><span><strong>Submitted On</strong></span></div>
                         </div>
 
-                        <div className="content-heading">
-                            <div className="folder-icon">
-                                <img src="/trainee-images/trainee-my-grade/Group 1040.png" alt="" />
-                            </div>
-                            <h5 style={{ margin: 'unset', padding: 'unset' }}>Cardiology</h5>
-                        </div>
 
                         <div className="Quizzes-heading-1">
-                            <span style={{ color: "#008BD6" }}>Quizzes</span>
+                            <span style={{ color: "#008BD6" }}>Courses</span>
                         </div>
 
                         <div className="Quiz-container custom-scroll">
-                            <div className="Quiz-1 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
+                            {allAsignments?.map((item, index) => {
+                                curdate = new Date(item?.curData?.updated_at)
+                                curdate = curdate.toLocaleString();
+                                curImage = "/trainee-images/trainee-my-grade/octicon_checklist-24.png";
+                                if(item?.curData?.course?.course_thumbnail) {
+                                    curImage = item?.curData?.course?.course_thumbnail;
+                                }
+                                return (
+                                    <div className="Quiz-1 d-flex justify-content-between" key={index}>
+                                        <div className="grade-item d-flex gap-1 align-items-center">
+                                            <div className="grade-icon">
+                                                <img src={curImage} alt="Course Image" height={20} width={20} />
+                                            </div>
+                                            <span>{item?.curData?.course?.course_name}</span>
+                                        </div>
+                                        <div className="Percentage">
+                                            <span><strong>{item.maxPercent}%</strong></span>
+                                        </div>
+                                        <div className="Remarks">
+                                            <span>{curdate}</span>
+                                        </div>
                                     </div>
-                                    <span>Chapter 1</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>98.78%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
+                                );
+                            })}
 
-                            <div className="Quiz-1 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 2</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>94.66%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-1 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 3</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>93.45%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-1 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 4</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>94.45%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-1 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 5</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>94.22%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className="content-heading-2">
-                            <div className="folder-icon">
-                                <img src="/trainee-images/trainee-my-grade/Group 1040.png" alt="" />
-                            </div>
-                            <h5>Pulmonology</h5>
-                        </div>
-
-                        <div className="Quizzes-heading-2">
-                            <span style={{ color: "#008BD6" }}>Quizzes</span>
-                        </div>
-
-                        <div className="Quiz-container custom-scroll">
-                            <div className="Quiz-2 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/images/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 1</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>98.78%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-2 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 2</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>94.66%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-2 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 3</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>93.45%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-2 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 4</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>94.45%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-
-                            <div className="Quiz-2 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Chapter 5</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>94.22%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="content-heading-4">
-                            <span>Final Exam</span>
-                        </div>
-
-                        <div className="Final-Result-container">
-                            <div className="Quiz-2 d-flex justify-content-between">
-                                <div className="grade-item d-flex gap-1 align-items-center">
-                                    <div className="grade-icon">
-                                        <img src="/trainee-images/trainee-my-grade/octicon_checklist-24.png"
-                                            alt="" />
-                                    </div>
-                                    <span>Course Completion</span>
-                                </div>
-                                <div className="Percentage">
-                                    <span><strong>98.34%</strong></span>
-                                </div>
-                                <div className="Remarks">
-                                    <span>Lorem ipsum dolor</span>
-                                </div>
-                            </div>
                         </div>
 
                     </div>

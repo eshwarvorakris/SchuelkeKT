@@ -28,7 +28,8 @@ function Page() {
   const [submitButton, setSubmitButton] = useState("");
   const [courseId, setCourseId] = useState(router?.id);
   const [checkedInput, setCheckedInput] = useState([]);
-  const [showSubmitButton, setShowSubmitButton] = useState(true);
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [showRetryButton, setShowRetryButton] = useState(false);
   useEffect(() => {
     /* const subscription = watch((data) => {
       if (data.questions !== undefined) {
@@ -77,6 +78,15 @@ function Page() {
       }).catch((error) => {
         console.log(error);
       });
+
+      const countAttemptForm = new FormData();
+      countAttemptForm.append("course_id", router?.query?.id);
+      assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
+        console.log("attempt result",submittedRes?.data);
+        if(submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
+          setShowSubmitButton(true);
+        }
+      });
     }
   }, [router]);
 
@@ -92,12 +102,17 @@ function Page() {
         helper.sweetalert.toast("Assignment saved to draft");
       } else {
         setShowSubmitButton(false);
+        if(res.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
+          setShowRetryButton(true);
+        }
         document.getElementById('quizTextHead').classList.add("d-none");
         document.getElementById('resultDiv').classList.remove("d-none");
         if (res.data) {
 
           document.getElementById("gotPercent").innerHTML = res.data?.answerPercent + "%";
-          if (res.data?.answerPercent >= 80) {
+          if(res.data?.answerPercent == 100) {
+            setShowRetryButton(false);
+          } else if (res.data?.answerPercent >= 80) {
             document.getElementById('gotPercent').classList.remove("text-danger");
             document.getElementById('gotPercent').classList.add("text-success");
           } else {
@@ -150,7 +165,7 @@ function Page() {
           <ol className="breadcrumb" style={{ backgroundColor: '#F5F6F8', padding: '.75rem 1rem' }}>
             <li className="breadcrumb-item"><Link href="/dashboard">Home</Link></li>
             <li className="breadcrumb-item"><Link href="/courses">Courses</Link></li>
-            <li className="breadcrumb-item"><Link href="#">{courseName}</Link></li>
+            <li className="breadcrumb-item"><Link href={`/courses/${router?.query?.id}`}>{courseName}</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Quizzes</li>
           </ol>
         </div>
@@ -159,22 +174,25 @@ function Page() {
           <h4 id='quizTextHead'>To Boost Your Understanding</h4>
           <div className='d-none' id="resultDiv">
             <h4 id='failH4' className='d-none'><img src="/trainee-images/trainee-quiz-images/carbon_warning-filled.png"
-              alt="warning symbol" class="icon" /> Try again once you are ready</h4>
-            <div class="header-content">
-              <h6>Your Received <span class="text-danger pr-2" id='gotPercent'>70%</span> <span className='d-none' id='passPercent'>To Pass <span
+              alt="warning symbol" className="icon" /> Try again once you are ready</h4>
+            <div className="header-content">
+              <h6>Your Received <span className="text-danger pr-2" id='gotPercent'>70%</span> <span className='d-none' id='passPercent'>To Pass <span
                 style={{ color: "#007CC2" }}>80% or Above</span></span>
               </h6>
-              <a class="try-again" href={`/courses/${courseId}/quizzes`}>
-                <button type="button" class="try-again-btn">Try Again</button>
-              </a>
+              {showRetryButton &&
+                <a className="try-again" href={`/courses/${courseId}/quizzes`}>
+                  <button type="button" className="try-again-btn">Try Again</button>
+                </a>
+              }
+                
             </div>
           </div>
         </div>
         <div className="trainee-body">
           <div className="trainee-list d-flex flex-column" style={{ margin: '0rem 3rem -2.5rem 3rem', padding: 'unset', height: 'unset' }}>
             <div className="box-container-1">
-              <div className="box-1"></div>
-              <div className="box-2"></div>
+              <div className="box-1" style={{width:'105px', borderLeft:'unset', borderRight:'unset', borderTop:'unset'}}></div>
+              <div className="box-2" style={{left:'75px', borderTop:'unset'}}></div>
 
               <div className="trainee-tag">
                 <p style={{ zIndex: '1' }}>Quizzes</p>
@@ -197,7 +215,7 @@ function Page() {
                     <div className="question">
                       <span>{index + 1}. {item.question}</span>
                       <input type="hidden" {...register(`questions[${index}][question]`)} defaultValue={item.id} />
-                      <div className="points">1 point</div>
+                      {/* <div className="points">1 point</div> */}
                     </div>
                     <div className="question-options" id="group1">
                       {item?.options?.map((optionitem, optionindex) => {

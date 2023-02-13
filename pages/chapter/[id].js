@@ -10,6 +10,7 @@ import { Modal } from 'react-bootstrap';
 import AppContext from '../../lib/appContext';
 import Checktimer from '../../components/checkTimer';
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import DocumentViewer from "../components/DocumentViewer";
 const topicpage = () => {
     const [nextContent, setNextContent] = useState([]);
     const [prevContent, setPrevContent] = useState([]);
@@ -32,6 +33,7 @@ const topicpage = () => {
             setCurContent(contentData?.data);
             //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
             setContentUrl(contentData?.data?.file_url);
+            console.log(contentData?.data?.file_url);
             contentModel.list({ module_id: contentData?.data?.module_id }).then((res) => {
                 //console.log("contents - ", res.data);
                 if ((res?.data).length > 1) {
@@ -66,11 +68,11 @@ const topicpage = () => {
         }
     }, [contentData, QueryParam?.id]);
     return (
-        <>  
-            {courseId && 
+        <>
+            {courseId &&
                 <Checktimer startTimer={true} courseId={courseId} moduleId={moduleId} chapterId={QueryParam?.id} />
             }
-            
+
             <div className="content-header d-flex gap-3 align-items-center">
                 <Link href={`/courses/${courseId}`}>
                     <div className="left-icon">
@@ -115,6 +117,9 @@ const topicpage = () => {
                                 style={{ height: 500 }}
                             />
                         </div>
+                        // <div>
+                        //     <DocumentViewer fileUrl="https://fastly.picsum.photos/id/880/536/354.jpg?hmac=Tpt84Al9HFHuVxRHGO8W4_7jGxTE3zkPbVrg6GZGVSU" />
+                        // </div>
                     }
                 </div>
 

@@ -6,6 +6,7 @@ import category from "../../../model/category.model";
 import courseModel from "../../../model/course.model";
 import ModuleCard from "../../components/moduleCard";
 import ModuleDetailCard from "../../components/moduleDetailCard"
+import assignmentModel from "../../../model/assignment.model";
 import { useRouter } from "next/router";
 import moment from 'moment';
 import Link from "next/link";
@@ -23,6 +24,7 @@ const Page = () => {
   const [per_module_hour, setper_module_hour] = useState(0);
   const [moduleCount, setModuleCount] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [showAssignmentButton, setShowAssignmentButton] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
   const { data: courseData, mutate: couresDetail, error, isLoading } = useSWR("coursedetail", async () => await courseModel.detail(router?.query?.id), config.swrConfig);
   const { data: modules, mutate: moduleList, error:moduleError, isLoading:moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id), config.swrConfig);
@@ -36,9 +38,18 @@ const Page = () => {
       var hourOut = total_training_hour + "hrs " + 0 + "mins left";
       setTimeLeft(hourOut);
     }
-    console.log("courseData ", courseData);
-    console.log("module ", modules);
-    
+    // console.log("courseData ", courseData);
+    // console.log("module ", modules);
+    if(router?.query?.id !== undefined) {
+      const countAttemptForm = new FormData();
+      countAttemptForm.append("course_id", router?.query?.id);
+      assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
+        //console.log("attempt result",process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT);
+        if(submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
+          setShowAssignmentButton(true);
+        }
+      });
+    }
     if(modules?.data && total_training_hour != undefined){
       setModuleCount(modules.data.length);
       setper_module_hour(total_training_hour / modules.data.length);
@@ -108,9 +119,12 @@ const Page = () => {
             <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} moduleHourLeft={per_module_hour} />
           )
         })}
-        <div className="p-4" style={{marginLeft:'3rem'}}>
-          <Link href={`/courses/${router?.query?.id}/quizzes`} type="button" className="btn btn-primary">Course Assignment</Link>
-        </div>
+        
+        {showAssignmentButton &&
+          <div className="p-4" style={{marginLeft:'3rem'}}>
+            <Link href={`/courses/${router?.query?.id}/quizzes`} type="button" className="btn btn-primary">Course Assignment</Link>
+          </div>
+        }
         
       </form>
     </>

@@ -4,6 +4,7 @@ import useSWR, { mutate } from 'swr';
 import auth from "../../../../model/auth.model";
 import userModal from "../../../../model/user.model";
 import courseModel from "../../../../model/course.model";
+import assignmentModel from "../../../../model/assignment.model";
 import AdminCourseCard from "../../../components/adminCourseCard";
 import { useRouter } from "next/router";
 import { config } from '../../../../lib/config';
@@ -16,6 +17,7 @@ const editTrainee = () => {
     { layoutValues.setPageHeading("Trainee Status") }
     const [profileData, setprofileData] = useState([]);
     const [errorMessage, seterrorMessage] = useState("");
+    const [allAsignments, setAllAsignments] = useState([]);
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
     QueryParam.order_by = router.query?.order_by || "created_at";
@@ -36,6 +38,12 @@ const editTrainee = () => {
             }).catch((error) => {
                 console.log(error);
             });
+            const assignmentUser = new FormData();
+            assignmentUser.append("trainee_id", router.query.id);
+            assignmentModel.traineeAttempts(assignmentUser).then((submittedRes) => {
+                console.log("list", submittedRes);
+                setAllAsignments(submittedRes);
+            });
         }
     }, [router, reset]);
 
@@ -53,7 +61,11 @@ const editTrainee = () => {
             setFormErrors(error.response?.data?.errors);
         })
     });
-
+    var curStatus = "";
+    var submitColor = "";
+    var passStatus = "";
+    var passStatusColor = "";
+    var averageScore = 0;
     return (
         <>
             <div className="trainee-body">
@@ -70,18 +82,18 @@ const editTrainee = () => {
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
                         <div className="trainee-name d-flex gap-2 justify-self-center"><span>Trainee-name :</span>
-                            <h6 style={{color:'#000'}}><strong>{profileData?.full_name}</strong></h6>
+                            <h6 style={{ color: '#000' }}><strong>{profileData?.full_name}</strong></h6>
                         </div>
                         <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>No. of courses
                             Enrolled :</span>
-                            <h6 style={{color:'#000'}}> <strong>6</strong></h6>
+                            <h6 style={{ color: '#000' }}> <strong>6</strong></h6>
                         </div>
                         <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
-                            <h6 style={{color:'#000'}}><strong>{profileData?.email}</strong></h6>
+                            <h6 style={{ color: '#000' }}><strong>{profileData?.email}</strong></h6>
                         </div>
                     </div>
 
-                    <div className="trainee-topic-cards row">
+                    <div className="trainee-topic-cards row" style={{marginBottom:'unset'}}>
                         {courses?.data?.map((item, index) => {
                             console.log(item);
                             return (
@@ -93,14 +105,14 @@ const editTrainee = () => {
                     <div className="assignment-table">
                         <div className="table-header d-flex justify-content-between">
                             <div className="trainee-main-heading d-flex">
-                                <div className="trainee-assignment-heading">Gastroentrology</div>
-                                <div className="label-info d-flex text-warning gap-2">
+                                <div className="trainee-assignment-heading"></div>
+                                {/* <div className="label-info d-flex text-warning gap-2">
                                     <div className="blank-dot-class"></div>
                                     <div className="dot-label" style={{ backgroundColor: '#ffc50f' }}></div>
-                                    <span>In Progress</span>
-                                </div>
+                                    <span></span>
+                                </div> */}
                             </div>
-                            <div className="assignment-filter">
+                            {/* <div className="assignment-filter">
 
                                 <div className="dropdown">
                                     <button type="button" className="btn dropdown-toggle dropdown-btn"
@@ -185,7 +197,7 @@ const editTrainee = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         {(layoutValues?.profile?.role == 'admin') &&
                             <div className="dashboard-info" style={{ padding: '2rem 0rem', marginTop: 'unset' }}>
@@ -250,34 +262,49 @@ const editTrainee = () => {
 
                         <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
                             <table>
-                                <tbody>
+                                <thead>
                                     <tr>
                                         <td style={{ width: '15%' }}>Assignment Name</td>
                                         <td style={{ width: '15%' }}>Submimssion Status</td>
                                         <td style={{ width: '5%' }}>No. of Attempts</td>
-                                        <td style={{ width: '5%' }}>Average Attempts</td>
                                         <td style={{ width: '5%' }}>Average Score</td>
                                         <td style={{ width: '5%' }}>Obtained Score</td>
                                         <td style={{ width: '5%' }}>Passing Status</td>
                                     </tr>
-                                    <tr>
-                                        <td>Assignment 1</td>
-                                        <td className="text-success">
-                                            <span>Submitted</span>
-                                        </td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>92%</td>
-                                        <td className="text-success">97%</td>
-                                        <td className="text-success">Pass</td>
-                                    </tr>
-                                    <tr>
+                                </thead>
+                                <tbody>
+                                    {allAsignments?.map((item, index) => {
+                                        curStatus = 'Submitted';
+                                        submitColor = 'text-success';
+                                        if(item?.curData?.status != "submitted") {
+                                            submitColor = 'text-danger';
+                                            curStatus = 'Not Submitted<';
+                                        }
+                                        passStatusColor = 'text-success';
+                                        passStatus = "Pass";
+                                        if(item?.maxPercent < 80) {
+                                            passStatusColor = 'text-danger';
+                                            passStatus = 'Fail';
+                                        }
+                                        averageScore = (item?.totalScore / item.totalAttempts)
+                                        return (
+                                            <tr key={index}>
+                                                <td>{item?.curData?.course?.course_name}</td>
+                                                <td className={submitColor}><span>{curStatus}</span></td>
+                                                <td>{item.totalAttempts}</td>
+                                                <td>{averageScore}%</td>
+                                                <td className={passStatusColor}>{item?.maxPercent}%</td>
+                                                <td className={passStatusColor}>{passStatus}</td>
+                                            </tr>
+                                        );
+                                    })}
+
+                                    {/* <tr>
                                         <td>Assignment 2</td>
                                         <td className="text-danger">
                                             <span>Not Submitted</span>
                                         </td>
                                         <td>-</td>
-                                        <td>1</td>
                                         <td>90%</td>
                                         <td>-</td>
                                         <td>-</td>
@@ -288,7 +315,6 @@ const editTrainee = () => {
                                             <span>Submitted</span>
                                         </td>
                                         <td>2</td>
-                                        <td>2</td>
                                         <td>94%</td>
                                         <td className="text-warning">86%</td>
                                         <td className="text-success">Pass</td>
@@ -298,7 +324,6 @@ const editTrainee = () => {
                                         <td className="text-success">
                                             <span>Submitted</span>
                                         </td>
-                                        <td>1</td>
                                         <td>1</td>
                                         <td>93%</td>
                                         <td className="text-danger">24%</td>
@@ -313,8 +338,7 @@ const editTrainee = () => {
                                         <td>-</td>
                                         <td>-</td>
                                         <td>-</td>
-                                        <td>-</td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                             </table>
                         </div>

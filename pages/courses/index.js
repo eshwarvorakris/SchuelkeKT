@@ -212,12 +212,12 @@ const admincoursemanagement = () => {
                     else {
                         return (
                             <>
-                                <form>
-                                    <div className="content-heading" style={{padding:'unset'}}>
+                                <form style={{paddingTop:'10rem'}}>
+                                    {/* <div className="content-heading" style={{padding:'unset'}}>
                                         <h5>Recent Learning</h5>
                                     </div>
 
-                                    <RecentLearningCard />
+                                    <RecentLearningCard /> */}
                                     <TabCourseList />
                                 </form>
                             </>
