@@ -3,15 +3,127 @@ const { getPaginate } = require("../lib/helpers");
 const AssignmentAttempt = require("../models/Assignment_attempt.model");
 const QuestionAttempt = require("../models/Question_attempt.model");
 const QuestionOption = require("../models/Question_option.model");
+const sequelize = require("../lib/dbConnection");
 const questionAttemptController = class {
   async index(req, res) {
     await QuestionAttempt
-      .findAndCountAll({ offset: pageNumber * pageLimit, limit: pageLimit })
+      .findAndCountAll({
+        offset: pageNumber * pageLimit, limit: pageLimit
+      })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
+      });
+  }
+
+  async traineeAttemptList(req, res) {
+    req.body.trainee_id = req.userId;
+    console.clear();
+    console.log(req.body);
+    var outResult = [];
+    var maxPercent = 0;
+    var curData = [];
+    async function attemptRes(allCourses) {
+      let questionResp = async () => {
+        var i = 0;
+        for (const curCourse of allCourses) {
+          console.log("cur" + i, curCourse.DISTINCT);
+          maxPercent = await AssignmentAttempt.max('correct_percentage',
+            { where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
+          );
+          curData = await AssignmentAttempt.findOne(
+            {include: ['course'],
+            where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT, correct_percentage:maxPercent } }
+          );
+          
+          outResult.push({maxPercent:maxPercent, curData:curData})
+          i++;
+        }
+      }
+      let retResp = async () => {
+        await questionResp();
+        console.log("outreult", outResult)
+        res.send(outResult);
+      }
+      retResp();
+    }
+    await AssignmentAttempt
+      .aggregate('course_id', 'DISTINCT', {
+        plain: false,
+        where: { trainee_id: req.body.trainee_id, status: 'submitted' }
+      })
+      .then((result) => {
+        attemptRes(result)
+        //console.log("result", result);
+      })
+      .catch((error) => {
+        return res.status(422).send(
+          {
+            message: "Please Try Again Later.",
+          }
+        );
+        console.error("Failed to retrieve data : ", error);
+      });
+  }
+
+  async traineeAttempts(req, res) {
+    console.clear();
+    console.log(req.body);
+    var outResult = [];
+    var maxPercent = 0;
+    var curData = [];
+    var totalAttempts = 0;
+    var totalScore = 0;
+
+
+    async function attemptRes(allCourses) {
+      let questionResp = async () => {
+        var i = 0;
+        for (const curCourse of allCourses) {
+          console.log("cur" + i, curCourse.DISTINCT);
+          maxPercent = await AssignmentAttempt.max('correct_percentage',
+            { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
+          );
+          totalScore = await AssignmentAttempt.sum('correct_percentage',
+            { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
+          );
+          totalAttempts = await AssignmentAttempt.count(
+            { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
+          );
+          curData = await AssignmentAttempt.findOne(
+            {include: ['course'],
+            where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT, correct_percentage:maxPercent } }
+          );
+          
+          outResult.push({maxPercent:maxPercent, totalScore:totalScore, totalAttempts:totalAttempts, curData:curData})
+          i++;
+        }
+      }
+      let retResp = async () => {
+        await questionResp();
+        console.log("outreult", outResult)
+        res.send(outResult);
+      }
+      retResp();
+    }
+    await AssignmentAttempt
+      .aggregate('course_id', 'DISTINCT', {
+        plain: false,
+        where: { trainee_id: req.body.trainee_id }
+      })
+      .then((result) => {
+        attemptRes(result)
+        //console.log("result", result);
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+        return res.status(422).send(
+          {
+            message: "Please Try Again Later.",
+          }
+        );
       });
   }
 
@@ -110,6 +222,7 @@ const questionAttemptController = class {
       var answerAr = [];
       let totalQuestion = 0;
       let answeredQuestion = 0;
+      var assignmentAttempt = [];
       console.log(req.body.questions.length);
       let questionResp = async () => {
         for (const curQuestion of req.body.questions) {
@@ -160,11 +273,16 @@ const questionAttemptController = class {
           }
 
         };
+
+        assignmentAttempt = await AssignmentAttempt.count({
+          where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted' }
+        })
       };
 
       let retResp = async () => {
         await questionResp();
         var resultData = [];
+        resultData.push("assignmentAttempt", assignmentAttempt);
         var answerPercent = (correctQues.length / totalQuestion) * 100;
         console.log("percent = ", answerPercent);
         await AssignmentAttempt
@@ -175,7 +293,8 @@ const questionAttemptController = class {
             correctQues: correctQues,
             totalQuestion: totalQuestion,
             answeredQuestion: answeredQuestion,
-            answerPercent: answerPercent
+            answerPercent: answerPercent,
+            assignmentAttempt: assignmentAttempt
           };
         }
         res.send(resultData);
@@ -184,6 +303,15 @@ const questionAttemptController = class {
     }
 
   }
+
+  async countAttempt(req, res) {
+    req.body.trainee_id = req.userId;
+    const assignmentAttempt = await AssignmentAttempt.count({
+      where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted' }
+    })
+    res.send({ assignmentAttempt });
+  }
+
   async show(req, res) {
     const questionAttempt = await QuestionAttempt.findByPk(req.params.id);
     res.send({ data: questionAttempt });

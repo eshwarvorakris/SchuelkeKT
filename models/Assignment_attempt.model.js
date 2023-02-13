@@ -26,6 +26,9 @@ AssignmentAttempt.init({
     type: DataTypes.FLOAT,
     allowNull:true,
   },
+  remark: {
+    type: DataTypes.TEXT
+  },
   status: {
     type: DataTypes.STRING(30),
     defaultValue: "drafted",
