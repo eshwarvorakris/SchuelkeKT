@@ -108,16 +108,20 @@ const Page = () => {
     //console.log("fileFkey", fileKey);
     //setValue('content['+curId+'][file_url]', "checking");
     console.log(e.target.files[0].name);
+    const fileNameAr = e.target.files[0].name.split('.');
+    const fileExt = fileNameAr[fileNameAr.length - 1];
+    const curFileExt = getValues('content[' + curId + '][file_ext]');
     document.getElementById("uploadOutFileName"+curId).innerHTML = "File Selected : <b>"+e.target.files[0].name+"</b>";
     var data = new FormData();
     var imagedata = await e.target.files[0];
     data.append("uploadFile", imagedata);
     data.append("filefolder", "Courses");
-    if (fileKey != "" && fileKey != undefined) {
+    if (fileKey != "" && fileKey != undefined && curFileExt === fileExt) {
       data.append("fileKey", fileKey);
     }
     setIsUploaded(true);
     await uploader.upload(data).then((res) => {
+      console.log(res?.data?.data?.Location);
       helper.sweetalert.toast("File Uploaded");
       setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
 
@@ -285,6 +289,7 @@ const Page = () => {
                         <input type="hidden" {...register(`content[${index}][file_ext]`)} defaultValue={item?.file_ext} />
                         <input type="hidden" {...register(`content[${index}][file_name]`)} defaultValue={item?.file_name} />
                         <input type="hidden" {...register(`content[${index}][file_key]`)} defaultValue={item?.file_key} />
+                        <input type="hidden" {...register(`content[${index}][file_format]`)} defaultValue={item?.file_ext} />
                         <input className="file-input" {...register(`content[${index}][file_url]`)} defaultValue={item.file_url} type="text" hidden={true} />
                       </div>
                       <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>

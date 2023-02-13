@@ -24,6 +24,8 @@ const topicpage = () => {
     QueryParam.page = router.query.page || 1;
     const { data: contentData, mutate: loadContent, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.detail(QueryParam?.id), config.swrConfig);
 
+    const [showDocs, setShowDocs] = useState("d-none");
+
     useEffect(() => {
         setNextContent([]);
         setPrevContent([]);
@@ -33,6 +35,9 @@ const topicpage = () => {
             setCurContent(contentData?.data);
             //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
             setContentUrl(contentData?.data?.file_url);
+            if(contentData?.data?.file_ext != "mp4") {
+                setShowDocs("");
+            }
             console.log(contentData?.data?.file_url);
             contentModel.list({ module_id: contentData?.data?.module_id }).then((res) => {
                 //console.log("contents - ", res.data);
@@ -97,9 +102,19 @@ const topicpage = () => {
                 </div>
 
                 <div className="presentation">
-                    {/* <img src="/trainee-images/topic-page/Rectangle 721.png" alt="" /> */}
+                    {
+                        (() => {
+                            if (curContent?.file_url != "") {
+                                if (curContent?.file_ext == "mp4") {
+                                    return (
+                                        <video controls style={{ height: '500px', width:'56vw' }}><source src={curContent?.file_url} /></video>
+                                    );
+                                }
+                            }
+                        })()
+                    }
                     {curContent?.file_url &&
-                        <div key={Math.random()}>
+                        <div key={Math.random()} className={showDocs}>
                             <DocViewer
                                 pluginRenderers={DocViewerRenderers}
                                 documents={
@@ -117,9 +132,6 @@ const topicpage = () => {
                                 style={{ height: 500 }}
                             />
                         </div>
-                        // <div>
-                        //     <DocumentViewer fileUrl="https://fastly.picsum.photos/id/880/536/354.jpg?hmac=Tpt84Al9HFHuVxRHGO8W4_7jGxTE3zkPbVrg6GZGVSU" />
-                        // </div>
                     }
                 </div>
 
