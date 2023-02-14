@@ -37,6 +37,7 @@
     "react-select": "^5.7.0",
     "sweetalert2": "^11.4.8",
     "swr": "^2.0.0",
+    "video-react": "^0.16.0",
     "viewerjs": "^1.11.2"
   }
 }

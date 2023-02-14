@@ -10,7 +10,7 @@ import { Modal } from 'react-bootstrap';
 import AppContext from '../../lib/appContext';
 import Checktimer from '../../components/checkTimer';
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
-import DocumentViewer from "../components/DocumentViewer";
+import { Player } from 'video-react';
 const topicpage = () => {
     const [nextContent, setNextContent] = useState([]);
     const [prevContent, setPrevContent] = useState([]);
@@ -35,7 +35,7 @@ const topicpage = () => {
             setCurContent(contentData?.data);
             //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
             setContentUrl(contentData?.data?.file_url);
-            if(contentData?.data?.file_ext != "mp4") {
+            if (contentData?.data?.file_ext != "mp4") {
                 setShowDocs("");
             }
             console.log(contentData?.data?.file_url);
@@ -61,6 +61,9 @@ const topicpage = () => {
             }).catch((error) => {
                 console.log(error);
             });
+
+
+            //document.getElementById("video1").muted = false; 
 
             moduleModel.detail(contentData?.data?.module_id).then((res) => {
                 console.log("module", res.data);
@@ -107,7 +110,10 @@ const topicpage = () => {
                             if (curContent?.file_url != "") {
                                 if (curContent?.file_ext == "mp4") {
                                     return (
-                                        <video controls style={{ height: '500px', width:'56vw' }}><source src={curContent?.file_url} /></video>
+                                        <Player>
+                                            <source src={curContent?.file_url} />
+                                        </Player>
+                                        // <video controls muted autoplay id='video1' style={{ height: '500px', width:'56vw' }}><source src={curContent?.file_url} /></video>
                                     );
                                 }
                             }
