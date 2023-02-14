@@ -28,6 +28,8 @@ const myprofile = () => {
     const [countryOptions, setCountryOptions] = useState([]);
     const [selectCountry, setSelectCountry] = useState(null);
 
+    const [yearOptions, setYearOptions] = useState([]);
+    const [selectedYear, setselectedYear] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
     const { register, setValue, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: profileData });
 
@@ -38,7 +40,8 @@ const myprofile = () => {
                 setprofileUrl(res.profile_img);
             }
             setprofileData(res);
-            setSelectCountry({ label: res.country, value: res.country })
+            setSelectCountry({ label: res.country, value: res.country });
+            setselectedYear({ label: res.joining_year, value: res.joining_year })
             console.log(res);
             reset(res);
         }).catch((error) => {
@@ -48,7 +51,7 @@ const myprofile = () => {
     }, [router, reset]);
 
     useEffect(() => {
-        console.clear();
+        //console.clear();
         //console.log("countries", countryLists);
         const opt = [];
         countryLists?.map((item, index) => {
@@ -63,6 +66,10 @@ const myprofile = () => {
 
     const onCountrySelect = (e) => {
         setSelectCountry(e);
+    };
+
+    const onYearSelect = (e) => {
+        setselectedYear(e);
     };
 
     const onSubmit = handleSubmit(async (data) => {
@@ -108,6 +115,17 @@ const myprofile = () => {
         })
         //setImage(URL.createObjectURL(e.target.files[0]))
     });
+    const curYear = new Date().getFullYear();
+    const allYear = [];
+    
+    useEffect(() => {
+        for (var preYear = curYear;preYear >= curYear-75; preYear--) {
+            allYear.push({ value: preYear, label: preYear });
+        }
+        setYearOptions(allYear);
+        console.log("allyear",allYear);
+    },[])
+    
     return (
         <>
             <div className="trainee-right-edit" style={{ marginTop: '10rem' }}>
@@ -153,7 +171,7 @@ const myprofile = () => {
 
                                 <div className="trainer-Email">
                                     <h6>Email</h6>
-                                    <input type="text" placeholder="Thomas@gmail.com" {...register("email", { required: "Fill Email Address" })} />
+                                    <input type="text" placeholder="Thomas@gmail.com" value={profileData.email} readOnly />
                                     {formErrors?.email && <p className="invalid-feedback">{formErrors?.email}</p>}
                                 </div>
 
@@ -188,18 +206,30 @@ const myprofile = () => {
                                 }
                                 <div className="trainer-Name ">
                                     <h6>Country Of Origin</h6>
-                                    <Select
-                                        isSearchable
-                                        options={countryOptions}
-                                        name={"country"}
-                                        placeholder="Select Country"
-                                        value={selectCountry}
-                                        onChange={onCountrySelect}
-                                    />
+                                    <div style={{width:'25rem'}}>
+                                        <Select
+                                            isSearchable
+                                            options={countryOptions}
+                                            name={"country"}
+                                            placeholder="Select Country"
+                                            value={selectCountry}
+                                            onChange={onCountrySelect}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="trainer-Name">
                                     <h6>Year Of Joining</h6>
-                                    <input type="text" pattern="\d*" placeholder="2023" maxLength={4} {...register("joining_year")} />
+                                    <div style={{width:'25rem'}}>
+                                        <Select
+                                            isSearchable
+                                            options={yearOptions}
+                                            name={"joining_year"}
+                                            placeholder="Select Joining Year"
+                                            value={selectedYear}
+                                            onChange={onYearSelect}
+                                        />
+                                    </div>
+                                    {/* <input type="text" pattern="\d*" placeholder="2023" maxLength={4} {...register("joining_year")} /> */}
                                 </div>
 
                                 {/* <div className="trainer-designation">

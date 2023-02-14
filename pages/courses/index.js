@@ -47,13 +47,14 @@ const admincoursemanagement = () => {
             name: 'Course',
             selector: row => row.course_name,
             sortable: true,
-            sortField: "course_name"
+            sortField: "course_name",
+            wrap: true,
         },
         {
             name: 'Topic',
             selector: row => row.category?.category_name,
             sortable: true,
-            sortField: "category.category_name"
+            sortField: "category.category_name",
         },
         {
             name: 'No. of Module',
@@ -63,10 +64,10 @@ const admincoursemanagement = () => {
             name: 'Training time',
             selector: row => row?.week_duration,
         },
-        {
-            name: 'Trainee enroll',
-            selector: row => row?.trainee_count,
-        },
+        // {
+        //     name: 'Trainee enroll',
+        //     selector: row => row?.trainee_count,
+        // },
         {
             name: 'Published By',
             selector: row => row?.trainer?.full_name,

@@ -58,6 +58,7 @@ function Page() {
   //console.clear();
   const [questions, setQuestions] = useState([initialQuestion]);
   const [courseId, setCourseId] = useState(router?.id);
+  const [questionUpdated, setQuestionUpdated] = useState(0);
   const addQuestion = function () {
     setQuestions([...questions, initialQuestion]);
   }
@@ -92,19 +93,26 @@ function Page() {
         console.log(error);
       });
     }
-  }, [router]);
+  }, [router, questionUpdated]);
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
+    setIsButtonDisabled(true);
     console.clear();
     const formData = new FormData(event.target);
     //console.log('data',data.questions);
     await questionModel.create(formData).then((res) => {
       //console.log(res)
       helper.sweetalert.toast("Assignment Added");
-      //router.push("/dashboard");
+      setIsButtonDisabled(false);
+      setQuestionUpdated(Math.random());
+      //router.push("/courses/"+router?.query?.id);
+      
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
+      setIsButtonDisabled(false);
     })
 
   });
@@ -311,7 +319,7 @@ function Page() {
 
               <div className="Save-btn">
                 <button type="submit" className="btn btn-primary"
-                  style={{ backgroundColor: "#008bd6" }}>Save</button>
+                  style={{ backgroundColor: "#008bd6" }} disabled={isButtonDisabled}>Save</button>
 
               </div>
 
