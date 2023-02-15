@@ -1,6 +1,7 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../lib/dbConnection");
 const Module = require("./Module.model");
+const Course = require("./Course.model");
 class ModuleContent extends Model { }
 
 ModuleContent.init({
@@ -8,6 +9,10 @@ ModuleContent.init({
   module_id: {
     type: DataTypes.INTEGER,
     references:{model:"modules",key:"id"}
+  },
+  course_id: {
+    type: DataTypes.INTEGER,
+    references:{model:"courses",key:"id"}
   },
   title: {
     type: DataTypes.STRING,
@@ -51,5 +56,6 @@ ModuleContent.init({
   underscored:true
 });
 ModuleContent.belongsTo(Module,{foreignKey:"module_id",as:"module"});
+ModuleContent.belongsTo(Course,{foreignKey:"course_id",as:"course"});
 sequelize.sync();
 module.exports = ModuleContent;
