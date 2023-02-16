@@ -5,7 +5,7 @@ const Content = require("../models/Module_content.model");
 const moduleContentController = class {
   async index(req, res) {
     await Content
-      .findAndCountAll({ include: ['module'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order:[orderByColumn]  })
+      .findAndCountAll({ include: ['module'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order:[['id', 'ASC']]  })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
