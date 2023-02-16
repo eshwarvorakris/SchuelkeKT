@@ -3,10 +3,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import CourseViewModel from "../../model/cource_view.model";
 import { helper } from '../../lib/helper';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useEffect } from 'react';
+import AppContext from "../../lib/appContext";
 export default function chapterCard({ chapterData, chapterIndex, perContentMin }) {
   const router = useRouter();
+  const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
   const rand = 1 + Math.random() * (100 - 1);
   var chapterStatus = "locked"; // ongoing / completed / locked
@@ -74,7 +76,7 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin }
               </>
             }
 
-            {chapterStatus == "ongoing" &&
+            {(chapterStatus == "ongoing" && layoutValues?.profile?.role == 'trainee') &&
               <>
                 <div className="progress-bar-info">
                   <div className="progress-circle progress-size over50" style={{ fontSize: '6px', margin: 'unset' }}>

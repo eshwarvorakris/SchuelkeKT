@@ -20,6 +20,7 @@ const topicpage = () => {
     const [contentUrl, setContentUrl] = useState(null);
     const [chapterId, setChapterId] = useState(null);
     const router = useRouter();
+    const layoutValues = useContext(AppContext);
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
     const { data: contentData, mutate: loadContent, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.detail(QueryParam?.id), config.swrConfig);
@@ -71,7 +72,7 @@ const topicpage = () => {
                 console.log("prev=", prevContent.length);
                 console.log("next=", nextContent.length);
             }).catch((error) => {
-                console.log("module error",error);
+                console.log("module error", error);
             });
         }
     }, [contentData, QueryParam?.id]);
@@ -82,11 +83,21 @@ const topicpage = () => {
             }
 
             <div className="content-header d-flex gap-3 align-items-center">
-                <Link href={`/courses/${courseId}`}>
-                    <div className="left-icon">
-                        <i className="fa fa-chevron-left go-left-icon" aria-hidden="true"></i>
-                    </div>
-                </Link>
+                {(layoutValues?.profile?.role == 'trainee') &&
+                    <Link href={`/courses/${courseId}`}>
+                        <div className="left-icon">
+                            <i className="fa fa-chevron-left go-left-icon" aria-hidden="true"></i>
+                        </div>
+                    </Link>
+                }
+                
+                {(layoutValues?.profile?.role != 'trainee') &&
+                    <Link href={`/courses/${courseId}/update_status`}>
+                        <div className="left-icon">
+                            <i className="fa fa-chevron-left go-left-icon" aria-hidden="true"></i>
+                        </div>
+                    </Link>
+                }
                 <div className="icon-detail">
                     <h6>Course Outcome</h6>
                 </div>
