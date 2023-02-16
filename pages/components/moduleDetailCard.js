@@ -18,7 +18,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
   QueryParam.order_in = router.query?.order_in || "title";
   //QueryParam.content_type = "asc";
   const rand = 1 + Math.random() * (100 - 1);
-  const moduleStatus = moduleData.chapterView;  // 1 : completed, 2: ongoing, 3:all locked
+  const moduleStatus = 2;  // 1 : completed, 2: ongoing, 3:all locked
   const [contents, setContent] = useState([]);
   const [perContentMin, setPerContentMin] = useState(0);
   const [learnButtonText, setLearnButtonText] = useState("");
