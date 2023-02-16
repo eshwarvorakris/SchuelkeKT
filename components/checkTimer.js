@@ -3,7 +3,7 @@ import CourseViewModel from "../model/cource_view.model"
 let apiUpdateCounter = 1;
 export default function checkTimer({ startTimer = false, courseId = null, moduleId = null, chapterId = null }) {
   useEffect(() => {
-    console.clear();
+    //console.clear();
     console.log("CourseId = ", courseId);
     console.log("moduleId = ", moduleId);
     console.log("chapterId = ", chapterId);

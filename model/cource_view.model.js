@@ -10,6 +10,12 @@ const categoryModel=class {
     {
         return (await axiosInstance.get(`${this.baseUrl}?${new URLSearchParams(query)}`)).data;
     }
+
+    async getAnyCourseChapterViewed(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_any_course_chapter_viewed`, data));
+    }
+
     async create(data=[])
     {
         return await axiosInstance.post(this.baseUrl,data);
@@ -18,7 +24,15 @@ const categoryModel=class {
     {
         return await axiosInstance.put(`${this.baseUrl}/${id}`,data);
     }
-    
+    async getChapterView(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_chapter_view`, data));
+    }
+
+    async getModuleView(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_module_view`, data));
+    }
     async delete(id)
     {
         return await axiosInstance.delete(`${this.baseUrl}/${id}`);

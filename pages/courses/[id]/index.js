@@ -2,11 +2,11 @@ import { useState, useEffect, useRef, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
-import category from "../../../model/category.model";
 import courseModel from "../../../model/course.model";
 import ModuleCard from "../../components/moduleCard";
 import ModuleDetailCard from "../../components/moduleDetailCard"
 import assignmentModel from "../../../model/assignment.model";
+import CourseViewModel from "../../../model/cource_view.model"
 import { useRouter } from "next/router";
 import moment from 'moment';
 import Link from "next/link";
@@ -15,51 +15,122 @@ const Page = () => {
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
-  QueryParam.order_by = router.query?.order_by || "id";
+  QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "asc";
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Trainee Center") }
   const [image, setImage] = useState("");
   //const [courseData, setcourseData] = useState([]);
-  const [per_module_hour, setper_module_hour] = useState(0);
+  const [per_module_hour, setper_module_hour] = useState("0hrs 0mins");
+  const [perModuleMin, setPerModuleMin] = useState(0);
   const [moduleCount, setModuleCount] = useState(0);
-  const [categories, setCategories] = useState([]);
   const [showAssignmentButton, setShowAssignmentButton] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
+  const [counter, setCounter] = useState(0);
+  const [coursePercent, setCoursePercent] = useState(0);
+  
+  const [lastChapterViewData, setLastChapterViewData] = useState(0);
   const { data: courseData, mutate: couresDetail, error, isLoading } = useSWR("coursedetail", async () => await courseModel.detail(router?.query?.id), config.swrConfig);
-  const { data: modules, mutate: moduleList, error:moduleError, isLoading:moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id), config.swrConfig);
+  const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id, QueryParam), config.swrConfig);
   useEffect(() => {
-    if(courseData?.data) {
+    if (courseData?.data) {
       setModuleCount(courseData?.data?.total_modules);
       var total_training_hour = courseData?.data?.total_training_hour;
-      let time = courseData?.data?.week_duration * 7 * 24;
-      var Hours = Math.floor(time / 60);
-      var minutes = time % 60;
-      var hourOut = total_training_hour + "hrs " + 0 + "mins left";
-      setTimeLeft(hourOut);
+      let totalminutes = total_training_hour * 60;
+      var Hours = Math.floor(totalminutes / 60);
+      var minutes = totalminutes % 60;
+      var hourOut = Hours + "hrs " + minutes + "mins left";
+      //setTimeLeft(hourOut);
     }
     // console.log("courseData ", courseData);
     // console.log("module ", modules);
-    if(router?.query?.id !== undefined) {
+    if (router?.query?.id !== undefined) {
+      console.clear();
       const countAttemptForm = new FormData();
       countAttemptForm.append("course_id", router?.query?.id);
       assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
         //console.log("attempt result",process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT);
-        if(submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
+        if (submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
           setShowAssignmentButton(true);
         }
       });
+      let isLastModuleFound = false;
+      let isAnyChapterViewed = false;
+      CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
+        console.clear();
+        console.log("course view", res);
+        let maxcoursemin = Math.floor(courseData?.data?.total_training_hour * 60);
+        let maxcoursesec = maxcoursemin * 60;
+        let courseViewSec = 0;
+        if(res?.data?.courseViewSec) {
+          courseViewSec = res?.data?.courseViewSec;
+        }
+
+        if(courseViewSec > maxcoursesec) {
+          hourOut = "0 hrs 0 mins left";
+          setCoursePercent(100);
+          setTimeLeft(hourOut)
+        } else  {
+          let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
+          setCoursePercent(percentage);
+          let diff = maxcoursesec - courseViewSec;
+          console.log("diff",diff)
+          let diffmin = Math.floor(diff / 60);
+          Hours = Math.floor(diffmin / 60);
+          minutes = diffmin % 60;
+          hourOut = Hours + "hrs " + minutes + "mins left";
+          setTimeLeft(hourOut)
+        }
+        if(res?.data !== null && res?.data !== "") {
+          isAnyChapterViewed = true;
+          setLastChapterViewData(res.data);
+        }
+        setCounter(counter + 1);
+        modules?.data?.map((item, index) => {
+          item.isCompleted = false;
+          if(isAnyChapterViewed === false && index == 0) {
+            item.chapterView = 2; // 1 : all, 2: partial, 3:all locked
+            item.chapterViewId = 0;
+          } else if (isAnyChapterViewed === true) {
+            if(isLastModuleFound === false) {
+              if(item.id === lastChapterViewData.module_id) {
+                item.chapterView = 2; // 1 : all, 2: partial, 3:all locked
+                item.chapterViewId = lastChapterViewData.chapter_id;
+                isLastModuleFound = true;
+              } else {
+                item.chapterView = 1;
+                item.isCompleted = true;
+                item.chapterViewId = "all";
+              }
+            } else {
+              item.chapterView = 3; // 1 : all, 2: partial, 3:all locked
+            }
+          } else {
+            item.chapterView = 3; // 1 : all, 2: partial, 3:all locked
+          }
+          console.log("isAnyChapterViewed",isAnyChapterViewed);
+        });
+      }).catch((error) => {
+        console.log("module error", error);
+      });
+      
+      
     }
-    if(modules?.data && total_training_hour != undefined){
+    if (modules?.data && total_training_hour != undefined) {
       setModuleCount(modules.data.length);
-      setper_module_hour(total_training_hour / modules.data.length);
+      const totalMin = total_training_hour * 60;
+      const perCourseMin = totalMin / modules.data.length;
+      setPerModuleMin(perCourseMin);
+      const hours = Math.floor(perCourseMin / 60);
+      const minutes = perCourseMin % 60;
+      setper_module_hour(hours + "hrs " + minutes + "mins");
       //console.log("module count => ", per_module_hour);
     }
   }, [router, courseData, modules]);
-
+  
   return (
     <>
-      <form style={{backgroundColor:'white'}}>
+      <form style={{ backgroundColor: 'white' }}>
 
         <div className="header-heading">
           <h5>My Progress</h5>
@@ -69,17 +140,17 @@ const Page = () => {
 
           <div className="info">
             <div className="progress-card-heading">
-              <span style={{color:'#212529'}}>{courseData?.data?.course_name}</span>
+              <span style={{ color: '#212529' }}>{courseData?.data?.course_name}</span>
             </div>
             <div className="remaining-info-card">
               <span>{moduleCount} Module Remaining</span>
             </div>
             <div className="date-assessment-info d-flex gap-2">
               <div className="date-label-1">
-                <span style={{color:'#212529'}}>Due Date: {moment(courseData?.data?.course_launch_date).add(courseData?.week_duration, 'weeks').format("Do MMM YY")}, 12:00 AM</span>
+                <span style={{ color: '#212529' }}>Due Date: {moment(courseData?.data?.course_launch_date).add(courseData?.week_duration, 'weeks').format("Do MMM YY")}, 12:00 AM</span>
               </div>
               <div className="assessment-label">
-                <span style={{color:'#212529'}}>Assessment Submissions: none</span>
+                <span style={{ color: '#212529' }}>Assessment Submissions: none</span>
               </div>
             </div>
           </div>
@@ -87,14 +158,14 @@ const Page = () => {
           <div className="progress-bar-info">
             {/* <div className="progress-circle over50 p60"> */}
             <div className="progress-circle over0 p0">
-              <span>0%</span>
+              <span>{coursePercent}%</span>
               <div className="left-half-clipper">
                 <div className="first50-bar"></div>
                 <div className="value-bar"></div>
               </div>
             </div>
             <div className="time-info">
-              <span style={{color:'#212529'}}>{timeLeft}</span>
+              <span style={{ color: '#212529' }}>{timeLeft}</span>
             </div>
           </div>
         </div>
@@ -111,21 +182,23 @@ const Page = () => {
               )
             })}
           </div>
-          
+
         </div>
 
         {modules?.data?.map((item, index) => {
+          console.log("module check"+item.id+" - ", item.chapterView);
+          console.log("counter", counter);
           return (
-            <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} moduleHourLeft={per_module_hour} />
+            <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} moduleHourLeft={per_module_hour} perModuleMin={perModuleMin} />
           )
         })}
-        
-        {showAssignmentButton &&
-          <div className="p-4" style={{marginLeft:'3rem'}}>
+
+        {(showAssignmentButton && coursePercent == 100) &&
+          <div className="p-4" style={{ marginLeft: '3rem' }}>
             <Link href={`/courses/${router?.query?.id}/quizzes`} type="button" className="btn btn-primary">Course Assignment</Link>
           </div>
         }
-        
+
       </form>
     </>
   )

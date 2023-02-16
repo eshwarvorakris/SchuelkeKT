@@ -215,6 +215,7 @@ const Page = () => {
               return (
                 <div className="wrapper d-flex flex-column gap-5" key={`form${index}`} style={{ height: 'unset', width: 'unset', marginBottom: 'unset', overflow: 'unset' }}>
                   <input type="hidden" {...register(`content[${index}][module_id]`)} defaultValue={QueryParam?.id} />
+                  <input type="hidden" {...register(`content[${index}][course_id]`)} defaultValue={QueryParam?.course} />
                   <input type="hidden" {...register(`content[${index}][sequence_no]`)} defaultValue={index + 1} />
                   <input type="hidden" {...register(`content[${index}][id]`)} defaultValue={item.id} />
 

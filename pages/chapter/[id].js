@@ -71,7 +71,7 @@ const topicpage = () => {
                 console.log("prev=", prevContent.length);
                 console.log("next=", nextContent.length);
             }).catch((error) => {
-                console.log(error);
+                console.log("module error",error);
             });
         }
     }, [contentData, QueryParam?.id]);
@@ -110,9 +110,11 @@ const topicpage = () => {
                             if (curContent?.file_url != "") {
                                 if (curContent?.file_ext == "mp4") {
                                     return (
-                                        <Player>
-                                            <source src={curContent?.file_url} />
-                                        </Player>
+                                        <div key={Math.random()}>
+                                            <Player>
+                                                <source src={curContent?.file_url} />
+                                            </Player>
+                                        </div>
                                         // <video controls muted autoplay id='video1' style={{ height: '500px', width:'56vw' }}><source src={curContent?.file_url} /></video>
                                     );
                                 }
@@ -152,14 +154,14 @@ const topicpage = () => {
                     <div className="trainee-footer-left d-flex">
                         {prevContent?.title &&
                             <>
-                                <Link href={`/chapter/${prevContent?.id}`}>
+                                <a href={`/chapter/${prevContent?.id}`}>
                                     <i className="fa fa-arrow-left footer-icon text-light" aria-hidden="true"></i>
-                                </Link>
+                                </a>
 
                                 <div className="icon-content-1">
-                                    <Link href={`/chapter/${prevContent?.id}`}>
+                                    <a href={`/chapter/${prevContent?.id}`}>
                                         <p>PREVIOUS</p>
-                                    </Link>
+                                    </a>
                                     <span>Chapter {prevContent?.sequence_no} - {prevContent?.title}</span>
                                 </div>
                             </>
@@ -169,14 +171,14 @@ const topicpage = () => {
                         {nextContent?.title &&
                             <>
                                 <div className="icon-content-2">
-                                    <Link href={`/chapter/${nextContent?.id}`}>
+                                    <a href={`/chapter/${nextContent?.id}`}>
                                         <p>NEXT</p>
-                                    </Link>
+                                    </a>
                                     <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
                                 </div>
-                                <Link href={`/chapter/${nextContent?.id}`}>
+                                <a href={`/chapter/${nextContent?.id}`}>
                                     <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
-                                </Link>
+                                </a>
                             </>
                         }
                     </div>

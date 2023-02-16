@@ -29,6 +29,7 @@ const editCourse = () => {
             if (res.data.course_thumbnail !== null) {
                 setImage(res.data.course_thumbnail);
             }
+            setcourseData(res.data)
             console.log(res.data);
             reset(res.data);
         }).catch((error) => {
@@ -110,7 +111,7 @@ const editCourse = () => {
                                 </div>
                                 <div className="launch-date">
                                     <h6>Course Launch Date</h6>
-                                    <input className="min-date" type="date" {...register("course_launch_date")} min={moment().format("YYYY-MM-DD")} />
+                                    <input className="min-date" type="date" {...register("course_launch_date")} min={moment(courseData.course_launch_date).format("YYYY-MM-DD")} />
                                 </div>
                             </div>
 
@@ -167,7 +168,7 @@ const editCourse = () => {
                                 </div>
                                 <div className="course-completion">
                                     <h6>Total Training Hour</h6>
-                                    <input type="number" {...register("total_training_hour")} />
+                                    <input type="number" {...register("total_training_hour")} step="any" />
                                 </div>
                             </div>
                         </div>

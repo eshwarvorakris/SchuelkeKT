@@ -29,9 +29,9 @@ const courseModel=class {
     }
 
 
-    async modules(id)
+    async modules(id, query=[])
     {
-        return (await axiosInstance.get(`${this.baseUrl}/${id}/module`)).data;
+        return (await axiosInstance.get(`${this.baseUrl}/${id}/module?${new URLSearchParams(query)}`)).data;
     }
 
 }
