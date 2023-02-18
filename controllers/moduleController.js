@@ -6,7 +6,7 @@ const Content = require("../models/Module_content.model");
 const moduleController = class {
   async index(req, res) {
     await Module
-      .findAndCountAll({ include: ['course'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order:[orderByColumn]  })
+      .findAndCountAll({ include: ['course'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
@@ -15,6 +15,13 @@ const moduleController = class {
       });
   }
   async store(req, res) {
+    let sequence_no = await Module.max('sequence_no', { where: { course_id: req.body.course_id } });
+    if (sequence_no === null || sequence_no == 0) {
+      sequence_no = 0;
+    }
+    sequence_no++;
+    req.body.sequence_no = sequence_no;
+    //console.log("module sequence", sequence_no);
     const data = req.body;
     const rules = {
       module_name: "required",
@@ -61,6 +68,24 @@ const moduleController = class {
       }
     );
   }
+
+  async updateAll(req, res) {
+    //console.log(req.body);
+    let updated = 0;
+    let notUpdated = 0;
+    req.body.modules.forEach(async (curModule) => {
+      const module = await Module.findByPk(curModule.id);
+      if (module) {
+        module.update(curModule);
+        updated++;
+      } else  {
+        notUpdated++
+      }
+      //console.log("curmodule = ", curModule);
+    });
+    res.send({updated:updated, notUpdated:notUpdated});
+  }
+
   async destroy(req, res) {
     const module = await Module.destroy({ where: { id: req.params.id } }).then((result) => {
       return { message: "Module Deleted" };
@@ -73,7 +98,7 @@ const moduleController = class {
     var addedContentCount = 0;
     req.body.content.forEach(async (element) => {
       allContentCount++;
-      if(element?.id != "") {
+      if (element?.id != "") {
         const contentDet = await Content.findByPk(element.id);
         if (contentDet) {
           contentDet.update(element);
@@ -92,9 +117,9 @@ const moduleController = class {
         })
       }
     });
-    console.clear();
-    console.log("allcontents = "+allContentCount+" added content = "+addedContentCount);
-    res.send("allcontents = "+allContentCount+" added content = "+addedContentCount);
+    //console.clear();
+    //console.log("allcontents = " + allContentCount + " added content = " + addedContentCount);
+    res.send("allcontents = " + allContentCount + " added content = " + addedContentCount);
   }
 };
 

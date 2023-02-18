@@ -5,6 +5,9 @@ const Content = require("../models/Module_content.model");
 const CourseView = require("../models/Course_views.model");
 const ModuleView = require("../models/Module_views.model");
 const ChapterView = require("../models/Chapter_views.model");
+const User = require("../models/User.model");
+const Module = require("../models/Module.model");
+const { Op } = require("sequelize");
 const courseController = class {
   async index(req, res) {
     await Course
@@ -19,11 +22,11 @@ const courseController = class {
 
   async getAnyCourseChapterViewed(req, res) {
     if (req.body.course_id !== undefined && req.body.course_id != "undefined") {
-      const courseViewSec = await CourseView.sum('viewed_seconds',{where : {course_id:req.body.course_id, trainee_id:req.userId}});
+      const courseViewSec = await ChapterView.sum('viewed_seconds', { where: { course_id: req.body.course_id, trainee_id: req.userId } });
       await ChapterView
-        .findOne({where: { trainee_id: req.userId, course_id: req.body.course_id }, order: [['chapter_id', 'DESC']] })
+        .findOne({ where: { trainee_id: req.userId, course_id: req.body.course_id }, order: [['chapter_id', 'DESC']] })
         .then((result) => {
-          const data = {courseViewSec:courseViewSec, result:result}
+          const data = { courseViewSec: courseViewSec, result: result }
           //console.log(result);
           res.send(data);
           //res.send("done");
@@ -31,47 +34,159 @@ const courseController = class {
         .catch((error) => {
           console.error("Failed to retrieve data : ", error);
         });
-    } else  {
+    } else {
       return res.status(422).send(
         {
           message: "Please Re-Select Course",
         }
       );
     }
-    
+
+  }
+
+  async getCourseViewData(req, res) {
+    console.clear();
+    //console.log(req.body);
+    let allContentInCourse = await Content.count({ where: { course_id: req.body.course_id } });
+    let courseContentCompletedCount = await ChapterView.count({ where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id, status: 'completed' } });
+    let totalCourseView = await CourseView.findOne({ where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id } });
+    const data = {
+      allContentInCourse: allContentInCourse,
+      courseContentCompletedCount: courseContentCompletedCount,
+      totalCourseView: totalCourseView
+    }
+    res.send(data);
   }
 
   async getChapterView(req, res) {
-    
-    
-    const allContentInCourse = await Content.count({where : {course_id:req.body.course_id}});
-    const curChapterViews = await ChapterView.sum('viewed_seconds' ,{where : {chapter_id:req.body.chapter_id, trainee_id:req.userId}});
+    let isCurrentChapterLocked = false;
+    const allContentInCourse = await Content.count({ where: { course_id: req.body.course_id } });
+    const curChapterViews = await ChapterView.sum('viewed_seconds', { where: { chapter_id: req.body.chapter_id, trainee_id: req.userId } });
+
+    if (curChapterViews === null || curChapterViews == 0) {
+      const prevContentInModule = await Content.findOne(
+        {
+          where: {
+            course_id: req.body.course_id, module_id: req.body.module_id,
+            id: { [Op.lt]: req.body.chapter_id }
+          }, order: [['id', 'DESC']]
+        });
+      if (prevContentInModule === null) {
+        let curModuleSequence = req.body.module_sequence_no;
+        if (curModuleSequence > 1) {
+          let prevModuleSequence = curModuleSequence - 1;
+          const prevModule = await Module.findOne({ attributes: ['id'], where: { course_id: req.body.course_id, sequence_no: prevModuleSequence } });
+          const prevModuleContentCount = await Content.count({ where: { module_id: prevModule?.dataValues?.id } });
+          const prevModuleContentCompleted = await ChapterView.count({ where: { module_id: prevModule?.dataValues?.id, trainee_id: req.userId, status: 'completed' } });
+          if (prevModuleContentCount != prevModuleContentCompleted) {
+            isCurrentChapterLocked = true;
+          }
+        }
+      }
+      else {
+        let prevContentId = prevContentInModule.dataValues.id;
+        const prevChapterViews = await ChapterView.findOne({ where: { chapter_id: req.body.chapter_id, trainee_id: req.userId, status: 'completed' } });
+        if (prevChapterViews === null) {
+          isCurrentChapterLocked = true;
+        }
+      }
+    }
     const courseData = await Course.findOne({
       attributes: ['total_training_hour'],
       where: { id: req.body.course_id }
     });
     const data = {
-      allContentInCourse:allContentInCourse, 
-      courseData:courseData,
-      curChapterViews:curChapterViews
+      allContentInCourse: allContentInCourse,
+      courseData: courseData,
+      curChapterViews: curChapterViews,
+      isCurrentChapterLocked: isCurrentChapterLocked
     };
     res.send(data);
-    
   }
 
   async getModuleView(req, res) {
-    const allContentInModule = await Content.count({where : {module_id:req.body.module_id}});
-    const allContentInCourse = await Content.count({where : {course_id:req.body.course_id}});
-    const curModuleViews = await ModuleView.sum('viewed_seconds' ,{where : {module_id:req.body.module_id, trainee_id:req.userId}});
+    var moduleStatus = 3;// 1 : completed, 2: ongoing, 3:all locked
+    var lastchapter = null;
+    const allContentInModule = await Content.count({ where: { module_id: req.body.module_id } });
+    const allContentInCourse = await Content.count({ where: { course_id: req.body.course_id } });
+    const curModuleViews = await ChapterView.sum('viewed_seconds', { where: { module_id: req.body.module_id, trainee_id: req.userId } });
+    const curModuleContentCompletedCount = await ChapterView.count({ where: { module_id: req.body.module_id, trainee_id: req.userId, status: 'completed' } });
     const courseData = await Course.findOne({
       attributes: ['total_training_hour'],
       where: { id: req.body.course_id }
     });
-    const data = {allContentInModule:allContentInModule, 
-      allContentInCourse:allContentInCourse, 
-      courseData:courseData,
-      curModuleViews:curModuleViews
+    if (curModuleContentCompletedCount == allContentInModule) {
+      moduleStatus = 1;
+    } else {
+      const firstModule = await Module.findOne({ attributes: ['id'], where: { course_id: req.body.course_id }, order: [['sequence_no', 'ASC']] });
+      if (firstModule?.dataValues?.id != req.body.module_id) {
+        let sequence_no = req.body.sequence_no;
+        sequence_no--;
+        moduleStatus = 2;
+        if (sequence_no > 0) {
+          const prevModule = await Module.findOne({ attributes: ['id'], where: { course_id: req.body.course_id, sequence_no: sequence_no } });
+          const prevModuleContentCount = await Content.count({ where: { module_id: prevModule?.dataValues?.id } });
+          const prevModuleContentCompleted = await ChapterView.count({ where: { module_id: prevModule?.dataValues?.id, trainee_id: req.userId, status: 'completed' } });
+          if (prevModuleContentCompleted != prevModuleContentCount) {
+            moduleStatus = 3;
+          }
+        }
+      } else {
+        moduleStatus = 2;
+      }
+    }
+
+    if (moduleStatus == 2 || moduleStatus == 1) {
+      lastchapter = await ChapterView.findOne({ attributes: ['chapter_id'], where: { module_id: req.body.module_id, trainee_id: req.userId }, order: [['chapter_id', 'DESC']] });
+    }
+
+    const data = {
+      allContentInModule: allContentInModule,
+      allContentInCourse: allContentInCourse,
+      courseData: courseData,
+      curModuleViews: curModuleViews,
+      moduleStatus: moduleStatus,
+      lastchapter: lastchapter
     };
+    res.send(data);
+  }
+
+  async getRecentLearning(req, res) {
+    const lastChapter = await ChapterView.findOne({ include: ['course'], where: { trainee_id: req.userId, status: 'ongoing' }, order: [['chapter_id', 'DESC']] });
+    var data = null;
+    if (lastChapter !== null) {
+      //console.log("lastChapter", lastChapter.dataValues);
+      let allContentInCourse = await Content.count({ where: { course_id: lastChapter.dataValues.course_id } });
+      let courseContentCompletedCount = await ChapterView.count({ where: { course_id: lastChapter.dataValues.course_id, trainee_id: req.userId, status: 'completed' } });
+      let totalCourseView = await ChapterView.sum('viewed_seconds', { where: { course_id: lastChapter.dataValues.course_id, trainee_id: req.userId } });
+      data = {
+        allContentInCourse: allContentInCourse,
+        courseContentCompletedCount: courseContentCompletedCount,
+        totalCourseView: totalCourseView,
+        lastChapter: lastChapter
+      }
+    } else {
+      data = {
+        lastChapter: lastChapter
+      }
+    }
+    res.send(data);
+  }
+
+  async getEachCourseStat(req, res) {
+    const countTrainee = await CourseView.count({ where: { course_id:req.body.course_id } });
+    const countCourseCompletedUsers = await CourseView.count( { where: { course_id:req.body.course_id, status:'completed' } } );
+    const timeSpentByUserInCourse = await CourseView.sum('viewed_seconds', { where: { course_id:req.body.course_id } } );
+    let userCompletePercent = 0;
+    if(countCourseCompletedUsers > 0 && countTrainee > 0) {
+      userCompletePercent = ((countCourseCompletedUsers/countTrainee)*100);
+    }
+    let weeksSpent =  Math.floor((((timeSpentByUserInCourse / 60) / 60) / 24) / 7);
+    let data = {
+      traineeEnrolled:countTrainee,
+      userCompletePercent:userCompletePercent,
+      weeksSpent:weeksSpent
+    }
     res.send(data);
   }
 

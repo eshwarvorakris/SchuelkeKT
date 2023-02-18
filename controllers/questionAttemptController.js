@@ -20,8 +20,8 @@ const questionAttemptController = class {
 
   async traineeAttemptList(req, res) {
     req.body.trainee_id = req.userId;
-    console.clear();
-    console.log(req.body);
+    //console.clear();
+    //console.log(req.body);
     var outResult = [];
     var maxPercent = 0;
     var curData = [];
@@ -29,7 +29,7 @@ const questionAttemptController = class {
       let questionResp = async () => {
         var i = 0;
         for (const curCourse of allCourses) {
-          console.log("cur" + i, curCourse.DISTINCT);
+          //console.log("cur" + i, curCourse.DISTINCT);
           maxPercent = await AssignmentAttempt.max('correct_percentage',
             { where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
           );
@@ -44,7 +44,7 @@ const questionAttemptController = class {
       }
       let retResp = async () => {
         await questionResp();
-        console.log("outreult", outResult)
+        //console.log("outreult", outResult)
         res.send(outResult);
       }
       retResp();
@@ -69,8 +69,8 @@ const questionAttemptController = class {
   }
 
   async traineeAttempts(req, res) {
-    console.clear();
-    console.log(req.body);
+    //console.clear();
+    //console.log(req.body);
     var outResult = [];
     var maxPercent = 0;
     var curData = [];
@@ -82,7 +82,7 @@ const questionAttemptController = class {
       let questionResp = async () => {
         var i = 0;
         for (const curCourse of allCourses) {
-          console.log("cur" + i, curCourse.DISTINCT);
+          //console.log("cur" + i, curCourse.DISTINCT);
           maxPercent = await AssignmentAttempt.max('correct_percentage',
             { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
           );
@@ -103,7 +103,7 @@ const questionAttemptController = class {
       }
       let retResp = async () => {
         await questionResp();
-        console.log("outreult", outResult)
+        //console.log("outreult", outResult)
         res.send(outResult);
       }
       retResp();
@@ -140,9 +140,9 @@ const questionAttemptController = class {
           { where: { question_id: curQuestion.question, is_answer: true, id: answerAr }, attributes: ['id', 'is_answer'] }
         ).then(async (optionResult) => {
           if (answerAr.length == optionResult.length) {
-            console.log(curQuestion.question, "correct");
+            //console.log(curQuestion.question, "correct");
           } else {
-            console.log(curQuestion.question, "not correct");
+            //console.log(curQuestion.question, "not correct");
           }
         });
       } else {
@@ -152,9 +152,9 @@ const questionAttemptController = class {
   }
 
   async getSubmitted(req, res) {
-    console.clear();
+    //console.clear();
     req.body.trainee_id = req.userId;
-    console.log(req.body);
+    //console.log(req.body);
     const attempt = await AssignmentAttempt.findOne({
       attributes: ['id'],
       where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'drafted' },
@@ -177,9 +177,9 @@ const questionAttemptController = class {
   }
 
   async store(req, res) {
-    console.clear();
+    //console.clear();
     req.body.trainee_id = req.userId;
-    console.log(req.body);
+    //console.log(req.body);
     var attemptId = 0;
     const attempt = await AssignmentAttempt.findOne({
       attributes: ['id'],
@@ -203,7 +203,7 @@ const questionAttemptController = class {
             attemptRes(attemptId);
             return attemptId;
           })
-        console.log("not found");
+        //console.log("not found");
       }
     }).catch((error) => {
       return res.status(422).send(
@@ -223,7 +223,7 @@ const questionAttemptController = class {
       let totalQuestion = 0;
       let answeredQuestion = 0;
       var assignmentAttempt = [];
-      console.log(req.body.questions.length);
+      //console.log(req.body.questions.length);
       let questionResp = async () => {
         for (const curQuestion of req.body.questions) {
           is_correct = false;
@@ -243,12 +243,12 @@ const questionAttemptController = class {
               { where: { question_id: curQuestion.question, is_answer: true, id: answerAr }, attributes: ['id', 'is_answer'] }
             ).then(async (optionResult) => {
               if (answerAr.length == optionResult.length) {
-                console.log(curQuestion.question, "correct");
+                //console.log(curQuestion.question, "correct");
                 is_correct = true;
                 correctQues.push(curQuestion.question);
               } else {
                 incorrectQues.push(curQuestion.question);
-                console.log(curQuestion.question, "not correct");
+                //console.log(curQuestion.question, "not correct");
               }
               const checkQuestion = await QuestionAttempt.findOne(
                 { where: { assignment_attempt_id: attemptId, question: curQuestion.question } }
@@ -284,7 +284,7 @@ const questionAttemptController = class {
         var resultData = [];
         resultData.push("assignmentAttempt", assignmentAttempt);
         var answerPercent = (correctQues.length / totalQuestion) * 100;
-        console.log("percent = ", answerPercent);
+        //console.log("percent = ", answerPercent);
         await AssignmentAttempt
           .update({ total_questions: totalQuestion, attempted_questions: answeredQuestion, correct_percentage: answerPercent }, { where: { id: attemptId } })
         if (req.body.status == 'submitted') {
