@@ -26,6 +26,7 @@
     "moment": "^2.29.4",
     "next": "^13.0.6",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.7.0",
     "react-data-table-component": "^7.5.3",
     "react-doc-viewer": "^0.1.5",

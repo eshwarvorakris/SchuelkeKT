@@ -35,6 +35,7 @@ export default function checkTimer({ sessionTimer = false}) {
             isSwalFired = false;
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
+              sessionStorage.removeItem("access_token");
               window.location.assign("/login");
             }
             else {

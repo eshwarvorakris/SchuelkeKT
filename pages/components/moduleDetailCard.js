@@ -18,13 +18,14 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
   QueryParam.order_in = router.query?.order_in || "title";
   //QueryParam.content_type = "asc";
   const rand = 1 + Math.random() * (100 - 1);
-  const moduleStatus = 2;  // 1 : completed, 2: ongoing, 3:all locked
+  const [moduleStatus, setmoduleStatus] = useState(2);  // 1 : completed, 2: ongoing, 3:all locked
   const [contents, setContent] = useState([]);
   const [perContentMin, setPerContentMin] = useState(0);
   const [learnButtonText, setLearnButtonText] = useState("");
   const [percentCompleted, setPercentCompleted] = useState(0);
   const [timeLeft, setTimeLeft] = useState("");
   const [moduleLeftHour, setModuleLeftHour] = useState("");
+  const [lastChapterId, setLastChapterId] = useState(0);
   //const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id || null, async () => await contentModel.list({ module_id: moduleData?.id }), config.swrConfig);
   //console.log(chapters);
   useEffect(() => {
@@ -33,47 +34,62 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
       const moduleViewData = new FormData();
       moduleViewData.append("course_id", moduleData?.course_id);
       moduleViewData.append("module_id", moduleData?.id);
+      moduleViewData.append("sequence_no", moduleData?.sequence_no);
 
       CourseViewModel.getModuleView(moduleViewData).then((res) => {
-        //console.log("module view = ",res);
-        let percontentsec = 0;
-        let courseTimeInHour = res?.data?.courseData?.total_training_hour;
-        let courseTimeInSec = courseTimeInHour * 60 * 60;
-        let percentage = 0;
-        let currentModuleMaxSec = 0;
-        if(res?.data?.allContentInModule > 0) {
-          percontentsec = parseInt(courseTimeInSec / res?.data?.allContentInCourse);
-          currentModuleMaxSec = percontentsec * res?.data?.allContentInModule;
-          let curModuleViewSec = res?.data?.curModuleViews;
-          if(curModuleViewSec > 0) {
-            percentage = parseInt((curModuleViewSec / currentModuleMaxSec) * 100);
-            if(percentage == 100) {
-              let maxmodulemin = Math.floor(currentModuleMaxSec / 60);
-              var Hours = Math.floor(maxmodulemin / 60);
-              var minutes = maxmodulemin % 60;
-              var hourOut = Hours + "hrs " + minutes + "mins left";
-              
+        console.log("module view = ",res);
+        setmoduleStatus(res?.data?.moduleStatus);
+        setLastChapterId(res?.data?.lastchapter?.chapter_id);
+        if(res?.data?.moduleStatus != 3) {
+          let percontentsec = 0;
+          let courseTimeInHour = res?.data?.courseData?.total_training_hour;
+          let courseTimeInSec = courseTimeInHour * 60 * 60;
+          let percentage = 0;
+          let currentModuleMaxSec = 0;
+          if(res?.data?.allContentInModule > 0) {
+            percontentsec = parseInt(courseTimeInSec / res?.data?.allContentInCourse);
+            currentModuleMaxSec = percontentsec * res?.data?.allContentInModule;
+            let curModuleViewSec = res?.data?.curModuleViews;
+            if(curModuleViewSec > currentModuleMaxSec) {
+              percentage = 100;
+              var hourOut = "0hrs 0mins left";
               setModuleLeftHour(hourOut)
-            } else  {
-              let maxmodulemin = Math.floor(curModuleViewSec / 60);
-              var Hours = Math.floor(maxmodulemin / 60);
-              var minutes = maxmodulemin % 60;
-              var hourOut = Hours + "hrs " + minutes + "mins left";
-              setModuleLeftHour(hourOut)
+            } else {
+              if(curModuleViewSec > 0) {
+                if(curModuleViewSec > currentModuleMaxSec) {
+                  percentage = 100;
+                }
+                else {
+                  percentage = parseInt((curModuleViewSec / currentModuleMaxSec) * 100);
+                }
+                
+                if(percentage == 100) {
+                  var hourOut = "0hrs 0mins left";
+                  setModuleLeftHour(hourOut)
+                } else  {
+                  let diffSec = currentModuleMaxSec - curModuleViewSec;
+                  let maxmodulemin = Math.floor(diffSec / 60);
+                  var Hours = Math.floor(maxmodulemin / 60);
+                  var minutes = maxmodulemin % 60;
+                  var hourOut = Hours + "hrs " + minutes + "mins left";
+                  setModuleLeftHour(hourOut)
+                }
+              } else {
+                
+                let maxmodulemin = Math.floor(currentModuleMaxSec / 60);
+                var Hours = Math.floor(maxmodulemin / 60);
+                var minutes = maxmodulemin % 60;
+                var hourOut = Hours + "hrs " + minutes + "mins left";
+                setModuleLeftHour(hourOut)
+              }
             }
-          } else {
-            let maxmodulemin = Math.floor(currentModuleMaxSec / 60);
-            var Hours = Math.floor(maxmodulemin / 60);
-            var minutes = maxmodulemin % 60;
-            var hourOut = Hours + "hrs " + minutes + "mins left";
-            setModuleLeftHour(hourOut)
+            setPercentCompleted(percentage);
           }
-          setPercentCompleted(percentage);
         }
       });
 
       contentModel.list({ module_id: moduleData?.id }).then((res) => {
-        console.log("perModuleMin = ",perModuleMin);
+        //console.log("perModuleMin = ",perModuleMin);
         if(perModuleMin > 0 && res?.data?.length > 0) {
           setPerContentMin(perModuleMin / res?.data?.length);
         }
@@ -82,8 +98,12 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
         console.log(error);
       });
     }
-    console.log("all contents1111 => ", contents?.data)
+    //console.log("all contents1111 => ", contents?.data)
   }, []);
+
+  const contentLink = function () {
+    helper.sweetalert.warningToast("Please complete previous module chapters.");
+  }
   return (
     <>
     {(contents?.data?.length > 0) &&
@@ -106,7 +126,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
                 <div className="button-progress-container">
                   {(moduleStatus == 2 || moduleStatus == 1) &&
                     <>
-                      <Link className="topic-link" href="#">
+                      <Link className="topic-link" href={`/chapter/${lastChapterId}`}>
                         <button type="button" className="start-learning-btn d-flex gap-2">
                           <div className="blank-class">
 
@@ -132,7 +152,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
 
                   {moduleStatus == 3 &&
                     <>
-                      <button type="button" className="start-learning-btn">
+                      <button type="button" className="start-learning-btn" onClick={() => contentLink()}>
                         Start Learning
                       </button>
                     </>
@@ -147,21 +167,17 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
           {
             (() => {
               if (contents?.data?.length > 0) {
+                //console.log("first  id = ", contents?.data?.[0].id);
                 return (
                   <>
                     {contents?.data?.map((item, index) => {
-                      item.isLocked = true;
-                      item.isFirst = false;
-                      if(moduleData.chapterViewId !== undefined) {
-                        if(moduleData.chapterViewId == 0 && index == 0) {
-                          item.isLocked = false;
-                          item.isFirst = true;
-                        } else if (moduleData.chapterViewId == item.id) {
-                          item.isLocked = false;
-                        }
-                      }
                       return (
-                        <ChapterCard key={`module${item.id}`} chapterData={item} chapterIndex={index} perContentMin={perContentMin} />
+                        <ChapterCard key={`module${item.id}`} 
+                          chapterData={item} 
+                          chapterIndex={index} 
+                          perContentMin={perContentMin} 
+                          moduleData={moduleData} 
+                          firstChapterId={contents?.data?.[0]?.id} />
                       )
                     })}
                   </>

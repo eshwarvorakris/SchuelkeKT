@@ -6,22 +6,32 @@ import { helper } from '../../lib/helper';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import AppContext from "../../lib/appContext";
-export default function chapterCard({ chapterData, chapterIndex, perContentMin }) {
+export default function chapterCard({ chapterData, chapterIndex, perContentMin, moduleData, firstChapterId }) {
   const router = useRouter();
   const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
   const rand = 1 + Math.random() * (100 - 1);
-  var chapterStatus = "locked"; // ongoing / completed / locked
+  
+  const [chapterStatus, setchapterStatus] = useState("ongoing"); // ongoing / completed / locked
   var linkOut = '#';
-  chapterStatus = "ongoing";
+  
   linkOut = '/chapter/'+chapterData?.id;
   const [percent, setPercent] = useState(0);
   var curChapterViewSeconds = 0;
   useEffect(() => {
+    //console.log("chapterData.isLocked", chapterData.isLocked)
+    
     const chapterForm = new FormData();
     chapterForm.append("chapter_id", chapterData.id);
     chapterForm.append("course_id", chapterData.course_id);
     chapterForm.append("module_id", chapterData.module_id);
+    chapterForm.append("module_sequence_no", moduleData.sequence_no);
+    let isModuleFirstChapter = false;
+    if(firstChapterId == chapterData.id) {
+      isModuleFirstChapter = true;
+    }
+    chapterForm.append("module_first_chapter_id", firstChapterId);
+    chapterForm.append("isModuleFirstChapter", isModuleFirstChapter);
     CourseViewModel.getChapterView(chapterForm).then((res) => {
       //console.log("cur course view", res.data)
       if(res?.data !== null || res?.data !== "") {
@@ -29,14 +39,21 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin }
           let courseTotalSec = (res?.data?.courseData?.total_training_hour * 60 * 60);
           let perContentSec = courseTotalSec / res?.data?.allContentInCourse;
           let currentChapterView = res?.data?.curChapterViews;
-          let percentage = parseInt((currentChapterView / perContentSec) * 100);
-          if(percentage > 0) {
-            
-            chapterStatus = "ongoing";
-            if(percentage == 100) {
-              chapterStatus = "completed";
+          let percentage = 0;
+          if(currentChapterView > perContentSec) {
+            percentage = 100;
+          } else {
+            percentage = parseInt((currentChapterView / perContentSec) * 100);
+            if(percentage > 0) {
+              
+              setchapterStatus("ongoing");
+              if(percentage == 100) {
+                setchapterStatus("completed")
+              }
+              setPercent(percentage);
+            } else if(res?.data?.isCurrentChapterLocked){
+              setchapterStatus("locked");
             }
-            setPercent(percentage);
           }
         }
       }
@@ -47,12 +64,13 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin }
   
   
   const contentLink = function () {
-    router.push(`/chapter/${chapterData?.id}`);
-    // if(chapterStatus == "ongoing" || chapterStatus == "completed") {
-    //   router.push(`/chapter/${chapterData?.id}`);
-    // } else {
-    //   helper.sweetalert.warningToast("Please complete previous chapters.");
-    // }
+    //router.push(`/chapter/${chapterData?.id}`);
+    if(chapterStatus == "ongoing" || chapterStatus == "completed") {
+      //window.location.assign(`/chapter/${chapterData?.id}`);
+      router.push(`/chapter/${chapterData?.id}`);
+    } else {
+      helper.sweetalert.warningToast("Please complete previous chapters.");
+    }
   }
   
   return (

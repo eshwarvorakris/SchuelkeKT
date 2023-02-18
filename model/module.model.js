@@ -26,6 +26,11 @@ const moduleModel=class {
     {
         return await axiosInstance.put(`${this.baseUrl}/${id}`,data);
     }
+
+    async updateAll(data=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/update_all`,data);
+    }
     
     async delete(id)
     {

@@ -1,13 +1,18 @@
 import widgetModel from "../../model/widget.model";
 import useSWR from 'swr';
+import { useEffect } from "react";
 export default function adminWidgets() {
-  const { data: courseCount, mutate: loadTotal } = useSWR('courseCount', async () => await widgetModel.courseCount());
+  const { data: traineeKpi, mutate: loadTraineeKpi } = useSWR('traineeKapi', async () => await widgetModel.traineeKpis());
+  
+  useEffect(() => {
+    console.log("traineeKpi", traineeKpi);
+  }, [traineeKpi]);
   return (
     <>
       <div className="total-courses">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-            <h1 className="text-light" >{courseCount?.data?.total}</h1>
+            <h1 className="text-light" >{traineeKpi?.totalCourse}</h1>
           </div>
           <div className="explicit-info text-light">
             <p>Total Courses</p>
@@ -20,7 +25,7 @@ export default function adminWidgets() {
       <div className="enrolled-trainees">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-            <h1 className="text-light">{courseCount?.data?.total}</h1>
+            <h1 className="text-light">{traineeKpi?.totalCourse - traineeKpi?.totalCourseCompleted}</h1>
           </div>
           <div className="explicit-info text-light">
             <p>Courses Pending</p>
@@ -33,7 +38,7 @@ export default function adminWidgets() {
       <div className="training-hours">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-            <h1 className="text-light">0</h1>
+            <h1 className="text-light">{traineeKpi?.totalCourseCompleted}</h1>
           </div>
           <div className="explicit-info text-light">
             <p>Courses Completed</p>
@@ -46,10 +51,10 @@ export default function adminWidgets() {
       <div className="courses-completion">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-            <h1 className="text-light">0</h1>
+            <h1 className="text-light">{traineeKpi?.totalTrainingHour}</h1>
           </div>
           <div className="explicit-info text-light">
-            <p>Total Learing Hourss</p>
+            <p>Total Learing Mins</p>
           </div>
         </div>
         <div className="right-icon">

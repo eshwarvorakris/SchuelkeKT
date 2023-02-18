@@ -1,11 +1,23 @@
 import Link from "next/link";
-
+import { useRouter } from 'next/router';
+import { useState } from "react";
+import { useEffect } from "react";
+import CourseViewModel from "../../model/cource_view.model";
 export default function courseCard({ courseData }) {
   let courseImg = "/trainer-images/dashboard images/thumbnails/thumbnaila.png";
   if(courseData?.course_thumbnail !== null && courseData?.course_thumbnail != "")
   {
     courseImg = courseData?.course_thumbnail;
   }
+  const [statData, setStatData] = useState([]);
+  useEffect (()=> {
+    const form = new FormData();
+    form.append("course_id", courseData.id);
+    CourseViewModel.getEachCourseStat(form).then((res)=> {
+      console.log("resonse each", res.data);
+      setStatData(res?.data)
+    })
+  },[])
   return (
     <>
       <div className="course-info-card-1 course-card">
@@ -24,18 +36,18 @@ export default function courseCard({ courseData }) {
         <div className="statistical-details">
           <div className="enrolled-detail">
             <p>Enrolled : </p>
-            <span>604 Trainees</span>
+            <span>{statData?.traineeEnrolled} Trainees</span>
           </div>
           <div className="meter-detail">
             <div className="progress">
               <div className="progress-bar" role="progressbar" aria-label="Basic example"
-                style={{ width: "75%", ariaValuenow: "75", ariaValuemin: "0", ariaValuemax: "100" }}>
+                style={{ width: statData?.userCompletePercent+"%", ariaValuenow: statData?.userCompletePercent, ariaValuemin: "0", ariaValuemax: "100" }}>
 
               </div>
             </div>
           </div>
           <div className="percentage-detail">
-            <p>80% Trainees Completed</p>
+            <p>{statData?.userCompletePercent}% Trainees Completed</p>
           </div>
         </div>
         <div className="duration-details">
@@ -44,7 +56,7 @@ export default function courseCard({ courseData }) {
             <span>{courseData?.week_duration} Weeks</span>
           </div>
           <div className="average-time-detail">
-            <p>Average Time Spent: 5 weeks</p>
+            <p>Average Time Spent: {statData?.weeksSpent} weeks</p>
           </div>
         </div>
         <div className="edit-btn">

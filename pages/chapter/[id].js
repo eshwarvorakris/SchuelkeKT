@@ -19,6 +19,7 @@ const topicpage = () => {
     const [courseId, setCourseId] = useState(null);
     const [contentUrl, setContentUrl] = useState(null);
     const [chapterId, setChapterId] = useState(null);
+    const [curExt, setCurExt] = useState("");
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     const QueryParam = router.query;
@@ -28,6 +29,7 @@ const topicpage = () => {
     const [showDocs, setShowDocs] = useState("d-none");
 
     useEffect(() => {
+        setShowDocs("d-none");
         setNextContent([]);
         setPrevContent([]);
         setContentUrl(null);
@@ -36,8 +38,13 @@ const topicpage = () => {
             setCurContent(contentData?.data);
             //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
             setContentUrl(contentData?.data?.file_url);
-            if (contentData?.data?.file_ext != "mp4") {
-                setShowDocs("");
+            if(contentData?.data?.file_url) {
+                const fileNameAr = contentData?.data?.file_url.split('.');
+                const fileExt = fileNameAr[fileNameAr.length - 1];
+                setCurExt(fileExt)
+                if (fileExt != "mp4") {
+                    setShowDocs("");
+                }
             }
             console.log(contentData?.data?.file_url);
             contentModel.list({ module_id: contentData?.data?.module_id }).then((res) => {
@@ -118,8 +125,8 @@ const topicpage = () => {
                 <div className="presentation">
                     {
                         (() => {
-                            if (curContent?.file_url != "") {
-                                if (curContent?.file_ext == "mp4") {
+                            if (curExt != "") {
+                                if (curExt == "mp4") {
                                     return (
                                         <div key={Math.random()}>
                                             <Player>

@@ -5,6 +5,7 @@ import auth from "../../../../model/auth.model";
 import userModal from "../../../../model/user.model";
 import courseModel from "../../../../model/course.model";
 import assignmentModel from "../../../../model/assignment.model";
+import widgetModel from "../../../../model/widget.model";
 import AdminCourseCard from "../../../components/adminCourseCard";
 import { useRouter } from "next/router";
 import { config } from '../../../../lib/config';
@@ -27,13 +28,14 @@ const editTrainee = () => {
 
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: profileData });
-
+    const [statusKpis, setStatusKpis] = useState([]);
     useEffect(() => {
         //console.log("Courses => ", courses?.data)
         if (router.query.id !== undefined) {
+
             userModal.detail(router.query.id).then((res) => {
                 setprofileData(res?.data);
-                console.log(res?.data);
+                //console.log(res?.data);
                 reset(res?.data);
             }).catch((error) => {
                 console.log(error);
@@ -41,8 +43,14 @@ const editTrainee = () => {
             const assignmentUser = new FormData();
             assignmentUser.append("trainee_id", router.query.id);
             assignmentModel.traineeAttempts(assignmentUser).then((submittedRes) => {
-                console.log("list", submittedRes);
+                //console.log("list", submittedRes);
                 setAllAsignments(submittedRes);
+            });
+            widgetModel.traineeStatusKpis(assignmentUser).then((res) => {
+                console.log("kpi response", res);
+                setStatusKpis(res);
+            }).catch((error) => {
+                console.log(error);
             });
         }
     }, [router, reset]);
@@ -95,7 +103,7 @@ const editTrainee = () => {
 
                     <div className="trainee-topic-cards row" style={{marginBottom:'unset'}}>
                         {courses?.data?.map((item, index) => {
-                            console.log(item);
+                            //console.log(item);
                             return (
                                 <AdminCourseCard key={`courseCard${index}`} courseData={item} courseIndex={index} />
                             )
@@ -204,7 +212,7 @@ const editTrainee = () => {
                                 <div className="total-courses" style={{ padding: '1rem 2rem' }}>
                                     <div className="left-info" style={{ justifySelf: 'unset' }}>
                                         <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >46</h1>
+                                            <h1 className="text-light" >{statusKpis.totalCourse}</h1>
                                         </div>
                                         <div className="explicit-info text-light">
                                             <p>Total Courses</p>
@@ -218,7 +226,7 @@ const editTrainee = () => {
                                 <div className="total-courses" style={{ padding: '1rem 2rem' }}>
                                     <div className="left-info" style={{ justifySelf: 'unset' }}>
                                         <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >0</h1>
+                                            <h1 className="text-light" >{statusKpis.totalCourseCompleted}</h1>
                                         </div>
                                         <div className="explicit-info text-light">
                                             <p>Course Completed</p>
@@ -232,7 +240,7 @@ const editTrainee = () => {
                                 <div className="total-courses" style={{ padding: '1rem 2rem' }}>
                                     <div className="left-info" style={{ justifySelf: 'unset' }}>
                                         <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >92</h1>
+                                            <h1 className="text-light" >{statusKpis.averageScore}</h1>
                                         </div>
                                         <div className="explicit-info text-light">
                                             <p>Average Score</p>
@@ -246,7 +254,7 @@ const editTrainee = () => {
                                 <div className="total-courses" style={{ padding: '1rem 2rem' }}>
                                     <div className="left-info" style={{ justifySelf: 'unset' }}>
                                         <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >92</h1>
+                                            <h1 className="text-light" >{statusKpis.totalTrainingHour}</h1>
                                         </div>
                                         <div className="explicit-info text-light">
                                             <p>Training Time</p>

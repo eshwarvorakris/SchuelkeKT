@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { config } from '../../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../../lib/helper';
+import moment from 'moment';
 import Link from 'next/link';
 const editTrainee = () => {
     const router = useRouter();
@@ -20,7 +21,9 @@ const editTrainee = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses, mutate: couresListMutate, error, isLoading } = useSWR("couresList", async () => await courseModel.list(), config.swrConfig);
+    const [allCourses, setAllCourses] = useState([]);
+    const [courseSubmitted, setCourseSubmitted] = useState(0);
+    //const { data: courses, mutate: couresListMutate, error, isLoading } = useSWR("couresList", async () => await courseModel.list(), config.swrConfig);
 
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: profileData });
@@ -30,8 +33,17 @@ const editTrainee = () => {
         if (router.query.id !== undefined) {
             userModal.detail(router.query.id).then((res) => {
                 setprofileData(res?.data);
-                console.log(res?.data);
+                //console.log(res?.data);
                 reset(res?.data);
+            }).catch((error) => {
+                console.log(error);
+            });
+            QueryParam.trainer_id = router.query.id;
+            delete (QueryParam.id);
+            courseModel.list(QueryParam).then((res) => {
+                //console.log("courses => ",res);
+                setCourseSubmitted(res?.data.length);
+                setAllCourses(res?.data);
             }).catch((error) => {
                 console.log(error);
             });
@@ -73,7 +85,7 @@ const editTrainee = () => {
                         </div>
                         <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>Courses
                             Submitted :</span>
-                            <h6> <strong>6</strong></h6>
+                            <h6> <strong>{courseSubmitted}</strong></h6>
                         </div>
                         <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
                             <h6><strong>{profileData?.email}</strong></h6>
@@ -81,74 +93,46 @@ const editTrainee = () => {
                     </div>
 
                     <div className="assignment-table">
-                        
+
                         <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td style={{ width: '15%' }}>Assignment Name</td>
-                                        <td style={{ width: '15%' }}>Submimssion Status</td>
-                                        <td style={{ width: '5%' }}>No. of Attempts</td>
-                                        <td style={{ width: '5%' }}>Average Attempts</td>
-                                        <td style={{ width: '5%' }}>Average Score</td>
-                                        <td style={{ width: '5%' }}>Obtained Score</td>
-                                        <td style={{ width: '5%' }}>Passing Status</td>
+                                        <td style={{ width: '5%' }}>#</td>
+                                        <td style={{ width: '15%' }}>Course Name</td>
+                                        <td style={{ width: '15%' }}>Topic</td>
+                                        <td style={{ width: '5%' }}>Date Of<br />Launch</td>
+                                        <td style={{ width: '5%' }}>Due<br />Date</td>
+                                        <td style={{ width: '5%' }}>No Of<br />Modules</td>
+                                        <td style={{ width: '5%' }}>Training<br />Time</td>
+                                        <td style={{ width: '5%' }}>Approval<br />Status</td>
                                     </tr>
-                                    <tr>
-                                        <td>Assignment 1</td>
-                                        <td className="text-success">
-                                            <span>Submitted</span>
-                                        </td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>92%</td>
-                                        <td className="text-success">97%</td>
-                                        <td className="text-success">Pass</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Assignment 2</td>
-                                        <td className="text-danger">
-                                            <span>Not Submitted</span>
-                                        </td>
-                                        <td>-</td>
-                                        <td>1</td>
-                                        <td>90%</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Assignment 3</td>
-                                        <td className="text-success">
-                                            <span>Submitted</span>
-                                        </td>
-                                        <td>2</td>
-                                        <td>2</td>
-                                        <td>94%</td>
-                                        <td className="text-warning">86%</td>
-                                        <td className="text-success">Pass</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Assignment 4</td>
-                                        <td className="text-success">
-                                            <span>Submitted</span>
-                                        </td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>93%</td>
-                                        <td className="text-danger">24%</td>
-                                        <td className="text-danger">Fail</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Final Assignment</td>
-                                        <td className="">
-                                            <span>Not Started</span>
-                                        </td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
+                                    {allCourses?.map((item, index) => {
+                                        let approveClass = "";
+                                        let approveStatus = "Pending";
+                                        if(item.status == "approved") {
+                                            approveClass = "text-success";
+                                            approveStatus = "Approved";
+                                        } else if (item.status == "rejected") {
+                                            approveClass = "text-danger";
+                                            approveStatus = "Rejected";
+                                        }
+                                        return (
+                                            <tr>
+                                                <td>{index+1}</td>
+                                                <td>{item.course_name}</td>
+                                                <td>{item.category.category_name}</td>
+                                                <td>{item.course_launch_date}</td>
+                                                <td>{moment(item.course_launch_date).add(item.week_duration, 'weeks').format("Do MMM YY")}</td>
+                                                <td>{item.total_modules}</td>
+                                                <td>{item.total_training_hour}</td>
+                                                <td className={approveClass}>
+                                                    <span>{approveStatus}</span>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                    
                                 </tbody>
                             </table>
                         </div>

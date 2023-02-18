@@ -7,10 +7,11 @@ import Link from 'next/link';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import ReactPaginate from 'react-paginate';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from "../../../lib/appContext";
 import { useForm } from "react-hook-form";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 function Page() {
   const [modalStatus, setModalStatus] = useState(false);
   const [modalUpdateStatus, setModalUpdateStatus] = useState(false);
@@ -19,7 +20,7 @@ function Page() {
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
-  QueryParam.order_by = router.query?.order_by || "id";
+  QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "asc";
   const [formErrors, setFormErrors] = useState([]);
   const [moduleData, setModuleData] = useState([]);
@@ -29,13 +30,13 @@ function Page() {
   const [updateDesc, setupdateDesc] = useState(null);
   const [dataUpdated, setdataUpdated] = useState(null);
   //const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
-  
+
   // useEffect(() => {
   //   console.log("moduleData",moduleData);
   // }, []);
 
   const updateList = function () {
-    courseModule.modules(QueryParam?.id).then((res) => {
+    courseModule.modules(QueryParam?.id, QueryParam).then((res) => {
       setModuleData(res?.data);
     }).catch((error) => {
       console.log(error);
@@ -43,7 +44,7 @@ function Page() {
   }
 
   useEffect(() => {
-    if(QueryParam?.id !== undefined) {
+    if (QueryParam?.id !== undefined) {
       updateList();
     }
   }, [QueryParam?.id]);
@@ -61,10 +62,10 @@ function Page() {
   }
 
   const moduleUpdate = function (id) {
-    console.log(document.getElementById('description'+id).value);
+    console.log(document.getElementById('description' + id).value);
     setupdateId(id);
-    setupdateName(document.getElementById('name'+id).value);
-    setupdateDesc(document.getElementById('description'+id).value);
+    setupdateName(document.getElementById('name' + id).value);
+    setupdateDesc(document.getElementById('description' + id).value);
     setModalUpdateStatus(true);
   }
 
@@ -98,6 +99,48 @@ function Page() {
     setupdateId(null);
     setupdateName(null);
     setupdateDesc(null);
+  }
+
+  const saveModuleButton= useRef(null);
+  const saveForm= useRef(null);
+  function handleDragEnd(result) {
+    if (!result.destination) {
+      return;
+    }
+
+    const newItems = Array.from(moduleData);
+    const [removed] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, removed);
+    let seq = 0;
+    
+    newItems?.map((item, index) => {
+      seq++;
+      item.sequence_no = seq;
+    });
+    console.log("reorder", newItems);
+    updateAllModule(newItems)
+    //setModuleData(newItems);
+    //saveModuleButton.current.click()
+    
+  }
+
+  const updateAllModule = async (newItems) => {
+    //event.preventDefault();
+    let moduleForm = new FormData();
+    let i = 0;
+    newItems?.map((item, index) => {
+      moduleForm.append('modules['+i+'][id]', item.id);
+      moduleForm.append('modules['+i+'][sequence_no]', item.sequence_no);
+      i++;
+    });
+    //moduleForm.append('modules', JSON.stringify(newItems));
+    await moduleModel.updateAll(moduleForm).then((res) => {
+      //console.log("check update res", res.data);
+      helper.sweetalert.toast("Modules Updated");
+      setModuleData(newItems);
+    }).catch((error) => {
+      setFormErrors(error.response?.data?.errors);
+    })
   }
 
   const columns = React.useMemo(() => [
@@ -161,68 +204,84 @@ function Page() {
           <div className="module-heading">
             <h6>Modules Name</h6>
           </div>
+          
+            <div className="wrapper custom-scroll" style={{ padding: 'unset', height: 'fit-content' }}>
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="itemList">
+                  {(provided) => (
+                    <ul {...provided.droppableProps} ref={provided.innerRef}>
+                      {moduleData?.map((item, index) => {
+                        return (
+                          <Draggable key={item.id} draggableId={`${item.module_name}-${item.id}`} index={index}>
+                            {(provided) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              className="module-card module-card-1 d-flex">
+                                  <div className="left-side-card d-flex">
+                                    <div className="drag-container">
+                                      <img className=""
+                                        src="/trainer-images/edit-module/Vector (Stroke).png"
+                                        alt="drag here" />
+                                    </div>
+                                    <div className="input-container d-flex gap-2">
+                                      <div className="module-card-name">
+                                        <span>Module {index + 1} -</span>
+                                      </div>
 
-          <div className="wrapper custom-scroll" style={{ padding: 'unset', height: 'fit-content' }}>
-            {moduleData?.map((item, index) => {
-              return (
-                <>
-                  <div key={item.id} className="module-card module-card-1 d-flex">
-                    <div className="left-side-card d-flex">
-                      <div className="drag-container">
-                        <img className=""
-                          src="/trainer-images/edit-module/Vector (Stroke).png"
-                          alt="drag here" />
-                      </div>
-                      <div className="input-container d-flex gap-2">
-                        <div className="module-card-name">
-                          <span>Module {index + 1} -</span>
-                        </div>
-                        
-                          <div className="module-input d-flex">
-                            <div className="search-wrap">
-                              <input type="hidden" name="id" value={item.id} />
-                              <input type="text" placeholder="Lorem ipsum dolor sit amet" name="module_name" id={`name${item.id}`} defaultValue={item.module_name} />
-                              <input type="hidden" name="description" id={`description${item.id}`} defaultValue={item.description} />
-                            </div>
-                            <button type='button' style={{ border: 'none' }} onClick={() => moduleUpdate(item.id)}>
-                              <div className="edit" style={{ backgroundColor: '#fff' }}><span style={{ color: '#1a86d0' }}>Update</span></div>
-                            </button>
-                          </div>
-                      </div>
-                    </div>
-                    <div className="right-side-card d-flex">
-                      <div className="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
-                        <Link href={`/module/${item.id}/content?course=${QueryParam?.id}`}><button type="button" className="btn"><span>Edit Content
-                          🖊</span></button></Link>
-                      </div>
-                      <div className="delete-btn" style={{ height: 'unset' }}>
-                        <a href="#!">
-                          <img className="delete-icon" src="/trainer-images/edit-module/Vector.png" alt="delete button" onClick={() => moduleDelete(item.id)} />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )
-            })}
-          </div>
+                                      <div className="module-input d-flex">
+                                        <div className="search-wrap">
+                                          <input type="hidden" name={`module[${index}][id]`} value={item.id} />
+                                          <input type="hidden" name={`module[${index}][sequence_no]`} value={item.sequence_no} />
+                                          <input type="text" placeholder="Lorem ipsum dolor sit amet" id={`name${item.id}`} defaultValue={item.module_name} />
+                                          <input type="hidden" id={`description${item.id}`} defaultValue={item.description} />
+                                        </div>
+                                        <button type='button' style={{ border: 'none' }} onClick={() => moduleUpdate(item.id)}>
+                                          <div className="edit" style={{ backgroundColor: '#fff' }}><span style={{ color: '#1a86d0' }}>Update</span></div>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="right-side-card d-flex">
+                                    <div className="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
+                                      <Link href={`/module/${item.id}/content?course=${QueryParam?.id}`}><button type="button" className="btn"><span>Edit Content
+                                        🖊</span></button></Link>
+                                    </div>
+                                    <div className="delete-btn" style={{ height: 'unset' }}>
+                                      <a href="#!">
+                                        <img className="delete-icon" src="/trainer-images/edit-module/Vector.png" alt="delete button" onClick={() => moduleDelete(item.id)} />
+                                      </a>
+                                    </div>
+                                  </div>
+                              </li>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>
 
-          {/* <DataTable
-            columns={columns}
-            data={modules?.data}
-            progressPending={isLoading}
-            className="wrapper custom-scroll"
-          /> */}
-          <div className='btn-container d-flex justify-content-between gap-3'>
-            <div>
-              <button type="button" className="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
+            {/* <DataTable
+              columns={columns}
+              data={modules?.data}
+              progressPending={isLoading}
+              className="wrapper custom-scroll"
+            /> */}
+            <div className='btn-container d-flex justify-content-between gap-3'>
+              <div>
+                <button type="button" className="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
+              </div>
+              <div className="back-save-btn d-flex gap-4">
+                <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn">Back</button></Link>
+                {/* <button type="submit" className="save-btn" ref={saveModuleButton}>Save</button> */}
+              </div>
+              {/* <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button> */}
             </div>
-            <div className="back-save-btn d-flex gap-4">
-              <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn">Back</button></Link>
-              <a href="#!"><button type="submit" className="save-btn">Save</button></a>
-            </div>
-            {/* <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button> */}
-          </div>
         </div>
       </div>
       <Modal show={modalStatus} onHide={() => setModalStatus(false)}>

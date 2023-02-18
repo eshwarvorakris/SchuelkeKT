@@ -20,6 +20,7 @@ const Page = () => {
   const inputFileRef = useRef();
   const [contentUrl, setcontentUrl] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const [nextModule, setNextModule] = useState([]);
   const [prevModule, setPrevModule] = useState([]);
   const initialContent = [{ id: "", sequence_no: "1", title: "", paragraph1: "", paragraph2: "", file_url: "", paragraph3: "" }];
@@ -105,6 +106,7 @@ const Page = () => {
   const handleChangeImage = (async (e) => {
     let curId = e?.target?.attributes?.dataid?.value;
     let fileKey = getValues('content[' + curId + '][file_key]');
+    setDisableButton(true);
     //console.log("fileFkey", fileKey);
     //setValue('content['+curId+'][file_url]', "checking");
     console.log(e.target.files[0].name);
@@ -121,6 +123,7 @@ const Page = () => {
     }
     setIsUploaded(true);
     await uploader.upload(data).then((res) => {
+      setDisableButton(false);
       console.log(res?.data?.data?.Location);
       helper.sweetalert.toast("File Uploaded");
       setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
@@ -133,6 +136,7 @@ const Page = () => {
       //setcontentUrl(res?.data?.data?.Location);
       console.log(res?.data);
     }).catch((error) => {
+      setDisableButton(false);
       helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
       console.error(error.response)
     })
@@ -335,7 +339,7 @@ const Page = () => {
               </div>
 
               <div className="Save-btn">
-                <button type="submit" className="btn btn-primary"
+                <button type="submit" className="btn btn-primary" disabled={disableButton}
                   style={{ backgroundColor: "#008bd6" }}>Save</button>
 
               </div>

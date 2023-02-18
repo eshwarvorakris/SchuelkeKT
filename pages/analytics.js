@@ -17,8 +17,8 @@ const mygrade = () => {
                 </div>
                 {/* <div className="content-heading" style={{ padding: 'unset' }}>
                     <h5 style={{marginTop:'unset'}}>Recent Learning</h5>
-                </div>
-                <RecentLearningCard /> */}
+                </div> */}
+                <RecentLearningCard />
                 <TabCourseList />
             </div>
         </>

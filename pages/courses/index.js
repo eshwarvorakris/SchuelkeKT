@@ -213,12 +213,8 @@ const admincoursemanagement = () => {
                     else {
                         return (
                             <>
-                                <form style={{paddingTop:'10rem'}}>
-                                    {/* <div className="content-heading" style={{padding:'unset'}}>
-                                        <h5>Recent Learning</h5>
-                                    </div>
-
-                                    <RecentLearningCard /> */}
+                                <form style={{marginTop: '12%'}}>
+                                    <RecentLearningCard />
                                     <TabCourseList />
                                 </form>
                             </>

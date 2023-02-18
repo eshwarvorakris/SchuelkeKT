@@ -16,6 +16,11 @@ const categoryModel=class {
         return (await axiosInstance.post(`${this.baseUrl}/get_any_course_chapter_viewed`, data));
     }
 
+    async getCourseViewData(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_course_view_data`, data));
+    }
+
     async create(data=[])
     {
         return await axiosInstance.post(this.baseUrl,data);
@@ -32,6 +37,16 @@ const categoryModel=class {
     async getModuleView(data=[])
     {
         return (await axiosInstance.post(`${this.baseUrl}/get_module_view`, data));
+    }
+
+    async getEachCourseStat(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_course_stat`, data));
+    }
+
+    async getRecentLearning(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_recent_learn`, data));
     }
     async delete(id)
     {

@@ -45,7 +45,7 @@ const Page = () => {
     // console.log("courseData ", courseData);
     // console.log("module ", modules);
     if (router?.query?.id !== undefined) {
-      console.clear();
+      //console.clear();
       const countAttemptForm = new FormData();
       countAttemptForm.append("course_id", router?.query?.id);
       assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
@@ -57,8 +57,8 @@ const Page = () => {
       let isLastModuleFound = false;
       let isAnyChapterViewed = false;
       CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
-        console.clear();
-        console.log("course view", res);
+        
+        //console.log("course view", res);
         let maxcoursemin = Math.floor(courseData?.data?.total_training_hour * 60);
         let maxcoursesec = maxcoursemin * 60;
         let courseViewSec = 0;
@@ -74,7 +74,7 @@ const Page = () => {
           let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
           setCoursePercent(percentage);
           let diff = maxcoursesec - courseViewSec;
-          console.log("diff",diff)
+          //console.log("diff",diff)
           let diffmin = Math.floor(diff / 60);
           Hours = Math.floor(diffmin / 60);
           minutes = diffmin % 60;
@@ -85,31 +85,7 @@ const Page = () => {
           isAnyChapterViewed = true;
           setLastChapterViewData(res.data);
         }
-        setCounter(counter + 1);
-        modules?.data?.map((item, index) => {
-          item.isCompleted = false;
-          if(isAnyChapterViewed === false && index == 0) {
-            item.chapterView = 2; // 1 : all, 2: partial, 3:all locked
-            item.chapterViewId = 0;
-          } else if (isAnyChapterViewed === true) {
-            if(isLastModuleFound === false) {
-              if(item.id === lastChapterViewData.module_id) {
-                item.chapterView = 2; // 1 : all, 2: partial, 3:all locked
-                item.chapterViewId = lastChapterViewData.chapter_id;
-                isLastModuleFound = true;
-              } else {
-                item.chapterView = 1;
-                item.isCompleted = true;
-                item.chapterViewId = "all";
-              }
-            } else {
-              item.chapterView = 3; // 1 : all, 2: partial, 3:all locked
-            }
-          } else {
-            item.chapterView = 3; // 1 : all, 2: partial, 3:all locked
-          }
-          console.log("isAnyChapterViewed",isAnyChapterViewed);
-        });
+        
       }).catch((error) => {
         console.log("module error", error);
       });
@@ -186,8 +162,8 @@ const Page = () => {
         </div>
 
         {modules?.data?.map((item, index) => {
-          console.log("module check"+item.id+" - ", item.chapterView);
-          console.log("counter", counter);
+          //console.log("module check"+item.id+" - ", item.chapterView);
+          //console.log("counter", counter);
           return (
             <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} moduleHourLeft={per_module_hour} perModuleMin={perModuleMin} />
           )

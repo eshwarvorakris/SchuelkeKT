@@ -29,6 +29,16 @@ const widgetModel=class {
         return (await axiosInstance.get(`${this.baseUrl}/module/total`)).data;
     }
 
+    async traineeKpis()
+    {
+        return (await axiosInstance.get(`${this.baseUrl}/trainee_kpis`)).data;
+    }
+
+    async traineeStatusKpis(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/trainee_status_kpis`, data)).data;
+    }
+
 }
 
 export default new widgetModel();
