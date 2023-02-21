@@ -27,7 +27,7 @@ Course.init({
     type: DataTypes.DATEONLY
   },
   total_training_hour: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     defaultValue: 0,
   },
   week_duration: {
