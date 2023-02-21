@@ -148,7 +148,7 @@ const addcourse = ({ categories }) => {
                                 </div>
                                 <div className="course-completion">
                                     <h6>Total Training Hour</h6>
-                                    <input type="number" {...register("total_training_hour")} />
+                                    <input type="number" {...register("total_training_hour")} step="any" />
                                 </div>
                             </div >
                         </div >

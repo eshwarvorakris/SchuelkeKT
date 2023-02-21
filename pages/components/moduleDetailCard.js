@@ -37,7 +37,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
       moduleViewData.append("sequence_no", moduleData?.sequence_no);
 
       CourseViewModel.getModuleView(moduleViewData).then((res) => {
-        console.log("module view = ",res);
+        //console.log("module view = ",res);
         setmoduleStatus(res?.data?.moduleStatus);
         setLastChapterId(res?.data?.lastchapter?.chapter_id);
         if(res?.data?.moduleStatus != 3) {

@@ -9,6 +9,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from '../../lib/appContext';
 import Checktimer from '../../components/checkTimer';
+import CourseViewModel from "../../model/cource_view.model";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import { Player } from 'video-react';
 const topicpage = () => {
@@ -27,7 +28,7 @@ const topicpage = () => {
     const { data: contentData, mutate: loadContent, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.detail(QueryParam?.id), config.swrConfig);
 
     const [showDocs, setShowDocs] = useState("d-none");
-
+    const [showNextChapter, setShowNextChapter] = useState(false);
     useEffect(() => {
         setShowDocs("d-none");
         setNextContent([]);
@@ -38,7 +39,7 @@ const topicpage = () => {
             setCurContent(contentData?.data);
             //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
             setContentUrl(contentData?.data?.file_url);
-            if(contentData?.data?.file_url) {
+            if (contentData?.data?.file_url) {
                 const fileNameAr = contentData?.data?.file_url.split('.');
                 const fileExt = fileNameAr[fileNameAr.length - 1];
                 setCurExt(fileExt)
@@ -46,7 +47,7 @@ const topicpage = () => {
                     setShowDocs("");
                 }
             }
-            console.log(contentData?.data?.file_url);
+            //console.log(contentData?.data?.file_url);
             contentModel.list({ module_id: contentData?.data?.module_id }).then((res) => {
                 //console.log("contents - ", res.data);
                 if ((res?.data).length > 1) {
@@ -74,15 +75,32 @@ const topicpage = () => {
             //document.getElementById("video1").muted = false; 
 
             moduleModel.detail(contentData?.data?.module_id).then((res) => {
-                console.log("module", res.data);
+                //console.log("module", res.data);
                 setCourseId(res?.data?.course_id);
-                console.log("prev=", prevContent.length);
-                console.log("next=", nextContent.length);
+                //console.log("prev=", prevContent.length);
+                //console.log("next=", nextContent.length);
             }).catch((error) => {
                 console.log("module error", error);
             });
+            const chapterForm = new FormData();
+            //console.log("chapter id", contentData?.data?.id)
+            chapterForm.append("chapter_id", contentData?.data?.id);
+            CourseViewModel.getChapterViewData(chapterForm).then((chapterRes) => {
+                if (chapterRes !== null) {
+                    if (chapterRes?.data?.status === "completed") {
+                        setShowNextChapter(true);
+                    }
+                }
+                console.log("chapterRes", chapterRes);
+
+            });
+
         }
     }, [contentData, QueryParam?.id]);
+
+    const contentLink = function () {
+        helper.sweetalert.warningToast("Please complete current chapters.");
+    }
     return (
         <>
             {courseId &&
@@ -97,7 +115,7 @@ const topicpage = () => {
                         </div>
                     </Link>
                 }
-                
+
                 {(layoutValues?.profile?.role != 'trainee') &&
                     <Link href={`/courses/${courseId}/update_status`}>
                         <div className="left-icon">
@@ -188,15 +206,35 @@ const topicpage = () => {
                     <div className="trainee-footer-right d-flex">
                         {nextContent?.title &&
                             <>
-                                <div className="icon-content-2">
-                                    <a href={`/chapter/${nextContent?.id}`}>
-                                        <p>NEXT</p>
-                                    </a>
-                                    <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
-                                </div>
-                                <a href={`/chapter/${nextContent?.id}`}>
-                                    <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
-                                </a>
+                                {showNextChapter ?
+                                    (
+                                        <>
+                                            <div className="icon-content-2">
+                                                <a href={`/chapter/${nextContent?.id}`}>
+                                                    <p>NEXT</p>
+                                                </a>
+                                                <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
+                                            </div>
+                                            <a href={`/chapter/${nextContent?.id}`}>
+                                                <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
+                                            </a>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="icon-content-2" onClick={() => contentLink()}>
+                                                <a>
+                                                    <p>NEXT</p>
+                                                </a>
+                                                <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
+                                            </div>
+                                            <a onClick={() => contentLink()}>
+                                                <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
+                                            </a>
+                                        </>
+                                    )
+
+                                }
+
                             </>
                         }
                     </div>

@@ -34,6 +34,11 @@ const categoryModel=class {
         return (await axiosInstance.post(`${this.baseUrl}/get_chapter_view`, data));
     }
 
+    async getChapterViewData(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/get_chapter_view_data`, data));
+    }
+
     async getModuleView(data=[])
     {
         return (await axiosInstance.post(`${this.baseUrl}/get_module_view`, data));

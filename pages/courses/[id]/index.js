@@ -29,9 +29,40 @@ const Page = () => {
   const [counter, setCounter] = useState(0);
   const [coursePercent, setCoursePercent] = useState(0);
   
+  const [modules, setModules] = useState([]);
+  const [courseData, setCourseData] = useState([]);
+
   const [lastChapterViewData, setLastChapterViewData] = useState(0);
-  const { data: courseData, mutate: couresDetail, error, isLoading } = useSWR("coursedetail", async () => await courseModel.detail(router?.query?.id), config.swrConfig);
-  const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id, QueryParam), config.swrConfig);
+  //const { data: courseData, mutate: couresDetail, error, isLoading } = useSWR("coursedetail", async () => await courseModel.detail(router?.query?.id), config.swrConfig);
+  //const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id, QueryParam), config.swrConfig);
+  
+  const moduleList = function () {
+    if(router?.query?.id !== undefined) {
+      courseModel.modules(QueryParam?.id, QueryParam).then((res) => {
+        //console.log(res.data);
+        setModules(res);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
+  const couresDetail = function () {
+    if(router?.query?.id !== undefined) {
+      courseModel.detail(router?.query?.id).then((res) => {
+        //console.log(res.data);
+        setCourseData(res);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
+  useEffect(() => {
+    moduleList();
+    couresDetail();
+  }, [router])
+  
   useEffect(() => {
     if (courseData?.data) {
       setModuleCount(courseData?.data?.total_modules);
