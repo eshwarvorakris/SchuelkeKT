@@ -10,6 +10,7 @@ router.post("/get_module_view", verifyAuth.verifyUser, courceViewController.getM
 router.post("/get_recent_learn", verifyAuth.verifyUser, courceViewController.getRecentLearning);
 router.post("/get_course_view_data", verifyAuth.verifyUser, courceViewController.getCourseViewData);
 router.post("/get_course_stat", verifyAuth.verifyUser, courceViewController.getEachCourseStat);
+router.post("/get_chapter_view_data", verifyAuth.verifyUser, courceViewController.getChapterViewData);
 router.get("/", courceViewController.index);
 router.get("/:id", courceViewController.show);
 router.post("/", verifyAuth.verifyUser, courceViewController.store);

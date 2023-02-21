@@ -104,6 +104,12 @@ const courseController = class {
     res.send(data);
   }
 
+  async getChapterViewData(req, res) {
+    //console.log(req.body);
+    const curChapter = await ChapterView.findOne({ where: { chapter_id: req.body.chapter_id, trainee_id: req.userId } });
+    res.send(curChapter);
+  }
+
   async getModuleView(req, res) {
     var moduleStatus = 3;// 1 : completed, 2: ongoing, 3:all locked
     var lastchapter = null;
