@@ -37,9 +37,12 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
       moduleViewData.append("sequence_no", moduleData?.sequence_no);
 
       CourseViewModel.getModuleView(moduleViewData).then((res) => {
-        //console.log("module view = ",res);
+        //console.log("module view = "+moduleData?.id+" ",res);
         setmoduleStatus(res?.data?.moduleStatus);
-        setLastChapterId(res?.data?.lastchapter?.chapter_id);
+        if(res?.data?.lastchapter?.chapter_id !== undefined) {
+          setLastChapterId(res?.data?.lastchapter?.chapter_id);
+        }
+
         if(res?.data?.moduleStatus != 3) {
           let percontentsec = 0;
           let courseTimeInHour = res?.data?.courseData?.total_training_hour;
@@ -100,6 +103,16 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
     }
     //console.log("all contents1111 => ", contents?.data)
   }, []);
+
+  useEffect(() => {
+    if(lastChapterId === undefined || lastChapterId == 0) {
+      //setLastChapterId(res?.data?.lastchapter?.chapter_id);
+      if(contents?.data?.length > 0 && moduleStatus != 3) {
+        //console.log("found in module "+moduleData?.id+" -> ", contents?.data?.[0].id);
+        setLastChapterId(contents?.data?.[0].id);
+      }
+    }
+  }, [contents, lastChapterId, moduleStatus])
 
   const contentLink = function () {
     helper.sweetalert.warningToast("Please complete previous module chapters.");
