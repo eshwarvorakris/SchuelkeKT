@@ -99,11 +99,11 @@ const addcourse = ({ categories }) => {
                                             (() => {
                                                 if (image.length > 0) {
                                                     return (
-                                                        <img className="thumbnail-pic" src={image} style={{ width: '100%', height: '161px' }} alt="" />
+                                                        <img className="thumbnail-pic" src={image} style={{ width: '10rem', height: 'auto' }} alt="" />
                                                     );
                                                 } else {
                                                     return (
-                                                        <div className="pic-container" style={{ width: '100%', height: '161px' }}>
+                                                        <div className="pic-container" style={{ width: '10rem', height: 'auto' }}>
                                                             <p>Drag and Drop here</p>
                                                         </div>
                                                     );
@@ -129,14 +129,13 @@ const addcourse = ({ categories }) => {
                                             </div>
 
                                             <div className="right-col-btns black-border d-flex flex-column gap-4">
-                                                <a href="#!">
-                                                    <button className="btn d-flex justify-content-center gap-2">
-                                                        <img className="btn-icon"
-                                                            src="/trainer-images/dashboard images/Vector (2).png"
-                                                            alt="" />
-                                                        <span style={{ color: 'rgba(0, 0, 0, 0.568)' }}>Remove</span>
-                                                    </button>
-                                                </a>
+                                                
+                                                <button type="button" className="remove_button btn d-flex justify-content-center gap-2">
+                                                    <img className="btn-icon"
+                                                        src="/trainer-images/dashboard images/Vector (2).png"
+                                                        alt="" />
+                                                    <span style={{ color: 'rgba(0, 0, 0, 0.568)' }}>Remove</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -159,7 +158,7 @@ const addcourse = ({ categories }) => {
                             <textarea {...register("course_description")} cols="30" rows="30" className="text-type-box"></textarea>
 
 
-                            <div className="btn-container d-flex justify-content-between mt-5">
+                            <div className="btn-container d-flex justify-content-between mt-5" style={{padding:'unset'}}>
                                 <div className="left-col">
                                     <div className="edit-modules-btn">
                                         {/* <a href="./editcourse"><button type="button" className="btn"
@@ -168,15 +167,15 @@ const addcourse = ({ categories }) => {
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">
-                                    <div className="back-btn">
+                                    <div className="back-btn" style={{padding:'unset'}}>
                                         <Link href="/courses" style={{textDecoration:'none'}} className="btn">
-                                            <span style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
+                                            <span style={{ color: "rgba(0, 0, 0, 0.61)",fontSize:'15px' }}>Back</span>
                                         </Link>
                                     </div>
 
-                                    <div className="save-btn">
-                                        <button type="submit" className="btn"
-                                            style={{ backgroundColor: "#008bd6" }}><span>Save</span></button>
+                                    <div className="save-btn" style={{padding:'unset'}}>
+                                        <button type="submit" className="btn save_button"
+                                            style={{ backgroundColor: "#008bd6" }}><span style={{fontSize:'15px'}}>Save</span></button>
                                     </div>
                                 </div>
                             </div>

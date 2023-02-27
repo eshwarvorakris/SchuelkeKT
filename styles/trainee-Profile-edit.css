@@ -345,8 +345,18 @@ html {
     border: 1px solid #008bd6;
 }
 
+.upload-btn:hover {
+    border: 1px solid #008bd6 !important;
+    box-shadow: #008bd6 0px 0px 2px !important;
+}
+
 .remove-btn {
     border: 1px solid rgba(0, 0, 0, 0.534);
+}
+
+.remove_button:hover {
+    border: 1px solid rgba(0, 0, 0, 0.534) !important;
+    box-shadow: rgba(0, 0, 0, 0.534) 0px 0px 2px !important;
 }
 
 /* edit btn */
@@ -358,6 +368,11 @@ html {
 
 .edit-btn {
     font-size: 12px;
+}
+
+.edit_btn:hover {
+    border: 1px solid #008bd6 !important;
+    box-shadow: #008bd6 0px 0px 5px !important;
 }
 
 /* notifications pop-up */
@@ -554,6 +569,9 @@ html {
 .cancel-btn button,
 .save-btn button {
     font-size: 13px;
+}
+.save_button:hover {
+    box-shadow: #008bd6 0px 0px 8px;
 }
 
 .cancel-btn button {

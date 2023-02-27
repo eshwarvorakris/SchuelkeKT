@@ -154,7 +154,7 @@ const admincoursemanagement = () => {
                                         <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
                                     </div>
 
-                                    <div className=" category d-flex gap-3 align-items-center ">
+                                    <div className=" category d-flex gap-3 align-items-center " style={{marginRight:'2rem'}}>
                                         <select name=" category " id=" cars " className="select-mycourse">
                                             <option value=" Product ">Filter</option>
                                             <option value=" Country ">Trainee ID</option>

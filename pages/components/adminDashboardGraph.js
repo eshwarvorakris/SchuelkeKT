@@ -15,15 +15,15 @@ export default function adminDashboardGraph() {
                 <div>
                   <span>Country -</span>
                 </div>
-                <div>
+                <div style={{marginLeft:'0.2rem'}}>
                   <select className="custom-scroll countries"></select> <br />
                 </div>
               </div>
               <div className="year-select">
                 <div>
-                  <label htmlFor="year">Year -</label>
+                  <label htmlFor="year">Year - </label>
                 </div>
-                <div>
+                <div style={{marginLeft:'0.2rem'}}>
                   <select className="year custom-scroll" name="year"></select>
                 </div>
               </div>
@@ -41,9 +41,9 @@ export default function adminDashboardGraph() {
             <div className="right d-flex flex-column gap-1">
               <div className="country-select">
                 <div>
-                  <span>Country -</span>
+                  <span>Country - </span>
                 </div>
-                <div>
+                <div style={{marginLeft:'0.2rem'}}>
                   <select className="custom-scroll countries-2"></select> <br />
                 </div>
               </div>

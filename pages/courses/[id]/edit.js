@@ -20,7 +20,7 @@ const editCourse = () => {
     const [courseData, setcourseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [formErrors, setFormErrors] = useState([]);
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: courseData });
+    const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({ defaultValues: courseData });
     //const { data: categories, error: categoryerror, isLoading: categoryisLoading } = useSWR('categoryList', async () => await category.list(QueryParam), config.swrConfig);
     //const { data:course, courseerror, courseisLoading, mutate:loadCourse } = useSWR (router.query?.id||null, async ()=>await courseModel.detail(router.query.id),config.swrConfig);
 
@@ -69,7 +69,8 @@ const editCourse = () => {
         setIsUploaded(true);
         await uploader.upload(data).then((res) => {
             helper.sweetalert.toast("File Uploaded");
-
+            document.getElementById("thumbnail-pic").classList.remove("d-none");
+            document.getElementById("pic-container").classList.add("d-none");
             console.log(res?.data);
             setImage(res?.data?.data?.Location);
         }).catch((error) => {
@@ -78,6 +79,13 @@ const editCourse = () => {
         })
         //setImage(URL.createObjectURL(e.target.files[0]))
     });
+
+    const removeFile = () => {
+        //setValue('course_thumbnail', "");
+        document.getElementById("course_thumbnail").value="";
+        document.getElementById("thumbnail-pic").classList.add("d-none");
+        document.getElementById("pic-container").classList.remove("d-none");
+    }
 
     return (
         <>
@@ -124,13 +132,21 @@ const editCourse = () => {
                                             (() => {
                                                 if (image.length > 0) {
                                                     return (
-                                                        <img className="thumbnail-pic" src={image} style={{ width: '100%', height: '161px' }} alt="" />
+                                                        <>
+                                                            <img className="thumbnail-pic" id="thumbnail-pic" src={image} style={{ width: '10rem', height: 'auto' }} alt="" />
+                                                            <div className="pic-container d-none" id="pic-container" style={{ width: '10rem', height: 'auto' }}>
+                                                                <p>Drag and Drop here</p>
+                                                            </div>
+                                                        </>
                                                     );
                                                 } else {
                                                     return (
-                                                        <div className="pic-container" style={{ width: '100%', height: '161px' }}>
-                                                            <p>Drag and Drop here</p>
-                                                        </div>
+                                                        <>
+                                                            <img className="thumbnail-pic d-none" id="thumbnail-pic" src={image} style={{ width: '10rem', height: 'auto' }} alt="" />
+                                                            <div className="pic-container" id="pic-container" style={{ width: '10rem', height: 'auto' }}>
+                                                                <p>Drag and Drop here</p>
+                                                            </div>
+                                                        </>
                                                     );
                                                 }
                                             })()
@@ -146,17 +162,16 @@ const editCourse = () => {
                                                     <span>Browse</span>
                                                 </button>
                                                 <input className="file-input" type="file" onChange={handleChangeImage} ref={inputFileRef} hidden />
-                                                <input type="hidden" name="course_thumbnail" value={image} />
+                                                <input type="hidden" id="course_thumbnail" name="course_thumbnail" value={image} />
                                             </div>
                                             <div className="right-col-btns black-border d-flex flex-column gap-4">
-                                                <a href="#!">
-                                                    <button className="btn d-flex justify-content-center gap-2">
-                                                        <img className="btn-icon"
-                                                            src="/trainer-images/dashboard images/Vector (2).png"
-                                                            alt="" />
-                                                        <span style={{ color: 'rgba(0, 0, 0, 0.568)' }}>Remove</span>
-                                                    </button>
-                                                </a>
+                                                
+                                                <button onClick={removeFile} type="button" className="remove_button btn d-flex justify-content-center gap-2">
+                                                    <img className="btn-icon"
+                                                        src="/trainer-images/dashboard images/Vector (2).png"
+                                                        alt="" />
+                                                    <span style={{ color: 'rgba(0, 0, 0, 0.568)' }}>Remove</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -179,7 +194,7 @@ const editCourse = () => {
                             <textarea {...register("course_description")} cols="30" rows="30" className="text-type-box"></textarea>
 
 
-                            <div className="btn-container d-flex justify-content-between mt-5">
+                            <div className="btn-container d-flex justify-content-between mt-5" style={{padding:'unset'}}>
                                 <div className="left-col d-flex gap-4">
                                     <div className="edit-modules-btn">
                                         <Link href={`/courses/${queryid}/module`} className="btn"
@@ -193,15 +208,15 @@ const editCourse = () => {
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">
-                                    <div className="back-btn">
+                                    <div className="back-btn" style={{padding:'unset'}}>
                                         <Link href="/courses" style={{ textDecoration: 'none' }} className="btn">
-                                            <span style={{ color: "rgba(0, 0, 0, 0.61)" }}>Back</span>
+                                            <span style={{ color: "rgba(0, 0, 0, 0.61)", fontSize:'15px' }}>Back</span>
                                         </Link>
                                     </div>
 
-                                    <div className="save-btn">
-                                        <button type="submit" className="btn"
-                                            style={{ backgroundColor: "#008bd6" }}><span>Save</span></button>
+                                    <div className="save-btn" style={{padding:'unset'}}>
+                                        <button type="submit" className="btn save_button"
+                                            style={{ backgroundColor: "#008bd6" }}><span style={{fontSize:'15px'}}>Save</span></button>
                                     </div>
                                 </div>
                             </div>

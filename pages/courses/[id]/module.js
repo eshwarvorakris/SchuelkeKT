@@ -245,7 +245,7 @@ function Page() {
                                   </div>
                                   <div className="right-side-card d-flex">
                                     <div className="edit-btn" style={{ padding: 'unset', alignSelf: 'unset', height: 'unset' }}>
-                                      <Link href={`/module/${item.id}/content?course=${QueryParam?.id}`}><button type="button" className="btn"><span>Edit Content
+                                      <Link href={`/module/${item.id}/content?course=${QueryParam?.id}`}><button type="button" className="btn edit_btn"><span>Edit Content
                                         🖊</span></button></Link>
                                     </div>
                                     <div className="delete-btn" style={{ height: 'unset' }}>
@@ -272,12 +272,12 @@ function Page() {
               progressPending={isLoading}
               className="wrapper custom-scroll"
             /> */}
-            <div className='btn-container d-flex justify-content-between gap-3'>
+            <div className='btn-container d-flex justify-content-between gap-3' style={{padding:'2rem 0rem 2rem 0rem'}}>
               <div>
                 <button type="button" className="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
               </div>
               <div className="back-save-btn d-flex gap-4">
-                <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn">Back</button></Link>
+                <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn remove_button">Back</button></Link>
                 {/* <button type="submit" className="save-btn" ref={saveModuleButton}>Save</button> */}
               </div>
               {/* <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button> */}

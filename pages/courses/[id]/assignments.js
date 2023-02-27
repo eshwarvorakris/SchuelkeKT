@@ -81,10 +81,10 @@ function Page() {
   }, [watch]);
 
   useEffect(() => {
-    if(router?.query?.id !== undefined) {
+    if (router?.query?.id !== undefined) {
       setCourseId(router?.query?.id)
-      questionModel.list({ course_id: router?.query?.id, order_by:"sequence_no", order_in:"asc" }).then((res) => {
-        if(res.data.length > 0) {
+      questionModel.list({ course_id: router?.query?.id, order_by: "sequence_no", order_in: "asc" }).then((res) => {
+        if (res.data.length > 0) {
           setQuestions(res.data);
           reset(res.data);
         }
@@ -107,14 +107,61 @@ function Page() {
       //console.log(res)
       helper.sweetalert.toast("Assignment Added");
       setIsButtonDisabled(false);
-      setQuestionUpdated(Math.random());
+      //setQuestionUpdated(Math.random());
       //router.push("/courses/"+router?.query?.id);
-      
+
     }).catch((error) => {
       setFormErrors(error.response?.data?.errors);
       setIsButtonDisabled(false);
     })
 
+  });
+
+  const handleTypeChange = (async (e) => {
+    let type = e.target.value;
+    let questionId = e.target.id;
+    let inputType = "checkbox";
+    if (type == "single") {
+      inputType = "radio";
+    }
+    let tempAr = questions;
+    tempAr[questionId]["question_type"] = type;
+    for (let i = 0; i < 4; i++) {
+      let curId = "answer" + questionId + "-" + i;
+      document.getElementById(curId).type = inputType;
+      if(inputType == "radio") {
+        document.getElementById(curId).checked = false;
+        //console.log("questionId = "+questionId,tempAr[questionId]["options"]);
+        tempAr[questionId]["options"][i]["is_answer"] = false;
+      }
+    }
+    reset(tempAr);
+    setQuestions(tempAr);
+  });
+
+  const handleAnswerChange = (async (e) => {
+    let type = e.target.type;
+    if (type == "radio") {
+      let isChecked = e.target.checked;
+      if (isChecked) {
+        let qid = e.target.attributes["data-qid"].nodeValue;
+        let aqsid = e.target.attributes["data-ansid"].nodeValue;
+        //console.log("aqsid", aqsid);
+        let tempAr = questions;
+        for (let i = 0; i < 4; i++) {
+          let curId = "answer" + qid + "-" + i;
+          tempAr[qid]["options"][i]["is_answer"] = true;
+          //console.log(curId)
+          if (i != aqsid) {
+            console.log("false = ",curId)
+            document.getElementById(curId).checked = false;
+            tempAr[qid]["options"][i]["is_answer"] = false;
+          }
+        }
+        reset(tempAr);
+        setQuestions(tempAr);
+      }
+    }
   });
   return (
     <>
@@ -134,7 +181,11 @@ function Page() {
 
               <div className="wrapper-exercise d-flex flex-column gap-3">
                 {questions?.map((item, index) => {
-                  console.log("question - ", item)
+                  //console.log("question - ", item);
+                  let input_type = "checkbox";
+                  if (item?.question_type == "single") {
+                    input_type = "radio";
+                  }
                   return (
                     <>
                       <section key={`question${index}`}>
@@ -161,25 +212,27 @@ function Page() {
 
                             <div className="checkbox-options d-flex flex-column gap-3" style={{ width: '100%' }}>
                               {item?.options?.map((optionitem, optionindex) => {
+
                                 return (
                                   <div className="option-1 d-flex justify-content-between" key={`q${index}o${optionindex}`}>
                                     <label htmlFor="vehicle1">Option {optionindex + 1} -</label>
                                     <div className="input-container">
                                       <input className="input-box" type="text" {...register(`questions[${index}][options][${optionindex}][option]`)} required defaultValue={optionitem?.option}
                                         placeholder="Add the content here" />
-                                      <input  type="hidden" {...register(`questions[${index}][options][${optionindex}][id]`)} defaultValue={optionitem?.id}
+                                      <input type="hidden" {...register(`questions[${index}][options][${optionindex}][id]`)} defaultValue={optionitem?.id}
                                         placeholder="Add the content here" />
                                     </div>
+
                                     {
                                       (() => {
                                         if (optionitem?.is_answer == "true" || optionitem?.is_answer === true) {
                                           return (
-                                            <><input type="checkbox" {...register(`questions[${index}][options][${optionindex}][is_answer]`)}
+                                            <><input type={input_type} onClick={handleAnswerChange} data-qid={index} data-ansid={optionindex} id={`answer${index}-${optionindex}`} {...register(`questions[${index}][options][${optionindex}][is_answer]`)}
                                               defaultValue={optionitem?.is_answer} checked /></>
                                           );
                                         } else {
                                           return (
-                                            <><input type="checkbox" {...register(`questions[${index}][options][${optionindex}][is_answer]`)}
+                                            <><input type={input_type} onClick={handleAnswerChange} data-qid={index} data-ansid={optionindex} id={`answer${index}-${optionindex}`} {...register(`questions[${index}][options][${optionindex}][is_answer]`)}
                                               defaultValue={optionitem?.is_answer} /></>
                                           );
                                         }
@@ -194,7 +247,7 @@ function Page() {
                           <span className="drop-box-question">Type of Question -</span>
 
                           <div className={`category ${item?.question_type}`} >
-                            <select {...register(`questions[${index}][question_type]`)} defaultValue={item.question_type}>
+                            <select {...register(`questions[${index}][question_type]`)} id={index} onChange={handleTypeChange} defaultValue={item.question_type}>
                               {
                                 (() => {
                                   if (item?.question_type == 'multiple') {
