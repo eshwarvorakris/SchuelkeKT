@@ -37,6 +37,10 @@ const addcourse = ({ categories }) => {
     const fileClick = () => {
         inputFileRef.current.click();
     };
+
+    const fileDropped = () => {
+        console.log("dropped");
+    };
     const handleChangeImage = (async (e) => {
         //setValue("uploadfile", e.target.files);
         var data = new FormData();
@@ -103,7 +107,7 @@ const addcourse = ({ categories }) => {
                                                     );
                                                 } else {
                                                     return (
-                                                        <div className="pic-container" style={{ width: '10rem', height: 'auto' }}>
+                                                        <div className="pic-container" style={{ width: '10rem', height: 'auto' }} onDropCapture={fileDropped}>
                                                             <p>Drag and Drop here</p>
                                                         </div>
                                                     );

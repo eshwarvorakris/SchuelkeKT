@@ -29,6 +29,9 @@ function Page() {
   const [updateName, setupdateName] = useState(null);
   const [updateDesc, setupdateDesc] = useState(null);
   const [dataUpdated, setdataUpdated] = useState(null);
+
+  const [moduleAddBtn, setModuleAddBtn] = useState(false);
+  const [moduleUpdateBtn, setModuleUpdateBtn] = useState(false);
   //const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
 
   // useEffect(() => {
@@ -62,7 +65,7 @@ function Page() {
   }
 
   const moduleUpdate = function (id) {
-    console.log(document.getElementById('description' + id).value);
+    //console.log(document.getElementById('description' + id).value);
     setupdateId(id);
     setupdateName(document.getElementById('name' + id).value);
     setupdateDesc(document.getElementById('description' + id).value);
@@ -71,25 +74,31 @@ function Page() {
 
   const updateModule = async (event) => {
     event.preventDefault();
+    setModuleUpdateBtn(true);
     const formData = new FormData(event.target);
-    console.log(event.target)
+    //console.log(event.target)
     await moduleModel.update(formData.get("id"), formData).then((res) => {
       helper.sweetalert.toast("Module Updated");
       moduleHide();
+      setModuleUpdateBtn(false);
       updateList();
     }).catch((error) => {
+      setModuleUpdateBtn(false);
       setFormErrors(error.response?.data?.errors);
     })
   };
 
   const handleModuleSumit = async (event) => {
     event.preventDefault();
+    setModuleAddBtn(true);
     const formData = new FormData(event.target);
     await moduleModel.create(formData).then((res) => {
       helper.sweetalert.toast("Module Added");
       setModalStatus(false);
+      setModuleAddBtn(false);
       updateList();
     }).catch((error) => {
+      setModuleAddBtn(false);
       setFormErrors(error.response?.data?.errors);
     })
   };
@@ -297,7 +306,7 @@ function Page() {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <button type="submit" className='btn btn-primary'>Save</button>
+            <button type="submit" className='btn btn-primary' disabled={moduleAddBtn}>Save</button>
           </Modal.Footer>
         </form>
       </Modal>
@@ -314,7 +323,7 @@ function Page() {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <button type="submit" className='btn btn-primary'>Update</button>
+            <button type="submit" className='btn btn-primary' disabled={moduleUpdateBtn}>Update</button>
           </Modal.Footer>
         </form>
       </Modal>

@@ -28,18 +28,18 @@ const myprofile = () => {
     }, [router]);
     return (
         <>
-            <div className="trainee-right-body-profile">
+            <div className="trainee-right-body-profile" style={{height:'fit-content'}}>
                 <div className="trainee-profile-pic">
                     <div className="box-1"></div>
                     <div className="box-2"></div>
-                    <div className="text-tag" style={{zIndex:'1'}}>
+                    <div className="text-tag" style={{ zIndex: '1' }}>
                         <h6>My Info</h6>
                     </div>
                     <img className="profile-picture-profile" src={image} alt="" />
                 </div>
                 <div className="trainee-info">
 
-                    <table className="table-myprofile" style={{ height: 'min-content' }}>
+                    {/* <table className="table-myprofile" style={{ height: 'min-content' }}>
                         <tbody>
                             {(profile?.role == 'trainer' || profile?.role == 'trainee') &&
                                 <tr style={{ lineHeight: '1px' }}>
@@ -96,8 +96,55 @@ const myprofile = () => {
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> */}
+                    <div className="trainer-form">
+                        <div className="trainer-Name">
+                            <h6>Full Name</h6>
+                            <input type="text" value={profile.full_name} readOnly />
+                        </div>
 
+                        <div className="trainer-Email">
+                            <h6>Email</h6>
+                            <input type="text" value={profile.email} readOnly />
+                        </div>
+
+                        <div className="trainer-DOB">
+                            <h6>Date of Birth</h6>
+                            <input type="date" value={profile.dob} readOnly />
+                        </div>
+
+                        <div className="trainer-address">
+                            <h6>Address</h6>
+                            <textarea className="address-box"
+                                cols="30"
+                                rows="3" value={profile.address} readOnly ></textarea>
+                        </div>
+
+                        <div className="trainer-Name">
+                            <h6>Contact Number</h6>
+                            <input type="text" value={profile.contact_no} readOnly />
+                        </div>
+                        {
+                            (() => {
+                                if (profile?.role != 'admin') {
+                                    return (
+                                        <div className="trainer-Name">
+                                            <h6>Education Background</h6>
+                                            <input type="text" value={profile.edu_background} readOnly />
+                                        </div>
+                                    );
+                                }
+                            })()
+                        }
+                        <div className="trainer-Name ">
+                            <h6 style={{ marginRight: '5px' }}>Country Of Origin</h6>
+                            <input type="text" value={profile.country} readOnly />
+                        </div>
+                        <div className="trainer-Name">
+                            <h6>Year Of Joining</h6>
+                            <input type="text" value={profile.joining_year} readOnly />
+                        </div>
+                    </div>
                 </div>
                 <div className="edit-profile-btn">
                     <Link href="/profile/edit">

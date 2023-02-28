@@ -12,7 +12,8 @@ import Form from 'react-bootstrap/Form';
 import AppContext from '../../lib/appContext';
 import moment from 'moment';
 import Link from "next/link";
-import Select from 'react-select'
+import Select from 'react-select';
+import _ from 'lodash';
 const myprofile = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
@@ -52,9 +53,11 @@ const myprofile = () => {
 
     useEffect(() => {
         //console.clear();
-        //console.log("countries", countryLists);
+        console.log("countries", countryLists);
         const opt = [];
-        countryLists?.map((item, index) => {
+        let countries = _.orderBy(countryLists, [function(o) { return o.name.common; }],['asc']);
+        
+        countries?.map((item, index) => {
             //console.log(item.flags.png);
             //console.log(item.name.common);
             opt.push({ value: item.name.common, label: item.name.common })
@@ -123,12 +126,12 @@ const myprofile = () => {
             allYear.push({ value: preYear, label: preYear });
         }
         setYearOptions(allYear);
-        console.log("allyear",allYear);
+        //console.log("allyear",allYear);
     },[])
     
     return (
         <>
-            <div className="trainee-right-edit" style={{ marginTop: '10rem' }}>
+            <div className="trainee-right-edit" style={{ marginTop: '10rem',height:'fit-content'}}>
                 <Form onSubmit={onSubmit} encType="multipart/form-data">
                     <div className="edit-container" >
                         <div className="trainee-profile-pic">
@@ -205,7 +208,7 @@ const myprofile = () => {
                                     })()
                                 }
                                 <div className="trainer-Name ">
-                                    <h6>Country Of Origin</h6>
+                                    <h6 style={{marginRight:'5px'}}>Country Of Origin</h6>
                                     <div style={{width:'25rem'}}>
                                         <Select
                                             isSearchable
