@@ -107,7 +107,7 @@ const myprofile = () => {
         data.append("filefolder", "profile");
         setIsUploaded(true);
         await uploader.upload(data).then((res) => {
-            helper.sweetalert.toast("File Uploaded");
+            helper.sweetalert.toast("File Uploaded Successfully");
 
             console.log(res?.data);
             setprofileUrl(res?.data?.data?.Location);

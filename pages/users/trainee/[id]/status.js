@@ -85,7 +85,7 @@ const editTrainee = () => {
                         <p>Trainee Status</p>
                     </div>
 
-                    <div className="trainee-info">
+                    <div className="trainee-info" style={{flexWrap: 'wrap'}}>
                         <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
@@ -272,12 +272,12 @@ const editTrainee = () => {
                             <table>
                                 <thead>
                                     <tr>
-                                        <td style={{ width: '15%' }}>Assignment Name</td>
-                                        <td style={{ width: '15%' }}>Submimssion Status</td>
+                                        <td style={{ width: '15%' }}>Course Name</td>
+                                        <td style={{ width: '15%' }}>Course Status</td>
                                         <td style={{ width: '5%' }}>No. of Attempts</td>
                                         <td style={{ width: '5%' }}>Average Score</td>
                                         <td style={{ width: '5%' }}>Obtained Score</td>
-                                        <td style={{ width: '5%' }}>Passing Status</td>
+                                        <td style={{ width: '5%' }}>Status</td>
                                     </tr>
                                 </thead>
                                 <tbody>

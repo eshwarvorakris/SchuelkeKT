@@ -49,7 +49,7 @@ const addcourse = ({ categories }) => {
         data.append("filefolder", "course");
         setIsUploaded(true);
         await uploader.upload(data).then((res) => {
-            helper.sweetalert.toast("File Uploaded");
+            helper.sweetalert.toast("File Uploaded Successfully");
 
             console.log(res?.data);
             setImage(res?.data?.data?.Location);

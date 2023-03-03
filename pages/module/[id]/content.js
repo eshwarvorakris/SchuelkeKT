@@ -125,7 +125,7 @@ const Page = () => {
     await uploader.upload(data).then((res) => {
       setDisableButton(false);
       console.log(res?.data?.data?.Location);
-      helper.sweetalert.toast("File Uploaded");
+      helper.sweetalert.toast("File Uploaded Successfully");
       setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
 
       setValue('content[' + curId + '][file_ext]', res?.data?.data?.fileExt);

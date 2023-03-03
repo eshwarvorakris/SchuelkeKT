@@ -12,8 +12,8 @@ import ReactPaginate from 'react-paginate';
 
 const trainer = () => {
     const router = useRouter();
-    const layoutValues=useContext(AppContext);
-    {layoutValues.setPageHeading("Trainer Lists")}
+    const layoutValues = useContext(AppContext);
+    { layoutValues.setPageHeading("Trainer Lists") }
 
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
@@ -34,11 +34,11 @@ const trainer = () => {
         })
 
     }
-    /* useEffect(() => {
+    useEffect(() => {
         console.clear();
         console.log("trainers : ", trainer);
-    }, [trainer]); */
-    
+    }, [trainer]);
+
     const columns = [
         {
             name: 'S.No',
@@ -47,64 +47,93 @@ const trainer = () => {
                     <p>{index + 1}</p>
                 )
             },
+            width: "6%"
         },
         {
             name: 'Trainer Id',
+            selector: row => row.user_id,
             cell: row => {
                 return (
                     <p className="d-flex gap-2 profile-icon">
                         {
                             (() => {
-                                if(row.profile_img === null || row.profile_img == ""){
+                                if (row.profile_img === null || row.profile_img == "") {
                                     return (
                                         <i className="fa fa-user-circle-o" aria-hidden="true"></i>
                                     );
                                 }
                                 else {
                                     return (
-                                        <img src={row.profile_img} style={{height:'25px', width:'25px', borderRadius:'50%'}} />
+                                        <img src={row.profile_img} style={{ height: '25px', width: '25px', borderRadius: '50%' }} />
                                     );
                                 }
                             })()
                         }
-                        
+
                         <span> {row.user_id}</span>
                     </p>
                 )
             },
+            sortable: true,
+            sortField: "user_id",
+            width: "12%"
         },
         {
             name: 'Trainer Name',
             selector: row => row.full_name,
             sortable: true,
+            wrap: false,
             sortField: "full_name"
         },
         {
             name: 'Email',
             selector: row => row?.email,
+            wrap: false
         },
         {
             name: 'No. of Courses Published',
+            selector: row => row?.course_count,
             cell: row => {
                 return (
-                    <p>0</p>
+                    <p>{row?.course_count}</p>
                 )
             },
+            sortable: true,
+            sortField: "course_count",
+            width: "9%"
+        },
+        {
+            name: 'Year Of Joining',
+            cell: row => {
+                return (
+                    <p>{row?.joining_year}</p>
+                )
+            },
+            width: "8%"
+        },
+        {
+            name: 'Status',
+            cell: row => {
+                return (
+                    <p className="text-capitalize">{row?.status}</p>
+                )
+            },
+            width: "7%"
         },
         {
             name: '',
             cell: row => {
                 return (
                     <>
-                    <div className='btn-group  text-nowrap p-1'>
-                        <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}/status`}>Check Status</Link>
-                        <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}`}><i className="fa fa-pencil" aria-hidden="true"></i></Link>
-                        <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => userDelete(row.id)}><i className="fa fa-trash" aria-hidden="true"></i></button>
-                    </div>
+                        <div className='btn-group  text-nowrap p-1'>
+                            <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}/status`}>Check Status</Link>
+                            <Link className='btn btn-outline-primary btn-sm' href={`/users/trainer/${row.id}`}><i className="fa fa-pencil" aria-hidden="true"></i></Link>
+                            <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => userDelete(row.id)}><i className="fa fa-trash" aria-hidden="true"></i></button>
+                        </div>
                     </>
-                    
+
                 )
-            },
+            }
         },
     ];
 
@@ -117,18 +146,33 @@ const trainer = () => {
         });
     };
     const handleSort = function (column, sortDirection) {
+        //console.log(rows)
         QueryParam.order_by = column.sortField;
         QueryParam.order_in = sortDirection;
-        router.push({
+        /* router.push({
             pathname: router.pathname,
             query: QueryParam,
-        });
+        }); */
+        trainerList();
     }
 
 
     return (
         <>
             <div className=" SearchandSort ">
+                <div className=" search-button-mycourse d-flex ">
+                    <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                    <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; trainerList() }} placeholder=" Search " /></div>
+                </div>
+
+                <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                    <select name=" category "
+                        className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                        onChange={(event) => { QueryParam.filter = event.target.value; trainerList() }}>
+                        <option value="all">All</option>
+                        <option value="country">Country Name</option>
+                    </select>
+                </div>
                 {
                     (() => {
                         if (layoutValues?.profile?.role == 'admin') {
@@ -144,10 +188,10 @@ const trainer = () => {
                 }
             </div>
             <div className="trainee-body">
-                <div className="trainee-admincoursemanagement d-flex flex-column">
+                <div className="trainee-admincoursemanagement d-flex flex-column" style={{ height: 'fit-content' }}>
                     <div className="box-1-admincoursemanagement"></div>
                     <div className="box-2-admincoursemanagement"></div>
-                    <div className="trainee-tag-admincoursemanagement" style={{ height: 'fit-content' }}>
+                    <div className="trainee-tag-admincoursemanagement">
                         <p>Trainer List</p>
                     </div>
                     <DataTable
@@ -173,7 +217,7 @@ const trainer = () => {
                         breakLabel="..."
                         onPageChange={pagginationHandler}
                         className="pagination float-end float-right"
-                        pageLinkClassName='page-link rounded-circle'
+                        pageLinkClassName='page-link  pagination-link'
                         pageClassName="page-item border-0"
                     />
                 </nav>

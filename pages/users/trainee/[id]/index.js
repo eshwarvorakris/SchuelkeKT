@@ -61,10 +61,10 @@ const editTrainee = () => {
                             <input type="text" {...register("full_name", { required: "Fill Name" })} placeholder="Enter Trainee's full name" />
                         </div>
 
-                        <div className="trainer-email">
+                        {/* <div className="trainer-email">
                             <h6>Trainee Email</h6>
                             <input type="email" {...register("email", { required: "Fill Email Address" })} placeholder="Enter Trainee's email address" />
-                        </div>
+                        </div> */}
 
                         <div className="trainer-name" style={{ display: 'block' }}>
                             <h6>Trainee Contact</h6>

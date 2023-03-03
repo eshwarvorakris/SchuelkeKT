@@ -27,7 +27,7 @@ const admincoursemanagement = () => {
         helper.sweetalert.confirm("Are you sure you want to delete this course", "info", "true").then((result) => {
             if (result.isConfirmed) {
                 courseModel.delete(id).then((res) => {
-                    mutate('couresList');
+                    couresList();
                     helper.sweetalert.toast(res.data?.message);
                 })
             }
@@ -135,12 +135,16 @@ const admincoursemanagement = () => {
     const handleSort = function (column, sortDirection) {
         QueryParam.order_by = column.sortField;
         QueryParam.order_in = sortDirection;
-        router.push({
+        /* router.push({
             pathname: router.pathname,
             query: QueryParam,
-        });
+        }); */
+        couresList();
     }
 
+    // useEffect(() => {
+    //     couresList();
+    // }, [QueryParam]);
     return (
         <>
             {
@@ -154,12 +158,13 @@ const admincoursemanagement = () => {
                                         <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
                                     </div>
 
-                                    <div className=" category d-flex gap-3 align-items-center " style={{marginRight:'2rem'}}>
-                                        <select name=" category " id=" cars " className="select-mycourse">
-                                            <option value=" Product ">Filter</option>
-                                            <option value=" Country ">Trainee ID</option>
-                                            <option value=" Country ">Trainee Name</option>
-                                            <option value=" Blanket ">No. of Courses Enrolled</option>
+                                    <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                        <select name=" category " id=" cars " 
+                                            className="select-mycourse" style={{padding:'1px', width:'8.5rem'}}
+                                            onChange={(event) => { QueryParam.filter = event.target.value; couresList() }}>
+                                            <option value="all">All</option>
+                                            <option value="course_name">Course Name</option>
+                                            <option value="country">Country</option>
                                         </select>
                                     </div>
                                     {(layoutValues?.profile?.role == 'trainer') &&
@@ -171,7 +176,7 @@ const admincoursemanagement = () => {
                                     }
                                 </div>
                                 <div className="trainee-body">
-                                    <div className="trainee-admincoursemanagement d-flex flex-column" style={{minHeight:'70vh', height:'unset'}}>
+                                    <div className="trainee-admincoursemanagement d-flex flex-column" style={{ minHeight: '70vh', height: 'unset' }}>
                                         <div className="box-1-admincoursemanagement"></div>
                                         <div className="box-2-admincoursemanagement"></div>
                                         <div className="trainee-tag-admincoursemanagement">
@@ -202,7 +207,7 @@ const admincoursemanagement = () => {
                                             breakLabel="..."
                                             onPageChange={pagginationHandler}
                                             className="pagination float-end float-right"
-                                            pageLinkClassName='page-link rounded-circle'
+                                            pageLinkClassName='page-link pagination-link'
                                             pageClassName="page-item border-0"
                                         />
                                     </nav>
@@ -213,13 +218,13 @@ const admincoursemanagement = () => {
                     else {
                         return (
                             <>
-                                <form style={{marginTop: '12%'}}>
+                                <form style={{ marginTop: '12%' }}>
                                     <RecentLearningCard />
                                     <TabCourseList />
                                 </form>
                             </>
                         );
-                        
+
                     }
                 })()
             }

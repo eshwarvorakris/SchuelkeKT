@@ -68,7 +68,7 @@ const editCourse = () => {
         data.append("filefolder", "course");
         setIsUploaded(true);
         await uploader.upload(data).then((res) => {
-            helper.sweetalert.toast("File Uploaded");
+            helper.sweetalert.toast("File Uploaded Successfully");
             document.getElementById("thumbnail-pic").classList.remove("d-none");
             document.getElementById("pic-container").classList.add("d-none");
             console.log(res?.data);

@@ -76,7 +76,7 @@ const editTrainee = () => {
                         <p>Trainer Status</p>
                     </div>
 
-                    <div className="trainee-info">
+                    <div className="trainee-info" style={{flexWrap: 'wrap'}}>
                         <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>

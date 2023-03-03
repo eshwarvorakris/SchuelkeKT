@@ -629,6 +629,13 @@ h6 {
     margin-left: 10px;
 }
 
+.pagination-link {
+    border-radius: 10px;
+}
+
+.hbotQl {
+    white-space: unset !important;
+}
 /* ////////////////////////////////////////////////// */
 
 
