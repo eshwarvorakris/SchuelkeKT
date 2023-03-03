@@ -215,6 +215,7 @@ const courseController = class {
           .create(req.body)
           .then((resultCreate) => {
             res.send(resultCreate);
+            User.increment({course_count: 1}, { where: { id: req.userId } })
           })
           .catch((error) => {
             console.error("Failed to retrieve data : ", error);

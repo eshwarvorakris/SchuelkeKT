@@ -1,10 +1,12 @@
 const express = require("express");
 const { getPaginate } = require("../lib/helpers");
 const User = require("../models/User.model");
+const Course = require("../models/Course.model");
+const CourseView = require("../models/Course_views.model");
 const validator = require("Validator");
 const bcrypt = require("bcrypt");
 const customValidation = require("../lib/customValidation");
-const { Op } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const _ = require("lodash");
 const userController = class {
   async index(req, res) {
@@ -19,15 +21,15 @@ const userController = class {
   }
 
   async getNexUserId(req, res) {
-    console.log("request = ",req?.query);
-    var userId = await User.max('user_id', {where: { role: "trainee" }});
+    console.log("request = ", req?.query);
+    var userId = await User.max('user_id', { where: { role: "trainee" } });
     var userIdInitial = 50000000;
     if (req.query.role !== undefined) {
       userIdInitial = 10000000;
       userId = await User.max('user_id', { where: req?.query });
     }
     console.log("userid = ", userId);
-    if(userId == 0 || userId == null) {
+    if (userId == 0 || userId == null) {
       userId = userIdInitial;
     }
     userId++;
@@ -35,13 +37,57 @@ const userController = class {
     res.send({ data: userId });
   }
   async getTrainee(req, res) {
+
+    if (req.query.filter) {
+      if (req.query.filter == "country") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+          ];
+        }
+      } else if (req.query.filter == "all") {
+        if(req.query.search) {
+          req["query"][Op.or] = [
+            { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+            Sequelize.where(
+              Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+              {[Op.iLike]: `%${req.query.search}%`}
+            ),
+          ];
+        }
+      }
+      delete req.query.search;
+      delete req.query.filter;
+    } else if (req.query.search) {
+      req["query"][Op.or] = [
+        { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+      ];
+      delete req.query.search;
+    }
+    req["query"]["role"] = "trainee";
+
     await User
       .findAndCountAll({
-        where: {
-          role: "trainee"
-        }, offset: req.query.page, limit: pageLimit, order:[orderByColumn] 
+        where: req.query,
+        offset: req.query.page, limit: pageLimit, order: [orderByColumn]
       })
-      .then((result) => {
+      .then(async (result) => {
+        let allUsers = [];
+        for (const curUser of result.rows) {
+          const count = await CourseView.count({ where: { trainee_id: curUser?.dataValues?.id } });
+          curUser.dataValues.totalCourse = count;
+          allUsers.push(curUser);
+          //console.log(count);
+        }
+        result.rows = allUsers;
         res.send(getPaginate(result, req.query.page ?? pageNumber, pageLimit));
       })
       .catch((error) => {
@@ -50,13 +96,58 @@ const userController = class {
   }
 
   async getTrainer(req, res) {
+
+    if (req.query.filter) {
+      if (req.query.filter == "country") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+          ];
+        }
+      } else if (req.query.filter == "all") {
+        if(req.query.search) {
+          req["query"][Op.or] = [
+            { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+            Sequelize.where(
+              Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+              {[Op.iLike]: `%${req.query.search}%`}
+            ),
+          ];
+        }
+      }
+      delete req.query.search;
+      delete req.query.filter;
+    } else if (req.query.search) {
+      req["query"][Op.or] = [
+        { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+      ];
+      delete req.query.search;
+    }
+    req["query"]["role"] = "trainer";
     await User
       .findAndCountAll({
-        where: {
-          role: "trainer"
-        }, offset: req.query.page, limit: pageLimit, order:[orderByColumn] 
+        where: req.query,
+        offset: req.query.page, limit: pageLimit, order: [orderByColumn]
       })
-      .then((result) => {
+      .then(async (result) => {
+        //console.clear();
+        //console.log(result.rows)
+        let allUsers = [];
+        for (const curUser of result.rows) {
+          const count = await Course.count({ where: { trainer_id: curUser?.dataValues?.id } });
+          curUser.dataValues.totalCourse = count;
+          allUsers.push(curUser);
+          //console.log(count);
+        }
+        result.rows = allUsers;
         res.send(getPaginate(result, req.query.page ?? pageNumber, pageLimit));
       })
       .catch((error) => {
@@ -91,7 +182,7 @@ const userController = class {
         userId = await User.max('user_id', { where: { role: req.body.role } });
       }
 
-      if(userId == 0 || userId == null) {
+      if (userId == 0 || userId == null) {
         userId = userIdInitial;
       }
       userId++;
@@ -111,8 +202,7 @@ const userController = class {
         );
       });
     }
-    else
-    {
+    else {
       return res.status(422).send(
         {
           message: _.chain(validation.getErrors()).flatMap().head(),
@@ -163,7 +253,7 @@ const userController = class {
     }
   }
   async show(req, res) {
-    if(req.params.id !== undefined && req.params.id !== "undefined") {
+    if (req.params.id !== undefined && req.params.id !== "undefined") {
       const user = await User.findByPk(req.params.id);
       res.send({ data: user });
     } else {

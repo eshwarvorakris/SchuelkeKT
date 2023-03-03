@@ -54,6 +54,10 @@ User.init({
   password: {
     type: DataTypes.STRING
   },
+  course_count: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
   user_id: {
     type: DataTypes.INTEGER,
     defaultValue: 0,

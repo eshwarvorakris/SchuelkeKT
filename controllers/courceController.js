@@ -4,12 +4,44 @@ const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Course = require("../models/Course.model");
 const Module = require("../models/Module.model");
+const User = require("../models/User.model");
 const { Sequelize, Op, DataTypes } = require("sequelize");
 const Category = require("../models/Category.model");
 const courseController = class {
   async index(req, res) {
     let search = req.query.search;
-    if (req.query.search) {
+    if(req.query.filter) {
+      if(req.query.filter == "course_name") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, }
+          ];
+        }
+      } else if (req.query.filter == "country") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { '$trainer.country$': { [Op.iLike]: `%${req.query.search}%` } }
+          ];
+        }
+      } else if (req.query.filter == "all") {
+        req["query"][Op.or] = [
+          { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+          { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
+          { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
+          { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+          Sequelize.where(
+            Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
+            {[Op.iLike]: `%${req.query.search}%`}
+          ),
+          Sequelize.where(
+            Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
+            {[Op.iLike]: `%${req.query.search}%`}
+          ),
+        ];
+      }
+      delete req.query.search;
+      delete req.query.filter;
+    } else if (req.query.search) {
       req["query"][Op.or] = [
         { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
         { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
@@ -65,6 +97,7 @@ const courseController = class {
     await Course
       .create(req.body)
       .then((result) => {
+        User.increment({course_count: 1}, { where: { id: req.userId } })
         res.send(result);
       })
       .catch((error) => {
@@ -119,17 +152,28 @@ const courseController = class {
     }
     return res.status(422).send(
       {
-        message: "Course not update",
+        message: "Course not found",
       }
     );
   }
 
   async destroy(req, res) {
-    console.log(req.params)
-    const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
-      return { message: "Course Deleted" };
-    });
-    res.send(course);
+    //console.clear();
+    const coursefind = await Course.findByPk(req.params.id);
+    if (coursefind) {
+      //console.log(coursefind.trainer_id);
+      const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
+        User.decrement({course_count: 1}, { where: { id: coursefind.trainer_id } })
+        return { message: "Course Deleted" };
+      });
+      res.send(course);
+    } else {
+      return res.status(422).send(
+        {
+          message: "Course not update",
+        }
+      );
+    }
   }
 };
 
