@@ -5,10 +5,16 @@ import auth from "../model/auth.model";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Modal from 'react-bootstrap/Modal';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
 import authLayout from "../components/authLayout";
+import { useState } from 'react';
 function index() {
+  const [blanketModal, setBlanketModal] = useState(false);
+  const [productModal, setProductModal] = useState(false);
+  const [countryModal, setCountryModal] = useState(false);
+  const [videoModal, setVideoModal] = useState(false);
   return (
     <>
       <div>
@@ -174,7 +180,7 @@ function index() {
 
           <header className="header">
             <h1 className="fw-bolder">
-              Schülke Knowledge
+              schülke Knowledge
               Transfer (Online)
             </h1>
             <span>Acquire and Apply to Achieve</span>
@@ -200,7 +206,7 @@ function index() {
                       <span className="info-heading">What & Who?</span>
                     </div>
                     <div>
-                      <p>Schülke Knowledge Transfer (Online) is a unique learning platform specifically created for schülke
+                      <p>schülke Knowledge Transfer (Online) is a unique learning platform specifically created for schülke
                         colleagues and our associates to acquire essential knowledge in infection prevention control.</p>
                     </div>
                   </li>
@@ -236,9 +242,9 @@ function index() {
                       <span className="info-heading">Where?</span>
                     </div>
                     <div>
-                      <p>The trainings content is designed to be assessed remotely via an online platform, mitigating the risk
+                      <p>The training content is designed to be assessed remotely via an online platform, mitigating the risk
                         associated with social distancing for a seamless training schedule not affected by physical absentees.
-                        Trainees are able to perform the training at their own pace within the designated time frame without
+                        Trainees are able to participate in the training at their own pace within the designated time frame without
                         compromising operational demands.</p>
                     </div>
                   </li>
@@ -283,7 +289,7 @@ function index() {
           <div className="row training-topics">
             <div className="col-md-12">
               <div className="main-heading">
-                <h1 className='mt-5 pt-5'>On what you will be trained!</h1>
+                <h1 className='mt-5 pt-5'>Topics that you will be trained on!</h1>
               </div>
             </div>
             <div className="col-md-12 ">
@@ -307,8 +313,8 @@ function index() {
                     <p className="card-text training-info text-light">
                       Applicable <br /> to all
                     </p>
-                    <a href="#" className="btn btn-light training-card-btn mt-3" data-toggle="modal" data-target="#myModal">Know
-                      More</a>
+                    <button className="btn btn-light training-card-btn mt-3" onClick={() => setBlanketModal(true)}>Know
+                      More</button>
                   </div>
                 </div>
               </div>
@@ -324,8 +330,8 @@ function index() {
                     </h5>
                     <p className="card-text training-info text-light">
                       Information of the different products in your region </p>
-                    <a href="#" className="btn btn-light training-card-btn mt-3" data-toggle="modal" data-target="#myModal-2">Know
-                      More</a>
+                    <button className="btn btn-light training-card-btn mt-3" onClick={() => setProductModal(true)}>Know
+                      More</button>
                   </div>
                 </div>
               </div>
@@ -340,98 +346,83 @@ function index() {
                     </h5>
                     <p className="card-text training-info text-light">
                       Information specific to your region of interest </p>
-                    <a href="#" className="btn btn-light training-card-btn mt-3" data-toggle="modal" data-target="#myModal-3">Know
-                      More</a>
+                    <button className="btn btn-light training-card-btn mt-3" onClick={() => setCountryModal(true)}>Know
+                      More</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="modal fade" tabindex="-1" id="myModal">
-              <div className="modal-dialog modal-lg modal-dialog-centered">
-                <div className="modal-content  text-center">
-                  <div className="modal-title">
+            <Modal
+              show={blanketModal}
+              onHide={() => setBlanketModal(false)}
+              size="lg"
+              centered>
+              <Modal.Body>
+                <h5 className="align-middle" style={{ textAlign: 'center' }}>Blanket Topics</h5>
+                <h5 className="align-middle card-p" style={{ textAlign: 'center' }}>Applicable to all</h5>
+                <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
+                  <strong>
+                    Blanket topics are overarching topics
+                    of
+                    infection prevention
+                    control and wound
+                    care. All topics within this categories will be applicable to all trainees who will learn and acquire
+                    the necessary knowledge to facilitate their work (sales, marketing etc.) within schülke product
+                    offerings in IPC and wound care. </strong>
+                </h5>
+              </Modal.Body>
+              <Modal.Footer>
+                <img src="trainee-images/blue.png" className="popup-brand-logo pl-3" alt="pop-up logo" />
+              </Modal.Footer>
+            </Modal>
 
-                  </div>
+            <Modal
+              show={productModal}
+              onHide={() => setProductModal(false)}
+              size="lg"
+              centered>
+              <Modal.Body>
+                <h5 className="align-middle" style={{ textAlign: 'center' }}>Product Topics</h5>
+                <h5 className="align-middle card-p" style={{ textAlign: 'center' }}>Information of the different products in your region</h5>
+                <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
+                  <strong>
+                    Product topics covers the different
+                    information
+                    of the products within your region of concerns. Basic information of the products and field-specific
+                    questions derived from the individual trainers/colleagues will be shared. These modules will provide
+                    you
+                    with essential information to prepare individuals to speak about the products and to answer any common
+                    asked questions. </strong>
+                </h5>
+              </Modal.Body>
+              <Modal.Footer>
+                <img src="trainee-images/blue.png" className="popup-brand-logo pl-3" alt="pop-up logo" />
+              </Modal.Footer>
+            </Modal>
 
-                  <div className="modal-body">
-                    <h5 className="align-middle">Blanket Topics</h5>
-                    <h5 className="align-middle card-p">Applicable to all</h5>
-                    <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
-                      <strong>
-                        Blanket topics are overarching topics
-                        of
-                        infection prevention
-                        control and wound
-                        care. All topics within this categories will be applicable to all trainees who will learn and acquire
-                        the necessary knowledge to facilitate their work (sales, marketing etc.) within schülke product
-                        offerings in IPC and wound care. </strong>
-                    </h5>
-                  </div>
+            <Modal
+              show={countryModal}
+              onHide={() => setCountryModal(false)}
+              size="lg"
+              centered>
+              <Modal.Body>
+                <h5 className="align-middle" style={{ textAlign: 'center' }}>Country Topics</h5>
+                <h5 className="align-middle card-p" style={{ textAlign: 'center' }}>Information specific to your region of interest</h5>
+                <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
+                  <strong>
+                    Country topics are modules that provide
+                    information for those who resides within that region. Critical information such as guidelines,
+                    national
+                    regulatory, compliance are covered to prepare the individuals to operate within the region of
+                    interest. </strong>
+                </h5>
+              </Modal.Body>
+              <Modal.Footer>
+                <img src="trainee-images/blue.png" className="popup-brand-logo pl-3" alt="pop-up logo" />
+              </Modal.Footer>
+            </Modal>
 
-                  <div className="modal-footer">
-                    <img src="trainee-images/blue.png" className="popup-brand-logo pl-3" alt="pop-up logo" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="modal fade" tabindex="-1" id="myModal-2">
-              <div className="modal-dialog modal-lg modal-dialog-centered">
-                <div className="modal-content  text-center">
-                  <div className="modal-title">
-                  </div>
-
-                  <div className="modal-body">
-                    <h5 className="align-middle">Product Topics</h5>
-                    <h5 className="align-middle card-p">Information of the different products in your region </h5>
-                    <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
-                      <strong>
-                        Product topics covers the different
-                        information
-                        of the products within your region of concerns. Basic information of the products and field-specific
-                        questions derived from the individual trainers/colleagues will be shared. These modules will provide
-                        you
-                        with essential information to prepare individuals to speak about the products and to answer any common
-                        asked questions.
-                      </strong>
-                    </h5>
-                  </div>
-
-                  <div className="modal-footer">
-                    <img src="trainee-images/blue.png" className="popup-brand-logo pl-3" alt="pop-up logo" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="modal fade" tabindex="-1" id="myModal-3">
-              <div className="modal-dialog modal-lg modal-dialog-centered">
-                <div className="modal-content  text-center">
-                  <div className="modal-title">
-
-                  </div>
-
-                  <div className="modal-body">
-                    <h5 className="align-middle">Country topics</h5>
-                    <h5 className="align-middle card-p">Information specific to your region of interest</h5>
-                    <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
-                      <strong>
-                        Country topics are modules that provide
-                        information for those who resides within that region. Critical information such as guidelines,
-                        national
-                        regulatory, compliance are covered to prepare the individuals to operate within the region of
-                        interest.
-                      </strong>
-                    </h5>
-                  </div>
-
-                  <div className="modal-footer">
-                    <img src="trainee-images/blue.png" className="popup-brand-logo pl-3" alt="pop-up logo" />
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -439,7 +430,7 @@ function index() {
           <div className="container">
             <div className="row training-topics">
               <div className="col-md-12 main-heading">
-                <h1 className='mt-5 pt-5'>Training Overview</h1>
+                <h1 className='mt-5 pt-5' style={{ marginLeft: 'unset', textAlign: 'center' }}>Training Overview</h1>
               </div>
             </div>
           </div>
@@ -447,9 +438,9 @@ function index() {
           <div className="container mx-auto training-video-overview">
             <div className="row">
               <div className="col-md-11 training-video m-auto d-grid background">
-                <img className="training-thumbnail" data-toggle="modal" data-target="#myModal2" width="560" height="315"
+                <img className="training-thumbnail" onClick={() => setVideoModal(true)} width="560" height="315"
                   src="trainer-images/poster.png" alt="" />
-                <div className="pause-play-btn" data-toggle="modal" data-target="#myModal2">
+                <div className="pause-play-btn"  onClick={() => setVideoModal(true)}>
                   {/* <ion-icon className="play-btn" name="play-outline"></ion-icon> */}
                   <center>
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-play" viewBox="0 0 16 16">
@@ -460,6 +451,20 @@ function index() {
               </div>
             </div>
           </div>
+
+          <Modal
+            show={videoModal}
+            onHide={() => setVideoModal(false)}
+            size="lg"
+            centered>
+            <Modal.Body className=' text-center'>
+              <video width="100%" height="100%" controls poster="images/trainer-images/poster.png">
+                <source src="/videos/landing-page/Landing Page Video V1.mp4" type="video/mp4" />
+                Your browser does not support this video.
+              </video>
+            </Modal.Body>
+          </Modal>
+
           <div className="modal fade" tabindex="-1" id="myModal2">
             <div className="modal-dialog modal-lg modal-dialog-centered">
               <div className="modal-content">
@@ -486,7 +491,7 @@ function index() {
               </div>
               <div className="col-md-12">
                 <div className="story-content">
-                  <p>The best trainers with the best expertise to guide along</p>
+                  <p>Members of the Core Knowledge Team (APAC)</p>
                 </div>
               </div>
             </div>
@@ -499,8 +504,8 @@ function index() {
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Dr. Thomas.png"
                     style={{ height: "12rem" }} alt="Card image cap" />
                   <div className="card-body">
-                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Dr. Thomas Oh</h5>
-                    <div className="department-info">Medical & Scientific Affai'rs (APAC) </div>
+                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Dr. Thomas OH</h5>
+                    <div className="department-info">Medical & Scientific Affairs (APAC) </div>
                     <div className="LMS-info">Administrator/Trainer </div>
                     <div className="country-info">Singapore/APAC</div>
                   </div>
@@ -511,8 +516,8 @@ function index() {
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Pearleen pic.png"
                     style={{ height: "12rem" }} alt="Card image cap" />
                   <div className="card-body">
-                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Pearleen Ho</h5>
-                    <div className="department-info">Senior Application Scientist </div>
+                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Pearleen HO</h5>
+                    <div className="department-info">Senior Application Specialist </div>
                     <div className="LMS-info">Trainer </div>
                     <div className="country-info">Singapore</div>
                   </div>
@@ -562,7 +567,7 @@ function index() {
                     alt="Card image cap" />
                   <div className="card-body">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Mr. V Rajaraman</h5>
-                    <div className="department-info" style={{ fontSize: '10px' }}>Customer Engagement & Key Account </div>
+                    <div className="department-info" style={{ fontSize: '10px' }}>Marketing </div>
                     <div className="LMS-info">Trainer </div>
                     <div className="country-info">India</div>
                   </div>
@@ -637,14 +642,14 @@ function index() {
                       <a href="#home" className="text-reset">Home</a>
                     </p>
                     <p>
-                      <a href="#section-3" className="text-reset">About</a>
+                      <a href="#section-2" className="text-reset">About</a>
                     </p>
                     <p>
                       <a href="#section-4" className="text-reset">Trainings</a>
                     </p>
-                    <p>
+                    {/* <p>
                       <a href="#!" className="text-reset">Contact</a>
-                    </p>
+                    </p> */}
                   </div>
                   <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4 text-md-left">
                     <h6 className="fw-bold mb-4 text-light">

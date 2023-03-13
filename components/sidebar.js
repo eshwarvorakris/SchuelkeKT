@@ -15,13 +15,12 @@ function sidebar({ profile }) {
       <div className="col-md-2 trainee-sidebar">
         <div className="section-1-sidebar d-flex flex-column flex-shrink-0 p-3"
           style={{ width: "280px", height: '100vh', backgroundColor: '#008bd6' }}>
-          <a href="" className="d-flex flex-column mb-3 mb-md-0 me-md-auto link-dark text-decoration-none"></a>
+          <Link href="/" className="d-flex flex-column mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
           <div className="trainee-brand-logo">
             <img src="/trainee-images/Schuelke_Logo 1-min.png" alt="" />
           </div>
-          <a href="#">
-            <span className="trainee-brand-info mt-1 text-light">Knowledge Transfer</span>
-          </a>
+          <span className="trainee-brand-info mt-1 text-light">Knowledge Transfer</span>
+          </Link>
           <ul className="nav nav-pills flex-column mb-auto text-light">
             <li className="nav-item">
               <Link href="/dashboard" className="nav-link ml-4 otherLink">

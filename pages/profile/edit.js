@@ -178,7 +178,7 @@ const myprofile = () => {
                                     {formErrors?.email && <p className="invalid-feedback">{formErrors?.email}</p>}
                                 </div>
 
-                                <div className="trainer-DOB">
+                                {/* <div className="trainer-DOB">
                                     <h6>Date of Birth</h6>
                                     <input type="date"  {...register("dob", { required: "Fill Date Of Birth" })} max={moment().format("YYYY-MM-DD")} />
                                     {formErrors?.dob && <p className="invalid-feedback">{formErrors?.dob}</p>}
@@ -189,7 +189,7 @@ const myprofile = () => {
                                     <textarea className="address-box"
                                         placeholder="1234, Lorem ipsum dolor sit amet, consectetur" cols="30"
                                         rows="3" {...register("address")}></textarea>
-                                </div>
+                                </div> */}
 
                                 <div className="trainer-Name">
                                     <h6>Contact Number</h6>

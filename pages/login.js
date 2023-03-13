@@ -48,10 +48,10 @@ function Login() {
 
             <img src="/trainee-images/rafiki.png" className="traineeLogin-2-illustration" alt="" />
 
-            <p className='brandp'>
+            {/* <p className='brandp'>
               Lorem ipsum dolor sit amet, consectetur <br />
               adipiscing
-            </p>
+            </p> */}
 
             <div className="social-logos d-flex">
               <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" className="bi bi-facebook" viewBox="0 0 16 16">

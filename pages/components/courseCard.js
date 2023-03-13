@@ -47,7 +47,7 @@ export default function courseCard({ courseData }) {
             </div>
           </div>
           <div className="percentage-detail">
-            <p>{statData?.userCompletePercent}% Trainees Completed</p>
+            <p style={{fontSize:'13px'}}>{statData?.userCompletePercent}% Trainees Completed</p>
           </div>
         </div>
         <div className="duration-details">

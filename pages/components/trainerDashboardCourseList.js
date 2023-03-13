@@ -28,6 +28,10 @@ export default function adminDashboardGraph() {
   const changeCategory = (value) => {
     //console.log(value);
     QueryParam.category_id = value;
+    if(value == "all") {
+      delete(QueryParam.category_id);
+    }
+    
     router.push({
       pathname: router.pathname,
       query: QueryParam,
@@ -41,7 +45,7 @@ export default function adminDashboardGraph() {
         <div className="category d-flex gap-3 align-items-center">
           <h6 htmlFor="category" style={{ color: "#7E878C", fontFamily: "Co-text" }}>Category: </h6>
           <select name="category" id="cars" className='select-dashboard' onChange={() => { changeCategory(event.target.value) }}>
-            <option value="Country">-Select-</option>
+            <option value="all">All</option>
             {categoryData?.data?.map((item) => {
               return (<option key={item.id} value={item.id}>{item.category_name}</option>)
             })}

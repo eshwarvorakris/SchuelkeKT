@@ -108,7 +108,7 @@ const myprofile = () => {
                             <input type="text" value={profile.email} readOnly />
                         </div>
 
-                        <div className="trainer-DOB">
+                        {/* <div className="trainer-DOB">
                             <h6>Date of Birth</h6>
                             <input type="date" value={profile.dob} readOnly />
                         </div>
@@ -118,7 +118,7 @@ const myprofile = () => {
                             <textarea className="address-box"
                                 cols="30"
                                 rows="3" value={profile.address} readOnly ></textarea>
-                        </div>
+                        </div> */}
 
                         <div className="trainer-Name">
                             <h6>Contact Number</h6>
