@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import userModal from "../../../model/user.model";
+import widgetModal from "../../../model/widget.model";
 import DataTable from 'react-data-table-component';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
@@ -13,6 +14,7 @@ import AppContext from "../../../lib/appContext";
 const trainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
+    const [courseCount, setCourseCount] = useState(0);
     { layoutValues.setPageHeading("Trainee List") }
 
     const QueryParam = router.query;
@@ -21,6 +23,15 @@ const trainee = () => {
     QueryParam.order_in = router.query?.order_in || "desc";
 
     const { data: trainee, mutate: traineeList, error: traineeerror, isLoading: traineeisLoading } = useSWR(QueryParam ? "traineeList" : null, async () => await userModal.traineeList(QueryParam), config.swrConfig);
+
+    useEffect(() => {
+        widgetModal.approvedCourseCount().then((reswidget) => {
+            //console.log("reswidget", reswidget?.data);
+            setCourseCount(reswidget?.data?.total);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, [])
 
     const userDelete = function (id) {
         //console.log(id);
@@ -88,7 +99,7 @@ const trainee = () => {
             selector: row => row?.course_count,
             cell: row => {
                 return (
-                    <p>{row?.course_count}</p>
+                    <p>{courseCount}</p>
                 )
             },
             sortable: true,
@@ -179,7 +190,7 @@ const trainee = () => {
                 }
             </div>
             <div className="trainee-body">
-                <div className="trainee-admincoursemanagement d-flex flex-column">
+                <div className="trainee-admincoursemanagement d-flex flex-column" style={{minHeight:'85vh', height:'unset'}}>
                     <div className="box-1-admincoursemanagement"></div>
                     <div className="box-2-admincoursemanagement"></div>
                     <div className="trainee-tag-admincoursemanagement">

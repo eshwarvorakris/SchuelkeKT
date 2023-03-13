@@ -10,6 +10,9 @@ import { config } from '../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../lib/helper';
 import AppContext from "../../lib/appContext";
+import Tooltip from 'react-bootstrap/Tooltip';
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import Link from "next/link";
 const addcourse = ({ categories }) => {
@@ -106,11 +109,36 @@ const addcourse = ({ categories }) => {
                         <div className="trainee-course-form d-grid">
                             <div className="course-form d-flex flex-column justify-content-between">
                                 <div className="course-name">
-                                    <h6>Course Name</h6>
+                                    <h6>
+                                        Course Name <span><OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip {...props}>
+                                                    Course Name
+                                                </Tooltip>
+                                            )}
+                                            placement="bottom"
+                                        ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                        </OverlayTrigger>
+                                        </span>
+                                    </h6>
+
                                     <input type="text" {...register("course_name")} placeholder="Gastroentrology" required />
                                 </div>
                                 <div className="category">
-                                    <h6 htmlFor="category">Category</h6>
+                                    <h6 htmlFor="category">
+                                        Category <span><OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip {...props}>
+                                                    Course Category
+                                                </Tooltip>
+                                            )}
+                                            placement="bottom"
+                                        ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                        </OverlayTrigger>
+                                        </span>
+                                    </h6>
                                     <select {...register("category_id")} className="selectaddcourse" required>
                                         {categoryData?.data?.map((item) => {
                                             return (<option key={item.id} value={item.id}>{item.category_name}</option>)
@@ -118,11 +146,34 @@ const addcourse = ({ categories }) => {
                                     </select>
                                 </div>
                                 <div className="course-completion">
-                                    <h6>Number of Modules</h6>
+                                    <h6>Number of Modules <span><OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip {...props}>
+                                                    Number of Modules
+                                                </Tooltip>
+                                            )}
+                                            placement="bottom"
+                                        ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                        </OverlayTrigger>
+                                        </span>
+                                    </h6>
                                     <input type="number" {...register("total_modules")} min="1" required />
                                 </div>
                                 <div className="launch-date">
-                                    <h6>Course Launch Date</h6>
+                                    <h6>
+                                        Course Launch Date <span><OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip {...props}>
+                                                    Course Launch Date
+                                                </Tooltip>
+                                            )}
+                                            placement="bottom"
+                                        ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                        </OverlayTrigger>
+                                        </span>
+                                    </h6>
                                     <input className="min-date" type="date" {...register("course_launch_date")} min={moment().format("YYYY-MM-DD")} required />
                                 </div>
                             </div>
@@ -193,7 +244,19 @@ const addcourse = ({ categories }) => {
                         </div >
                         <div className="text-box">
                             <div className="text-heading">
-                                <h6>Course Description</h6>
+                                <h6>
+                                    Course Description <span><OverlayTrigger
+                                        delay={{ hide: 450, show: 300 }}
+                                        overlay={(props) => (
+                                            <Tooltip {...props}>
+                                                Course Description
+                                            </Tooltip>
+                                        )}
+                                        placement="bottom"
+                                    ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                    </OverlayTrigger>
+                                    </span>
+                                </h6>
                             </div>
                             <textarea {...register("course_description")} cols="30" rows="30" className="text-type-box"></textarea>
 

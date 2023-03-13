@@ -1,6 +1,6 @@
 import auth from "../../../model/auth.model";
 import { useRouter } from "next/router";
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import useSWR, { mutate } from 'swr';
 import courseModel from "../../../model/course.model";
 import ModuleCard from "../../components/moduleCard";
@@ -52,8 +52,8 @@ const updateStatus = () => {
     //console.log("called");
     loadModule();
     //console.log("modules = ", modules);
-    
-    if(modules?.data){
+
+    if (modules?.data) {
       setModuleCount(modules.data.length);
     }
   }, [router, modules]);
@@ -99,10 +99,20 @@ const updateStatus = () => {
               <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} />
             )
           })}
-          <div className="btn-containers">
-            <button type="button" onClick={() => approveBtn()} className="footer-btn approve-btn"
-              style={{ backgroundColor: "#008bd6", padding: '5px 15px' }}>Approve</button>
-            <button type="button" onClick={() => rejectBtn()} className="footer-btn reject-btn" style={{ padding: '5px 15px' }}>Reject</button>
+          <div className="btn-containers  d-flex justify-content-between ">
+            <div className="left-col d-flex gap-4">
+              <button type="button" onClick={() => approveBtn()} className="footer-btn approve-btn"
+                style={{ backgroundColor: "#008bd6", padding: '5px 15px' }}>Approve</button>
+              <button type="button" onClick={() => rejectBtn()} className="footer-btn reject-btn" style={{ padding: '5px 15px' }}>Reject</button>
+            </div>
+            <div className="right-col d-flex gap-4" style={{marginRight:'4rem'}}>
+              <div className="back-btn" style={{ padding: 'unset' }}>
+                <Link href="/courses" style={{ textDecoration: 'none' }} className="btn">
+                  <span style={{ color: "rgba(0, 0, 0, 0.61)", fontSize: '15px' }}>Back</span>
+                </Link>
+              </div>
+
+            </div>
           </div>
         </form>
       </div>

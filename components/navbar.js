@@ -17,12 +17,12 @@ function navbar() {
             {console.log("profile data",layoutValues?.profile?.role)}
             <div className="collapse navbar-collapse flex-row-reverse">
                 <ul className="navbar-nav align-content-center">
-                    <li className="notify-btn nav-item active" style={{marginTop:'0.5rem'}}>
+                    {/* <li className="notify-btn nav-item active" style={{marginTop:'0.5rem'}}>
                         <Link className="nav-link" href="#"  style={{ backgroundColor: 'transparent', border: '1px solid rgba(60, 64, 67, 0.226)', borderRadius: '10px', padding: '0.5rem', color:'black' }}>
                             <i className="fa fa-bell" aria-hidden="true"></i>
                         </Link>
                         <span className="icon-badgeadmin">10+</span>
-                    </li>
+                    </li> */}
                     <li className="nav-item active face-tag">
                         <Link href="/profile" className="face-name text-light">
                             <button type="button" className="btn text-light profile-btn"

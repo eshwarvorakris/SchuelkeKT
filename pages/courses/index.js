@@ -34,6 +34,21 @@ const admincoursemanagement = () => {
         })
 
     }
+
+    const courseUnapprove = function (id) {
+        helper.sweetalert.confirm("Are you sure you want to Un-Approve this course", "info", "true").then((result) => {
+            if (result.isConfirmed) {
+                const updateCourse = new FormData();
+                updateCourse.append('status', 'pending');
+                courseModel.update(id, updateCourse).then((res) => {
+                    couresList();
+                    helper.sweetalert.toast("Course Status Updated.");
+                })
+            }
+        })
+
+    }
+
     const columns = [
         {
             name: 'S.No',
@@ -55,6 +70,12 @@ const admincoursemanagement = () => {
             selector: row => row.category?.category_name,
             sortable: true,
             sortField: "category.category_name",
+        },
+        {
+            name: 'Quiz Added',
+            selector: row => row.question_added,
+            sortable: true,
+            sortField: "row.question_added",
         },
         {
             name: 'No. of Module',
@@ -117,6 +138,17 @@ const admincoursemanagement = () => {
                         <div className='btn-group  text-nowrap'>
                             <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}>Edit</Link>
                             <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}>Delete</button>
+                            {
+                                (() => {
+                                    if (layoutValues?.profile?.role == 'admin' && row.status == 'approved') {
+                                        return (
+                                            <>
+                                            <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}>Un-Approve</button>
+                                            </>
+                                        );
+                                    }
+                                })()
+                            }
                         </div>)
                 }
 
@@ -142,9 +174,10 @@ const admincoursemanagement = () => {
         couresList();
     }
 
-    // useEffect(() => {
-    //     couresList();
-    // }, [QueryParam]);
+    useEffect(() => {
+        console.clear();
+        console.log(courses);
+    }, [courses]);
     return (
         <>
             {

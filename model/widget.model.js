@@ -20,6 +20,12 @@ const widgetModel=class {
     {
         return (await axiosInstance.get(`${this.baseUrl}/course/total`)).data;
     }
+
+    async approvedCourseCount()
+    {
+        return (await axiosInstance.get(`${this.baseUrl}/course/totalApproved`)).data;
+    }
+
     async courseWeek()
     {
         return (await axiosInstance.get(`${this.baseUrl}/course/weekDuration`)).data;

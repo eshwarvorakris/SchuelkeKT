@@ -44,7 +44,7 @@ function index() {
         <div className="section1" id="home" style={{ display: 'block' }}>
           <Navbar expand="lg">
             <div className="container">
-              <a className="navbar-brand d-flex flex-column fs-2 fw-bold text-light" href="#" style={{ width: 'max-content' }}>
+              <a className="navbar-brand d-flex flex-column fs-2 fw-bold text-light" href="#" style={{ width: 'max-content', paddingLeft:'unset' }}>
                 <img src="site_img/Schuelke_Logo 1-min.png" alt="shulke brand logo picture" style={{ width: 'fit-content' }} />
                 <span className="brand-info-header">Knowledge Transfer</span>
               </a>
@@ -73,7 +73,7 @@ function index() {
               </Navbar.Collapse>
             </div>
           </Navbar>
-          <div className="dot-pattern-1">
+          {/* <div className="dot-pattern-1">
             <div className="floting-style d-flex">
               <div className="ellipse-row-1 d-flex gap-4">
                 <div className="small-circle-1"><img src="site_img/Ellipse 120.png" alt="" /></div>
@@ -120,9 +120,9 @@ function index() {
                 <div className="small-circle-3"><img src="site_img/Ellipse 120.png" alt="" /></div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="dot-pattern-2">
+          {/* <div className="dot-pattern-2">
             <div className="floting-style d-flex">
               <div className="ellipse-row-1 d-flex gap-4">
                 <div className="small-circle-1"><img src="site_img/Ellipse 120.png" alt="" /></div>
@@ -165,7 +165,7 @@ function index() {
                 <div className="small-circle-3"><img src="site_img/Ellipse 120.png" alt="" /></div>
               </div>
             </div>
-          </div>
+          </div> */}
 
 
           <img src="site_img/atom.png" alt="" className="atom-icon" />

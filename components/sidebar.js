@@ -90,13 +90,14 @@ function sidebar({ profile }) {
                 if (layoutValues?.profile?.role == 'trainee') {
                   return (
                     <>
-                      <hr className="under_menu_line" /><li>
+                      {/* <hr className="under_menu_line" />
+                      <li>
                         <Link href="/analytics" className="nav-link ml-4 otherLink">
                           <i className="fa fa-line-chart" aria-hidden="true"></i>
                           <span style={{ marginLeft: '10px' }}>Analytic Board</span>
 
                         </Link>
-                      </li>
+                      </li> */}
                       <hr className="under_menu_line" /><li>
                         <Link href="/my-grades" className="nav-link ml-4 otherLink">
                           <i className="fa fa-graduation-cap" aria-hidden="true"></i>

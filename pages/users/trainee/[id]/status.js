@@ -85,7 +85,7 @@ const editTrainee = () => {
                         <p>Trainee Status</p>
                     </div>
 
-                    <div className="trainee-info" style={{flexWrap: 'wrap'}}>
+                    <div className="trainee-info" style={{ flexWrap: 'wrap' }}>
                         <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
@@ -94,14 +94,14 @@ const editTrainee = () => {
                         </div>
                         <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>No. of courses
                             Enrolled :</span>
-                            <h6 style={{ color: '#000' }}> <strong>6</strong></h6>
+                            <h6 style={{ color: '#000' }}> <strong>{statusKpis.totalCourse}</strong></h6>
                         </div>
                         <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
                             <h6 style={{ color: '#000' }}><strong>{profileData?.email}</strong></h6>
                         </div>
                     </div>
 
-                    <div className="trainee-topic-cards row" style={{marginBottom:'unset'}}>
+                    <div className="trainee-topic-cards row" style={{ marginBottom: 'unset' }}>
                         {courses?.data?.map((item, index) => {
                             //console.log(item);
                             return (
@@ -284,13 +284,13 @@ const editTrainee = () => {
                                     {allAsignments?.map((item, index) => {
                                         curStatus = 'Submitted';
                                         submitColor = 'text-success';
-                                        if(item?.curData?.status != "submitted") {
+                                        if (item?.curData?.status != "submitted") {
                                             submitColor = 'text-danger';
                                             curStatus = 'Not Submitted<';
                                         }
                                         passStatusColor = 'text-success';
                                         passStatus = "Pass";
-                                        if(item?.maxPercent < 80) {
+                                        if (item?.maxPercent < 80) {
                                             passStatusColor = 'text-danger';
                                             passStatus = 'Fail';
                                         }
@@ -349,6 +349,19 @@ const editTrainee = () => {
                                     </tr> */}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="btn-container d-flex justify-content-between mt-5 mb-5" style={{ padding: 'unset' }}>
+                            <div className="left-col d-flex gap-4">
+
+                            </div>
+                            <div className="right-col d-flex gap-4">
+                                <div className="back-btn" style={{ padding: 'unset' }}>
+                                    <Link href="/users/trainee/" style={{ textDecoration: 'none' }} className="btn">
+                                        <span style={{ color: "rgba(0, 0, 0, 0.61)", fontSize: '15px' }}>Back</span>
+                                    </Link>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

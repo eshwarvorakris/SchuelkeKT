@@ -13,7 +13,7 @@ import Link from 'next/link';
 const editTrainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
-    { layoutValues.setPageHeading("Trainee Status") }
+    { layoutValues.setPageHeading("Trainer Status") }
     const [profileData, setprofileData] = useState([]);
     const [errorMessage, seterrorMessage] = useState("");
     const QueryParam = router.query;
@@ -77,7 +77,7 @@ const editTrainee = () => {
                     </div>
 
                     <div className="trainee-info" style={{flexWrap: 'wrap'}}>
-                        <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
+                        <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainer ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
                         </div>
                         <div className="trainee-name d-flex gap-2 justify-self-center"><span>Trainer-name :</span>
@@ -102,9 +102,9 @@ const editTrainee = () => {
                                         <td style={{ width: '15%' }}>Course Name</td>
                                         <td style={{ width: '15%' }}>Topic</td>
                                         <td style={{ width: '5%' }}>Date Of<br />Launch</td>
-                                        <td style={{ width: '5%' }}>Due<br />Date</td>
+                                        {/* <td style={{ width: '5%' }}>Due<br />Date</td> */}
                                         <td style={{ width: '5%' }}>No Of<br />Modules</td>
-                                        <td style={{ width: '5%' }}>Training<br />Time</td>
+                                        {/* <td style={{ width: '5%' }}>Training<br />Time</td> */}
                                         <td style={{ width: '5%' }}>Approval<br />Status</td>
                                     </tr>
                                     {allCourses?.map((item, index) => {
@@ -123,9 +123,9 @@ const editTrainee = () => {
                                                 <td>{item.course_name}</td>
                                                 <td>{item.category.category_name}</td>
                                                 <td>{item.course_launch_date}</td>
-                                                <td>{moment(item.course_launch_date).add(item.week_duration, 'weeks').format("Do MMM YY")}</td>
+                                                {/* <td>{moment(item.course_launch_date).add(item.week_duration, 'weeks').format("Do MMM YY")}</td> */}
                                                 <td>{item.total_modules}</td>
-                                                <td>{item.total_training_hour}</td>
+                                                {/* <td>{item.total_training_hour}</td> */}
                                                 <td className={approveClass}>
                                                     <span>{approveStatus}</span>
                                                 </td>
@@ -135,6 +135,20 @@ const editTrainee = () => {
                                     
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div className="btn-container d-flex justify-content-between mt-5 mb-5" style={{ padding: 'unset' }}>
+                            <div className="left-col d-flex gap-4">
+
+                            </div>
+                            <div className="right-col d-flex gap-4">
+                                <div className="back-btn" style={{ padding: 'unset' }}>
+                                    <Link href="/users/trainer/" style={{ textDecoration: 'none' }} className="btn">
+                                        <span style={{ color: "rgba(0, 0, 0, 0.61)", fontSize: '15px' }}>Back</span>
+                                    </Link>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
