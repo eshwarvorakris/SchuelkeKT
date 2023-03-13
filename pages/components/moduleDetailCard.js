@@ -38,7 +38,11 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
 
       CourseViewModel.getModuleView(moduleViewData).then((res) => {
         //console.log("module view = "+moduleData?.id+" ",res);
-        setmoduleStatus(res?.data?.moduleStatus);
+        if(layoutValues.profile.role == "trainee") {
+          setmoduleStatus(res?.data?.moduleStatus);
+        } else {
+          setmoduleStatus(1)
+        }
         if(res?.data?.lastchapter?.chapter_id !== undefined) {
           setLastChapterId(res?.data?.lastchapter?.chapter_id);
         }
@@ -105,6 +109,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
   }, []);
 
   useEffect(() => {
+    //console.log("layoutValues", layoutValues.profile.role)
     if(lastChapterId === undefined || lastChapterId == 0) {
       //setLastChapterId(res?.data?.lastchapter?.chapter_id);
       if(contents?.data?.length > 0 && moduleStatus != 3) {

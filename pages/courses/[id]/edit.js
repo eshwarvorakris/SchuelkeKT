@@ -4,6 +4,7 @@ import auth from "../../../model/auth.model";
 import category from "../../../model/category.model";
 import courseModel from "../../../model/course.model";
 import uploader from "../../../model/fileupload.model";
+import { useDropzone } from 'react-dropzone'
 import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
@@ -82,10 +83,31 @@ const editCourse = () => {
 
     const removeFile = () => {
         //setValue('course_thumbnail', "");
-        document.getElementById("course_thumbnail").value="";
+        document.getElementById("course_thumbnail").value = "";
         document.getElementById("thumbnail-pic").classList.add("d-none");
         document.getElementById("pic-container").classList.remove("d-none");
     }
+
+    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+        onDrop: async files => {
+            //console.log(files[0]);
+            var data = new FormData();
+            var imagedata = files[0];
+            data.append("uploadFile", imagedata);
+            data.append("filefolder", "course");
+            setIsUploaded(true);
+            await uploader.upload(data).then((res) => {
+                helper.sweetalert.toast("File Uploaded Successfully");
+                document.getElementById("thumbnail-pic").classList.remove("d-none");
+                document.getElementById("pic-container").classList.add("d-none");
+                console.log(res?.data);
+                setImage(res?.data?.data?.Location);
+            }).catch((error) => {
+                helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
+                console.error(error.response)
+            })
+        }
+    });
 
     return (
         <>
@@ -134,8 +156,10 @@ const editCourse = () => {
                                                     return (
                                                         <>
                                                             <img className="thumbnail-pic" id="thumbnail-pic" src={image} style={{ width: '10rem', height: 'auto' }} alt="" />
-                                                            <div className="pic-container d-none" id="pic-container" style={{ width: '10rem', height: 'auto' }}>
-                                                                <p>Drag and Drop here</p>
+                                                            <div {...getRootProps({className: ''})}>
+                                                                <div className="pic-container d-none" id="pic-container" style={{ width: '10rem', height: '95%' }}>
+                                                                    <p>Drag and Drop here</p>
+                                                                </div>
                                                             </div>
                                                         </>
                                                     );
@@ -143,8 +167,10 @@ const editCourse = () => {
                                                     return (
                                                         <>
                                                             <img className="thumbnail-pic d-none" id="thumbnail-pic" src={image} style={{ width: '10rem', height: 'auto' }} alt="" />
-                                                            <div className="pic-container" id="pic-container" style={{ width: '10rem', height: 'auto' }}>
-                                                                <p>Drag and Drop here</p>
+                                                            <div {...getRootProps({className: ''})}>
+                                                                <div className="pic-container" id="pic-container" style={{ width: '10rem', height: '95%' }}>
+                                                                    <p>Drag and Drop here</p>
+                                                                </div>
                                                             </div>
                                                         </>
                                                     );
@@ -165,7 +191,7 @@ const editCourse = () => {
                                                 <input type="hidden" id="course_thumbnail" name="course_thumbnail" value={image} />
                                             </div>
                                             <div className="right-col-btns black-border d-flex flex-column gap-4">
-                                                
+
                                                 <button onClick={removeFile} type="button" className="remove_button btn d-flex justify-content-center gap-2">
                                                     <img className="btn-icon"
                                                         src="/trainer-images/dashboard images/Vector (2).png"
@@ -194,7 +220,7 @@ const editCourse = () => {
                             <textarea {...register("course_description")} cols="30" rows="30" className="text-type-box"></textarea>
 
 
-                            <div className="btn-container d-flex justify-content-between mt-5" style={{padding:'unset'}}>
+                            <div className="btn-container d-flex justify-content-between mt-5" style={{ padding: 'unset' }}>
                                 <div className="left-col d-flex gap-4">
                                     <div className="edit-modules-btn">
                                         <Link href={`/courses/${queryid}/module`} className="btn"
@@ -208,15 +234,15 @@ const editCourse = () => {
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">
-                                    <div className="back-btn" style={{padding:'unset'}}>
+                                    <div className="back-btn" style={{ padding: 'unset' }}>
                                         <Link href="/courses" style={{ textDecoration: 'none' }} className="btn">
-                                            <span style={{ color: "rgba(0, 0, 0, 0.61)", fontSize:'15px' }}>Back</span>
+                                            <span style={{ color: "rgba(0, 0, 0, 0.61)", fontSize: '15px' }}>Back</span>
                                         </Link>
                                     </div>
 
-                                    <div className="save-btn" style={{padding:'unset'}}>
+                                    <div className="save-btn" style={{ padding: 'unset' }}>
                                         <button type="submit" className="btn save_button"
-                                            style={{ backgroundColor: "#008bd6" }}><span style={{fontSize:'15px'}}>Save</span></button>
+                                            style={{ backgroundColor: "#008bd6" }}><span style={{ fontSize: '15px' }}>Save</span></button>
                                     </div>
                                 </div>
                             </div>

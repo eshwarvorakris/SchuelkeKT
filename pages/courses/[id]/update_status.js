@@ -49,9 +49,9 @@ const updateStatus = () => {
   }
 
   useEffect(() => {
-    console.log("called");
+    //console.log("called");
     loadModule();
-    console.log("modules = ", modules);
+    //console.log("modules = ", modules);
     
     if(modules?.data){
       setModuleCount(modules.data.length);

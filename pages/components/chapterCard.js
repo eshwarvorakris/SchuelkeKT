@@ -20,46 +20,47 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin, 
   var curChapterViewSeconds = 0;
   useEffect(() => {
     //console.log("chapterData.isLocked", chapterData.isLocked)
-    
-    const chapterForm = new FormData();
-    chapterForm.append("chapter_id", chapterData.id);
-    chapterForm.append("course_id", chapterData.course_id);
-    chapterForm.append("module_id", chapterData.module_id);
-    chapterForm.append("module_sequence_no", moduleData.sequence_no);
-    let isModuleFirstChapter = false;
-    if(firstChapterId == chapterData.id) {
-      isModuleFirstChapter = true;
-    }
-    chapterForm.append("module_first_chapter_id", firstChapterId);
-    chapterForm.append("isModuleFirstChapter", isModuleFirstChapter);
-    CourseViewModel.getChapterView(chapterForm).then((res) => {
-      //console.log("cur course view", res.data)
-      if(res?.data !== null || res?.data !== "") {
-        if(res?.data?.curChapterViews !== undefined) {
-          let courseTotalSec = (res?.data?.courseData?.total_training_hour * 60 * 60);
-          let perContentSec = courseTotalSec / res?.data?.allContentInCourse;
-          let currentChapterView = res?.data?.curChapterViews;
-          let percentage = 0;
-          if(currentChapterView > perContentSec) {
-            percentage = 100;
-          } else {
-            percentage = parseInt((currentChapterView / perContentSec) * 100);
-            if(percentage > 0) {
-              
-              setchapterStatus("ongoing");
-              if(percentage == 100) {
-                setchapterStatus("completed")
+    if(layoutValues.profile.role == "trainee") {
+      const chapterForm = new FormData();
+      chapterForm.append("chapter_id", chapterData.id);
+      chapterForm.append("course_id", chapterData.course_id);
+      chapterForm.append("module_id", chapterData.module_id);
+      chapterForm.append("module_sequence_no", moduleData.sequence_no);
+      let isModuleFirstChapter = false;
+      if(firstChapterId == chapterData.id) {
+        isModuleFirstChapter = true;
+      }
+      chapterForm.append("module_first_chapter_id", firstChapterId);
+      chapterForm.append("isModuleFirstChapter", isModuleFirstChapter);
+      CourseViewModel.getChapterView(chapterForm).then((res) => {
+        //console.log("cur course view", res.data)
+        if(res?.data !== null || res?.data !== "") {
+          if(res?.data?.curChapterViews !== undefined) {
+            let courseTotalSec = (res?.data?.courseData?.total_training_hour * 60 * 60);
+            let perContentSec = courseTotalSec / res?.data?.allContentInCourse;
+            let currentChapterView = res?.data?.curChapterViews;
+            let percentage = 0;
+            if(currentChapterView > perContentSec) {
+              percentage = 100;
+            } else {
+              percentage = parseInt((currentChapterView / perContentSec) * 100);
+              if(percentage > 0) {
+                
+                setchapterStatus("ongoing");
+                if(percentage == 100) {
+                  setchapterStatus("completed")
+                }
+                setPercent(percentage);
+              } else if(res?.data?.isCurrentChapterLocked){
+                setchapterStatus("locked");
               }
-              setPercent(percentage);
-            } else if(res?.data?.isCurrentChapterLocked){
-              setchapterStatus("locked");
             }
           }
         }
-      }
-    }).catch((error) => {
-      console.log("module error", error);
-    });
+      }).catch((error) => {
+        console.log("module error", error);
+      });
+    }
   },[]);
   
   

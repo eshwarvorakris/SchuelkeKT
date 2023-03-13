@@ -1,6 +1,7 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useCallback } from "react";
 import useSWR, { mutate } from 'swr';
 import auth from "../../model/auth.model";
+import {useDropzone} from 'react-dropzone'
 import courseModel from "../../model/course.model";
 import categoryModel from "../../model/category.model";
 import uploader from "../../model/fileupload.model";
@@ -59,6 +60,25 @@ const addcourse = ({ categories }) => {
         })
         //setImage(URL.createObjectURL(e.target.files[0]))
     });
+    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+        onDrop: async files => {
+            console.log(files[0]);
+            var data = new FormData();
+            var imagedata = files[0];
+            data.append("uploadFile", imagedata);
+            data.append("filefolder", "course");
+            setIsUploaded(true);
+            await uploader.upload(data).then((res) => {
+                helper.sweetalert.toast("File Uploaded Successfully");
+
+                console.log(res?.data);
+                setImage(res?.data?.data?.Location);
+            }).catch((error) => {
+                helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
+                console.error(error.response)
+            })
+        }
+    });
     return (
         <>
 
@@ -103,12 +123,15 @@ const addcourse = ({ categories }) => {
                                             (() => {
                                                 if (image.length > 0) {
                                                     return (
-                                                        <img className="thumbnail-pic" src={image} style={{ width: '10rem', height: 'auto' }} alt="" />
+                                                        <img className="thumbnail-pic" src={image} style={{ width: '10rem', height: '95%' }} alt="" />
                                                     );
                                                 } else {
                                                     return (
-                                                        <div className="pic-container" style={{ width: '10rem', height: 'auto' }} onDropCapture={fileDropped}>
-                                                            <p>Drag and Drop here</p>
+                                                        <div {...getRootProps({className: ''})}>
+                                                            <div className="pic-container" style={{ width: '10rem', height: '95%' }}>
+                                                                
+                                                                <p>Drag and Drop here</p>
+                                                            </div>
                                                         </div>
                                                     );
                                                 }
@@ -144,7 +167,7 @@ const addcourse = ({ categories }) => {
                                         </div>
                                     </div>
                                 </div>
-
+                                <br />
                                 <div className="course-completion">
                                     <h6>Weeks Required for Completion</h6>
                                     <input type="number" {...register("week_duration")} />
