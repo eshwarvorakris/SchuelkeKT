@@ -40,6 +40,10 @@ Course.init({
     type: DataTypes.INTEGER,
     references: { model: "users", key: "id" }
   },
+  question_added: {
+    type: DataTypes.STRING(30),
+    defaultValue: "no",
+  },
   status: {
     type: DataTypes.STRING(30),
     defaultValue: "pending",

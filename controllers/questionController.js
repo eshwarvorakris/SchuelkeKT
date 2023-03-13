@@ -2,13 +2,14 @@ const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Question = require("../models/Question.model");
+const Course = require("../models/Course.model");
 const { query } = require("express");
 const QuestionOption = require("../models/Question_option.model");
 const sequelize = require("../lib/dbConnection");
 const questionController = class {
   async index(req, res) {
     await Question
-      .findAndCountAll({ distinct: true, include: ['course', 'options'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order:[orderByColumn] })
+      .findAndCountAll({ distinct: true, include: ['course', 'options'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order: [orderByColumn] })
       .then((result) => {
         //console.log(result);
         res.send(getPaginate(result, pageNumber, pageLimit));
@@ -44,7 +45,7 @@ const questionController = class {
           curQuestion.options[index].is_answer = "false";
         }
 
-        if(item?.id == ""){
+        if (item?.id == "") {
           delete curQuestion.options[i].id;
         }
         i++;
@@ -76,20 +77,24 @@ const questionController = class {
           else {
             delete curQuestion.id;
             await Question
-            .create(curQuestion, {
-              include: "options"
-            })
-            .catch((error) => {
-              console.error("Failed to retrieve data : ", error);
-            });
+              .create(curQuestion, {
+                include: "options"
+              }).then(async (result) => {
+                console.log("hereeeeeeeee");
+                await Course.update({ question_added: "yes" }, { where: { id: curQuestion.course_id } });
+              }).catch((error) => {
+                console.error("Failed to retrieve data : ", error);
+              });
           }
         } else {
           delete curQuestion.id;
           await Question
             .create(curQuestion, {
               include: "options"
-            })
-            .catch((error) => {
+            }).then(async (result) => {
+              console.log("hereeeeeeeee");
+              await Course.update({ question_added: "yes" }, { where: { id: curQuestion.course_id } });
+            }).catch((error) => {
               console.error("Failed to retrieve data : ", error);
             });
         }

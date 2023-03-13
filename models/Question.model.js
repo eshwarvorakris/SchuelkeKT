@@ -11,7 +11,7 @@ Question.init({
     references:{model:"courses",key:"id"}
   },
   question: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(800),
     allowNull: false
   },
   question_type: {

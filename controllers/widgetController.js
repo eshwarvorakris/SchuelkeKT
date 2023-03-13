@@ -22,6 +22,11 @@ const widgetController = class {
         //console.log(req.query);
         res.send({ data: { total: courseCount || 0 } });
         break;
+      case "totalApproved":
+        let courseApproved = await Course.count({ where: {status:'approved'} });
+        //console.log(req.query);
+        res.send({ data: { total: courseApproved || 0 } });
+        break;
       case "weekDuration":
         let totalWeek = await Course.sum('week_duration', { where: req.query });
         //console.log(req.query);
@@ -62,10 +67,10 @@ const widgetController = class {
       req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
     }
     const totalCourse = await Course.count({ where: req.query });
-    const totalCourseCompleted = await CourseView.count({ where: {trainee_id: req.userId, status:'completed'} });
-    const totalCourseViewed = await CourseView.sum('viewed_seconds',{ where: {trainee_id: req.userId} });
+    const totalCourseCompleted = await CourseView.count({ where: { trainee_id: req.userId, status: 'completed' } });
+    const totalCourseViewed = await CourseView.sum('viewed_seconds', { where: { trainee_id: req.userId } });
     let totalTrainingHour = 0;
-    if(totalCourseViewed > 0) {
+    if (totalCourseViewed > 0) {
       let maxmin = Math.floor(totalCourseViewed / 60);
       var Hours = Math.floor(maxmin / 60);
       var minutes = maxmin % 60;
@@ -73,27 +78,27 @@ const widgetController = class {
       totalTrainingHour = hourOut;
     }
     const data = {
-      totalCourse:totalCourse,
-      totalCourseCompleted:totalCourseCompleted,
-      totalCourseViewed:totalCourseViewed,
-      totalTrainingHour:totalTrainingHour
+      totalCourse: totalCourse,
+      totalCourseCompleted: totalCourseCompleted,
+      totalCourseViewed: totalCourseViewed,
+      totalTrainingHour: totalTrainingHour
     }
     //console.log(data);
     res.send(data);
   }
 
   async traineeStatusKpis(req, res) {
-    const totalCourse = await Course.count({ where: {status:"approved"} });
-    const totalCourseCompleted = await CourseView.count({ where: {trainee_id: req.body.trainee_id, status:'completed'} });
-    const totalCourseViewed = await CourseView.sum('viewed_seconds',{ where: {trainee_id: req.body.trainee_id} });
-    const scoreTotal = await AssignmentAttempt.sum('correct_percentage', {where: {trainee_id: req.body.trainee_id}});
-    const scoreCount = await AssignmentAttempt.count({where: {trainee_id: req.body.trainee_id}});
+    const totalCourse = await Course.count({ where: { status: "approved" } });
+    const totalCourseCompleted = await CourseView.count({ where: { trainee_id: req.body.trainee_id, status: 'completed' } });
+    const totalCourseViewed = await CourseView.sum('viewed_seconds', { where: { trainee_id: req.body.trainee_id } });
+    const scoreTotal = await AssignmentAttempt.sum('correct_percentage', { where: { trainee_id: req.body.trainee_id } });
+    const scoreCount = await AssignmentAttempt.count({ where: { trainee_id: req.body.trainee_id } });
     let averageScore = 0;
-    if(scoreTotal !== null && scoreCount !== null) {
-      averageScore = Math.floor(scoreTotal/scoreCount)
+    if (scoreTotal !== null && scoreCount !== null) {
+      averageScore = Math.floor(scoreTotal / scoreCount)
     }
     let totalTrainingHour = 0;
-    if(totalCourseViewed > 0) {
+    if (totalCourseViewed > 0) {
       let maxmin = Math.floor(totalCourseViewed / 60);
       var Hours = Math.floor(maxmin / 60);
       var minutes = maxmin % 60;
@@ -101,11 +106,11 @@ const widgetController = class {
       totalTrainingHour = hourOut;
     }
     const data = {
-      totalCourse:totalCourse,
-      totalCourseCompleted:totalCourseCompleted,
-      totalCourseViewed:totalCourseViewed,
-      totalTrainingHour:totalTrainingHour,
-      averageScore:averageScore
+      totalCourse: totalCourse,
+      totalCourseCompleted: totalCourseCompleted,
+      totalCourseViewed: totalCourseViewed,
+      totalTrainingHour: totalTrainingHour,
+      averageScore: averageScore
     }
     //console.log(data);
     res.send(data);
