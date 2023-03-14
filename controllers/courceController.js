@@ -73,20 +73,22 @@ const courseController = class {
       } else if (req.query.filter == "all") {
         //console.log("check");
         if (req.query.search) {
-          req["query"][Op.or] = [
-            { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
-            { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
-            { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
-            { 'status': { [Op.iLike]: `%${req.query.search}%` } },
-            Sequelize.where(
-              Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-              {[Op.iLike]: `%${req.query.search}%`}
-            ),
-            Sequelize.where(
-              Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-              {[Op.iLike]: `%${req.query.search}%`}
-            ),
-          ];
+          if(req.query.search != "") {
+            req["query"][Op.or] = [
+              { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+              { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
+              { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
+              { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+              Sequelize.where(
+                Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
+                {[Op.iLike]: `%${req.query.search}%`}
+              ),
+              Sequelize.where(
+                Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
+                {[Op.iLike]: `%${req.query.search}%`}
+              ),
+            ];
+          }
         }
       }
       delete req.query.search;
