@@ -154,7 +154,7 @@ const admincoursemanagement = () => {
                                     if (layoutValues?.profile?.role == 'admin' && row.status == 'approved') {
                                         return (
                                             <>
-                                            <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}>Disapprove</button>
+                                                <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}>Disapprove</button>
                                             </>
                                         );
                                     }
@@ -184,11 +184,30 @@ const admincoursemanagement = () => {
         }); */
         couresList();
     }
+    const [hideSearch, setHideSearch] = useState(false);
+    const [hideStatusDropdown, setHideStatusDropdown] = useState(true);
+    const [hideTopicDropdown, setHideTopicDropdown] = useState(true);
+    const handleFilterChange = (async (e) => {
+        QueryParam.filter = e.target.value;
+        QueryParam.search = "";
+        setHideStatusDropdown(true)
+        setHideTopicDropdown(true)
+        if (e.target.value == "topic") {
+            setHideSearch(true);
+            setHideTopicDropdown(false)
+        } else if (e.target.value == "status") {
+            setHideSearch(true);
+            setHideStatusDropdown(false)
+        } else {
+            setHideSearch(false);
+        }
+        couresList()
+    });
 
-    useEffect(() => {
-        console.clear();
-        console.log(courses);
-    }, [courses]);
+    // useEffect(() => {
+    //     console.clear();
+    //     console.log(courses);
+    // }, [courses]);
     return (
         <>
             {
@@ -197,22 +216,64 @@ const admincoursemanagement = () => {
                         return (
                             <>
                                 <div className=" SearchandSort ">
-                                    <div className=" search-button-mycourse d-flex ">
-                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
-                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
-                                    </div>
+                                    {!hideSearch &&
+                                        <div className=" search-button-mycourse d-flex ">
+                                            <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                                            <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
+                                        </div>
+                                    }
+
 
                                     <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
                                         <select name="category"
-                                            className="select-mycourse" style={{padding:'1px', width:'8.5rem'}}
-                                            onChange={(event) => { QueryParam.filter = event.target.value; couresList() }}>
+                                            className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                            onChange={handleFilterChange}>
                                             <option value="all">All</option>
                                             {/* <option value="course_name">Course Name</option>
                                             <option value="country">Country</option> */}
-                                            <option value="category">Topic</option>
+                                            <option value="topic">Topic</option>
                                             <option value="status">Approval Status</option>
                                         </select>
                                     </div>
+
+                                    {hideSearch &&
+                                        <>
+                                            {!hideStatusDropdown &&
+                                                <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                                    <select name="search"
+                                                        className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                        onChange={(event) => { QueryParam.search = event.target.value; couresList() }}>
+                                                        <option value="all">All Status</option>
+                                                        <option value="approved">Approved</option>
+                                                        <option value="pending">Pending</option>
+                                                        {
+                                                            (() => {
+                                                                if (layoutValues?.profile?.role == 'admin') {
+                                                                    return (
+                                                                        <>
+                                                                            <option value="rejected">Rejected</option>
+                                                                        </>);
+                                                                }
+                                                            })()
+                                                        }
+                                                    </select>
+                                                </div>
+                                            }
+
+                                            {!hideTopicDropdown &&
+                                                <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                                    <select name="search"
+                                                        className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                        onChange={(event) => { QueryParam.search = event.target.value; couresList() }}>
+                                                        <option value="all">All Topics</option>
+                                                        <option value="country">Country</option>
+                                                        <option value="product">Product</option>
+                                                        <option value="blanket">blanket</option>
+                                                    </select>
+                                                </div>
+                                            }
+                                        </>
+                                    }
                                     {(layoutValues?.profile?.role == 'trainer') &&
                                         <div className=" create-course ">
                                             <Link href="/courses/create" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>
