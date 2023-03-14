@@ -11,11 +11,13 @@ const courseController = class {
   async index(req, res) {
     let search = req.query.search;
     if(req.query.filter) {
-      if(req.query.filter == "course_name") {
+      if(req.query.filter == "topic") {
         if (req.query.search) {
-          req["query"][Op.or] = [
-            { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, }
-          ];
+          if(req.query.search != "all") {
+            req["query"][Op.or] = [
+              { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
+            ];
+          }
         }
       } else if (req.query.filter == "country") {
         if (req.query.search) {
@@ -23,21 +25,32 @@ const courseController = class {
             { '$trainer.country$': { [Op.iLike]: `%${req.query.search}%` } }
           ];
         }
+      } else if (req.query.filter == "status") {
+        if (req.query.search) {
+          if(req.query.search != "all") {
+            req["query"][Op.or] = [
+              { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+            ];
+          }
+        }
       } else if (req.query.filter == "all") {
-        req["query"][Op.or] = [
-          { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
-          { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
-          { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
-          { 'status': { [Op.iLike]: `%${req.query.search}%` } },
-          Sequelize.where(
-            Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-            {[Op.iLike]: `%${req.query.search}%`}
-          ),
-          Sequelize.where(
-            Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-            {[Op.iLike]: `%${req.query.search}%`}
-          ),
-        ];
+        //console.log("check");
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
+            { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
+            { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+            Sequelize.where(
+              Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
+              {[Op.iLike]: `%${req.query.search}%`}
+            ),
+            Sequelize.where(
+              Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
+              {[Op.iLike]: `%${req.query.search}%`}
+            ),
+          ];
+        }
       }
       delete req.query.search;
       delete req.query.filter;
