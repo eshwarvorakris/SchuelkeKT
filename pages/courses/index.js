@@ -190,16 +190,19 @@ const admincoursemanagement = () => {
     const handleFilterChange = (async (e) => {
         QueryParam.filter = e.target.value;
         QueryParam.search = "";
+        QueryParam.filterParam = "all";
+        if(e.target.value == "all") {
+            delete(QueryParam.filter)
+            delete(QueryParam.search)
+            delete(QueryParam.filterParam)
+        }
+        
         setHideStatusDropdown(true)
         setHideTopicDropdown(true)
-        if (e.target.value == "topic") {
-            setHideSearch(true);
+        if (e.target.value == "category") {
             setHideTopicDropdown(false)
         } else if (e.target.value == "status") {
-            setHideSearch(true);
             setHideStatusDropdown(false)
-        } else {
-            setHideSearch(false);
         }
         couresList()
     });
@@ -216,13 +219,10 @@ const admincoursemanagement = () => {
                         return (
                             <>
                                 <div className=" SearchandSort ">
-                                    {!hideSearch &&
-                                        <div className=" search-button-mycourse d-flex ">
-                                            <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
-                                            <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
-                                        </div>
-                                    }
-
+                                    <div className=" search-button-mycourse d-flex ">
+                                        <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
+                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
+                                    </div>
 
                                     <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
                                         <select name="category"
@@ -231,48 +231,44 @@ const admincoursemanagement = () => {
                                             <option value="all">All</option>
                                             {/* <option value="course_name">Course Name</option>
                                             <option value="country">Country</option> */}
-                                            <option value="topic">Topic</option>
+                                            <option value="category">Topic</option>
                                             <option value="status">Approval Status</option>
                                         </select>
                                     </div>
 
-                                    {hideSearch &&
-                                        <>
-                                            {!hideStatusDropdown &&
-                                                <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
-                                                    <select name="search"
-                                                        className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
-                                                        onChange={(event) => { QueryParam.search = event.target.value; couresList() }}>
-                                                        <option value="all">All Status</option>
-                                                        <option value="approved">Approved</option>
-                                                        <option value="pending">Pending</option>
-                                                        {
-                                                            (() => {
-                                                                if (layoutValues?.profile?.role == 'admin') {
-                                                                    return (
-                                                                        <>
-                                                                            <option value="rejected">Rejected</option>
-                                                                        </>);
-                                                                }
-                                                            })()
+                                    {!hideStatusDropdown &&
+                                        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                            <select name="statusChange"
+                                                className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
+                                                <option value="all">All Status</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="pending">Pending</option>
+                                                {
+                                                    (() => {
+                                                        if (layoutValues?.profile?.role == 'admin') {
+                                                            return (
+                                                                <>
+                                                                    <option value="rejected">Rejected</option>
+                                                                </>);
                                                         }
-                                                    </select>
-                                                </div>
-                                            }
+                                                    })()
+                                                }
+                                            </select>
+                                        </div>
+                                    }
 
-                                            {!hideTopicDropdown &&
-                                                <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
-                                                    <select name="search"
-                                                        className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
-                                                        onChange={(event) => { QueryParam.search = event.target.value; couresList() }}>
-                                                        <option value="all">All Topics</option>
-                                                        <option value="country">Country</option>
-                                                        <option value="product">Product</option>
-                                                        <option value="blanket">Blanket</option>
-                                                    </select>
-                                                </div>
-                                            }
-                                        </>
+                                    {!hideTopicDropdown &&
+                                        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                            <select name="topicChange"
+                                                className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
+                                                <option value="all">All Topics</option>
+                                                <option value="country">Country</option>
+                                                <option value="product">Product</option>
+                                                <option value="blanket">Blanket</option>
+                                            </select>
+                                        </div>
                                     }
                                     {(layoutValues?.profile?.role == 'trainer') &&
                                         <div className=" create-course ">
