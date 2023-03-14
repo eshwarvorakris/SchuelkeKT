@@ -14,6 +14,7 @@ function index() {
   const [blanketModal, setBlanketModal] = useState(false);
   const [productModal, setProductModal] = useState(false);
   const [countryModal, setCountryModal] = useState(false);
+  const currentYear = new Date().getFullYear();
   const [videoModal, setVideoModal] = useState(false);
   return (
     <>
@@ -193,7 +194,7 @@ function index() {
 
               <div className="main-heading">
                 <h1>
-                  The story of Schülke <br /> Knowledge Transfer (Online)
+                  The story of schülke <br /> Knowledge Transfer (Online)
                 </h1>
               </div>
 
@@ -277,7 +278,7 @@ function index() {
                   Our mission statement outlines our vision for this platform and our hope for our trainee to first ‘Acquire’
                   the
                   knowledge and then enabling them to, ‘Apply to Achieve’.
-                  <br />
+                  <br /><br />
                   We wish you all the best in your knowledge learning journey!
                 </span>
               </div>
@@ -667,13 +668,12 @@ function index() {
                   </div>
                   <div className="last-col col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4 text-md-left">
                     <h6 className="fw-bold mb-4 pl-md-3 text-light">Important Links</h6>
-                    <p><i className="fas fa-home me-3 text-reset"></i><a href="#!" className="text-reset">Privacy Policy</a></p>
+                    <p><a href="#!" className="text-reset">Privacy Policy</a></p>
                     <p>
-                      <i className="fas fa-envelope me-3 "></i>
                       <a href="#!" className="text-reset">Terms & Conditions</a>
                     </p>
-                    <p><i className="fas fa-phone me-3"></i><a href="#!" className="text-reset">Disclaimer</a></p>
-                    <p><i className="fas fa-print me-3"></i><a href="#!" className="text-reset">Sitemap</a></p>
+                    <p><a href="#!" className="text-reset">Disclaimer</a></p>
+                    <p><a href="#!" className="text-reset">Sitemap</a></p>
                   </div>
                 </div>
               </div>
@@ -681,15 +681,17 @@ function index() {
               <div className="move-up">
                 <a href="#home">
                   {/* <ion-icon className="move-up-icon" name="chevron-up-outline"></ion-icon> */}
-                  <svg xmlns="http://www.w3.org/2000/svg" className="move-up-icon" width="35" height="35" fill="currentColor" className="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                    <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-                  </svg>
+                  <span className="move-up-icon md hydrated" style={{width:'unset', height:'unset'}}>
+                    <svg xmlns="http://www.w3.org/2000/svg"  width="35" height="35" fill="currentColor" className="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
+                      <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
+                    </svg>
+                  </span>
                 </a>
               </div>
             </section-6>
             <div className="text-center p-3"
               style={{ backgroundColor: '#0b4668', color: `rgb(223, 219, 219)`, fontFamily: `myriad-regular` }}>
-              © Copyright 2022 Schülke
+              © Copyright {currentYear} schülke
             </div>
           </footer>
         </section-6>

@@ -22,28 +22,32 @@ const addcourse = ({ categories }) => {
 
     const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR("categorylist", async () => await categoryModel.list(), config.swrConfig);
     const [formErrors, setFormErrors] = useState([]);
-
+    const [disableBtn, setDisableBtn] = useState(false);
     const [moduleLink, setModuleLink] = useState("");
     const [assigmentLink, setAssignmentLink] = useState("");
     const { register, setValue, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
-        console.log(event.target.course_name.value);
+        setDisableBtn(true);
+        //console.log(event.target.course_name.value);
         if (event.target.course_name.value != "" && event.target.total_modules.value != "" && event.target.course_launch_date.value != "" && event.target.week_duration.value != "" && event.target.total_training_hour.value != "") {
             const formData = new FormData(event.target);
             //console.log(data, formData);
             await courseModel.create(formData).then((res) => {
-                console.clear();
-                console.log(res.data.id)
+                // console.clear();
+                // console.log(res.data.id)
+                setDisableBtn(false);
                 setModuleLink(`/courses/${res.data.id}/module`);
                 setAssignmentLink(`/courses/${res.data.id}/assignments`);
                 helper.sweetalert.toast("course Created");
                 //router.push("/courses");
             }).catch((error) => {
+                setDisableBtn(false);
                 setFormErrors(error.response?.data?.errors);
             })
         } else {
+            setDisableBtn(false);
             helper.sweetalert.toast("NOT ALL FIELDS are filled.", "warning");
         }
 
@@ -286,7 +290,7 @@ const addcourse = ({ categories }) => {
                                     </div>
 
                                     <div className="save-btn" style={{ padding: 'unset' }}>
-                                        <button type="submit" className="btn save_button"
+                                        <button type="submit" className="btn save_button" disabled={disableBtn}
                                             style={{ backgroundColor: "#008bd6" }}><span style={{ fontSize: '15px' }}>Save</span></button>
                                     </div>
                                 </div>

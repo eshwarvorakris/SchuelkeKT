@@ -36,7 +36,7 @@ const admincoursemanagement = () => {
     }
 
     const courseUnapprove = function (id) {
-        helper.sweetalert.confirm("Are you sure you want to Un-Approve this course", "info", "true").then((result) => {
+        helper.sweetalert.confirm("Are you sure you want to Disapprove this course", "info", "true").then((result) => {
             if (result.isConfirmed) {
                 const updateCourse = new FormData();
                 updateCourse.append('status', 'pending');
@@ -57,6 +57,7 @@ const admincoursemanagement = () => {
                     <p>{index + 1}</p>
                 )
             },
+            width: '7%',
         },
         {
             name: 'Course',
@@ -70,20 +71,29 @@ const admincoursemanagement = () => {
             selector: row => row.category?.category_name,
             sortable: true,
             sortField: "category.category_name",
+            width: '8%',
         },
         {
             name: 'Quiz Added',
             selector: row => row.question_added,
             sortable: true,
             sortField: "row.question_added",
+            cell: (row, index) => {
+                return (
+                    <span className="text-capitalize">{row.question_added}</span>
+                )
+            },
+            width: '8%',
         },
         {
             name: 'No. of Module',
             selector: row => row?.total_modules,
+            width: '8%',
         },
         {
             name: 'Training time',
             selector: row => row?.week_duration,
+            width: '8%',
         },
         // {
         //     name: 'Trainee enroll',
@@ -91,7 +101,7 @@ const admincoursemanagement = () => {
         // },
         {
             name: 'Published By',
-            selector: row => row?.trainer?.full_name,
+            selector: row => row?.trainer?.full_name
         },
         {
             name: 'Approval Status',
@@ -119,7 +129,7 @@ const admincoursemanagement = () => {
                                 }
                                 else {
                                     return (
-                                        <><span className="text-danger">{row.status}</span></>
+                                        <><span className="text-danger text-capitalize">{row.status}</span></>
                                     );
                                 }
                             })()
@@ -128,6 +138,7 @@ const admincoursemanagement = () => {
 
                 )
             },
+            width: '11%',
         },
         {
             name: 'Action',
@@ -143,7 +154,7 @@ const admincoursemanagement = () => {
                                     if (layoutValues?.profile?.role == 'admin' && row.status == 'approved') {
                                         return (
                                             <>
-                                            <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}>Un-Approve</button>
+                                            <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}>Disapprove</button>
                                             </>
                                         );
                                     }
@@ -192,12 +203,14 @@ const admincoursemanagement = () => {
                                     </div>
 
                                     <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
-                                        <select name=" category " id=" cars " 
+                                        <select name="category"
                                             className="select-mycourse" style={{padding:'1px', width:'8.5rem'}}
                                             onChange={(event) => { QueryParam.filter = event.target.value; couresList() }}>
                                             <option value="all">All</option>
-                                            <option value="course_name">Course Name</option>
-                                            <option value="country">Country</option>
+                                            {/* <option value="course_name">Course Name</option>
+                                            <option value="country">Country</option> */}
+                                            <option value="category">Topic</option>
+                                            <option value="status">Approval Status</option>
                                         </select>
                                     </div>
                                     {(layoutValues?.profile?.role == 'trainer') &&
