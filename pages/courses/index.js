@@ -268,7 +268,7 @@ const admincoursemanagement = () => {
                                                         <option value="all">All Topics</option>
                                                         <option value="country">Country</option>
                                                         <option value="product">Product</option>
-                                                        <option value="blanket">blanket</option>
+                                                        <option value="blanket">Blanket</option>
                                                     </select>
                                                 </div>
                                             }
