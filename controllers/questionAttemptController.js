@@ -3,7 +3,11 @@ const { getPaginate } = require("../lib/helpers");
 const AssignmentAttempt = require("../models/Assignment_attempt.model");
 const QuestionAttempt = require("../models/Question_attempt.model");
 const QuestionOption = require("../models/Question_option.model");
+const ChapterView = require("../models/Chapter_views.model");
+const ModelView = require("../models/Module_views.model");
+const CourseView = require("../models/Course_views.model");
 const sequelize = require("../lib/dbConnection");
+const { Op } = require("sequelize");
 const questionAttemptController = class {
   async index(req, res) {
     await QuestionAttempt
@@ -273,10 +277,22 @@ const questionAttemptController = class {
           }
 
         };
-
+        
         assignmentAttempt = await AssignmentAttempt.count({
           where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted' }
         })
+
+        if(assignmentAttempt > 1) {
+          const assignmentCorrect = await AssignmentAttempt.count({
+            where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted', correct_percentage: {[Op.gte]:80} }
+          });
+
+          if(assignmentCorrect == 0) {
+            CourseView.update({viewed_seconds:'0', status: 'ongoing'}, { where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
+            ModelView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
+            ChapterView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
+          }
+        }
       };
 
       let retResp = async () => {
