@@ -291,7 +291,7 @@ const questionAttemptController = class {
             CourseView.update({viewed_seconds:'0', status: 'ongoing'}, { where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
             ModelView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
             ChapterView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
-          }
+          } 
         }
       };
 
