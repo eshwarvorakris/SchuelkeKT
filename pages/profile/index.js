@@ -121,7 +121,7 @@ const myprofile = () => {
                         </div> */}
 
                         <div className="trainer-Name">
-                            <h6>Contact Number</h6>
+                            <h6>Contact<br />Number</h6>
                             <input type="text" value={profile.contact_no} readOnly />
                         </div>
                         {
