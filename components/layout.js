@@ -21,7 +21,7 @@ export default function Layout({ children }) {
   return (
     <AppContext.Provider value={layoutValues}>
     <SSRProvider>
-      <div className="section1" style={{height:"unset", marginBottom:'unset'}}>
+      <div className="section1" style={{height:"unset", marginBottom:'unset', minHeight:'100vh'}}>
         <SessionTimer sessionTimer={true} />
         <div className="blank-class"></div>
           <Sidebar />

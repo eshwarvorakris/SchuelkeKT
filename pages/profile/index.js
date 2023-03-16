@@ -28,7 +28,7 @@ const myprofile = () => {
     }, [router]);
     return (
         <>
-            <div className="trainee-right-body-profile" style={{height:'fit-content'}}>
+            <div className="trainee-right-body-profile" style={{ marginTop: '9rem',height:'fit-content'}}>
                 <div className="trainee-profile-pic">
                     <div className="box-1"></div>
                     <div className="box-2"></div>

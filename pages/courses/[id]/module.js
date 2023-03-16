@@ -201,8 +201,8 @@ function Page() {
   return (
     <>
 
-      <div className="trainee-body">
-        <div className="trainee-list-createcourse d-flex flex-column" style={{ padding: '2.5rem' }}>
+      <div className="trainee-body" style={{marginTop:'2rem'}}>
+        <div className="trainee-list-createcourse d-flex flex-column" style={{ padding: '2.5rem', minHeight:'75vh', height:'fit-content', marginTop:'10rem' }}>
           <div className="box-1-enrolledtrainers"></div>
           <div className="box-2-enrolledtrainers"></div>
 

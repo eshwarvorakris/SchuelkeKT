@@ -17,7 +17,7 @@ import _ from 'lodash';
 const myprofile = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
-    { layoutValues.setPageHeading("Courses List") }
+    { layoutValues.setPageHeading("Edit Profile") }
 
     const [profileData, setprofileData] = useState([]);
     const [isUploaded, setIsUploaded] = useState(false);
@@ -131,7 +131,7 @@ const myprofile = () => {
     
     return (
         <>
-            <div className="trainee-right-edit" style={{ marginTop: '10rem',height:'fit-content'}}>
+            <div className="trainee-right-edit" style={{ marginTop: '9rem',height:'fit-content'}}>
                 <Form onSubmit={onSubmit} encType="multipart/form-data">
                     <div className="edit-container" >
                         <div className="trainee-profile-pic">
@@ -140,7 +140,7 @@ const myprofile = () => {
                             <div className=" text-tag" style={{zIndex:'1'}}>
                                 <h6>Edit Info</h6>
                             </div>
-                            <img className="profile-picture" src={image} alt="" />
+                            <img className="profile-picture" src={image} alt="" style={{marginTop:'2rem'}} />
 
                             <div className="btn-container d-flex flex-column gap-3">
                                 <div>
@@ -164,7 +164,7 @@ const myprofile = () => {
 
                         </div>
 
-                        <div className="trainee-info" style={{paddingBottom:'unset'}}>
+                        <div className="trainee-info" style={{paddingBottom:'unset', paddingTop:'2rem'}}>
                             <div className="trainer-form">
                                 <Form.Group className="trainer-Name">
                                     <h6>Full Name</h6>

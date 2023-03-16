@@ -15,7 +15,7 @@ const updateStatus = () => {
   const [moduleCount, setModuleCount] = useState(0);
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
-  QueryParam.order_by = router.query?.order_by || "id";
+  QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "asc";
   { layoutValues.setPageHeading("Update Course Status") }
   const { data: course, courseerror, courseisLoading, mutate: loadCourse } = useSWR(router.query?.id || null, async () => await courseModel.detail(router?.query?.id), config.swrConfig);
