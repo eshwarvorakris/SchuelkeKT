@@ -45,6 +45,32 @@ const userController = class {
             { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
           ];
         }
+      } else if (req.query.filter == "status") {
+        if (req.query.filterParam) {
+          if(req.query.filterParam != "all") {
+            req["query"][Op.and] = [
+              { 'status': { [Op.iLike]: `%${req.query.filterParam}%` } },
+            ];
+          }
+
+          if (req.query.search) {
+            if(req.query.search != "") {
+              req["query"][Op.or] = [
+                { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+                Sequelize.where(
+                  Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+                  {[Op.iLike]: `%${req.query.search}%`}
+                ),
+              ];
+            }
+          }
+          console.log("check");
+          delete req.query.filterParam;
+        }
       } else if (req.query.filter == "all") {
         if(req.query.search) {
           req["query"][Op.or] = [
@@ -60,6 +86,7 @@ const userController = class {
           ];
         }
       }
+      delete req.query.filterParam;
       delete req.query.search;
       delete req.query.filter;
     } else if (req.query.search) {
@@ -104,6 +131,32 @@ const userController = class {
             { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
           ];
         }
+      } else if (req.query.filter == "status") {
+        if (req.query.filterParam) {
+          if(req.query.filterParam != "all") {
+            req["query"][Op.and] = [
+              { 'status': { [Op.iLike]: `%${req.query.filterParam}%` } },
+            ];
+          }
+
+          if (req.query.search) {
+            if(req.query.search != "") {
+              req["query"][Op.or] = [
+                { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+                Sequelize.where(
+                  Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+                  {[Op.iLike]: `%${req.query.search}%`}
+                ),
+              ];
+            }
+          }
+          //console.log("check");
+          delete req.query.filterParam;
+        }
       } else if (req.query.filter == "all") {
         if(req.query.search) {
           req["query"][Op.or] = [
@@ -119,6 +172,7 @@ const userController = class {
           ];
         }
       }
+      delete req.query.filterParam;
       delete req.query.search;
       delete req.query.filter;
     } else if (req.query.search) {

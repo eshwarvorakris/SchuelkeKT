@@ -2,6 +2,7 @@ const validator = require("Validator");
 const _ = require("lodash");
 const { getPaginate } = require("../lib/helpers");
 const Module = require("../models/Module.model");
+const Course = require("../models/Course.model");
 const Content = require("../models/Module_content.model");
 const moduleController = class {
   async index(req, res) {
@@ -38,7 +39,9 @@ const moduleController = class {
     }
     await Module
       .create(req.body)
-      .then((result) => {
+      .then(async (result) => {
+        const moduleCount = await Module.count({ where: { course_id: req.body.course_id } });
+        await Course.update({total_modules: moduleCount}, { where: { id: req.body.course_id } });
         res.send(result);
       })
       .catch((error) => {
@@ -87,7 +90,11 @@ const moduleController = class {
   }
 
   async destroy(req, res) {
-    const module = await Module.destroy({ where: { id: req.params.id } }).then((result) => {
+    const moduleData = await Module.findByPk(req.params.id);
+    //console.log("moduleData", moduleData.course_id);
+    const module = await Module.destroy({ where: { id: req.params.id } }).then(async (result) => {
+      const moduleCount = await Module.count({ where: { course_id: moduleData.course_id } });
+      await Course.update({total_modules: moduleCount}, { where: { id: moduleData.course_id } });
       return { message: "Module Deleted" };
     });
     res.send(module);
