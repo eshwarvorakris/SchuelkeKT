@@ -192,7 +192,7 @@ const myprofile = () => {
                                 </div> */}
 
                                 <div className="trainer-Name">
-                                    <h6>Contact Number</h6>
+                                    <h6>Contact<br />Number</h6>
                                     <input type="text" pattern="\d*" placeholder="+01 345 3345" maxLength={15} {...register("contact_no")} />
                                 </div>
                                 {
