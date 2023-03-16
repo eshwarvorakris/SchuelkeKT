@@ -51,15 +51,17 @@ export default function courseCard({ courseData }) {
           </div>
         </div>
         <div className="duration-details">
-          <div className="duration-detail">
-            <p>Duration : </p>
-            <span>{courseData?.week_duration} Weeks</span>
-          </div>
-          <div className="average-time-detail">
-            <p>Average Time Spent: {statData?.weeksSpent} weeks</p>
+          <div style={{marginTop:'-1.4rem'}}>
+            <div className="duration-detail">
+              <p>Duration : </p>
+              <span>{courseData?.week_duration} Weeks</span>
+            </div>
+            <div className="average-time-detail">
+              <p>Average Time Spent: {statData?.weeksSpent} weeks</p>
+            </div>
           </div>
         </div>
-        <div className="edit-btn">
+        <div className="edit-btn" style={{height:'unset'}}>
           <Link href={`/courses/${courseData?.id}/edit`}>
             <button className="btn edit">Edit Course</button>
           </Link>

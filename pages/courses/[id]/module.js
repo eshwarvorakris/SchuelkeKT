@@ -39,6 +39,7 @@ function Page() {
   // }, []);
 
   const updateList = function () {
+    setModuleData([]);
     courseModule.modules(QueryParam?.id, QueryParam).then((res) => {
       setModuleData(res?.data);
     }).catch((error) => {
@@ -53,7 +54,7 @@ function Page() {
   }, [QueryParam?.id]);
 
   const moduleDelete = function (id) {
-    helper.sweetalert.confirm("Delete module", "info").then((result) => {
+    helper.sweetalert.confirm("Are you sure you want to delete this module", "info", "true").then((result) => {
       if (result.isConfirmed) {
         moduleModel.delete(id).then((res) => {
           helper.sweetalert.toast(res.data?.message);

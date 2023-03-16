@@ -184,7 +184,7 @@ const admincoursemanagement = () => {
         }); */
         couresList();
     }
-    const [hideSearch, setHideSearch] = useState(false);
+    
     const [hideStatusDropdown, setHideStatusDropdown] = useState(true);
     const [hideTopicDropdown, setHideTopicDropdown] = useState(true);
     const handleFilterChange = (async (e) => {

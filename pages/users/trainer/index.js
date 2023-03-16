@@ -82,13 +82,18 @@ const trainer = () => {
             name: 'Trainer Name',
             selector: row => row.full_name,
             sortable: true,
-            wrap: false,
+            wrap: true,
             sortField: "full_name"
         },
         {
             name: 'Email',
             selector: row => row?.email,
-            wrap: false
+            wrap: true
+        },
+        {
+            name: 'Country',
+            selector: row => row?.country,
+            wrap: true
         },
         {
             name: 'No. of Courses Published',
@@ -156,6 +161,23 @@ const trainer = () => {
         trainerList();
     }
 
+    const [hideStatusDropdown, setHideStatusDropdown] = useState(true);
+    const handleFilterChange = (async (e) => {
+        QueryParam.filter = e.target.value;
+        QueryParam.search = "";
+        QueryParam.filterParam = "all";
+        if (e.target.value == "all") {
+            delete (QueryParam.filter)
+            delete (QueryParam.search)
+            delete (QueryParam.filterParam)
+        }
+
+        setHideStatusDropdown(true);
+        if (e.target.value == "status") {
+            setHideStatusDropdown(false)
+        }
+        trainerList()
+    });
 
     return (
         <>
@@ -168,11 +190,23 @@ const trainer = () => {
                 <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
                     <select name=" category "
                         className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
-                        onChange={(event) => { QueryParam.filter = event.target.value; trainerList() }}>
+                        onChange={handleFilterChange}>
                         <option value="all">All</option>
                         <option value="country">Country Name</option>
+                        <option value="status">Approval Status</option>
                     </select>
                 </div>
+                {!hideStatusDropdown &&
+                    <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                        <select name="statusChange"
+                            className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                            onChange={(event) => { QueryParam.filterParam = event.target.value; trainerList() }}>
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                }
                 {
                     (() => {
                         if (layoutValues?.profile?.role == 'admin') {
