@@ -36,7 +36,7 @@ const admincoursemanagement = () => {
     }
 
     const courseUnapprove = function (id) {
-        helper.sweetalert.confirm("Are you sure you want to Disapprove this course", "info", "true").then((result) => {
+        helper.sweetalert.confirm("Are you sure you want to undo the status of this course", "info", "true").then((result) => {
             if (result.isConfirmed) {
                 const updateCourse = new FormData();
                 updateCourse.append('status', 'pending');
@@ -72,6 +72,7 @@ const admincoursemanagement = () => {
             sortable: true,
             sortField: "category.category_name",
             width: '8%',
+            wrap: true,
         },
         {
             name: 'Quiz Added',
@@ -101,7 +102,9 @@ const admincoursemanagement = () => {
         // },
         {
             name: 'Published By',
-            selector: row => row?.trainer?.full_name
+            selector: row => row?.trainer?.full_name,
+            wrap: true,
+            width: '15%',
         },
         {
             name: 'Approval Status',
@@ -147,14 +150,14 @@ const admincoursemanagement = () => {
                 if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
                         <div className='btn-group  text-nowrap'>
-                            <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}>Edit</Link>
-                            <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}>Delete</button>
+                            <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}><i class="fa fa-pencil" aria-hidden="true"></i></Link>
+                            <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                             {
                                 (() => {
-                                    if (layoutValues?.profile?.role == 'admin' && row.status == 'approved') {
+                                    if (layoutValues?.profile?.role == 'admin') {
                                         return (
                                             <>
-                                                <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}>Disapprove</button>
+                                                <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}><i class="fa fa-undo" aria-hidden="true"></i></button>
                                             </>
                                         );
                                     }

@@ -82,7 +82,7 @@ const trainee = () => {
             },
             sortable: true,
             sortField: "user_id",
-            width: "12%"
+            width: "11%"
         },
         {
             name: 'Trainee Name',
@@ -99,7 +99,8 @@ const trainee = () => {
         {
             name: 'Country',
             selector: row => row?.country,
-            wrap: true
+            wrap: true,
+            width: "10%"
         },
         {
             name: 'No. of Courses Enrolled',
@@ -111,7 +112,7 @@ const trainee = () => {
             },
             sortable: true,
             sortField: "course_count",
-            width: "9%"
+            width: "8%"
         },
         {
             name: 'Year Of Joining',
@@ -120,7 +121,7 @@ const trainee = () => {
                     <p>{row?.joining_year}</p>
                 )
             },
-            width: "8%"
+            width: "7%"
         },
         {
             name: 'Status',
@@ -129,7 +130,7 @@ const trainee = () => {
                     <p className="text-capitalize">{row?.status}</p>
                 )
             },
-            width: "7%"
+            width: "8%"
         },
         {
             name: '',
@@ -197,7 +198,7 @@ const trainee = () => {
                         onChange={handleFilterChange}>
                         <option value="all">All</option>
                         <option value="country">Country Name</option>
-                        <option value="status">Approval Status</option>
+                        <option value="status">Trainee Status</option>
                     </select>
                 </div>
                 {!hideStatusDropdown &&

@@ -25,8 +25,22 @@ const topicpage = () => {
     const layoutValues = useContext(AppContext);
     const QueryParam = router.query;
     QueryParam.page = router.query.page || 1;
-    const { data: contentData, mutate: loadContent, error, isLoading } = useSWR(QueryParam?.id, async () => await contentModel.detail(QueryParam?.id), config.swrConfig);
-
+    //const { data: contentData, mutate: loadContent, error, isLoading } = useSWR("contentData", async () => await contentModel.detail(QueryParam?.id), config.swrConfig);
+    const [contentData, setContentData] = useState([]);
+    const loadContent = function () {
+        setContentData([]);
+        if(QueryParam.id !== undefined) {
+            contentModel.detail(QueryParam?.id).then((res) => {
+                console.log(res)
+                setContentData(res);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }
+    useEffect(() => {
+        loadContent();
+    }, [QueryParam?.id])
     const [showDocs, setShowDocs] = useState("d-none");
     const [showNextChapter, setShowNextChapter] = useState(false);
     useEffect(() => {
@@ -35,6 +49,7 @@ const topicpage = () => {
         setPrevContent([]);
         setContentUrl(null);
         if (contentData?.data !== undefined) {
+            //console.log("contentData?.data", contentData?.data);
             setModuleId(contentData?.data?.module_id);
             setCurContent(contentData?.data);
             //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
@@ -84,16 +99,19 @@ const topicpage = () => {
             });
             const chapterForm = new FormData();
             //console.log("chapter id", contentData?.data?.id)
-            chapterForm.append("chapter_id", contentData?.data?.id);
-            CourseViewModel.getChapterViewData(chapterForm).then((chapterRes) => {
-                if (chapterRes !== null) {
-                    if (chapterRes?.data?.status === "completed") {
-                        setShowNextChapter(true);
+            if (layoutValues?.profile?.role == 'trainee') {
+                chapterForm.append("chapter_id", contentData?.data?.id);
+                CourseViewModel.getChapterViewData(chapterForm).then((chapterRes) => {
+                    if (chapterRes !== null) {
+                        if (chapterRes?.data?.status === "completed") {
+                            setShowNextChapter(true);
+                        }
                     }
-                }
-                console.log("chapterRes", chapterRes);
-
-            });
+                    //console.log("chapterRes", chapterRes);
+                });
+            } else {
+                setShowNextChapter(true);
+            }
 
         }
     }, [contentData, QueryParam?.id]);

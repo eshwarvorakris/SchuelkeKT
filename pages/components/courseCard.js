@@ -27,13 +27,13 @@ export default function courseCard({ courseData }) {
               src={courseImg} alt="" />
           </div>
           <div className="title">
-            <div className="course-title">
+            <div className="course-title" style={{paddingTop:'0'}}>
               <h6>{courseData?.course_name}</h6>
             </div>
             <div className="badge-detail text-dark"><span>{courseData?.category?.category_name}</span></div>
           </div>
         </div>
-        <div className="statistical-details">
+        <div className="statistical-details" style={{paddingTop:'0'}}>
           <div className="enrolled-detail">
             <p>Enrolled : </p>
             <span>{statData?.traineeEnrolled} Trainees</span>
@@ -50,7 +50,7 @@ export default function courseCard({ courseData }) {
             <p style={{fontSize:'13px'}}>{statData?.userCompletePercent}% Trainees Completed</p>
           </div>
         </div>
-        <div className="duration-details">
+        <div className="duration-details" style={{paddingTop:'0'}}>
           <div style={{marginTop:'-1.4rem'}}>
             <div className="duration-detail">
               <p>Duration : </p>
@@ -61,7 +61,7 @@ export default function courseCard({ courseData }) {
             </div>
           </div>
         </div>
-        <div className="edit-btn" style={{height:'unset'}}>
+        <div className="edit-btn" style={{height:'unset', paddingTop:'0', marginTop:'-1.4rem'}}>
           <Link href={`/courses/${courseData?.id}/edit`}>
             <button className="btn edit">Edit Course</button>
           </Link>

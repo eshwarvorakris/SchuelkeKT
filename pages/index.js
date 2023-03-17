@@ -295,7 +295,7 @@ function index() {
             </div>
             <div className="col-md-12 ">
               <div className="story-content">
-                <p>Schulke knowledge Transfer will cover the following topics.</p>
+                <p>sch&#252;lke Knowledge Transfer will cover the following topics.</p>
               </div>
             </div>
           </div>
