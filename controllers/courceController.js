@@ -38,10 +38,32 @@ const courseController = class {
         }
         delete req.query.filterParam;
       } else if (req.query.filter == "country") {
-        if (req.query.search) {
-          req["query"][Op.or] = [
-            { '$trainer.country$': { [Op.iLike]: `%${req.query.search}%` } }
-          ];
+        if (req.query.filterParam) {
+          if(req.query.filterParam != "all") {
+            req["query"][Op.and] = [
+              { '$trainer.country$': { [Op.iLike]: `%${req.query.filterParam}%` } },
+            ];
+          }
+
+          if (req.query.search) {
+            if(req.query.search != "") {
+              req["query"][Op.or] = [
+                { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
+                { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
+                { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+                Sequelize.where(
+                  Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
+                  {[Op.iLike]: `%${req.query.search}%`}
+                ),
+                Sequelize.where(
+                  Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
+                  {[Op.iLike]: `%${req.query.search}%`}
+                ),
+              ];
+            }
+          }
+          delete req.query.filterParam;
         }
       } else if (req.query.filter == "status") {
         if (req.query.filterParam) {
@@ -98,6 +120,7 @@ const courseController = class {
         { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
         { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
         { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
+        { '$trainer.country$': { [Op.iLike]: `%${req.query.search}%` } },
         { 'status': { [Op.iLike]: `%${req.query.search}%` } },
         Sequelize.where(
           Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
