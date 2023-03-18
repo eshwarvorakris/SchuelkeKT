@@ -10,6 +10,9 @@ import ReactPaginate from 'react-paginate';
 import AppContext from "../../lib/appContext";
 import TabCourseList from "../components/tabCourseList"
 import RecentLearningCard from "../components/recentLearningCard"
+import baseModel from "../../model/base.model";
+import Select from 'react-select';
+import _ from 'lodash';
 
 const admincoursemanagement = () => {
     const layoutValues = useContext(AppContext);
@@ -20,7 +23,7 @@ const admincoursemanagement = () => {
     QueryParam.page = router.query.page || 1;
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
-
+    const { data: countryLists, countryerror, countryisLoading, mutate: countryListMutate } = useSWR('countryList', async () => await baseModel.countrylist());
     const { data: courses, mutate: couresList, error, isLoading } = useSWR(QueryParam ? "couresList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
 
     const courseDelete = function (id) {
@@ -107,6 +110,12 @@ const admincoursemanagement = () => {
             width: '15%',
         },
         {
+            name: 'Country',
+            selector: row => row?.trainer?.country,
+            wrap: true,
+            width: '10%',
+        },
+        {
             name: 'Approval Status',
             selector: row => {
                 return (
@@ -187,28 +196,62 @@ const admincoursemanagement = () => {
         }); */
         couresList();
     }
-    
+
+    const [selectCountry, setSelectCountry] = useState(null);
+    const [countryOptions, setCountryOptions] = useState([]);
+    useEffect(() => {
+        const opt = [];
+        let countries = _.orderBy(countryLists, [function (o) { return o.name.common; }], ['asc']);
+
+        countries?.map((item, index) => {
+            opt.push({ value: item.name.common, label: item.name.common })
+        });
+        if (opt.length > 0) {
+            setCountryOptions(opt);
+        }
+    }, [countryLists]);
+
     const [hideStatusDropdown, setHideStatusDropdown] = useState(true);
     const [hideTopicDropdown, setHideTopicDropdown] = useState(true);
+    const [hideCountryDropdown, setHideCountryDropdown] = useState(true);
     const handleFilterChange = (async (e) => {
         QueryParam.filter = e.target.value;
         QueryParam.search = "";
         QueryParam.filterParam = "all";
-        if(e.target.value == "all") {
-            delete(QueryParam.filter)
-            delete(QueryParam.search)
-            delete(QueryParam.filterParam)
+        if (e.target.value == "all") {
+            delete (QueryParam.filter)
+            delete (QueryParam.search)
+            delete (QueryParam.filterParam)
         }
-        
-        setHideStatusDropdown(true)
-        setHideTopicDropdown(true)
+
+        setHideStatusDropdown(true);
+        setHideTopicDropdown(true);
+        setHideCountryDropdown(true);
         if (e.target.value == "category") {
             setHideTopicDropdown(false)
         } else if (e.target.value == "status") {
             setHideStatusDropdown(false)
         }
+        else if (e.target.value == "country") {
+            setHideCountryDropdown(false)
+        }
         couresList()
     });
+    const onCountrySelect = (e) => {
+        //console.log(e.value);
+        QueryParam.filterParam = e.value;
+        couresList();
+        setSelectCountry(e);
+    };
+
+    const countryStyles = {
+        control: base => ({
+            ...base,
+            height: 35,
+            minHeight: 35,
+            width: '10rem',
+        })
+    };
 
     // useEffect(() => {
     //     console.clear();
@@ -232,8 +275,8 @@ const admincoursemanagement = () => {
                                             className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
                                             onChange={handleFilterChange}>
                                             <option value="all">All</option>
-                                            {/* <option value="course_name">Course Name</option>
-                                            <option value="country">Country</option> */}
+                                            {/* <option value="course_name">Course Name</option> */}
+                                            <option value="country">Country Name</option>
                                             <option value="category">Topic</option>
                                             <option value="status">Approval Status</option>
                                         </select>
@@ -271,6 +314,27 @@ const admincoursemanagement = () => {
                                                 <option value="product">Product</option>
                                                 <option value="blanket">Blanket</option>
                                             </select>
+                                        </div>
+                                    }
+                                    {!hideCountryDropdown &&
+                                        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                            {/* <select name="topicChange"
+                                                className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
+
+                                                <option value="country">Country</option>
+                                                <option value="product">Product</option>
+                                                <option value="blanket">Blanket</option>
+                                            </select> */}
+                                            <Select
+                                                isSearchable
+                                                options={countryOptions}
+                                                name={"country"}
+                                                placeholder="Select Country"
+                                                value={selectCountry}
+                                                onChange={onCountrySelect}
+                                                styles={countryStyles}
+                                            />
                                         </div>
                                     }
                                     {(layoutValues?.profile?.role == 'trainer') &&

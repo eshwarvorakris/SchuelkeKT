@@ -229,8 +229,8 @@ const editCourse = () => {
                                     </div>
 
                                     <div className="edit-modules-btn">
-                                        <Link href={`/courses/${queryid}/assignments`} className="btn"
-                                            style={{ backgroundColor: "#008bd6" }}><span>Edit Assignment</span></Link>
+                                        <Link href={`/courses/${queryid}/assessment`} className="btn"
+                                            style={{ backgroundColor: "#008bd6" }}><span>Edit Assessment</span></Link>
                                     </div>
                                 </div>
                                 <div className="right-col d-flex gap-4">

@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import questionModel from "../../../model/questions.model";
 function Page() {
   const layoutValues = useContext(AppContext);
-  { layoutValues.setPageHeading("Course Assignment") }
+  { layoutValues.setPageHeading("Course Assessment") }
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
@@ -172,7 +172,7 @@ function Page() {
             <div className="box-2" style={{ left: '150px' }}></div>
 
             <div className="trainer-tag">
-              <p style={{ zIndex: '1' }}>Assignments</p>
+              <p style={{ zIndex: '1' }}>Assessment</p>
             </div>
             <div className="exercise-module" style={{ paddingTop: '2rem' }}>
               <div className="module-heading">

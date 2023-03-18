@@ -39,7 +39,7 @@ const addcourse = ({ categories }) => {
                 // console.log(res.data.id)
                 setDisableBtn(false);
                 setModuleLink(`/courses/${res.data.id}/module`);
-                setAssignmentLink(`/courses/${res.data.id}/assignments`);
+                setAssignmentLink(`/courses/${res.data.id}/assessment`);
                 helper.sweetalert.toast("course Created");
                 //router.push("/courses");
             }).catch((error) => {
@@ -237,11 +237,33 @@ const addcourse = ({ categories }) => {
                                 </div>
                                 <br />
                                 <div className="course-completion">
-                                    <h6>Weeks Required for Completion</h6>
+                                    <h6>Weeks Required for Completion <span><OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip {...props}>
+                                                    Weeks Required for Completion
+                                                </Tooltip>
+                                            )}
+                                            placement="bottom"
+                                        ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                        </OverlayTrigger>
+                                        </span>
+                                    </h6>
                                     <input type="number" {...register("week_duration")} min="1" required />
                                 </div>
                                 <div className="course-completion">
-                                    <h6>Total Training Hour</h6>
+                                    <h6>Total Training Hour <span><OverlayTrigger
+                                            delay={{ hide: 450, show: 300 }}
+                                            overlay={(props) => (
+                                                <Tooltip {...props}>
+                                                    Total Training Hour
+                                                </Tooltip>
+                                            )}
+                                            placement="bottom"
+                                        ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                        </OverlayTrigger>
+                                        </span>
+                                    </h6>
                                     <input type="number" {...register("total_training_hour")} min="0.1" required step="any" />
                                 </div>
                             </div >
@@ -277,7 +299,7 @@ const addcourse = ({ categories }) => {
                                     <div className="edit-modules-btn">
                                         {assigmentLink &&
                                             <Link href={assigmentLink} className="btn"
-                                                style={{ backgroundColor: "#008bd6" }}><span>Edit Assignment</span></Link>
+                                                style={{ backgroundColor: "#008bd6" }}><span>Edit Assessment</span></Link>
 
                                         }
                                     </div>

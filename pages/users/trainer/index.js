@@ -9,6 +9,9 @@ import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
+import baseModel from "../../../model/base.model";
+import Select from 'react-select';
+import _ from 'lodash';
 
 const trainer = () => {
     const router = useRouter();
@@ -162,7 +165,23 @@ const trainer = () => {
         trainerList();
     }
 
+    const { data: countryLists, countryerror, countryisLoading, mutate: countryListMutate } = useSWR('countryList', async () => await baseModel.countrylist());
+    const [selectCountry, setSelectCountry] = useState(null);
+    const [countryOptions, setCountryOptions] = useState([]);
+    useEffect(() => {
+        const opt = [];
+        let countries = _.orderBy(countryLists, [function (o) { return o.name.common; }], ['asc']);
+
+        countries?.map((item, index) => {
+            opt.push({ value: item.name.common, label: item.name.common })
+        });
+        if (opt.length > 0) {
+            setCountryOptions(opt);
+        }
+    }, [countryLists]);
+
     const [hideStatusDropdown, setHideStatusDropdown] = useState(true);
+    const [hideCountryDropdown, setHideCountryDropdown] = useState(true);
     const handleFilterChange = (async (e) => {
         QueryParam.filter = e.target.value;
         QueryParam.search = "";
@@ -176,9 +195,27 @@ const trainer = () => {
         setHideStatusDropdown(true);
         if (e.target.value == "status") {
             setHideStatusDropdown(false)
+        } else if (e.target.value == "country") {
+            setHideCountryDropdown(false)
         }
         trainerList()
     });
+
+    const onCountrySelect = (e) => {
+        //console.log(e.value);
+        QueryParam.filterParam = e.value;
+        trainerList();
+        setSelectCountry(e);
+    };
+
+    const countryStyles = {
+        control: base => ({
+            ...base,
+            height: 35,
+            minHeight: 35,
+            width: '10rem',
+        })
+    };
 
     return (
         <>
@@ -204,10 +241,26 @@ const trainer = () => {
                             onChange={(event) => { QueryParam.filterParam = event.target.value; trainerList() }}>
                             <option value="all">All Status</option>
                             <option value="active">Active</option>
-                            <option value="pending">Pending</option>
+                            <option value="pending">In-Active</option>
                         </select>
                     </div>
                 }
+
+                {!hideCountryDropdown &&
+                    <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                        
+                        <Select
+                            isSearchable
+                            options={countryOptions}
+                            name={"country"}
+                            placeholder="Select Country"
+                            value={selectCountry}
+                            onChange={onCountrySelect}
+                            styles={countryStyles}
+                        />
+                    </div>
+                }
+
                 {
                     (() => {
                         if (layoutValues?.profile?.role == 'admin') {
