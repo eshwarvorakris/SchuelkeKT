@@ -130,7 +130,7 @@ const admincoursemanagement = () => {
                                 else if (row.status == 'pending' && layoutValues?.profile?.role == 'admin') {
                                     return (
                                         <>
-                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn">Approve</button></Link></span>
+                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn">Approved</button></Link></span>
                                         </>
                                     );
                                 }
