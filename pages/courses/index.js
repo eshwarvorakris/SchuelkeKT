@@ -150,7 +150,7 @@ const admincoursemanagement = () => {
 
                 )
             },
-            width: '11%',
+            width: '12%',
         },
         {
             name: 'Action',
