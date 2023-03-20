@@ -107,7 +107,7 @@ const admincoursemanagement = () => {
             name: 'Published By',
             selector: row => row?.trainer?.full_name,
             wrap: true,
-            width: '15%',
+            width: '14%',
         },
         {
             name: 'Country',
@@ -150,7 +150,7 @@ const admincoursemanagement = () => {
 
                 )
             },
-            width: '15%',
+            width: '16%',
         },
         {
             name: 'Action',
