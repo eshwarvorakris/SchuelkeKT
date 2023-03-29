@@ -33,15 +33,17 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin, 
       chapterForm.append("module_first_chapter_id", firstChapterId);
       chapterForm.append("isModuleFirstChapter", isModuleFirstChapter);
       CourseViewModel.getChapterView(chapterForm).then((res) => {
-        //console.log("cur course view", res.data)
+        //console.log("cur course view chapter id ->"+chapterData.id+" = ", res.data)
         if(res?.data !== null || res?.data !== "") {
           if(res?.data?.curChapterViews !== undefined) {
             let courseTotalSec = (res?.data?.courseData?.total_training_hour * 60 * 60);
             let perContentSec = courseTotalSec / res?.data?.allContentInCourse;
             let currentChapterView = res?.data?.curChapterViews;
             let percentage = 0;
-            if(currentChapterView > perContentSec) {
+            if(currentChapterView >= perContentSec) {
               percentage = 100;
+              setPercent(percentage);
+              setchapterStatus("completed");
             } else {
               percentage = parseInt((currentChapterView / perContentSec) * 100);
               if(percentage > 0) {

@@ -9,10 +9,12 @@ import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
 import AppContext from "../../../lib/appContext";
 import Link from 'next/link';
+import moment from 'moment';
 const updateStatus = () => {
   const router = useRouter();
   const layoutValues = useContext(AppContext);
   const [moduleCount, setModuleCount] = useState(0);
+  const [statusUpdateAllowed, setStatusUpdateAllowed] = useState(true);
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "sequence_no";
@@ -24,7 +26,9 @@ const updateStatus = () => {
     helper.sweetalert.confirm(`Are you sure you want to approve this course`, "info", "true").then(async (result) => {
       if (result.isConfirmed) {
         const formData = new FormData();
+        var CurrentDate = moment().format();
         formData.append('status', 'approved');
+        formData.append('status_update_on', CurrentDate);
         const updateRes = await courseModel.update(router.query.id, formData).then((res) => {
           helper.sweetalert.toast('Course Approved');
           router.push("/courses");
@@ -56,11 +60,26 @@ const updateStatus = () => {
     //console.log("called");
     loadModule();
     //console.log("modules = ", modules);
-
+    var CurrentDate = moment().format();
+    console.log("CurrentDate",CurrentDate);
+    
     if (modules?.data) {
       setModuleCount(modules.data.length);
     }
   }, [router, modules]);
+
+  useEffect(() => {
+    //console.log("course",course?.data?.status_update_on);
+    if(course?.data !== undefined) {
+      var updateLate = moment(course?.data?.status_update_on).add(process.env.NEXT_PUBLIC_MAXIMUM_MIN_UNDU_ALLOWED, 'minutes');
+      var curTime = moment();
+      //console.log("status update option = ",curTime.isBefore(updateLate));
+      if(curTime.isBefore(updateLate) === false) {
+        //setStatusUpdateAllowed(false)
+      }
+      //console.log("updateLate",updateLate.format());
+    }
+  }, [course]);
   return (
     <>
       <div style={{ backgroundColor: 'white' }}>
@@ -108,7 +127,9 @@ const updateStatus = () => {
             <div className="left-col d-flex gap-4">
               <button type="button" onClick={() => approveBtn()} className="footer-btn approve-btn"
                 style={{ backgroundColor: "#008bd6", padding: '5px 15px' }}>Approve</button>
-              <button type="button" onClick={() => rejectBtn()} className="footer-btn reject-btn" style={{ padding: '5px 15px' }}>Reject</button>
+              {statusUpdateAllowed &&
+                <button type="button" onClick={() => rejectBtn()} className="footer-btn reject-btn" style={{ padding: '5px 15px' }}>Reject</button>
+              }
             </div>
             <div className="right-col d-flex gap-4" style={{ marginRight: '4rem' }}>
               <div className="back-btn" style={{ padding: 'unset' }}>

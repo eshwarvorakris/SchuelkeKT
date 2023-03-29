@@ -33,6 +33,7 @@ const Page = () => {
   const [courseData, setCourseData] = useState([]);
 
   const [lastChapterViewData, setLastChapterViewData] = useState(0);
+  const [assignmentSubmitCount, setassignmentSubmitCount] = useState(0);
   //const { data: courseData, mutate: couresDetail, error, isLoading } = useSWR("coursedetail", async () => await courseModel.detail(router?.query?.id), config.swrConfig);
   //const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("modulelist", async () => await courseModel.modules(router?.query?.id, QueryParam), config.swrConfig);
   
@@ -75,26 +76,47 @@ const Page = () => {
     }
     // console.log("courseData ", courseData);
     // console.log("module ", modules);
+    
     if (router?.query?.id !== undefined) {
       //console.clear();
       const countAttemptForm = new FormData();
       countAttemptForm.append("course_id", router?.query?.id);
       assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
         //console.log("attempt result",process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT);
+        setassignmentSubmitCount(submittedRes?.data?.assignmentAttempt)
         if (submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
           setShowAssignmentButton(true);
         }
       });
+      
       let isLastModuleFound = false;
       let isAnyChapterViewed = false;
       CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
-        
-        //console.log("course view", res);
+        let maxAttempt = 0
+        if(res?.data?.courseReDoneCount?.re_done_count) {
+          maxAttempt = res?.data?.courseReDoneCount?.re_done_count * process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT;
+          if(assignmentSubmitCount < maxAttempt) {
+            setShowAssignmentButton(true);
+          }
+        }
+        //console.log("course view", res.data.courseReDoneCount.re_done_count);
+
         let maxcoursemin = Math.floor(courseData?.data?.total_training_hour * 60);
         let maxcoursesec = maxcoursemin * 60;
         let courseViewSec = 0;
-        if(res?.data?.courseViewSec) {
-          courseViewSec = res?.data?.courseViewSec;
+        if(res?.data?.courseViewData) {
+          let perContentSec = 0;
+          perContentSec = maxcoursesec / res?.data?.totalCourseContent;
+
+          res?.data?.courseViewData.forEach(viewedElement => {
+            if(viewedElement.viewed_seconds > perContentSec) {
+              courseViewSec += perContentSec;
+            } else {
+              courseViewSec += viewedElement.viewed_seconds;
+            }
+            //console.log("id = "+viewedElement.id+" view = "+viewedElement.viewed_seconds+" courseView = "+courseViewSec)
+          });
+          //courseViewSec = res?.data?.courseViewSec;
         }
 
         if(courseViewSec > maxcoursesec) {

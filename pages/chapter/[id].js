@@ -29,7 +29,7 @@ const topicpage = () => {
     const [contentData, setContentData] = useState([]);
     const loadContent = function () {
         setContentData([]);
-        if(QueryParam.id !== undefined) {
+        if (QueryParam.id !== undefined) {
             contentModel.detail(QueryParam?.id).then((res) => {
                 console.log(res)
                 setContentData(res);
@@ -119,11 +119,51 @@ const topicpage = () => {
     const contentLink = function () {
         helper.sweetalert.warningToast("Please complete current chapters.");
     }
+
+    useEffect(() => {
+        setChapterId(QueryParam?.id);
+        //console.clear();
+        let apiUpdateCounter = 1;
+        // console.log("CourseId = ", courseId);
+        // console.log("moduleId = ", moduleId);
+        // console.log("chapterId = ", chapterId);
+        const handleExit = function () {
+            clearInterval(myTimer);
+        }
+        //console.log("inside");
+        const myTimer = setInterval(function () {
+            //console.log("inside sec");
+            if ((apiUpdateCounter % process.env.NEXT_PUBLIC_TIMEOUT_UPDATE_SECOND) == 0) {
+                // console.log("inside tim");
+                // console.log("CourseId = ", courseId);
+                // console.log("moduleId = ", moduleId);
+                // console.log("chapterId = ", chapterId);
+                if (courseId != null && moduleId != null && chapterId != null) {
+                    const courseFormData = new FormData();
+                    courseFormData.append("course_id", courseId);
+                    courseFormData.append("module_id", moduleId);
+                    courseFormData.append("chapter_id", chapterId);
+                    courseFormData.append("viewed_seconds", process.env.NEXT_PUBLIC_TIMEOUT_UPDATE_SECOND);
+                    CourseViewModel.create(courseFormData).then((res) => {
+                        console.log("course view create result", res.data);
+                        if (res?.data?.curChapterViewSeconds >= res?.data?.perContentSecond) {
+                            setShowNextChapter(true);
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                }
+            }
+            apiUpdateCounter++;
+        }, 1000);
+        return () => handleExit();
+
+    }, [courseId, moduleId, chapterId]);
     return (
         <>
-            {courseId &&
+            {/* {courseId &&
                 <Checktimer startTimer={true} courseId={courseId} moduleId={moduleId} chapterId={QueryParam?.id} />
-            }
+            } */}
 
             <div className="content-header d-flex gap-3 align-items-center">
                 {(layoutValues?.profile?.role == 'trainee') &&

@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import questionModel from "../../../model/questions.model";
 import courseModel from "../../../model/course.model";
 import assignmentModel from "../../../model/assignment.model";
+import CourseViewModel from "../../../model/cource_view.model"
 function Page() {
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Quizzes") }
@@ -30,6 +31,8 @@ function Page() {
   const [checkedInput, setCheckedInput] = useState([]);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [showRetryButton, setShowRetryButton] = useState(false);
+  const [assignmentSubmitCount, setassignmentSubmitCount] = useState(0);
+  const [maxAttemptAllowed, setMaxAttemptAllowed] = useState(process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT);
   useEffect(() => {
     /* const subscription = watch((data) => {
       if (data.questions !== undefined) {
@@ -42,7 +45,7 @@ function Page() {
   useEffect(() => {
     //console.log("id = ", router?.query?.id);
     if (router?.query?.id !== undefined) {
-      console.log("in");
+      //console.log("in");
       courseModel.detail(router?.query?.id).then((res) => {
         console.log("course Name = ", res.data);
         setCourseName(res?.data?.course_name);
@@ -82,9 +85,23 @@ function Page() {
       const countAttemptForm = new FormData();
       countAttemptForm.append("course_id", router?.query?.id);
       assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
-        console.log("attempt result",submittedRes?.data);
-        if(submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
+        //console.log("attempt result", submittedRes?.data);
+        setassignmentSubmitCount(submittedRes?.data?.assignmentAttempt)
+        if (submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
           setShowSubmitButton(true);
+        }
+
+        if (submittedRes?.data?.assignmentAttempt > 0) {
+          CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
+            if(res?.data?.courseReDoneCount?.re_done_count) {
+              let maxAttempt = 0;
+              maxAttempt = res?.data?.courseReDoneCount?.re_done_count * process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT;
+              setMaxAttemptAllowed(maxAttempt);
+              if(assignmentSubmitCount < maxAttempt) {
+                setShowSubmitButton(true);
+              }
+            }
+          });
         }
       });
     }
@@ -92,25 +109,27 @@ function Page() {
 
   const onSubmit = async e => {
     e.preventDefault();
-    console.clear();
+    //console.clear();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     const formData = new FormData(e.target);
     formData.append("status", submitButton);
     await assignmentModel.create(formData).then((res) => {
       console.log(res.data);
+      
       if (submitButton == "drafted") {
         helper.sweetalert.toast("Assignment saved to draft");
       } else {
         setShowSubmitButton(false);
-        if(res.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
+        if (res.data?.assignmentAttempt < maxAttemptAllowed) {
           setShowRetryButton(true);
         }
+
         document.getElementById('quizTextHead').classList.add("d-none");
         document.getElementById('resultDiv').classList.remove("d-none");
         if (res.data) {
 
           document.getElementById("gotPercent").innerHTML = res.data?.answerPercent + "%";
-          if(res.data?.answerPercent == 100) {
+          if (res.data?.answerPercent == 100) {
             setShowRetryButton(false);
           } else if (res.data?.answerPercent >= 80) {
             document.getElementById('gotPercent').classList.remove("text-danger");
@@ -142,6 +161,7 @@ function Page() {
             }
           });
         }
+        console.log("show retry = ", showRetryButton);
         helper.sweetalert.toast("Assignment Submitted");
       }
       //router.push("/dashboard");
@@ -184,15 +204,15 @@ function Page() {
                   <button type="button" className="try-again-btn">Try Again</button>
                 </a>
               }
-                
+
             </div>
           </div>
         </div>
         <div className="trainee-body">
           <div className="trainee-list d-flex flex-column" style={{ margin: '0rem 3rem -2.5rem 3rem', padding: 'unset', height: 'unset' }}>
             <div className="box-container-1">
-              <div className="box-1" style={{width:'105px', borderLeft:'unset', borderRight:'unset', borderTop:'unset'}}></div>
-              <div className="box-2" style={{left:'75px', borderTop:'unset'}}></div>
+              <div className="box-1" style={{ width: '105px', borderLeft: 'unset', borderRight: 'unset', borderTop: 'unset' }}></div>
+              <div className="box-2" style={{ left: '75px', borderTop: 'unset' }}></div>
 
               <div className="trainee-tag">
                 <p style={{ zIndex: '1' }}>Quizzes</p>

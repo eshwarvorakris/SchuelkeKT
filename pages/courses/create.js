@@ -33,6 +33,8 @@ const addcourse = ({ categories }) => {
         //console.log(event.target.course_name.value);
         if (event.target.course_name.value != "" && event.target.total_modules.value != "" && event.target.course_launch_date.value != "" && event.target.week_duration.value != "" && event.target.total_training_hour.value != "") {
             const formData = new FormData(event.target);
+            var CurrentDate = moment().format();
+            formData.append('status_update_on', CurrentDate);
             //console.log(data, formData);
             await courseModel.create(formData).then((res) => {
                 // console.clear();

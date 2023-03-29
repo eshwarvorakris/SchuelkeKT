@@ -29,9 +29,11 @@ const mygrade = () => {
                         </div>
 
                         <div className="body-row">
-                            <div><span><strong>Grade Items</strong></span></div>
-                            <div><span><strong>Percentage</strong></span></div>
-                            <div><span><strong>Submitted On</strong></span></div>
+                            <div style={{width:'30%'}}><span><strong>Grade Items</strong></span></div>
+                            <div style={{width:'15%'}}><span><strong>Percentage</strong></span></div>
+                            <div style={{width:'15%'}}><span><strong>Assignment<br />Attempt<br />Count</strong></span></div>
+                            <div style={{width:'15%'}}><span><strong>Course<br />Attempt<br />Count</strong></span></div>
+                            <div style={{width:'25%'}}><span><strong>Submitted On</strong></span></div>
                         </div>
 
 
@@ -49,16 +51,22 @@ const mygrade = () => {
                                 }
                                 return (
                                     <div className="Quiz-1 d-flex justify-content-between" key={index}>
-                                        <div className="grade-item d-flex gap-1 align-items-center">
+                                        <div className="grade-item d-flex gap-1 align-items-center" style={{width:'30%'}}>
                                             <div className="grade-icon">
                                                 <img src={curImage} alt="Course Image" height={20} width={20} />
                                             </div>
                                             <span>{item?.curData?.course?.course_name}</span>
                                         </div>
-                                        <div className="Percentage">
+                                        <div className="Percentage" style={{width:'15%'}}>
                                             <span><strong>{item.maxPercent}%</strong></span>
                                         </div>
-                                        <div className="Remarks">
+                                        <div className="Percentage" style={{width:'15%'}}>
+                                            <span><strong>{item.attemptCount}</strong></span>
+                                        </div>
+                                        <div className="Percentage" style={{width:'15%'}}>
+                                            <span><strong>{item.courseAttemptData.re_done_count}</strong></span>
+                                        </div>
+                                        <div className="Remarks" style={{width:'25%'}}>
                                             <span>{curdate}</span>
                                         </div>
                                     </div>

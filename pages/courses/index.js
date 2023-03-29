@@ -13,6 +13,7 @@ import RecentLearningCard from "../components/recentLearningCard"
 import baseModel from "../../model/base.model";
 import Select from 'react-select';
 import _ from 'lodash';
+import moment from 'moment';
 
 const admincoursemanagement = () => {
     const layoutValues = useContext(AppContext);
@@ -20,6 +21,7 @@ const admincoursemanagement = () => {
     const router = useRouter();
 
     const QueryParam = router.query;
+    const curTime = moment();
     QueryParam.page = router.query.page || 1;
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
@@ -163,12 +165,24 @@ const admincoursemanagement = () => {
                             <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                             {
                                 (() => {
+                                    
                                     if (layoutValues?.profile?.role == 'admin') {
-                                        return (
-                                            <>
-                                                <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}><i class="fa fa-undo" aria-hidden="true"></i></button>
-                                            </>
-                                        );
+                                        if(row.status === "approved") {
+                                            let updateLate = moment(row?.status_update_on).add(process.env.NEXT_PUBLIC_MAXIMUM_MIN_UNDU_ALLOWED, 'minutes');
+                                            if(curTime.isBefore(updateLate)) {
+                                                return (
+                                                    <>
+                                                        <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                    </>
+                                                );
+                                            }
+                                        } else {
+                                            return (
+                                                <>
+                                                    <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                </>
+                                            );
+                                        }
                                     }
                                 })()
                             }
