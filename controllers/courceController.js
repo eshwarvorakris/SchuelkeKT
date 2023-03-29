@@ -220,6 +220,11 @@ const courseController = class {
   async update(req, res) {
     console.clear();
     console.log("update query ", req.body);
+    if(req.body?.status) {
+      if(req.body?.status == "approved") {
+        //req.body.status_update_on = 
+      }
+    }
     const course = await Course.findByPk(req.params.id);
     if (course) {
       const courseup = await course.update(req.body);

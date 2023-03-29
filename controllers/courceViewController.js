@@ -23,10 +23,17 @@ const courseController = class {
   async getAnyCourseChapterViewed(req, res) {
     if (req.body.course_id !== undefined && req.body.course_id != "undefined") {
       const courseViewSec = await ChapterView.sum('viewed_seconds', { where: { course_id: req.body.course_id, trainee_id: req.userId } });
+      const courseReDoneCount = await CourseView.findOne({attributes: ['id','viewed_seconds','re_done_count'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
+      const courseViewData = await ChapterView.findAll({attributes: ['id','viewed_seconds'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
+      const totalCourseContent = await Content.count({ where: { course_id: req.body.course_id } });
       await ChapterView
         .findOne({ where: { trainee_id: req.userId, course_id: req.body.course_id }, order: [['chapter_id', 'DESC']] })
         .then((result) => {
-          const data = { courseViewSec: courseViewSec, result: result }
+          const data = { courseViewSec: courseViewSec,
+            courseViewData:courseViewData,
+            totalCourseContent:totalCourseContent,
+            courseReDoneCount:courseReDoneCount,
+            result: result }
           //console.log(result);
           res.send(data);
           //res.send("done");
@@ -85,7 +92,7 @@ const courseController = class {
       }
       else {
         let prevContentId = prevContentInModule.dataValues.id;
-        const prevChapterViews = await ChapterView.findOne({ where: { chapter_id: req.body.chapter_id, trainee_id: req.userId, status: 'completed' } });
+        const prevChapterViews = await ChapterView.findOne({ where: { chapter_id: prevContentId, trainee_id: req.userId, status: 'completed' } });
         if (prevChapterViews === null) {
           isCurrentChapterLocked = true;
         }
@@ -203,7 +210,7 @@ const courseController = class {
       where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id }
     }).then(async (result) => {
       if (result !== null) {
-        res.send(result);
+        //res.send(result);
         console.log("view result=>", result?.dataValues?.id);
         if (result?.dataValues?.id) {
           await CourseView
@@ -214,7 +221,7 @@ const courseController = class {
         await CourseView
           .create(req.body)
           .then((resultCreate) => {
-            res.send(resultCreate);
+            //res.send(resultCreate);
             User.increment({course_count: 1}, { where: { id: req.userId } })
           })
           .catch((error) => {
@@ -225,6 +232,8 @@ const courseController = class {
       await moduleViewed();
       await chapterViewed();
     }).catch((error) => {
+      console.clear();
+      console.log(error)
       return res.status(422).send(
         {
           message: "Unable To Submit Please Try Again Later.",
@@ -254,12 +263,12 @@ const courseController = class {
 
     async function chapterViewed() {
       const alreadyView = await ChapterView.findOne({
-        attributes: ['id'],
+        attributes: ['id', 'viewed_seconds'],
         where: { trainee_id: req.body.trainee_id, chapter_id: req.body.chapter_id }
       }).then(async (chapterResult) => {
         if (chapterResult !== null) {
           //res.send(result);
-          console.log("module view result=>", chapterResult?.dataValues?.id);
+          console.log("Chapter view result=>", chapterResult?.dataValues);
           if (chapterResult?.dataValues?.id) {
             await ChapterView
               .increment({ viewed_seconds: req.body.viewed_seconds },
@@ -328,6 +337,11 @@ const courseController = class {
       console.log("perContentSecond = ", perContentSecond);
       console.log("curChapterViewSeconds = ", curChapterViewSeconds.dataValues.viewed_seconds);
       console.log("isCourseLastContent = " + isCourseLastContent + " isModuleLastContent " + isModuleLastContent + ", currentChapterId " + req.body.chapter_id);
+      const resultData = {
+        perContentSecond: perContentSecond,
+        curChapterViewSeconds: curChapterViewSeconds.dataValues.viewed_seconds
+      };
+      res.send(resultData)
     }
   }
   async show(req, res) {

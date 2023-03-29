@@ -18,6 +18,10 @@ CourseView.init({
     type: DataTypes.INTEGER,
     allowNull:true
   },
+  re_done_count: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+  },
   status: {
     type: DataTypes.STRING(30),
     defaultValue: 'ongoing'

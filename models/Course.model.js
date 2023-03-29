@@ -26,6 +26,9 @@ Course.init({
   course_launch_date: {
     type: DataTypes.DATEONLY
   },
+  status_update_on: {
+    type: DataTypes.DATE
+  },
   total_training_hour: {
     type: DataTypes.FLOAT,
     defaultValue: 0,

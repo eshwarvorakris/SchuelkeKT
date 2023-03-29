@@ -6,6 +6,7 @@ const QuestionOption = require("../models/Question_option.model");
 const ChapterView = require("../models/Chapter_views.model");
 const ModelView = require("../models/Module_views.model");
 const CourseView = require("../models/Course_views.model");
+//const Course = require("../models/Course.model");
 const sequelize = require("../lib/dbConnection");
 const { Op } = require("sequelize");
 const questionAttemptController = class {
@@ -29,6 +30,8 @@ const questionAttemptController = class {
     var outResult = [];
     var maxPercent = 0;
     var curData = [];
+    var attemptCount = null;
+    var courseAttemptData = null;
     async function attemptRes(allCourses) {
       let questionResp = async () => {
         var i = 0;
@@ -37,12 +40,17 @@ const questionAttemptController = class {
           maxPercent = await AssignmentAttempt.max('correct_percentage',
             { where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
           );
-          curData = await AssignmentAttempt.findOne(
-            {include: ['course'],
-            where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT, correct_percentage:maxPercent } }
+          attemptCount = await AssignmentAttempt.count( { where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
           );
-          
-          outResult.push({maxPercent:maxPercent, curData:curData})
+          courseAttemptData = await CourseView.findOne({attributes: ['id','viewed_seconds','re_done_count'], where: { course_id: curCourse.DISTINCT, trainee_id: req.body.trainee_id } });
+          curData = await AssignmentAttempt.findOne(
+            {
+              include: ['course'],
+              where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT, correct_percentage: maxPercent }
+            }
+          );
+
+          outResult.push({ maxPercent: maxPercent, curData: curData, attemptCount:attemptCount, courseAttemptData:courseAttemptData })
           i++;
         }
       }
@@ -97,11 +105,13 @@ const questionAttemptController = class {
             { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
           );
           curData = await AssignmentAttempt.findOne(
-            {include: ['course'],
-            where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT, correct_percentage:maxPercent } }
+            {
+              include: ['course'],
+              where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT, correct_percentage: maxPercent }
+            }
           );
-          
-          outResult.push({maxPercent:maxPercent, totalScore:totalScore, totalAttempts:totalAttempts, curData:curData})
+
+          outResult.push({ maxPercent: maxPercent, totalScore: totalScore, totalAttempts: totalAttempts, curData: curData })
           i++;
         }
       }
@@ -227,7 +237,9 @@ const questionAttemptController = class {
       let totalQuestion = 0;
       let answeredQuestion = 0;
       var assignmentAttempt = [];
+      var answerPercent = 0
       //console.log(req.body.questions.length);
+
       let questionResp = async () => {
         for (const curQuestion of req.body.questions) {
           is_correct = false;
@@ -277,21 +289,31 @@ const questionAttemptController = class {
           }
 
         };
-        
+
+        answerPercent = Math.round((correctQues.length / totalQuestion) * 100);
+        //console.log("percent = ", answerPercent);
+        await AssignmentAttempt
+          .update({ total_questions: totalQuestion, attempted_questions: answeredQuestion, correct_percentage: answerPercent }, { where: { id: attemptId } })
+
         assignmentAttempt = await AssignmentAttempt.count({
           where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted' }
         })
 
-        if(assignmentAttempt > 1) {
+        if (assignmentAttempt > 1) {
           const assignmentCorrect = await AssignmentAttempt.count({
-            where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted', correct_percentage: {[Op.gte]:80} }
+            where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted', correct_percentage: { [Op.gte]: 80 } }
           });
-
-          if(assignmentCorrect == 0) {
-            CourseView.update({viewed_seconds:'0', status: 'ongoing'}, { where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
+          const courseReDoneCount = await CourseView.findOne({attributes: ['id','viewed_seconds','re_done_count'], where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id } });
+          //console.log("courseReDoneCount", courseReDoneCount.re_done_count)
+          const perCourseAllowedAttempt = process.env.MAX_ATTEMPT_ALLOWED;
+          const maxTotalAttempt = courseReDoneCount?.re_done_count * perCourseAllowedAttempt;
+          //console.log("maxTotalAttempt", maxTotalAttempt);
+          if (assignmentCorrect == 0 && assignmentAttempt >= maxTotalAttempt) {
+            CourseView.update({viewed_seconds:'0', status: 'ongoing', re_done_count:sequelize.literal('re_done_count + 1')}, { where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
             ModelView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
             ChapterView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
-          } 
+
+          }
         }
       };
 
@@ -299,10 +321,7 @@ const questionAttemptController = class {
         await questionResp();
         var resultData = [];
         resultData.push("assignmentAttempt", assignmentAttempt);
-        var answerPercent = (correctQues.length / totalQuestion) * 100;
-        //console.log("percent = ", answerPercent);
-        await AssignmentAttempt
-          .update({ total_questions: totalQuestion, attempted_questions: answeredQuestion, correct_percentage: answerPercent }, { where: { id: attemptId } })
+
         if (req.body.status == 'submitted') {
           resultData = {
             incorrectQues: incorrectQues,
