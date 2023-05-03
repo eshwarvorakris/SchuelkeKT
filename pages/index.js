@@ -524,18 +524,7 @@ function index() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-3 col-sm-6 full-card">
-                <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
-                  <img className="card-img-top trainer-img" src="trainee-images/faces/Shey.png" style={{ height: "12rem" }}
-                    alt="Card image cap" />
-                  <div className="card-body">
-                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Shey LEMCKE</h5>
-                    <div className="department-info">Sales & Marketing </div>
-                    <div className="LMS-info">Trainer </div>
-                    <div className="country-info">Australia & New Zealand</div>
-                  </div>
-                </div>
-              </div>
+              
               <div className="col-lg-3 col-sm-6 full-card">
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Mandy.png" style={{ height: "12rem" }}
@@ -548,8 +537,7 @@ function index() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="row m-auto">
+            
               <div className="col-lg-3 col-sm-6 full-card">
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Rohit Bhatia.png"
@@ -598,6 +586,31 @@ function index() {
                   </div>
                 </div>
               </div>
+              <div className="col-lg-3 col-sm-6 full-card">
+                <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
+                  <img className="card-img-top trainer-img" src="trainee-images/faces/Foto_Dr. Lars Paßvogel__Projektmanager.png" style={{ height: "12rem" }}
+                    alt="Card image cap" />
+                  <div className="card-body">
+                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Dr. Lars PASSVOGEL</h5>
+                    <div className="department-info">Head of Microbiology & Strategic Innovation</div>
+                    <div className="LMS-info">Guest trainer </div>
+                    <div className="country-info"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-sm-6 full-card">
+                <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
+                  <img className="card-img-top trainer-img" src="trainee-images/faces/Nadine.jpg" style={{ height: "12rem" }}
+                    alt="Card image cap" />
+                  <div className="card-body">
+                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Nadine RADISCHAT</h5>
+                    <div className="department-info">Microbiology Expert</div>
+                    <div className="LMS-info">Guest trainer </div>
+                    <div className="country-info"></div>
+                  </div>
+                </div>
+              </div>
+              
             </div>
           </div>
         </div>
