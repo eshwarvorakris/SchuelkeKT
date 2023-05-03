@@ -80,7 +80,7 @@ const questionController = class {
               .create(curQuestion, {
                 include: "options"
               }).then(async (result) => {
-                console.log("hereeeeeeeee");
+                //console.log("hereeeeeeeee");
                 await Course.update({ question_added: "yes" }, { where: { id: curQuestion.course_id } });
               }).catch((error) => {
                 console.error("Failed to retrieve data : ", error);
@@ -92,7 +92,7 @@ const questionController = class {
             .create(curQuestion, {
               include: "options"
             }).then(async (result) => {
-              console.log("hereeeeeeeee");
+              //console.log("hereeeeeeeee");
               await Course.update({ question_added: "yes" }, { where: { id: curQuestion.course_id } });
             }).catch((error) => {
               console.error("Failed to retrieve data : ", error);
@@ -118,7 +118,7 @@ const questionController = class {
     if (question) {
       question.update(req.body)
       const updateQuery = await QuestionOption.bulkCreate(req.body.options, { fields: ['id', 'option', 'is_answer'], updateOnDuplicate: ["id", "option", 'is_answer'] });
-      console.log(updateQuery);
+      //console.log(updateQuery);
       return res.send({ data: question });
     }
     return res.status(422).send(

@@ -6,31 +6,31 @@ const Course = require("../models/Course.model");
 const Module = require("../models/Module.model");
 const User = require("../models/User.model");
 const { Sequelize, Op, DataTypes } = require("sequelize");
-const Category = require("../models/Category.model");
+const Assigned_courses = require("../models/Assigned_courses.model");
 const courseController = class {
   async index(req, res) {
     let search = req.query.search;
-    if(req.query.filter) {
-      if(req.query.filter == "category") {
+    if (req.query.filter) {
+      if (req.query.filter == "category") {
         if (req.query.filterParam) {
-          if(req.query.filterParam != "all") {
+          if (req.query.filterParam != "all") {
             req["query"][Op.and] = [
               { '$category.category_name$': { [Op.iLike]: `%${req.query.filterParam}%` } },
             ];
           }
           if (req.query.search) {
-            if(req.query.search != "") {
+            if (req.query.search != "") {
               req["query"][Op.or] = [
                 { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
                 { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
                 { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
                 Sequelize.where(
                   Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-                  {[Op.iLike]: `%${req.query.search}%`}
+                  { [Op.iLike]: `%${req.query.search}%` }
                 ),
                 Sequelize.where(
                   Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-                  {[Op.iLike]: `%${req.query.search}%`}
+                  { [Op.iLike]: `%${req.query.search}%` }
                 ),
               ];
             }
@@ -39,14 +39,14 @@ const courseController = class {
         delete req.query.filterParam;
       } else if (req.query.filter == "country") {
         if (req.query.filterParam) {
-          if(req.query.filterParam != "all") {
+          if (req.query.filterParam != "all") {
             req["query"][Op.and] = [
               { '$trainer.country$': { [Op.iLike]: `%${req.query.filterParam}%` } },
             ];
           }
 
           if (req.query.search) {
-            if(req.query.search != "") {
+            if (req.query.search != "") {
               req["query"][Op.or] = [
                 { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
                 { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
@@ -54,11 +54,11 @@ const courseController = class {
                 { 'status': { [Op.iLike]: `%${req.query.search}%` } },
                 Sequelize.where(
                   Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-                  {[Op.iLike]: `%${req.query.search}%`}
+                  { [Op.iLike]: `%${req.query.search}%` }
                 ),
                 Sequelize.where(
                   Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-                  {[Op.iLike]: `%${req.query.search}%`}
+                  { [Op.iLike]: `%${req.query.search}%` }
                 ),
               ];
             }
@@ -67,25 +67,25 @@ const courseController = class {
         }
       } else if (req.query.filter == "status") {
         if (req.query.filterParam) {
-          if(req.query.filterParam != "all") {
+          if (req.query.filterParam != "all") {
             req["query"][Op.and] = [
               { 'status': { [Op.iLike]: `%${req.query.filterParam}%` } },
             ];
           }
 
           if (req.query.search) {
-            if(req.query.search != "") {
+            if (req.query.search != "") {
               req["query"][Op.or] = [
                 { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
                 { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
                 { '$trainer.full_name$': { [Op.iLike]: `%${req.query.search}%` } },
                 Sequelize.where(
                   Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-                  {[Op.iLike]: `%${req.query.search}%`}
+                  { [Op.iLike]: `%${req.query.search}%` }
                 ),
                 Sequelize.where(
                   Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-                  {[Op.iLike]: `%${req.query.search}%`}
+                  { [Op.iLike]: `%${req.query.search}%` }
                 ),
               ];
             }
@@ -95,7 +95,7 @@ const courseController = class {
       } else if (req.query.filter == "all") {
         //console.log("check");
         if (req.query.search) {
-          if(req.query.search != "") {
+          if (req.query.search != "") {
             req["query"][Op.or] = [
               { 'course_name': { [Op.iLike]: `%${req.query.search}%`, }, },
               { '$category.category_name$': { [Op.iLike]: `%${req.query.search}%` } },
@@ -103,11 +103,11 @@ const courseController = class {
               { 'status': { [Op.iLike]: `%${req.query.search}%` } },
               Sequelize.where(
                 Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-                {[Op.iLike]: `%${req.query.search}%`}
+                { [Op.iLike]: `%${req.query.search}%` }
               ),
               Sequelize.where(
                 Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-                {[Op.iLike]: `%${req.query.search}%`}
+                { [Op.iLike]: `%${req.query.search}%` }
               ),
             ];
           }
@@ -124,11 +124,11 @@ const courseController = class {
         { 'status': { [Op.iLike]: `%${req.query.search}%` } },
         Sequelize.where(
           Sequelize.cast(Sequelize.col('week_duration'), 'varchar'),
-          {[Op.iLike]: `%${req.query.search}%`}
+          { [Op.iLike]: `%${req.query.search}%` }
         ),
         Sequelize.where(
           Sequelize.cast(Sequelize.col('total_modules'), 'varchar'),
-          {[Op.iLike]: `%${req.query.search}%`}
+          { [Op.iLike]: `%${req.query.search}%` }
         ),
         /* Sequelize.where(
           Sequelize.cast(Sequelize.col('trainer.contact_no'), 'varchar'),
@@ -140,18 +140,36 @@ const courseController = class {
     if (req.userRole == "trainer") {
       req["query"]["trainer_id"] = req.userId;
     }
-    else if (req.userRole == "trainee") {
+    
+    if (req.userRole == "trainee") {
       req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
-    }
-
-    await Course
-      .findAndCountAll({ include: ["category","trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
+      Course.hasMany(Assigned_courses, { foreignKey: 'course_id' });
+      await Course
+      .findAndCountAll({ 
+        include: ["category","trainer", {
+          model: Assigned_courses,
+          where: { trainee_id: req.userId },
+        }], 
+        offset: pageNumber * pageLimit, 
+        limit: pageLimit, 
+        where: req.query, 
+        order: [orderByColumn] })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
       .catch((error) => {
         console.error("Failed to retrieve data : ", error);
       });
+    } else {
+      await Course
+        .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
+        .then((result) => {
+          res.send(getPaginate(result, pageNumber, pageLimit));
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    }
   }
   async store(req, res) {
     const data = req.body;
@@ -172,7 +190,7 @@ const courseController = class {
     await Course
       .create(req.body)
       .then((result) => {
-        User.increment({course_count: 1}, { where: { id: req.userId } })
+        User.increment({ course_count: 1 }, { where: { id: req.userId } })
         res.send(result);
       })
       .catch((error) => {
@@ -200,7 +218,7 @@ const courseController = class {
 
   async modules(req, res) {
     if (req.params.id !== undefined && req.params.id != "undefined") {
-      const module = await Module.findAll({ where: { course_id: req.params.id } , order: [orderByColumn]});
+      const module = await Module.findAll({ where: { course_id: req.params.id }, order: [orderByColumn] });
       if (module) {
         return res.send({ data: module });
       }
@@ -220,8 +238,8 @@ const courseController = class {
   async update(req, res) {
     console.clear();
     console.log("update query ", req.body);
-    if(req.body?.status) {
-      if(req.body?.status == "approved") {
+    if (req.body?.status) {
+      if (req.body?.status == "approved") {
         //req.body.status_update_on = 
       }
     }
@@ -243,7 +261,7 @@ const courseController = class {
     if (coursefind) {
       //console.log(coursefind.trainer_id);
       const course = await Course.destroy({ where: { id: req.params.id } }).then((result) => {
-        User.decrement({course_count: 1}, { where: { id: coursefind.trainer_id } })
+        User.decrement({ course_count: 1 }, { where: { id: coursefind.trainer_id } })
         return { message: "Course Deleted" };
       });
       res.send(course);

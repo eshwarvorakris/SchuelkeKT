@@ -5,6 +5,7 @@ const Module = require("../models/Module.model");
 const Course = require("../models/Course.model");
 const CourseView = require("../models/Course_views.model");
 const AssignmentAttempt = require("../models/Assignment_attempt.model")
+const Assigned_courses = require("../models/Assigned_courses.model");
 const User = require("../models/User.model");
 const { Op } = require("sequelize");
 const widgetController = class {
@@ -23,7 +24,7 @@ const widgetController = class {
         res.send({ data: { total: courseCount || 0 } });
         break;
       case "totalApproved":
-        let courseApproved = await Course.count({ where: {status:'approved'} });
+        let courseApproved = await Course.count({ where: { status: 'approved' } });
         //console.log(req.query);
         res.send({ data: { total: courseApproved || 0 } });
         break;
@@ -52,8 +53,23 @@ const widgetController = class {
     req["query"]["role"] = "trainee";
     switch (req.params.type) {
       case "total":
-        let traineeCount = await User.count({ where: req.query });
-        //console.log("total trainee:", traineeCount);
+        let traineeCount = 0;
+        if (req.userRole == "trainer") {
+          Course.hasMany(Assigned_courses, { foreignKey: 'course_id' });
+          traineeCount = await Assigned_courses.count({
+            distinct: true,
+            col: 'trainee_id',
+            include: [{
+              model: Course,
+              as: 'course',
+              attributes: [['id', 'courses_id']],
+              where: { trainer_id: req.userId },
+            }]
+          });
+        } else {
+          traineeCount = await User.count({ where: req.query });
+        }
+
         res.send({ data: { total: traineeCount || 0 } });
         break;
     }
@@ -66,9 +82,23 @@ const widgetController = class {
     else if (req.userRole == "trainee") {
       req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
     }
-    const totalCourse = await Course.count({ where: req.query });
-    const totalCourseCompleted = await CourseView.count({ where: { trainee_id: req.userId, status: 'completed' } });
-    const totalCourseViewed = await CourseView.sum('viewed_seconds', { where: { trainee_id: req.userId } });
+
+    let totalCourse = await Course.count({ where: req.query });
+    let totalCourseCompleted = await CourseView.count({ where: { trainee_id: req.userId, status: 'completed' } });
+    let totalCourseViewed = await CourseView.sum('viewed_seconds', { where: { trainee_id: req.userId } });
+    if (req.userRole == "trainee") {
+      Course.hasMany(Assigned_courses, { foreignKey: 'course_id' });
+      totalCourse = await Course.count({
+        where: req.query,
+        include: [{
+          model: Assigned_courses,
+          where: { trainee_id: req.userId },
+        }]
+      });
+      totalCourseCompleted = await CourseView.count({ where: { trainee_id: req.userId, status: 'completed' } });
+      totalCourseViewed = await CourseView.sum('viewed_seconds', { where: { trainee_id: req.userId } });
+    }
+
     let totalTrainingHour = 0;
     if (totalCourseViewed > 0) {
       let maxmin = Math.floor(totalCourseViewed / 60);
