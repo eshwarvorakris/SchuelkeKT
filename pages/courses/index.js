@@ -109,13 +109,13 @@ const admincoursemanagement = () => {
             name: 'Published By',
             selector: row => row?.trainer?.full_name,
             wrap: true,
-            width: '14%',
+            width: '11%',
         },
         {
             name: 'Country',
             selector: row => row?.trainer?.country,
             wrap: true,
-            width: '10%',
+            width: '8%',
         },
         {
             name: 'Approval Status',
@@ -132,7 +132,7 @@ const admincoursemanagement = () => {
                                 else if (row.status == 'pending' && layoutValues?.profile?.role == 'admin') {
                                     return (
                                         <>
-                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn">To be Approved</button></Link></span>
+                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn p-1" title="Approve Course">To be Approved</button></Link></span>
                                         </>
                                     );
                                 }
@@ -152,7 +152,7 @@ const admincoursemanagement = () => {
 
                 )
             },
-            width: '16%',
+            width: '15%',
         },
         {
             name: 'Action',
@@ -160,33 +160,40 @@ const admincoursemanagement = () => {
                 //console.log(cell);
                 if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
-                        <div className='btn-group  text-nowrap'>
-                            <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`}><i class="fa fa-pencil" aria-hidden="true"></i></Link>
-                            <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)}><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                            {
-                                (() => {
-                                    
-                                    if (layoutValues?.profile?.role == 'admin') {
-                                        if(row.status === "approved") {
-                                            let updateLate = moment(row?.status_update_on).add(process.env.NEXT_PUBLIC_MAXIMUM_MIN_UNDU_ALLOWED, 'minutes');
-                                            if(curTime.isBefore(updateLate)) {
+                        <>
+                            <div style={{flexWrap: 'wrap'}}>
+                                <div className='btn-group  text-nowrap'>
+                                    <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
+                                    <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    {(() => {
+
+                                        if (layoutValues?.profile?.role == 'admin') {
+                                            if (row.status === "approved") {
+                                                let updateLate = moment(row?.status_update_on).add(process.env.NEXT_PUBLIC_MAXIMUM_MIN_UNDU_ALLOWED, 'minutes');
+                                                if (curTime.isBefore(updateLate)) {
+                                                    return (
+                                                        <>
+                                                            <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                        </>
+                                                    );
+                                                }
+                                            } else {
                                                 return (
                                                     <>
-                                                        <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                        <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
                                                     </>
                                                 );
                                             }
-                                        } else {
-                                            return (
-                                                <>
-                                                    <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)}><i class="fa fa-undo" aria-hidden="true"></i></button>
-                                                </>
-                                            );
                                         }
-                                    }
-                                })()
-                            }
-                        </div>)
+                                    })()}
+                                </div>
+                                <br />
+                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assign_course`} className="btn btn-outline-info btn-sm p-1">Assign Course</Link></div>
+
+                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-outline-info btn-sm p-1">Assigned Trainees</Link></div>
+                            </div>
+                        </>
+                    )
                 }
 
             },

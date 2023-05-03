@@ -107,14 +107,14 @@ const trainee = () => {
         },
         {
             name: 'No. of Courses Enrolled',
-            selector: row => row?.course_count,
+            selector: row => row?.assigned_course_count,
             cell: row => {
                 return (
-                    <p>{courseCount}</p>
+                    <p>{row?.assigned_course_count}</p>
                 )
             },
             sortable: true,
-            sortField: "course_count",
+            sortField: "assigned_course_count",
             width: "8%"
         },
         {
