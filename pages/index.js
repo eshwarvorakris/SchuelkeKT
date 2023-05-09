@@ -530,7 +530,7 @@ function index() {
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Mandy.png" style={{ height: "12rem" }}
                     alt="Card image cap" />
                   <div className="card-body">
-                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Mandy MITCHIE</h5>
+                    <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Mandy MICHIE</h5>
                     <div className="department-info">National Trainer </div>
                     <div className="LMS-info">Trainer </div>
                     <div className="country-info">Australia & New Zealand</div>
@@ -594,7 +594,7 @@ function index() {
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Dr. Lars PASSVOGEL</h5>
                     <div className="department-info">Head of Microbiology & Strategic Innovation</div>
                     <div className="LMS-info">Guest trainer </div>
-                    <div className="country-info"></div>
+                    <div className="country-info">Germany</div>
                   </div>
                 </div>
               </div>
@@ -606,7 +606,7 @@ function index() {
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Nadine RADISCHAT</h5>
                     <div className="department-info">Microbiology Expert</div>
                     <div className="LMS-info">Guest trainer </div>
-                    <div className="country-info"></div>
+                    <div className="country-info">Germany</div>
                   </div>
                 </div>
               </div>
