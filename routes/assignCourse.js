@@ -7,5 +7,6 @@ const verifyAuth = require("../middleware/authorization");
 router.get("/", verifyAuth.verifyUser, courseAssignController.index);
 router.post("/", verifyAuth.verifyAdminTrainer, courseAssignController.store);
 router.delete("/:id", verifyAuth.verifyAdminTrainer, courseAssignController.destroy);
+router.post("/multipleUnassign", verifyAuth.verifyAdminTrainer, courseAssignController.multipleDestroy);
 
 module.exports = router;

@@ -97,6 +97,24 @@ const courseAssignController = class {
       res.send({ message: "Course Unassigned" });
     });
   }
+
+  async multipleDestroy(req, res) {
+    try {
+      const ids = req.body.ids.split(",")
+      await Assigned_courses.destroy({ where: { id: ids } }).then((result) => {
+        res.send({ message: "Course Unassigned" });
+      });
+    } catch (error) {
+      console.log(error.message)
+      return res.status(422).send(
+        {
+          message: "Please try again later",
+          err_message: error.message
+        }
+      );
+    }
+    
+  }
 };
 
 module.exports = new courseAssignController();
