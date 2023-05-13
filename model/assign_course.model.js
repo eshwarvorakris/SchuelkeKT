@@ -27,6 +27,10 @@ const assignCourseModel=class {
     {
         return await axiosInstance.delete(`${this.baseUrl}/${id}`);
     }
+    async deleteAll(data=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/multipleUnassign`,data);
+    }
 }
 
 export default new assignCourseModel();

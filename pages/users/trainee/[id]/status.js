@@ -85,6 +85,69 @@ const editTrainee = () => {
                         <p>Trainee Status</p>
                     </div>
 
+                    <div className="assignment-table" style={{marginTop:'0.5rem'}}>
+                        {(layoutValues?.profile?.role == 'admin') &&
+                            <div className="dashboard-info" style={{ padding: '2rem 0rem', marginTop: 'unset' }}>
+                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
+                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
+                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+                                            <h1 className="text-light" >{statusKpis.totalCourse}</h1>
+                                        </div>
+                                        <div className="explicit-info text-light">
+                                            <p>Total Courses</p>
+                                        </div>
+                                    </div>
+                                    <div className="right-icon">
+                                        <img src="/trainer-images/dashboard images/icon-1.png" alt="" className="icon-info" />
+                                    </div>
+                                </div>
+
+                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
+                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
+                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+                                            <h1 className="text-light" >{statusKpis.totalCourseCompleted}</h1>
+                                        </div>
+                                        <div className="explicit-info text-light">
+                                            <p>Course Completed</p>
+                                        </div>
+                                    </div>
+                                    <div className="right-icon">
+                                        <img src="/trainer-images/dashboard images/icon-4.png" alt="" className="icon-info" />
+                                    </div>
+                                </div>
+
+                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
+                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
+                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+                                            <h1 className="text-light" >{statusKpis.averageScore}</h1>
+                                        </div>
+                                        <div className="explicit-info text-light">
+                                            <p>Average Score</p>
+                                        </div>
+                                    </div>
+                                    <div className="right-icon">
+                                        <img src="/admin-images/sheet.svg" alt="" className="icon-info" />
+                                    </div>
+                                </div>
+
+                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
+                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
+                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+                                            <h1 className="text-light" >{statusKpis.totalTrainingHour}</h1>
+                                        </div>
+                                        <div className="explicit-info text-light">
+                                            <p>Training Time</p>
+                                        </div>
+                                    </div>
+                                    <div className="right-icon">
+                                        <img src="/trainer-images/dashboard images/icon-3.png" alt="" className="icon-info" />
+                                        <img src="/trainer-images/dashboard images/icon-3(2).png" className="vector-fig" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
                     <div className="trainee-info" style={{ flexWrap: 'wrap' }}>
                         <div className="trainee-ID d-flex gap-2 justify-self-center"><span>Trainee ID :</span>
                             <h6 style={{ color: '#008bd6' }}><strong>{profileData?.user_id}</strong></h6>
@@ -207,66 +270,7 @@ const editTrainee = () => {
                                 </div>
                             </div> */}
                         </div>
-                        {(layoutValues?.profile?.role == 'admin') &&
-                            <div className="dashboard-info" style={{ padding: '2rem 0rem', marginTop: 'unset' }}>
-                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
-                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
-                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >{statusKpis.totalCourse}</h1>
-                                        </div>
-                                        <div className="explicit-info text-light">
-                                            <p>Total Courses</p>
-                                        </div>
-                                    </div>
-                                    <div className="right-icon">
-                                        <img src="/trainer-images/dashboard images/icon-1.png" alt="" className="icon-info" />
-                                    </div>
-                                </div>
 
-                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
-                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
-                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >{statusKpis.totalCourseCompleted}</h1>
-                                        </div>
-                                        <div className="explicit-info text-light">
-                                            <p>Course Completed</p>
-                                        </div>
-                                    </div>
-                                    <div className="right-icon">
-                                        <img src="/trainer-images/dashboard images/icon-4.png" alt="" className="icon-info" />
-                                    </div>
-                                </div>
-
-                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
-                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
-                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >{statusKpis.averageScore}</h1>
-                                        </div>
-                                        <div className="explicit-info text-light">
-                                            <p>Average Score</p>
-                                        </div>
-                                    </div>
-                                    <div className="right-icon">
-                                        <img src="/admin-images/sheet.svg" alt="" className="icon-info" />
-                                    </div>
-                                </div>
-
-                                <div className="total-courses" style={{ padding: '1rem 2rem' }}>
-                                    <div className="left-info" style={{ justifySelf: 'unset' }}>
-                                        <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-                                            <h1 className="text-light" >{statusKpis.totalTrainingHour}</h1>
-                                        </div>
-                                        <div className="explicit-info text-light">
-                                            <p>Training Time</p>
-                                        </div>
-                                    </div>
-                                    <div className="right-icon">
-                                        <img src="/trainer-images/dashboard images/icon-3.png" alt="" className="icon-info" />
-                                        <img src="/trainer-images/dashboard images/icon-3(2).png" className="vector-fig" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        }
 
                         <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
                             <table>

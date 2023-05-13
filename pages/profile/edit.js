@@ -99,6 +99,12 @@ const myprofile = () => {
         /*Collecting node-element and performing click*/
         inputFileRef.current.click();
     };
+
+    const removeProfile = () => {
+        setImage("/trainee-images/trainer.jpg");
+        setprofileUrl("");
+    };
+
     const handleChangeImage = (async (e) => {
         //setValue("uploadfile", e.target.files);
         var data = new FormData();
@@ -154,7 +160,7 @@ const myprofile = () => {
                                 </div>
 
                                 <div>
-                                    <button type="button" className="btn remove-btn">
+                                    <button type="button" className="btn remove-btn" onClick={removeProfile}>
                                         <img className="btn-icon" src="/trainee-images/edit profile/icon-2.png"
                                             alt="" />
                                         <span style={{ color: "rgba(0, 0, 0, 0.534)" }}>Remove</span>

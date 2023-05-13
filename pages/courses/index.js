@@ -26,7 +26,21 @@ const admincoursemanagement = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
     const { data: countryLists, countryerror, countryisLoading, mutate: countryListMutate } = useSWR('countryList', async () => await baseModel.countrylist());
-    const { data: courses, mutate: couresList, error, isLoading } = useSWR(QueryParam ? "couresList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
+    //const { data: courses, mutate: couresList1, error, isLoading } = useSWR(QueryParam ? "couresList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
+    const [courses, setCourses] = useState(null);
+    const [isLoading, setisLoading] = useState(true);
+    const couresList = async () => {
+        setisLoading(true);
+        await courseModel.list(QueryParam).then((result) => {
+            console.log("data", result);
+            setCourses(result);
+            setisLoading(false);
+        });
+    }
+
+    useEffect(() => {
+        couresList();
+    }, [QueryParam]);
 
     const courseDelete = function (id) {
         helper.sweetalert.confirm("Are you sure you want to delete this course", "info", "true").then((result) => {
@@ -58,8 +72,9 @@ const admincoursemanagement = () => {
         {
             name: 'S.No',
             cell: (row, index) => {
+                const curIndex = (((QueryParam.page - 1) * 15) + (index + 1));
                 return (
-                    <p>{index + 1}</p>
+                    <p>{curIndex}</p>
                 )
             },
             width: '7%',
@@ -94,7 +109,7 @@ const admincoursemanagement = () => {
         {
             name: 'No. of Module',
             selector: row => row?.total_modules,
-            width: '8%',
+            width: '5%',
         },
         {
             name: 'Training time',
@@ -108,8 +123,18 @@ const admincoursemanagement = () => {
         {
             name: 'Published By',
             selector: row => row?.trainer?.full_name,
-            wrap: true,
-            width: '11%',
+            cell: (row, index) => {
+                return (
+                    <>
+                        <div style={{ display: 'block' }}>
+                            <label>{row?.trainer?.full_name}</label>
+                            <label>{row?.trainer?.email}</label>
+                        </div>
+                    </>
+                )
+            },
+            wrap: false,
+            width: '15%',
         },
         {
             name: 'Country',
@@ -161,7 +186,7 @@ const admincoursemanagement = () => {
                 if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
                         <>
-                            <div style={{flexWrap: 'wrap'}}>
+                            <div style={{ flexWrap: 'wrap' }}>
                                 <div className='btn-group  text-nowrap'>
                                     <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
@@ -177,7 +202,7 @@ const admincoursemanagement = () => {
                                                         </>
                                                     );
                                                 }
-                                            } else {
+                                            } else if (row.status !== "pending") {
                                                 return (
                                                     <>
                                                         <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
@@ -187,10 +212,19 @@ const admincoursemanagement = () => {
                                         }
                                     })()}
                                 </div>
-                                <br />
-                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assign_course`} className="btn btn-outline-info btn-sm p-1">Assign Course</Link></div>
+                                {(() => {
+                                    if (row.status === "approved") {
+                                        return (
+                                            <>
+                                                <br />
+                                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assign_course`} className="btn btn-outline-info btn-sm p-1">Assign Course</Link></div>
 
-                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-outline-info btn-sm p-1">Assigned Trainees</Link></div>
+                                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-outline-info btn-sm p-1">Assigned Trainees</Link></div>
+                                            </>
+                                        );
+                                    }
+                                })()}
+
                             </div>
                         </>
                     )
@@ -202,11 +236,14 @@ const admincoursemanagement = () => {
     ];
 
     const pagginationHandler = (page) => {
+        page.selected++;
+        console.log("page : ", page)
         QueryParam.page = page.selected;
         router.push({
             pathname: router.pathname,
             query: QueryParam,
         });
+        couresList();
     };
     const handleSort = function (column, sortDirection) {
         QueryParam.order_by = column.sortField;
@@ -392,6 +429,7 @@ const admincoursemanagement = () => {
                                         <ReactPaginate
                                             threeDots={true}
                                             pageCount={courses?.meta?.total_page}
+                                            disableInitialCallback={true}
                                             initialPage={courses?.meta?.current_page}
                                             pageRangeDisplayed={10}
                                             prevNext
@@ -400,6 +438,7 @@ const admincoursemanagement = () => {
                                             className="pagination float-end float-right"
                                             pageLinkClassName='page-link pagination-link'
                                             pageClassName="page-item border-0"
+                                            renderOnZeroPageCount={null}
                                         />
                                     </nav>
                                 </div>

@@ -16,9 +16,11 @@ const AssignCourse = () => {
   const router = useRouter();
   const [courseName, setCourseName] = useState("");
   const [trainees, setTrainees] = useState([]);
+  const [traineesMeta, setTraineesMeta] = useState(null);
   const [courseId, setCourseId] = useState(null);
   const [course, setCourse] = useState(null);
   const [loggedUserId, setLoggedUserId] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
@@ -48,29 +50,26 @@ const AssignCourse = () => {
     if (!QueryParam.filter) {
       QueryParam.filter = "all";
     }
-    if (QueryParam.search != "") {
-      userModel.traineeList(QueryParam).then((res) => {
-        if (res?.data) {
-          if ((res?.data).length > 0) {
-            //console.log(res?.data)
-            let tempAr = checkedState;
-            res?.data.map((item, index) => {
-              tempAr[index] = false;
-              if (item.assigned_course !== 0) {
-                tempAr[index] = true;
-              }
-            })
-            setCheckedState(tempAr);
-            setIsLoading(false);
-            setTrainees(res?.data)
-          }
+    userModel.traineeList(QueryParam).then((res) => {
+      if (res?.data) {
+        if ((res?.data).length > 0) {
+          console.log(res)
+          setTraineesMeta(res.meta)
+          let tempAr = checkedState;
+          res?.data.map((item, index) => {
+            tempAr[index] = false;
+            if (item.assigned_course !== 0) {
+              tempAr[index] = true;
+            }
+          })
+          setCheckedState(tempAr);
+          setIsLoading(false);
+          setTrainees(res?.data)
         }
-      }).catch((error) => {
-        console.log(error);
-      });
-    } else {
-      console.log("other")
-    }
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   const handleFilterChange = (async (e) => {
@@ -89,7 +88,7 @@ const AssignCourse = () => {
       helper.sweetalert.confirm("Are you sure to unassign", "info", true).then((result) => {
         if (result.isConfirmed) {
 
-          assignCourseModel.delete(assignId).then((res)=>{
+          assignCourseModel.delete(assignId).then((res) => {
             //console.log(res.data)
             helper.sweetalert.toast(res.data?.message);
             getTrainees();
@@ -115,7 +114,6 @@ const AssignCourse = () => {
     if (course?.data !== undefined) {
       setCourseName("(" + course?.data.course_name + ")");
       setCourseId(course?.data?.id);
-
     }
   }, [course]);
 
@@ -128,6 +126,12 @@ const AssignCourse = () => {
     }
   }, [router]);
 
+  useEffect(() => {
+    if (courseId !== null) {
+      getTrainees();
+    }
+  }, [courseId]);
+
   const columns = [
     {
       name: 'S.No',
@@ -138,6 +142,8 @@ const AssignCourse = () => {
           </>
         )
       },
+      allowOverflow: true,
+      button: true,
     },
     {
       name: '',
@@ -167,7 +173,9 @@ const AssignCourse = () => {
     },
   ];
 
+
   const pagginationHandler = (page) => {
+    page.selected++;
     QueryParam.page = page.selected;
     router.push({
       pathname: router.pathname,
@@ -175,11 +183,10 @@ const AssignCourse = () => {
     });
   };
 
+
+
   const assignCourse = async e => {
     e.preventDefault();
-    // console.clear();
-    // console.log(e.target);
-    // console.log(sessionStorage.getItem("userinfo"))
     const formData = new FormData(e.target);
     await assignCourseModel.create(formData).then((res) => {
       //console.log(res);
@@ -190,6 +197,42 @@ const AssignCourse = () => {
     })
   }
 
+  const handleCheckAll = (async (e) => {
+    if (e.target.checked) {
+      const updatedCheckedState = checkedState.map((item, index) =>
+        true
+      );
+      setCheckedState(updatedCheckedState);
+    } else {
+      var inputs = document.getElementsByClassName('traineeCheck');
+      var assign_ids = [];
+      for (var i = 0, l = inputs.length; i < l; ++i) {
+        if (inputs[i].checked) {
+          if (inputs[i].getAttribute("data-assignId") != 0) {
+            assign_ids.push(inputs[i].getAttribute("data-assignId"))
+          }
+        }
+      }
+      if (assign_ids != "") {
+        helper.sweetalert.confirm("Are you sure to unassign", "info", true).then((result) => {
+          if (result.isConfirmed) {
+            const formData = new FormData();
+            formData.append("ids", assign_ids);
+            assignCourseModel.deleteAll(formData).then((res) => {
+              //console.log(res.data)
+              helper.sweetalert.toast(res.data?.message);
+              getTrainees();
+            })
+          }
+        })
+      } else {
+        const updatedCheckedState = checkedState.map((item, index) =>
+          false
+        );
+        setCheckedState(updatedCheckedState);
+      }
+    }
+  });
   return (
     <>
       <div className=" SearchandSort ">
@@ -222,28 +265,65 @@ const AssignCourse = () => {
             <>
               <form onSubmit={assignCourse}>
                 <input type="hidden" name="course_id" value={courseId} />
-                <DataTable
-                  columns={columns}
-                  data={trainees}
-                  progressPending={isLoading}
-                  sortServer
-                  className='table'
-                  customStyles={config.dataTableStyle}
-                />
+                <div className="table-responsive">
+                  <table className="table w-100 ">
+                    <thead>
+                      <tr style={{ height: '52px', padding: '.5rem' }}>
+                        <th><input type="checkbox" name="checkAll" onChange={handleCheckAll} /> S.No</th>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Contact No.</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {trainees?.map((item, index) => {
+                        return (
+                          <>
+                            <tr style={{ color: 'black', padding: '.5rem', borderBottomWidth: '1px', minHeight: '48px', backgroundColor: 'white' }}>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }}>
+                                <p><input type="checkbox" className="traineeCheck" name="trainee_ids[]" data-assignId={item.assigned_course} value={item.id} checked={checkedState[index]} onChange={() => handleOnChange(index, item.assigned_course)} /> {index + 1}</p>
+                              </td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }}><img src={item.profile_img} height="50" className="" alt="User Image" /></td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }}>{item.full_name}</td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }}>{item.contact_no}</td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }}>{item.email}</td>
+                            </tr>
+                          </>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
                 <center><button type="submit" className="btn btn-outline-success ">Assign Course</button></center>
               </form>
             </>
           }
 
           {isLoading &&
-            <><center><p style={{paddingTop:'3rem'}}>Search for trainee first to assign / unassign Course</p></center></>
+            <><center><p style={{ paddingTop: '3rem' }}>Search for trainee first to assign / unassign Course</p></center></>
           }
 
         </div>
       </div>
       <div className="trainer-pagination ">
         <nav className="pagination-container d-flex justify-content-end">
-
+          {!isLoading &&
+            <ReactPaginate
+              threeDots={true}
+              pageCount={traineesMeta?.total_page}
+              disableInitialCallback={true}
+              initialPage={traineesMeta?.current_page}
+              pageRangeDisplayed={10}
+              prevNext
+              breakLabel="..."
+              onPageChange={pagginationHandler}
+              className="pagination float-end float-right"
+              pageLinkClassName='page-link pagination-link'
+              pageClassName="page-item border-0"
+              renderOnZeroPageCount={null}
+            />
+          }
         </nav>
       </div>
     </>

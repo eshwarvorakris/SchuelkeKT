@@ -8,11 +8,12 @@ import { useDropzone } from 'react-dropzone'
 import Link from 'next/link';
 import { config } from '../../../lib/config';
 import { helper } from '../../../lib/helper';
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from '../../../lib/appContext';
 import { useForm } from 'react-hook-form';
 import _ from 'lodash';
+import DragNDrop from '../../components/dragNdropFile';
 
 const Page = () => {
   const layoutValues = useContext(AppContext);
@@ -110,7 +111,7 @@ const Page = () => {
     setDisableButton(true);
     //console.log("fileFkey", fileKey);
     //setValue('content['+curId+'][file_url]', "checking");
-    console.log(e.target.files[0].name);
+    console.log("curId", curId);
     const fileNameAr = e.target.files[0].name.split('.');
     const fileExt = fileNameAr[fileNameAr.length - 1];
     const curFileExt = getValues('content[' + curId + '][file_ext]');
@@ -125,17 +126,9 @@ const Page = () => {
     setIsUploaded(true);
     await uploader.upload(data).then((res) => {
       setDisableButton(false);
-      console.log(res?.data?.data?.Location);
+      console.log("retData => ", res?.data?.data);
+      handlefileChanged(curId, res?.data?.data)
       helper.sweetalert.toast("File Uploaded Successfully");
-      setValue('content[' + curId + '][file_url]', res?.data?.data?.Location);
-
-      setValue('content[' + curId + '][file_ext]', res?.data?.data?.fileExt);
-      if (res?.data?.data?.fileName != "" && res?.data?.data?.fileName != undefined) {
-        setValue('content[' + curId + '][file_name]', res?.data?.data?.fileName);
-      }
-      setValue('content[' + curId + '][file_key]', res?.data?.data?.key);
-      //setcontentUrl(res?.data?.data?.Location);
-      console.log(res?.data);
     }).catch((error) => {
       setDisableButton(false);
       helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -143,14 +136,27 @@ const Page = () => {
     })
     //setImage(URL.createObjectURL(e.target.files[0]))
   });
+  const handleDisableButtonChange = (buttonChange) => {
+    setDisableButton(buttonChange);
+  };
 
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+  const handlefileChanged = (fileId, fileData) => {
+    setValue('content[' + fileId + '][file_url]', fileData?.Location);
+
+    setValue('content[' + fileId + '][file_ext]', fileData?.fileExt);
+    if (fileData?.fileName != "" && fileData?.fileName != undefined) {
+      setValue('content[' + fileId + '][file_name]', fileData?.fileName);
+    }
+    setValue('content[' + fileId + '][file_key]', fileData?.key);
+    //console.log("fileData - ", fileData);
+  };
+  /* const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     onDrop: async files => {
       console.log(files[0]);
-      
+      setDisableButton(true);
+      console.log()
     }
-  });
-
+  }); */
   useEffect(() => {
     const subscription = watch((data) => {
       console.log(data.content);
@@ -224,6 +230,11 @@ const Page = () => {
               </div>
             </div>
             {moduleContent.map((item, index) => {
+              var fileData = {
+                file_name: item?.file_name,
+                id: index
+              }
+              //console.log("fileData", item);
               return (
                 <div className="wrapper d-flex flex-column gap-5" key={`form${index}`} style={{ height: 'unset', width: 'unset', marginBottom: 'unset', overflow: 'unset' }}>
                   <input type="hidden" {...register(`content[${index}][module_id]`)} defaultValue={QueryParam?.id} />
@@ -276,22 +287,8 @@ const Page = () => {
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
                     <span className="content-title">Upload PPT/PDF</span>
-                    <div {...getRootProps({className: ''})}>
-                      <div className="upload-container">
-                        <p className="drag-text" id={`uploadOutFileName${index}`}>
-                          {
-                            (() => {
-                              //console.log(item?.file_name?.length);
-                              if (item?.file_name?.length != 0 && item?.file_name?.length !== undefined) {
-                                return (<>{item?.file_name}</>);
-                              } else {
-                                return (<>Drag and Drop here</>);
-                              }
-                            })()
-                          }
-                        </p>
-                      </div>
-                    </div>
+
+                    <DragNDrop props={fileData} onDisableButtonChange={handleDisableButtonChange} onFileChanged={handlefileChanged} />
                     <div className="btns d-flex flex-column gap-2" style={{ width: 'unset' }}>
                       <input type={"file"} ref={inputFileRef} name="uploadfile" onChange={handleChangeImage} hidden={true} dataId={index} id={`inputGroupFile0${index}`} />
                       <div className="right-col-btns d-flex flex-column gap-4">
@@ -301,11 +298,11 @@ const Page = () => {
                             <span>Upload</span>
                           </label>
                         </button>
-                        <input type="hidden" {...register(`content[${index}][file_ext]`)} defaultValue={item?.file_ext} />
-                        <input type="hidden" {...register(`content[${index}][file_name]`)} defaultValue={item?.file_name} />
-                        <input type="hidden" {...register(`content[${index}][file_key]`)} defaultValue={item?.file_key} />
-                        <input type="hidden" {...register(`content[${index}][file_format]`)} defaultValue={item?.file_ext} />
-                        <input className="file-input" {...register(`content[${index}][file_url]`)} defaultValue={item.file_url} type="text" hidden={true} />
+                        <input {...register(`content[${index}][file_ext]`)} hidden={true} id={`content[${index}][file_ext]`} defaultValue={item.file_ext} />
+                        <input {...register(`content[${index}][file_name]`)} hidden={true} defaultValue={item.file_name} />
+                        <input {...register(`content[${index}][file_key]`)} hidden={true} defaultValue={item.file_key} />
+                        <input {...register(`content[${index}][file_format]`)} hidden={true} defaultValue={item.file_ext} />
+                        <input {...register(`content[${index}][file_url]`)} defaultValue={item.file_url} hidden={true} />
                       </div>
                       <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>
                         <a href="#!">

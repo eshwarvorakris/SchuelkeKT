@@ -134,7 +134,7 @@ const addTrainer = () => {
 
                         <div className="trainer-name" style={{ display: 'block' }}>
                             <h6>Trainer Contact</h6>
-                            <input type="text" {...register("contact_no", { required: "Fill Contact Number" })} placeholder="Enter Trainer's full name" />
+                            <input type="text" {...register("contact_no", { required: "Fill Contact Number" })} placeholder="Enter Trainer's Contact Number" />
                         </div>
 
                         <div className="trainer-email-password">
