@@ -128,6 +128,20 @@ const admincoursemanagement = () => {
                     <>
                         <div style={{ display: 'block' }}>
                             <label>{row?.trainer?.full_name}</label>
+                        </div>
+                    </>
+                )
+            },
+            wrap: false,
+            width: '15%',
+        },
+        {
+            name: 'Published By Email',
+            selector: row => row?.trainer?.full_name,
+            cell: (row, index) => {
+                return (
+                    <>
+                        <div style={{ display: 'block' }}>
                             <label>{row?.trainer?.email}</label>
                         </div>
                     </>

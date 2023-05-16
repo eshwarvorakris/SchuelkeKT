@@ -22,7 +22,7 @@ const myprofile = () => {
     const [profileData, setprofileData] = useState([]);
     const [isUploaded, setIsUploaded] = useState(false);
     const inputFileRef = useRef();
-    const [image, setImage] = useState("/trainee-images/trainer.jpg");
+    const [image, setImage] = useState("/site_img/user_def.svg");
     const [profileUrl, setprofileUrl] = useState("");
     const { data: countryLists, error, isLoading, mutate: countryListMutate } = useSWR('countryList', async () => await baseModel.countrylist());
 
@@ -101,7 +101,7 @@ const myprofile = () => {
     };
 
     const removeProfile = () => {
-        setImage("/trainee-images/trainer.jpg");
+        setImage("/site_img/user_def.svg");
         setprofileUrl("");
     };
 

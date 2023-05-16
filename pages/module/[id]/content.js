@@ -33,9 +33,28 @@ const Page = () => {
   QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "asc";
   //console.log(QueryParam);
-  const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await contentModel.list({ module_id: QueryParam?.id }), config.swrConfig);
-  const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course, QueryParam), config.swrConfig);
+  const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await contentModel.list({ module_id: QueryParam?.id, course_id: QueryParam?.course }), config.swrConfig);
+  //const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course, QueryParam), config.swrConfig);
   const { register, handleSubmit, formState: { errors }, reset, setValue, getValues, watch } = useForm();
+  
+  const [modules, setModules] = useState(null);
+  const moduleList = async function () {
+    await courseModule.modules(QueryParam?.course, QueryParam).then((result) => {
+      if(result?.data) {
+        if(result?.data.length > 0) {
+          setModules(result)
+        } else {
+          window.location.href = "/courses";
+        }
+      } else {
+        window.location.href = "/courses";
+      }
+      
+    }).catch((error) => {
+
+    })
+  }
+
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -163,6 +182,11 @@ const Page = () => {
     });
     return () => subscription.unsubscribe();
   }, [watch]);
+
+
+  useEffect(() => {
+    console.log("QueryParams = > ", QueryParam);
+  }, [QueryParam]);
 
   const contentDelete = function (indexid, itemid) {
     helper.sweetalert.confirm("Are you sure you want to delete this content?", "info", "true").then((result) => {

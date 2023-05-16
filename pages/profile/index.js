@@ -13,7 +13,7 @@ const myprofile = () => {
     //     Router.replace("login");
     // }
     const [profile, setprofileData] = useState([]);
-    const [image, setImage] = useState("/trainee-images/trainer.jpg");
+    const [image, setImage] = useState("/site_img/user_def.svg");
     useEffect(() => {
         auth.profile().then((res) => {
             if (res.profile_img !== null && res.profile_img != "") {

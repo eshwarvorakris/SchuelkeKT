@@ -12,7 +12,8 @@ function sidebar({ profile }) {
   const logout = function (e) {
     e.preventDefault();
     sessionStorage.setItem("access_token", "");
-    Router.replace("/login");
+    //Router.replace("/login");
+    window.location.href = "/login";
   }
   console.log("users",helper.user);
   return (

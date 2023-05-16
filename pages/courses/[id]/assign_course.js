@@ -188,13 +188,18 @@ const AssignCourse = () => {
   const assignCourse = async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    await assignCourseModel.create(formData).then((res) => {
-      //console.log(res);
-      helper.sweetalert.toast("Course Assignment to trainees updated");
-      getTrainees();
-    }).catch((error) => {
-      console.log(error.response?.data?.errors);
+    helper.sweetalert.confirm("Are you sure you want to assign this course?", "info", true).then(async (result) => {
+      if (result.isConfirmed) {
+        await assignCourseModel.create(formData).then((res) => {
+          //console.log(res);
+          helper.sweetalert.toast("Course Assignment to trainees updated");
+          getTrainees();
+        }).catch((error) => {
+          console.log(error.response?.data?.errors);
+        })
+      }
     })
+    
   }
 
   const handleCheckAll = (async (e) => {
