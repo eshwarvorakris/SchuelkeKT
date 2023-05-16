@@ -12,6 +12,8 @@ import ReactPaginate from 'react-paginate';
 import baseModel from "../../../model/base.model";
 import Select from 'react-select';
 import _ from 'lodash';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 const trainer = () => {
     const router = useRouter();
@@ -37,10 +39,7 @@ const trainer = () => {
         })
 
     }
-    useEffect(() => {
-        console.clear();
-        console.log("trainers : ", trainer);
-    }, [trainer]);
+   
 
     const columns = [
         {
@@ -216,6 +215,36 @@ const trainer = () => {
             width: '10rem',
         })
     };
+    const [trainersData, setTrainersData] = useState(null);
+    var curDate = new Date().toISOString().slice(0,10);
+    const handleExport = () => {
+        const worksheet = XLSX.utils.json_to_sheet(trainersData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, curDate+'-trainers.xlsx');
+    };
+
+    useEffect(() => {
+        if (trainer?.data) {
+            if (trainer?.data.length > 0) {
+                var tempData = [];
+                trainer?.data.map((item, index) => {
+                    tempData.push({ 
+                        'Trainer Id': item.user_id, 
+                        'TraineerName': item.full_name,
+                        'Email': item.email,
+                        'Country': item.country,
+                        'No. Of Courses Enrolled': item.course_count,
+                        'Year Of Joining': item.joining_year,
+                        'Status': item.status,
+                    })
+                })
+                setTrainersData(tempData);
+            }
+        }
+    }, [trainer])
 
     return (
         <>
@@ -265,10 +294,13 @@ const trainer = () => {
                     (() => {
                         if (layoutValues?.profile?.role == 'admin') {
                             return (
-                                <div className=" create-course ">
+                                <div className=" create-course " style={{display: 'flex', gap: '.5rem'}}>
                                     <Link href="/users/trainer/add" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>
                                         Add Trainer <strong>+</strong>
                                     </Link>
+                                    <button onClick={handleExport}  className=" btn create-course-btn " style={{ backgroundColor: '#10793F', color:'white' }}>
+                                        Export Excel
+                                    </button>
                                 </div>
                             );
                         }

@@ -13,11 +13,14 @@ import AppContext from "../../../lib/appContext";
 import baseModel from "../../../model/base.model";
 import Select from 'react-select';
 import _ from 'lodash';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 const trainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     const [courseCount, setCourseCount] = useState(0);
+    const [traineeData, setTraineeData] = useState(null);
     { layoutValues.setPageHeading("Trainee List") }
 
     const QueryParam = router.query;
@@ -220,6 +223,35 @@ const trainee = () => {
             width: '10rem',
         })
     };
+    var curDate = new Date().toISOString().slice(0,10);
+    const handleExport = () => {
+        const worksheet = XLSX.utils.json_to_sheet(traineeData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, curDate+'-trainees.xlsx');
+    };
+
+    useEffect(() => {
+        if (trainee?.data) {
+            if (trainee?.data.length > 0) {
+                var tempData = [];
+                trainee?.data.map((item, index) => {
+                    tempData.push({ 
+                        'Trainee Id': item.user_id, 
+                        'Trainee Name': item.full_name,
+                        'Email': item.email,
+                        'Country': item.country,
+                        'No. Of Courses Enrolled': item.course_count,
+                        'Year Of Joining': item.joining_year,
+                        'Status': item.status,
+                    })
+                })
+                setTraineeData(tempData);
+            }
+        }
+    }, [trainee])
 
     return (
         <>
@@ -251,7 +283,7 @@ const trainee = () => {
                 }
                 {!hideCountryDropdown &&
                     <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
-                        
+
                         <Select
                             isSearchable
                             options={countryOptions}
@@ -268,10 +300,13 @@ const trainee = () => {
                     (() => {
                         if (layoutValues?.profile?.role == 'admin') {
                             return (
-                                <div className=" create-course ">
+                                <div className=" create-course " style={{ display: 'flex', gap: '.5rem' }}>
                                     <Link href="/users/trainee/add" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>
                                         Add Trainee <strong>+</strong>
                                     </Link>
+                                    <button onClick={handleExport} className=" btn create-course-btn " style={{ backgroundColor: '#10793F', color: 'white' }}>
+                                        Export Excel
+                                    </button>
                                 </div>
                             );
                         }
@@ -279,7 +314,7 @@ const trainee = () => {
                 }
             </div>
             <div className="trainee-body">
-                <div className="trainee-admincoursemanagement d-flex flex-column" style={{minHeight:'85vh', height:'unset'}}>
+                <div className="trainee-admincoursemanagement d-flex flex-column" style={{ minHeight: '85vh', height: 'unset' }}>
                     <div className="box-1-admincoursemanagement"></div>
                     <div className="box-2-admincoursemanagement"></div>
                     <div className="trainee-tag-admincoursemanagement">
