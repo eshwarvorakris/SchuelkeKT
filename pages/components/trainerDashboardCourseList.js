@@ -9,6 +9,7 @@ import { helper } from '../../lib/helper';
 import CourseCard from './courseCard';
 import ReactPaginate from 'react-paginate';
 import Link from "next/link";
+import TrainerGraph1 from "./chart/trainerGraph1";
 export default function adminDashboardGraph() {
   const router = useRouter();
   const QueryParam = router.query;
@@ -18,15 +19,19 @@ export default function adminDashboardGraph() {
   const { data: courses, error: courseerror, isLoading: courseisLoading, mutate:loadCourse } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
   const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR(QueryParam ? "categorylist" : null, async () => await categoryModel.list(), config.swrConfig);
   const pagginationHandler = (page) => {
+    //console.log("clicked");
+    page.selected++;
     QueryParam.page = page.selected ;
     router.push({
       pathname: router.pathname,
       query: QueryParam,
     });
+    loadCourse();
   };
 
   const changeCategory = (value) => {
     //console.log(value);
+    QueryParam.page = 1 ;
     QueryParam.category_id = value;
     if(value == "all") {
       delete(QueryParam.category_id);
@@ -38,8 +43,16 @@ export default function adminDashboardGraph() {
     });
     loadCourse();
   }
+  useEffect(() => {
+    const curPage = {};
+    curPage.selected = 0;
+    pagginationHandler(curPage)
+  }, [])
   return (
     <>
+      <div className="graph-container">
+        <TrainerGraph1 />
+      </div>
       <div className="category-create-btn d-flex justify-content-between">
 
         <div className="category d-flex gap-3 align-items-center">
@@ -79,6 +92,7 @@ export default function adminDashboardGraph() {
             className="pagination float-end float-right"
             pageLinkClassName='page-link rounded-circle'
             pageClassName="page-item border-0"
+            renderOnZeroPageCount={null}
           />
         </nav>
       </div>

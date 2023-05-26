@@ -3,10 +3,12 @@ import Link from 'next/link';
 import CourseViewModel from "../../model/cource_view.model";
 import { useEffect, useState } from 'react';
 import AppContext from "../../lib/appContext";
+import Modal from 'react-bootstrap/Modal';
 import { useRouter } from 'next/router';
-export default function adminCourseCard({ courseData, courseIndex }) {
+export default function adminCourseCard({ courseData, courseIndex, revisit }) {
   const router = useRouter();
-  let courseImg = "/trainer-images/card-1.png";
+  const [showRevisitModal, setShowRevisitModal] = useState(false);
+  let courseImg = "/site_img/elearning_def.svg";
   if (courseData?.course_thumbnail !== null && courseData?.course_thumbnail != "") {
     courseImg = courseData?.course_thumbnail;
   }
@@ -50,7 +52,7 @@ export default function adminCourseCard({ courseData, courseIndex }) {
             } else {
               if (res?.data?.courseContentCompletedCount == res?.data?.allContentInCourse) {
                 setCourseStatus("completed");
-                setStatusColor("##2fa86f");
+                setStatusColor("#2fa86f");
               }
             }
           }
@@ -58,6 +60,11 @@ export default function adminCourseCard({ courseData, courseIndex }) {
       });
     }
   }, [router.query.id])
+  const [revisitData, setRevisitData] = useState(null);
+  useEffect(() => {
+    //console.log("got in here", courseData?.revisit)
+
+  }, [])
   return (
 
     <>
@@ -65,7 +72,7 @@ export default function adminCourseCard({ courseData, courseIndex }) {
         <div className={`col-3 ${marginTop}`}>
           <div className="card trainee-cards" style={{ width: '13.5rem', padding: 'unset' }}>
             <img className="card-img-top card-picture" src={courseImg}
-              alt="Card image cap" />
+              alt="Card image cap" style={{ maxHeight: '142px' }} />
             <div className="card-body">
               <div className="card-heading">{courseData?.course_name}</div>
               <div className="card-topic">Topic-{courseData?.category?.category_name}</div>
@@ -77,8 +84,9 @@ export default function adminCourseCard({ courseData, courseIndex }) {
                       aria-valuenow={coursePercent} aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
-                <div className="explicit-info"><span className="text-primary">{contentCompleted}</span> Out of {totalContent}
-                  Modules Completed</div>
+                <div className="explicit-info">
+                  <span className="text-primary">{contentCompleted}</span> Out of {totalContent} Modules Completed
+                </div>
               </div>
               <div className="card-footer-part d-flex justify-content-between">
                 <div className="label-info d-flex text-success gap-2">
@@ -86,7 +94,44 @@ export default function adminCourseCard({ courseData, courseIndex }) {
                   <div className="dot-label" style={{ backgroundColor: statusColor }}></div>
                   <span style={{ fontSize: '10px', color: statusColor }}>{courseStatus}</span>
                 </div>
-                <div className="time-left-info">Revisited 1 times</div>
+                <div className="time-left-info" style={{cursor:'pointer'}} onClick={() => setShowRevisitModal(true)}>Revisited {revisit.count} times</div>
+                {revisit.count > 0 &&
+                  <Modal
+                    show={showRevisitModal}
+                    onHide={() => setShowRevisitModal(false)}
+                    size="sm"
+                    centered>
+                    <Modal.Body>
+                      <h5 className="align-middle" style={{ textAlign: 'center' }}>Course Re-Visit </h5>
+                      <div className="table-responsive">
+                        <table className='table table-sm table-bordered' style={{ width: '100%' }}>
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Time Spent</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              revisit?.rows?.map((item, index) => {
+                                let min = Math.round(item.viewed_seconds / 60);
+                                return (
+                                  <>
+                                    <tr>
+                                      <td>{item.visit_date}</td>
+                                      <td>{min} min</td>
+                                    </tr>
+                                  </>
+                                );
+                              })
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </Modal.Body>
+                  </Modal>
+                }
+
               </div>
             </div>
           </div>

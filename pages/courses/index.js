@@ -32,7 +32,7 @@ const admincoursemanagement = () => {
     const couresList = async () => {
         setisLoading(true);
         await courseModel.list(QueryParam).then((result) => {
-            console.log("data", result);
+            //console.log("data", result);
             setCourses(result);
             setisLoading(false);
         });
@@ -67,7 +67,7 @@ const admincoursemanagement = () => {
         })
 
     }
-
+    const currentDate = new Date();
     const columns = [
         {
             name: 'S.No',
@@ -82,6 +82,20 @@ const admincoursemanagement = () => {
         {
             name: 'Course',
             selector: row => row.course_name,
+            cell: (row, index) => {
+                const dateToCheck = new Date(row.created_at);
+                const isCurrentMonth = dateToCheck.getMonth() === currentDate.getMonth() &&
+                    dateToCheck.getFullYear() === currentDate.getFullYear();
+                if(isCurrentMonth) {
+                    return (
+                        <><p><img src="/admin-images/new.png" height={20} /><br /> {row.course_name}</p></>
+                    );
+                } else {
+                    return (
+                        <p>{row.course_name}</p>
+                    );
+                }
+            },
             sortable: true,
             sortField: "course_name",
             wrap: true,
@@ -149,6 +163,16 @@ const admincoursemanagement = () => {
             },
             wrap: false,
             width: '15%',
+        },
+        {
+            name: 'Passing Rate(%)',
+            selector: row => row?.passing_rate,
+            wrap: true,
+        },
+        {
+            name: 'Average Score',
+            selector: row => row?.average_score,
+            wrap: true,
         },
         {
             name: 'Country',

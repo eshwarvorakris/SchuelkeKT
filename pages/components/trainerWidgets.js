@@ -1,11 +1,18 @@
+import { useEffect } from "react";
 import widgetModel from "../../model/widget.model";
 import useSWR from 'swr';
+
 export default function adminWidgets() {
   const { data: courseCount, mutate: loadTotal } = useSWR('courseCount', async () => await widgetModel.courseCount());
 
   const { data: courseWeek, mutate: loadWeek } = useSWR('courseWeek', async () => await widgetModel.courseWeek());
 
   const { data: totalTrainee, mutate: loadtrainee } = useSWR('totalTrainee', async () => await widgetModel.traineeCount());
+
+  const { data: trainerWidget, mutate: loadtrainerWidget } = useSWR('trainerWidget', async () => await widgetModel.trainerKpis());
+  useEffect (() => {
+    //console.log("trainerWidget", trainerWidget)
+  }, [])
   return (
     <>
       <div className="total-courses">
@@ -13,7 +20,7 @@ export default function adminWidgets() {
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
             <h1 className="text-light" >{courseCount?.data?.total}</h1>
           </div>
-          <div className="explicit-info text-light">
+          <div className="explicit-info text-light">+
             <p>Total Courses</p>
           </div>
         </div>
@@ -51,7 +58,7 @@ export default function adminWidgets() {
       <div className="courses-completion">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
-            <h1 className="text-light">60%</h1>
+            <h1 className="text-light">{trainerWidget?.course_completion}%</h1>
           </div>
           <div className="explicit-info text-light">
             <p>Course Completion %</p>

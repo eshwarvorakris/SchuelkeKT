@@ -40,9 +40,29 @@ const widgetModel=class {
         return (await axiosInstance.get(`${this.baseUrl}/trainee_kpis`)).data;
     }
 
+    async trainerKpis()
+    {
+        return (await axiosInstance.get(`${this.baseUrl}/trainer_kpis`)).data;
+    }
+
     async traineeStatusKpis(data=[])
     {
         return (await axiosInstance.post(`${this.baseUrl}/trainee_status_kpis`, data)).data;
+    }
+
+    async adminGraph1(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/admin_graph1`, data)).data;
+    }
+
+    async adminGraph2(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/admin_graph2`, data)).data;
+    }
+
+    async trainerGraph1(data=[])
+    {
+        return (await axiosInstance.post(`${this.baseUrl}/trainer_graph1`, data)).data;
     }
 
 }

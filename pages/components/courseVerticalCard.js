@@ -1,7 +1,7 @@
 import moment from 'moment';
 import Link from 'next/link';
 export default function courseVerticalCard({ courseData, courseIndex }) {
-  let courseImg = "/trainer-images/dashboard images/thumbnails/thumbnaila.png";
+  let courseImg = "/site_img/elearning_def.svg";
   if (courseData?.course_thumbnail !== null && courseData?.course_thumbnail != "") {
     courseImg = courseData?.course_thumbnail;
   }
@@ -22,6 +22,7 @@ export default function courseVerticalCard({ courseData, courseIndex }) {
           <div className="card-thumbnail">
             <img className="card-img card-img-top"
               src={courseImg}
+              style={{maxHeight:'145px'}}
               alt="Card image cap" />
             {courseStatus == "locked" &&
               <>

@@ -24,7 +24,25 @@ const editTrainee = () => {
     QueryParam.order_by = router.query?.order_by || "created_at";
     QueryParam.order_in = router.query?.order_in || "desc";
 
-    const { data: courses, mutate: couresListMutate, error, isLoading } = useSWR("couresList", async () => await courseModel.list(), config.swrConfig);
+    const [courses, setCourses] = useState(null);
+
+    const couresList = async () => {
+        if(router.query.id !== "" && router.query.id !== undefined && router.query.id !== null) {
+            const formData = new FormData();
+            formData.append("trainee_id", router.query.id)
+            await courseModel.getTraineeAssignedCourses(formData).then(async (result) => {
+                if(result) {
+                    //console.clear();
+                    console.log(result?.data);
+                    setCourses(result);
+                }
+            }).catch((error) => {
+                console.log(error.message);
+            });
+        }
+    }
+
+    //const { data: courses, mutate: couresListMutate, error, isLoading } = useSWR("couresList", async () => await courseModel.list({status: 'approved'}), config.swrConfig);
 
     const [formErrors, setFormErrors] = useState([]);
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: profileData });
@@ -32,7 +50,7 @@ const editTrainee = () => {
     useEffect(() => {
         //console.log("Courses => ", courses?.data)
         if (router.query.id !== undefined) {
-
+            couresList();
             userModal.detail(router.query.id).then((res) => {
                 setprofileData(res?.data);
                 //console.log(res?.data);
@@ -157,7 +175,7 @@ const editTrainee = () => {
                         </div>
                         <div className="courses-enrolled d-flex gap-2 justify-self-center "><span>No. of courses
                             Enrolled :</span>
-                            <h6 style={{ color: '#000' }}> <strong>{statusKpis.totalCourse}</strong></h6>
+                            <h6 style={{ color: '#000' }}> <strong>{statusKpis.assigned_course_count}</strong></h6>
                         </div>
                         <div className="courses-Email d-flex gap-2 justify-self-center"><span>Email :</span>
                             <h6 style={{ color: '#000' }}><strong>{profileData?.email}</strong></h6>
@@ -166,9 +184,9 @@ const editTrainee = () => {
 
                     <div className="trainee-topic-cards row" style={{ marginBottom: 'unset' }}>
                         {courses?.data?.map((item, index) => {
-                            //console.log(item);
+                            //console.log("item->",item);
                             return (
-                                <AdminCourseCard key={`courseCard${index}`} courseData={item} courseIndex={index} />
+                                <AdminCourseCard key={`courseCard${index}`} courseData={item.course} revisit={item.revisit} courseIndex={index} />
                             )
                         })}
                     </div>
@@ -277,8 +295,9 @@ const editTrainee = () => {
                                 <thead>
                                     <tr>
                                         <td style={{ width: '15%' }}>Course Name</td>
-                                        <td style={{ width: '15%' }}>Course Status</td>
+                                        <td style={{ width: '10%' }}>Course Status</td>
                                         <td style={{ width: '5%' }}>No. of Attempts</td>
+                                        <td style={{ width: '7%' }}>Average Time Spent</td>
                                         <td style={{ width: '5%' }}>Average Score</td>
                                         <td style={{ width: '5%' }}>Obtained Score</td>
                                         <td style={{ width: '5%' }}>Status</td>
@@ -304,6 +323,7 @@ const editTrainee = () => {
                                                 <td>{item?.curData?.course?.course_name}</td>
                                                 <td className={submitColor}><span>{curStatus}</span></td>
                                                 <td>{item.totalAttempts}</td>
+                                                <td>{item.averageTimeSpent} %</td>
                                                 <td>{averageScore}%</td>
                                                 <td className={passStatusColor}>{item?.maxPercent}%</td>
                                                 <td className={passStatusColor}>{passStatus}</td>

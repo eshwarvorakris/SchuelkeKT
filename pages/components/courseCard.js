@@ -14,7 +14,7 @@ export default function courseCard({ courseData }) {
     const form = new FormData();
     form.append("course_id", courseData.id);
     CourseViewModel.getEachCourseStat(form).then((res)=> {
-      console.log("resonse each", res.data);
+      //console.log("resonse each", res.data);
       setStatData(res?.data)
     })
   },[])
@@ -58,6 +58,9 @@ export default function courseCard({ courseData }) {
             </div>
             <div className="average-time-detail">
               <p>Average Time Spent: {statData?.weeksSpent} weeks</p>
+            </div>
+            <div className="average-time-detail">
+              <p>Average Score: {courseData?.average_score}</p>
             </div>
           </div>
         </div>

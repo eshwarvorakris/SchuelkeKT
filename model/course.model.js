@@ -34,6 +34,16 @@ const courseModel=class {
         return (await axiosInstance.get(`${this.baseUrl}/${id}/module?${new URLSearchParams(query)}`)).data;
     }
 
+    async getCourseAnalytics(data=[], query=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/course_analytics?${new URLSearchParams(query)}`,data);
+    }
+
+    async getTraineeAssignedCourses(data=[], query=[])
+    {
+        return await axiosInstance.post(`${this.baseUrl}/trainee_assigned_courses?${new URLSearchParams(query)}`,data);
+    }
+
 }
 
 export default new courseModel();
