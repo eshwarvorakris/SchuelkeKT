@@ -94,6 +94,7 @@ const Authorization = class {
       }
       req.userId = payload.id;
       req.userRole = payload.role;
+      req.userCountry = payload.country;
       next();
     } catch (err) {
       console.error(err.message);

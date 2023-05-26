@@ -7,6 +7,9 @@ const Module = require("../models/Module.model");
 const User = require("../models/User.model");
 const { Sequelize, Op, DataTypes } = require("sequelize");
 const Assigned_courses = require("../models/Assigned_courses.model");
+const CourseView = require("../models/Course_views.model");
+const AssignmentAttempt = require("../models/Assignment_attempt.model");
+const Revisit = require("../models/Course_revisit.model")
 const courseController = class {
   async index(req, res) {
     let search = req.query.search;
@@ -140,30 +143,78 @@ const courseController = class {
     if (req.userRole == "trainer") {
       req["query"]["trainer_id"] = req.userId;
     }
-    
+
     if (req.userRole == "trainee") {
       req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
       Course.hasMany(Assigned_courses, { foreignKey: 'course_id' });
       await Course
-      .findAndCountAll({ 
-        include: ["category","trainer", {
-          model: Assigned_courses,
-          where: { trainee_id: req.userId },
-        }], 
-        offset: pageNumber * pageLimit, 
-        limit: pageLimit, 
-        where: req.query, 
-        order: [orderByColumn] })
-      .then((result) => {
-        res.send(getPaginate(result, pageNumber, pageLimit));
-      })
-      .catch((error) => {
-        console.error("Failed to retrieve data : ", error);
-      });
+        .findAndCountAll({
+          include: ["category", "trainer", {
+            model: Assigned_courses,
+            where: { trainee_id: req.userId },
+          }],
+          offset: pageNumber * pageLimit,
+          limit: pageLimit,
+          where: req.query,
+          order: [orderByColumn]
+        })
+        .then((result) => {
+          
+          res.send(getPaginate(result, pageNumber, pageLimit));
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
     } else {
       await Course
         .findAndCountAll({ include: ["category", "trainer"], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query, order: [orderByColumn] })
-        .then((result) => {
+        .then(async (result) => {
+          // console.clear();
+          // console.log("================================================course=================================");
+          let passing_rate = 0;
+          let average_score = 0;
+          let passed_trainee = 0;
+          let total_trainee_attempt = 0;
+          let total_score = 0;
+          let i = 0;
+          for (const item of result.rows) {
+            passing_rate = 0;
+            average_score = 0;
+            passed_trainee = 0;
+            total_trainee_attempt = 0;
+            total_score = 0;
+
+            total_trainee_attempt = await AssignmentAttempt.count({
+              where: { course_id: item.id, status: 'submitted' }
+            });
+
+            passed_trainee = await AssignmentAttempt.count({
+              where: {
+                course_id: item.id, status: 'submitted', correct_percentage: {
+                  [Op.gte]: 80
+                }
+              }
+            });
+
+            if (total_trainee_attempt > 0 && passed_trainee > 0) {
+              passing_rate = Math.round((passed_trainee / total_trainee_attempt) * 100);
+            }
+
+            total_score = await AssignmentAttempt.sum('correct_percentage',
+              { where: { course_id: item.id, status: 'submitted' } });
+
+            if (total_score > 0 && total_trainee_attempt > 0) {
+              average_score = Math.round(total_score / total_trainee_attempt);
+            }
+
+            result.rows[i].dataValues.passing_rate = passing_rate;
+            result.rows[i].dataValues.average_score = average_score;
+            //console.log("total_trainee_attempt",item.id);
+
+            i++;
+          }
+          
+          //console.log("================================================course=================================");
           res.send(getPaginate(result, pageNumber, pageLimit));
         })
         .catch((error) => {
@@ -187,6 +238,7 @@ const courseController = class {
       );
     }
     req.body.trainer_id = req.userId;
+    req.body.country = req.userCountry;
     await Course
       .create(req.body)
       .then((result) => {
@@ -236,8 +288,8 @@ const courseController = class {
   }
 
   async update(req, res) {
-    console.clear();
-    console.log("update query ", req.body);
+    // console.clear();
+    // console.log("update query ", req.body);
     if (req.body?.status) {
       if (req.body?.status == "approved") {
         //req.body.status_update_on = 
@@ -271,6 +323,162 @@ const courseController = class {
           message: "Course not update",
         }
       );
+    }
+  }
+
+  async courseAnalytics(req, res) {
+    let condition = {};
+    if (req.body.country !== "all" && req.body.country !== undefined && req.body.country !== null) {
+      condition.country = req.body.country;
+    }
+
+    if (req.body.category !== "all" && req.body.category !== undefined && req.body.category !== null) {
+      condition.category_id = req.body.category;
+    }
+    await Course
+      .findAndCountAll({
+        offset: pageNumber * pageLimit,
+        limit: pageLimit,
+        where: condition,
+        order: [orderByColumn]
+      })
+      .then(async (result) => {
+        
+        if (result.count > 0) {
+          let trainee_enrolled = 0;
+          let average_course_completion_time = 0;
+          let passing_rate = 0;
+          let average_score = 0;
+          let average_no_of_attempt = 0;
+          let course_id = 0;
+          let passed_trainee = 0;
+          let total_trainee_attempt = 0;
+          let total_score = 0;
+          let distinct_trainee_attempt = 0;
+          let completionSec = 0;
+          var i = 0;
+          for (const item of result.rows) {
+            trainee_enrolled = 0;
+            average_course_completion_time = 0;
+            passing_rate = 0;
+            average_score = 0;
+            average_no_of_attempt = 0;
+            passed_trainee = 0;
+            total_trainee_attempt = 0;
+            total_score = 0;
+            distinct_trainee_attempt = 0;
+            completionSec = 0;
+
+            course_id = item.id;
+
+            trainee_enrolled = await Assigned_courses.count({
+              distinct: true,
+              col: 'trainee_id',
+              where: { course_id: item.id }
+            });
+
+            completionSec = await CourseView.sum('viewed_seconds', { where: { status: 'completed', course_id: item.id } });
+            if (completionSec > 0) {
+              average_course_completion_time = Math.round(completionSec / 3600)
+            }
+
+            total_trainee_attempt = await AssignmentAttempt.count({
+              where: { course_id: item.id, status: 'submitted' }
+            });
+
+            passed_trainee = await AssignmentAttempt.count({
+              where: {
+                course_id: item.id, status: 'submitted', correct_percentage: {
+                  [Op.gte]: 80
+                }
+              }
+            });
+
+            if (total_trainee_attempt > 0 && passed_trainee > 0) {
+              passing_rate = Math.round((passed_trainee / total_trainee_attempt) * 100);
+            }
+
+            total_score = await AssignmentAttempt.sum('correct_percentage',
+              { where: { course_id: item.id, status: 'submitted' } });
+
+            if (total_score > 0 && total_trainee_attempt > 0) {
+              average_score = Math.round(total_score / total_trainee_attempt);
+            }
+
+            distinct_trainee_attempt = await AssignmentAttempt.count({
+              distinct: true,
+              col: 'trainee_id',
+              where: { course_id: item.id, status: 'submitted' }
+            });
+
+            if (total_trainee_attempt > 0) {
+              average_no_of_attempt = Math.round(total_trainee_attempt / distinct_trainee_attempt);
+            }
+
+            result.rows[i].dataValues.trainee_enrolled = trainee_enrolled;
+            result.rows[i].dataValues.average_course_completion_time = average_course_completion_time;
+            result.rows[i].dataValues.passing_rate = passing_rate;
+            result.rows[i].dataValues.average_score = average_score;
+            result.rows[i].dataValues.average_no_of_attempt = average_no_of_attempt;
+            //console.log("total_trainee_attempt = >", total_trainee_attempt);
+            i++;
+          }
+        }
+        //console.log(result);
+        
+        res.send(getPaginate(result, pageNumber, pageLimit));
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+        res.status(422).send({ message: "Please Try Again Later", error: error.message });
+      });
+  }
+
+  async assignedTraineeCourses(req, res) {
+    let condition = {};
+    condition.status = "approved";
+    if(req.userRole == "trainer") {
+      condition.trainer_id = req.userId;
+    } 
+    if (req.body.trainee_id) {
+      await Assigned_courses.findAll(
+        { where: {trainee_id: req.body.trainee_id},
+        include: [
+          {
+            model: Course,
+            as: 'course',
+            where: condition ,
+          }
+        ]
+      }).then(async (result) => {
+        
+        if(result) {
+          let i = 0;
+          let revisit = 0;
+          console.clear();
+
+          for (const item of result) {
+            revisit = 0;
+            revisit = await Revisit.findAndCountAll({
+              where: {
+                trainee_id: req.body.trainee_id,
+                course_id: item.course_id,
+              },
+            });
+            console.log("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",revisit);
+            result[i].dataValues.revisit = revisit;
+            i++;
+          }
+          res.send(result)
+        } else {
+          res.status(404).send({ message: "No courses assigned to this trainee" })
+        }
+        
+      }).catch((err) => {
+        res.status(422).send({ message: "Please Try Again Later", error: err.message })
+      })
+    } else {
+      res.status(422).send({ message: "Please Select trainee" })
     }
   }
 };

@@ -147,8 +147,8 @@ const userController = class {
     req["query"]["role"] = "trainee";
 
     if (req.userRole === "trainer") {
-      console.clear();
-      console.log("req.userId", req.userId)
+      // console.clear();
+      // console.log("req.userId", req.userId)
       Course.hasMany(CourseAssign, { foreignKey: 'course_id' });
       User.hasMany(CourseAssign, { foreignKey: 'trainee_id' });
       await User
@@ -174,7 +174,15 @@ const userController = class {
           for (const curUser of result.rows) {
             const count = await CourseView.count({ where: { trainee_id: curUser?.dataValues?.id } });
             const assigned_course = await CourseAssign.findOne({ where: { trainee_id: curUser?.dataValues?.id, course_id: searchCourse }, attributes: ['id'] });
-            const assigned_course_count = await CourseAssign.count({ where: { trainee_id: curUser?.dataValues?.id } });
+            const assigned_course_count = await CourseAssign.count({
+              where: { trainee_id: curUser?.dataValues?.id },
+              include: [{
+                model: Course,
+                as: 'course',
+                attributes: [],
+                where: {status:'approved', trainer_id: req.userId} ,
+              }],
+            });
             curUser.dataValues.assigned_course = 0;
             if (assigned_course) {
               console.log(assigned_course?.id);

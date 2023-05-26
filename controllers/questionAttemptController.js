@@ -88,12 +88,17 @@ const questionAttemptController = class {
     var curData = [];
     var totalAttempts = 0;
     var totalScore = 0;
-
-
+    var averageTimeSpent = 0;
+    var averageTimeSpentSec = 0;
+    var totalTimeSpent = 0;
+    var timeSpentOnCourse = 0;
     async function attemptRes(allCourses) {
       let questionResp = async () => {
         var i = 0;
         for (const curCourse of allCourses) {
+          averageTimeSpent = 0;
+          timeSpentOnCourse = 0;
+          averageTimeSpentSec = 0;
           //console.log("cur" + i, curCourse.DISTINCT);
           maxPercent = await AssignmentAttempt.max('correct_percentage',
             { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
@@ -104,6 +109,16 @@ const questionAttemptController = class {
           totalAttempts = await AssignmentAttempt.count(
             { where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT } }
           );
+
+          totalTimeSpent = await CourseView.sum('viewed_seconds', {
+            where: { trainee_id: req.body.trainee_id },
+          });
+          timeSpentOnCourse = await CourseView.sum('viewed_seconds', {
+            where: { trainee_id: req.body.trainee_id, course_id: curCourse.DISTINCT },
+          });
+
+          averageTimeSpent = Math.round((timeSpentOnCourse / totalTimeSpent) * 100)
+          
           curData = await AssignmentAttempt.findOne(
             {
               include: ['course'],
@@ -111,7 +126,13 @@ const questionAttemptController = class {
             }
           );
 
-          outResult.push({ maxPercent: maxPercent, totalScore: totalScore, totalAttempts: totalAttempts, curData: curData })
+          outResult.push({ 
+            maxPercent: maxPercent, 
+            totalScore: totalScore, 
+            totalAttempts: totalAttempts, 
+            curData: curData,
+            averageTimeSpent: averageTimeSpent
+          })
           i++;
         }
       }

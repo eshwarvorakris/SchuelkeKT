@@ -47,7 +47,7 @@ exports.login = async function (req, res) {
   }
   await User.findOne({
     attributes: [
-      'id', 'full_name', 'profile_img', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'password'],
+      'id', 'full_name', 'country', 'profile_img', 'contact_no', 'dob', 'address', 'edu_background', 'role', 'password'],
     where: { email: req.body.email, status: 'active' }
   }).then(async (result) => {
     if (result !== null) {
@@ -57,7 +57,7 @@ exports.login = async function (req, res) {
         return res.status(401).json("Email Or Password is incorect");
       }
       result.dataValues.password = "";
-      var access_token = auth.generateToken(_.pick(result?.dataValues, ['role', 'id']));
+      var access_token = auth.generateToken(_.pick(result?.dataValues, ['role', 'id', 'country']));
       res.send({ data: result?.dataValues, access_token });
     }
     else {

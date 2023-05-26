@@ -7,6 +7,7 @@ const ModuleView = require("../models/Module_views.model");
 const ChapterView = require("../models/Chapter_views.model");
 const User = require("../models/User.model");
 const Module = require("../models/Module.model");
+const Revisit = require("../models/Course_revisit.model")
 const { Op } = require("sequelize");
 const courseController = class {
   async index(req, res) {
@@ -23,17 +24,19 @@ const courseController = class {
   async getAnyCourseChapterViewed(req, res) {
     if (req.body.course_id !== undefined && req.body.course_id != "undefined") {
       const courseViewSec = await ChapterView.sum('viewed_seconds', { where: { course_id: req.body.course_id, trainee_id: req.userId } });
-      const courseReDoneCount = await CourseView.findOne({attributes: ['id','viewed_seconds','re_done_count'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
-      const courseViewData = await ChapterView.findAll({attributes: ['id','viewed_seconds'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
+      const courseReDoneCount = await CourseView.findOne({ attributes: ['id', 'viewed_seconds', 're_done_count'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
+      const courseViewData = await ChapterView.findAll({ attributes: ['id', 'viewed_seconds'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
       const totalCourseContent = await Content.count({ where: { course_id: req.body.course_id } });
       await ChapterView
         .findOne({ where: { trainee_id: req.userId, course_id: req.body.course_id }, order: [['chapter_id', 'DESC']] })
         .then((result) => {
-          const data = { courseViewSec: courseViewSec,
-            courseViewData:courseViewData,
-            totalCourseContent:totalCourseContent,
-            courseReDoneCount:courseReDoneCount,
-            result: result }
+          const data = {
+            courseViewSec: courseViewSec,
+            courseViewData: courseViewData,
+            totalCourseContent: totalCourseContent,
+            courseReDoneCount: courseReDoneCount,
+            result: result
+          }
           //console.log(result);
           res.send(data);
           //res.send("done");
@@ -52,7 +55,7 @@ const courseController = class {
   }
 
   async getCourseViewData(req, res) {
-    console.clear();
+    //console.clear();
     //console.log(req.body);
     let allContentInCourse = await Content.count({ where: { course_id: req.body.course_id } });
     let courseContentCompletedCount = await ChapterView.count({ where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id, status: 'completed' } });
@@ -187,32 +190,56 @@ const courseController = class {
   }
 
   async getEachCourseStat(req, res) {
-    const countTrainee = await CourseView.count({ where: { course_id:req.body.course_id } });
-    const countCourseCompletedUsers = await CourseView.count( { where: { course_id:req.body.course_id, status:'completed' } } );
-    const timeSpentByUserInCourse = await CourseView.sum('viewed_seconds', { where: { course_id:req.body.course_id } } );
+    const countTrainee = await CourseView.count({ where: { course_id: req.body.course_id } });
+    const countCourseCompletedUsers = await CourseView.count({ where: { course_id: req.body.course_id, status: 'completed' } });
+    const timeSpentByUserInCourse = await CourseView.sum('viewed_seconds', { where: { course_id: req.body.course_id } });
     let userCompletePercent = 0;
-    if(countCourseCompletedUsers > 0 && countTrainee > 0) {
-      userCompletePercent = ((countCourseCompletedUsers/countTrainee)*100);
+    if (countCourseCompletedUsers > 0 && countTrainee > 0) {
+      userCompletePercent = ((countCourseCompletedUsers / countTrainee) * 100);
     }
-    let weeksSpent =  Math.floor((((timeSpentByUserInCourse / 60) / 60) / 24) / 7);
+    let weeksSpent = Math.floor((((timeSpentByUserInCourse / 60) / 60) / 24) / 7);
     let data = {
-      traineeEnrolled:countTrainee,
-      userCompletePercent:userCompletePercent,
-      weeksSpent:weeksSpent
+      traineeEnrolled: countTrainee,
+      userCompletePercent: userCompletePercent,
+      weeksSpent: weeksSpent
     }
     res.send(data);
   }
 
   async store(req, res) {
     req.body.trainee_id = req.userId;
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().substring(0, 10);
     const alreadyView = await CourseView.findOne({
-      attributes: ['id'],
+      attributes: ['id', 'status'],
       where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id }
     }).then(async (result) => {
       if (result !== null) {
         //res.send(result);
         console.log("view result=>", result?.dataValues?.id);
         if (result?.dataValues?.id) {
+          if (result?.dataValues?.status === "completed") {
+            const entryExists = await Revisit.findOne({
+              attributes: ['id', 'visit_date'],
+              where: {
+                trainee_id: req.body.trainee_id,
+                course_id: req.body.course_id,
+                visit_date: formattedDate,
+              },
+            });
+
+            if (!entryExists) {
+              await Revisit.create({
+                trainee_id: req.body.trainee_id,
+                course_id: req.body.course_id,
+                viewed_seconds: 30,
+              });
+            } else {
+              await Revisit.increment({ viewed_seconds: req.body.viewed_seconds }, { 
+                where: { id: entryExists?.dataValues?.id } 
+              })
+            }
+          }
           await CourseView
             .increment({ viewed_seconds: req.body.viewed_seconds }, { where: { id: result?.dataValues?.id } })
         }
@@ -222,7 +249,7 @@ const courseController = class {
           .create(req.body)
           .then((resultCreate) => {
             //res.send(resultCreate);
-            User.increment({course_count: 1}, { where: { id: req.userId } })
+            User.increment({ course_count: 1 }, { where: { id: req.userId } })
           })
           .catch((error) => {
             console.error("Failed to retrieve data : ", error);
