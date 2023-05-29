@@ -157,12 +157,12 @@ const userController = class {
           include: [
             {
               model: CourseAssign,
-              attributes: [['id' , 'assigned_course_id']],
+              attributes: [['id', 'assigned_course_id']],
               //required: true,
               include: [{
                 model: Course,
                 as: 'course',
-                attributes: [['id' , 'courses_id']],
+                attributes: [['id', 'courses_id']],
                 where: { trainer_id: req.userId },
               }]
             }
@@ -180,7 +180,7 @@ const userController = class {
                 model: Course,
                 as: 'course',
                 attributes: [],
-                where: {status:'approved', trainer_id: req.userId} ,
+                where: { status: 'approved', trainer_id: req.userId },
               }],
             });
             curUser.dataValues.assigned_course = 0;
@@ -227,6 +227,144 @@ const userController = class {
           console.error("Failed to retrieve data : ", error);
         });
     }
+
+  }
+
+  async getTraineeToAssign(req, res) {
+
+    var searchCourse = 0;
+    if (req.query.searchCourse) {
+      searchCourse = req.query.searchCourse;
+      delete req.query.searchCourse;
+    }
+
+    if (req.query.filter) {
+      if (req.query.filter == "country") {
+        if (req.query.filterParam != "all") {
+          req["query"][Op.and] = [
+            { 'country': { [Op.iLike]: `%${req.query.filterParam}%` } },
+          ];
+        }
+
+        if (req.query.search) {
+          if (req.query.search != "") {
+            req["query"][Op.or] = [
+              { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+              { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+              { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+              { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+              { 'joining_year': { [Op.iLike]: `%${req.query.search}%`, }, },
+              Sequelize.where(
+                Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+                { [Op.iLike]: `%${req.query.search}%` }
+              ),
+            ];
+          }
+        }
+        delete req.query.filterParam;
+      } else if (req.query.filter == "status") {
+        if (req.query.filterParam) {
+          if (req.query.filterParam != "all") {
+            req["query"][Op.and] = [
+              { 'status': { [Op.iLike]: `%${req.query.filterParam}%` } },
+            ];
+          }
+
+          if (req.query.search) {
+            if (req.query.search != "") {
+              req["query"][Op.or] = [
+                { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'joining_year': { [Op.iLike]: `%${req.query.search}%`, }, },
+                { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+                Sequelize.where(
+                  Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+                  { [Op.iLike]: `%${req.query.search}%` }
+                ),
+              ];
+            }
+          }
+          //console.log("check");
+          delete req.query.filterParam;
+        }
+      } else if (req.query.filter == "all") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'joining_year': { [Op.iLike]: `%${req.query.search}%`, }, },
+            { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+            Sequelize.where(
+              Sequelize.cast(Sequelize.col('user_id'), 'varchar'),
+              { [Op.iLike]: `%${req.query.search}%` }
+            ),
+          ];
+        }
+      } else if (req.query.filter == "full_name") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+          ];
+        }
+      } else if (req.query.filter == "email") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+          ];
+        }
+      } else if (req.query.filter == "contact_no") {
+        if (req.query.search) {
+          req["query"][Op.or] = [
+            { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+          ];
+        }
+      }
+      delete req.query.filterParam;
+      delete req.query.search;
+      delete req.query.filter;
+    } else if (req.query.search) {
+      req["query"][Op.or] = [
+        { 'full_name': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'email': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'contact_no': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'country': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'joining_year': { [Op.iLike]: `%${req.query.search}%`, }, },
+        { 'status': { [Op.iLike]: `%${req.query.search}%` } },
+      ];
+      delete req.query.search;
+    }
+    req["query"]["role"] = "trainee";
+
+    await User
+      .findAndCountAll({
+        where: req.query,
+        offset: req.query.page, limit: pageLimit, order: [orderByColumn]
+      })
+      .then(async (result) => {
+        let allUsers = [];
+        for (const curUser of result.rows) {
+          const count = await CourseView.count({ where: { trainee_id: curUser?.dataValues?.id } });
+          const assigned_course = await CourseAssign.findOne({ where: { trainee_id: curUser?.dataValues?.id, course_id: searchCourse }, attributes: ['id'] });
+          const assigned_course_count = await CourseAssign.count({ where: { trainee_id: curUser?.dataValues?.id } });
+          curUser.dataValues.assigned_course = 0;
+          if (assigned_course) {
+            console.log(assigned_course?.id);
+            curUser.dataValues.assigned_course = assigned_course?.id;
+          }
+          curUser.dataValues.totalCourse = count;
+          curUser.dataValues.assigned_course_count = assigned_course_count;
+          allUsers.push(curUser);
+        }
+        result.rows = allUsers;
+        res.send(getPaginate(result, req.query.page ?? pageNumber, pageLimit));
+      })
+      .catch((error) => {
+        console.error("Failed to retrieve data : ", error);
+      });
 
   }
 

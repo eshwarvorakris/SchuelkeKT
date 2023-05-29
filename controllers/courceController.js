@@ -143,6 +143,16 @@ const courseController = class {
     if (req.userRole == "trainer") {
       req["query"]["trainer_id"] = req.userId;
     }
+    if(req.query.year) {
+      let dtString = req.query.year+'-01-01';
+      let nextdtString = (parseInt(req.query.year) + 1)+'-01-01';
+      req["query"]["created_at"] = {
+        [Op.gte]: new Date(dtString), // Greater than or equal to January 1, 2022
+        [Op.lt]: new Date(nextdtString), // Less than January 1, 2023
+      };
+      delete req.query.year;
+    }
+    
 
     if (req.userRole == "trainee") {
       req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
@@ -447,6 +457,7 @@ const courseController = class {
           {
             model: Course,
             as: 'course',
+            include: ['category'],
             where: condition ,
           }
         ]

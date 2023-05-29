@@ -10,7 +10,7 @@ router.get("/trainee/:type", verifyAuth.verifyUser, widgetController.trainee);
 router.get("/trainer/:type", verifyAuth.verifyUser, widgetController.trainer);
 router.get("/trainee_kpis", verifyAuth.verifyUser, widgetController.traineeKpis);
 router.post("/trainee_status_kpis", verifyAuth.verifyUser, widgetController.traineeStatusKpis);
-router.post("/admin_graph1", verifyAuth.verifyAdmin, widgetController.adminGraph1);
+router.post("/admin_graph1", verifyAuth.verifyAdmin, widgetController.adminGraph11);
 router.post("/admin_graph2", verifyAuth.verifyAdmin, widgetController.adminGraph2);
 
 router.get("/trainer_kpis", verifyAuth.verifyTrainer, widgetController.trainerKpis);

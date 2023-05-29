@@ -282,6 +282,187 @@ const widgetController = class {
     });
   }
 
+  async adminGraph11(req, res) {
+    console.clear();
+    console.log("============================================here started=====================================");
+    console.log(req.body.country)
+    const array = req.body?.country.split(',');
+    // array.map((item) => {
+    //   console.log("curen country = ", item);
+    // })
+
+    var totalTraineeEnrolled = 0;
+    var learningSec = 0;
+    var learningHour = 0;
+    var completionHour = 0;
+    var completionSec = 0;
+
+    let temp = null;
+    var traineeCondition = [];
+    var learningSecCondition = {};
+
+    var chartData = [];
+
+    if (array.length > 0) {
+      for (const item of array) {
+
+        totalTraineeEnrolled = 0;
+        learningSec = 0;
+        learningHour = 0;
+        completionHour = 0;
+        completionSec = 0;
+
+        temp = null;
+        traineeCondition = [];
+        learningSecCondition = {};
+
+        Course.hasMany(Assigned_courses, { foreignKey: 'course_id' });
+        if (item !== "all" && item !== undefined) {
+          temp = {
+            model: User,
+            as: 'trainee',
+            attributes: [['id']],
+            where: { country: item },
+          }
+          traineeCondition.push(temp);
+          learningSecCondition.country = item;
+        }
+
+        if (req.body.category !== "all" && req.body.category !== undefined) {
+          temp = {
+            model: Course,
+            as: 'course',
+            attributes: [],
+            where: { category_id: req.body.category },
+          }
+          traineeCondition.push(temp);
+          learningSecCondition.category_id = req.body.category;
+        }
+
+        if (traineeCondition.length > 0) {
+
+          totalTraineeEnrolled = await Assigned_courses.count({
+            distinct: true,
+            col: 'trainee_id',
+            include: traineeCondition,
+          });
+
+          learningSec = await CourseView.sum('viewed_seconds', {
+            include: [
+              {
+                model: Course,
+                as: 'course',
+                attributes: [],
+                where: learningSecCondition,
+              }
+            ]
+          });
+          completionSec = await CourseView.sum('viewed_seconds', {
+            where: { status: 'completed' },
+            include: [
+              {
+                model: Course,
+                as: 'course',
+                attributes: [],
+                where: learningSecCondition,
+              }
+            ]
+          });
+
+        } else {
+          totalTraineeEnrolled = await Assigned_courses.count({
+            distinct: true,
+            col: 'trainee_id'
+          });
+          learningSec = await CourseView.sum('viewed_seconds');
+          completionSec = await CourseView.sum('viewed_seconds', { where: { status: 'completed' } });
+        }
+
+        if (learningSec > 0) {
+          learningHour = Math.round(learningSec / 3600)
+        }
+
+        if (completionSec > 0) {
+          completionHour = Math.round(completionSec / 3600)
+        }
+
+        let tempData = {
+          labels: item, totalTraineeEnrolled: totalTraineeEnrolled, learningHour: learningHour, completionHour: completionHour
+        }
+        chartData.push(tempData);
+      }
+    } else {
+      if (req.body.category !== "all" && req.body.category !== undefined) {
+        temp = {
+          model: Course,
+          as: 'course',
+          attributes: [],
+          where: { category_id: req.body.category },
+        }
+        traineeCondition.push(temp);
+        learningSecCondition.category_id = req.body.category;
+      }
+
+      if (traineeCondition.length > 0) {
+
+        totalTraineeEnrolled = await Assigned_courses.count({
+          distinct: true,
+          col: 'trainee_id',
+          include: traineeCondition,
+        });
+
+        learningSec = await CourseView.sum('viewed_seconds', {
+          include: [
+            {
+              model: Course,
+              as: 'course',
+              attributes: [],
+              where: learningSecCondition,
+            }
+          ]
+        });
+        completionSec = await CourseView.sum('viewed_seconds', {
+          where: { status: 'completed' },
+          include: [
+            {
+              model: Course,
+              as: 'course',
+              attributes: [],
+              where: learningSecCondition,
+            }
+          ]
+        });
+
+      } else {
+        totalTraineeEnrolled = await Assigned_courses.count({
+          distinct: true,
+          col: 'trainee_id'
+        });
+        learningSec = await CourseView.sum('viewed_seconds');
+        completionSec = await CourseView.sum('viewed_seconds', { where: { status: 'completed' } });
+      }
+
+      if (learningSec > 0) {
+        learningHour = Math.round(learningSec / 3600)
+      }
+
+      if (completionSec > 0) {
+        completionHour = Math.round(completionSec / 3600)
+      }
+
+      let tempData = {
+        labels: 'All', totalTraineeEnrolled: totalTraineeEnrolled, learningHour: learningHour, completionHour: completionHour
+      }
+      chartData.push(tempData);
+    }
+
+    res.send({
+      data: {
+        chartData: chartData
+      }
+    });
+  }
+
   async adminGraph2(req, res) {
     var productTopic = 0;
     var blanketTopic = 0;
@@ -326,7 +507,7 @@ const widgetController = class {
     }
     traineeCondition.push(temp);
     temp2 = temp;
-    temp2.include= [
+    temp2.include = [
       {
         model: CourseView,
         where: { status: 'completed' },
@@ -350,7 +531,7 @@ const widgetController = class {
       col: 'trainee_id',
       include: traineeCondition,
     });
-    
+
     traineeCompleted = await Assigned_courses.count({
       distinct: true,
       col: 'trainee_id',
