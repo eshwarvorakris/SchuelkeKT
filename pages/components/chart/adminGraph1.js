@@ -4,52 +4,83 @@ import { useState } from "react";
 import { useEffect } from "react";
 const AdminGraph1 = () => {
 
-  const [learningHour, setLearningHour] = useState(0);
-  const [enrolledTrainee, setEnrolledTrainee] = useState(0);
-  const [completionHour, setCompletionHour] = useState(0);
+
   const [selectedCountry, setSelectedCountry] = useState("all");
+  const [selectedCountryAr, setSelectedCountryAr] = useState(["all"]);
   const [selectedTopic, setSelectedTopic] = useState("all");
+
+  const [chartLabel, setChartLabel] = useState([]);
+  const [learningHour, setLearningHour] = useState([]);
+  const [enrolledTrainee, setEnrolledTrainee] = useState([]);
+  const [completionHour, setCompletionHour] = useState([]);
+
+  const [showMore, setShowMore] = useState(true);
+  const [showMoreLink, setShowMoreLink] = useState("");
+
+  const [countryLink, setCountryLink] = useState("");
+  const [topicLink, setTopicLink] = useState("");
+
   const adminGraph = async () => {
     const formData = new FormData();
-    formData.append("country", selectedCountry);
+    formData.append("country", selectedCountryAr);
     formData.append("category", selectedTopic);
-    setLearningHour(0);
-    setEnrolledTrainee(0);
-    setCompletionHour(0);
+    setLearningHour([]);
+    setEnrolledTrainee([]);
+    setCompletionHour([]);
+    setChartLabel([]);
     await widgetModel.adminGraph1(formData).then((result) => {
       //console.log(result.data);
-      if (result.data) {
-        setLearningHour(result.data.learningHour);
-        setEnrolledTrainee(result.data.totalTraineeEnrolled);
-        setCompletionHour(result.data.completionHour);
+      if (result?.data?.chartData) {
+        if (result?.data?.chartData.length > 0) {
+          const labels = result?.data?.chartData.map(({ labels }) => labels);
+          const learnHour = result?.data?.chartData.map(({ learningHour }) => learningHour);
+          const enroll = result?.data?.chartData.map(({ totalTraineeEnrolled }) => totalTraineeEnrolled);
+          const complete = result?.data?.chartData.map(({ completionHour }) => completionHour);
+          setChartLabel(labels);
+          setEnrolledTrainee(enroll);
+          setCompletionHour(complete);
+          setLearningHour(learnHour);
+        }
       }
     })
   }
 
   useEffect(() => {
     adminGraph();
-  }, [selectedCountry, selectedTopic])
+    let link = "";
+    if(selectedCountryAr.length > 1) {
+      setShowMore(false)
+    } else {
+      if(selectedCountryAr.length > 0) {
+        if(selectedCountryAr[0] != "all") {
+          link = "country="+selectedCountryAr[0];
+        }
+      }
+      setShowMore(true);
+    }
+    setCountryLink(link);
+  }, [selectedCountryAr, selectedTopic])
 
   const chartData = {
-    labels: [''],
+    labels: chartLabel,
     datasets: [
       {
         label: 'Learning Hour',
-        data: [learningHour],
+        data: learningHour,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
       {
         label: 'Enrolled Trainees',
-        data: [enrolledTrainee],
+        data: enrolledTrainee,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
       },
       {
         label: 'Time For Completion',
-        data: [completionHour],
+        data: completionHour,
         backgroundColor: 'rgba(74, 50, 168, 0.5)',
         borderColor: 'rgba(74, 50, 168, 1)',
         borderWidth: 1,
@@ -58,14 +89,40 @@ const AdminGraph1 = () => {
   };
 
   const handleCountryChangeParent = (country) => {
-    //console.log("parent", country.value)
-    setSelectedCountry(country.value);
+    console.log("parent", country)
+    let curCountry = [];
+    country.map((item, index) => {
+      curCountry.push(item.value);
+    })
+    setSelectedCountryAr(curCountry);
+    
+    //setSelectedCountry(country.value);
   };
 
   const handleTopicChangeParent = (topic) => {
     setSelectedTopic(topic.value);
+    let link = "";
+    if(topic.value !== "all") {
+      link = "category="+topic.value+"&topic="+topic.label;
+    }
+    setTopicLink(link);
     //console.log("parent", topic.value)
   };
+
+  useEffect(() => {
+    let link = "";
+    if(countryLink != "") {
+      link = countryLink;
+    }
+
+    if(topicLink != "") {
+      if(link != "") {
+        link += "&";
+      }
+      link += topicLink;
+    }
+    setShowMoreLink(link);
+  }, [countryLink, topicLink])
   return (
     <>
       <GraphComponent
@@ -75,10 +132,11 @@ const AdminGraph1 = () => {
         isCategory={true}
         Title={`Countries Performance`}
         Description={``}
-        showMore={true}
-        showMoreLink="course_analytics"
+        showMore={showMore}
+        showMoreLink={`course_analytics?${showMoreLink}`}
         onCountryChangeParent={handleCountryChangeParent}
         onTopicChanged={handleTopicChangeParent}
+        isMultiCountry={true}
       />
     </>
   );

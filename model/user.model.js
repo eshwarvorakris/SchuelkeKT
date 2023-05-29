@@ -12,6 +12,10 @@ const User = class {
         return (await axiosInstance.get(`${this.baseUrl}/getTrainee?${new URLSearchParams(query)}`)).data;
     }
 
+    async traineeToAssignList(query = []) {
+        return (await axiosInstance.get(`${this.baseUrl}/get_trainee_to_assign?${new URLSearchParams(query)}`)).data;
+    }
+
     async trainerList(query = []) {
         return (await axiosInstance.get(`${this.baseUrl}/getTrainer?${new URLSearchParams(query)}`)).data;
     }

@@ -12,16 +12,23 @@ export default function categorySelect(props) {
     setisLoading(true);
     await categoryModel.list().then((result) => {
       if (result) {
-        
+
         const opt = [];
         let countries = _.orderBy(result.data, [function (o) { return o.category_name; }], ['asc']);
         //console.log(countries)
-        if(props?.addAll) {
-          if(props.addAll === true) {
-            opt.push({ value: 'all', label: 'All Topic' })
-            setSelectedOption({ value: 'all', label: 'All Topic' })
+        if (props?.addAll) {
+          if (props.addAll === true) {
+            opt.push({ value: 'all', label: 'All Topic' });
+            if (!props?.defaultVal) {
+              setSelectedOption({ value: 'all', label: 'All Topic' })
+            }
           }
         }
+
+        if (props?.defaultVal) {
+          setSelectedOption(props?.defaultVal)
+        }
+
         countries?.map((item, index) => {
           opt.push({ value: item.id, label: item.category_name })
         });
@@ -56,15 +63,18 @@ export default function categorySelect(props) {
 
   return (
     <>
-      <Select
-        isSearchable
-        options={selectOptions}
-        name={"category"}
-        placeholder="Select Topic"
-        value={selectedOptions}
-        onChange={onOptionSelect}
-        styles={selectStyles}
-      />
+      {!isLoading &&
+        <Select
+          isSearchable
+          options={selectOptions}
+          name={"category"}
+          placeholder="Select Topic"
+          value={selectedOptions}
+          onChange={onOptionSelect}
+          styles={selectStyles}
+        />
+      }
+
     </>
   );
 }

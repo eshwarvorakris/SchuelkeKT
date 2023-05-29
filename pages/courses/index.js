@@ -14,6 +14,7 @@ import baseModel from "../../model/base.model";
 import Select from 'react-select';
 import _ from 'lodash';
 import moment from 'moment';
+import YearDropdown from "../components/yearDropdown";
 
 const admincoursemanagement = () => {
     const layoutValues = useContext(AppContext);
@@ -353,6 +354,13 @@ const admincoursemanagement = () => {
     //     console.clear();
     //     console.log(courses);
     // }, [courses]);
+    const handleYearChange = (e) => {
+        QueryParam.year = e.target.value;
+        router.push({
+            pathname: router.pathname,
+            query: QueryParam,
+        });
+    }
     return (
         <>
             {
@@ -433,6 +441,7 @@ const admincoursemanagement = () => {
                                             />
                                         </div>
                                     }
+                                    <div style={{width:'10rem'}}><YearDropdown handleYear={handleYearChange} /></div>
                                     {(layoutValues?.profile?.role == 'trainer') &&
                                         <div className=" create-course ">
                                             <Link href="/courses/create" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>

@@ -66,8 +66,8 @@ const TrainerGraph1 = () => {
         isCategory={true}
         Title={`Countries Performance`}
         Description={``}
-        showMore={false}
-        showMoreLink=""
+        showMore={true}
+        showMoreLink="get_enrolled"
         onCountryChangeParent={handleCountryChangeParent}
         onTopicChanged={handleTopicChangeParent}
       />

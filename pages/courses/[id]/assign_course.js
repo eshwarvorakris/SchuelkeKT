@@ -50,7 +50,7 @@ const AssignCourse = () => {
     if (!QueryParam.filter) {
       QueryParam.filter = "all";
     }
-    userModel.traineeList(QueryParam).then((res) => {
+    userModel.traineeToAssignList(QueryParam).then((res) => {
       if (res?.data) {
         if ((res?.data).length > 0) {
           console.log(res)

@@ -14,16 +14,11 @@ export default function countrySelect(props) {
       if (result) {
         const opt = [];
         let countries = _.orderBy(result, [function (o) { return o.name.common; }], ['asc']);
-        if (props?.addAll) {
-          if (props.addAll === true) {
+        if(props?.addAll) {
+          if(props.addAll === true) {
             opt.push({ value: 'all', label: 'All Country' })
-            if (!props?.defaultVal) {
-              setSelectCountry({ value: 'all', label: 'All Country' });
-            }
+            setSelectCountry({ value: 'all', label: 'All Country' });
           }
-        }
-        if (props?.defaultVal) {
-          setSelectCountry(props?.defaultVal)
         }
         countries?.map((item, index) => {
           opt.push({ value: item.name.common, label: item.name.common })
@@ -37,7 +32,6 @@ export default function countrySelect(props) {
   }
 
   useEffect(() => {
-    console.log("setSelectCountry", props.defaultVal)
     countryLists();
   }, []);
 
@@ -50,28 +44,24 @@ export default function countrySelect(props) {
   const countryStyles = {
     control: base => ({
       ...base,
-      height: 30,
-      minHeight: 30,
-      width: '10rem',
+      width: '100%',
       paddingTop: 0,
       paddingBottom: 0,
     })
   };
 
   return (
-
     <>
-      {!isLoading &&
-        <Select
-          isSearchable
-          options={countryOptions}
-          name={"country"}
-          placeholder="Select Country"
-          value={selectCountry}
-          onChange={onCountrySelect}
-          styles={countryStyles}
-        />
-      }
+      <Select
+        isSearchable
+        options={countryOptions}
+        name={"country"}
+        placeholder="Select Country"
+        value={selectCountry}
+        onChange={onCountrySelect}
+        styles={countryStyles}
+        isMulti={true}
+      />
     </>
   );
 }

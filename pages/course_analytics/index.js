@@ -21,17 +21,31 @@ const analytics = () => {
   const [topic, setTopic] = useState("all");
   const [exportData, setExportData] = useState(null);
 
+  const [countryDrop, setCountryDrop] = useState(null);
+  const [topicDrop, setTopicDrop] = useState(null);
+
   const [courses, setCourses] = useState(null);
 
   const handleCountryChange = (country) => {
     //onCountryChangeParent(country)
     setCountry(country.value);
-    console.log(country);
+    //console.log(country);
+    QueryParam.country = country.value;
+    router.push({
+      pathname: router.pathname,
+      query: QueryParam,
+    });
   };
   const handleSelectChange = (option) => {
     //onTopicChanged(option)
     setTopic(option.value);
     console.log("category option = ", option);
+    delete(QueryParam.topic)
+    QueryParam.category = option.value;
+    router.push({
+      pathname: router.pathname,
+      query: QueryParam,
+    });
   };
 
   const QueryParam = router.query;
@@ -60,8 +74,12 @@ const analytics = () => {
 
   const getAnalytics = async () => {
     const formData = new FormData();
-    formData.append("country", country);
-    formData.append("category", topic);
+    if(QueryParam.country) {
+      formData.append("country", QueryParam.country);
+    }
+    if(QueryParam.category) {
+      formData.append("category", QueryParam.category);
+    }
     await courseModel.getCourseAnalytics(formData, QueryParam).then((result) => {
       console.log("data", result?.data);
       setCourses(result?.data);
@@ -90,8 +108,22 @@ const analytics = () => {
   }
 
   useEffect(() => {
-    getAnalytics();
-  }, [QueryParam, country, topic])
+    if (QueryParam.country) {
+      setCountryDrop({ value: QueryParam.country, label: QueryParam.country });
+      setCountry(QueryParam.country);
+    }
+    if (QueryParam.category) {
+      setTopicDrop({value:QueryParam.category, label: QueryParam.topic})
+      setTopic(QueryParam.category);
+    }
+  }, [])
+
+  useEffect(() => {
+    //console.log("QueryParam", QueryParam);
+    if(QueryParam) {
+      getAnalytics();
+    }
+  }, [QueryParam])
 
   const columns = [
     {
@@ -116,7 +148,7 @@ const analytics = () => {
       sortable: true,
       sortField: "row.trainee_enrolled",
       cell: (row, index) => {
-        if(row.trainee_enrolled > 0) {
+        if (row.trainee_enrolled > 0) {
           return (
             <Link href={`/courses/${row.id}/assigned_trainee`}>{row.trainee_enrolled}</Link>
           )
@@ -149,53 +181,51 @@ const analytics = () => {
   ];
   return (
     <>
-      <div className=" SearchandSort ">
+      {!isLoading &&
+        <><div className=" SearchandSort ">
 
-        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
-          <CategoryList onCategoryChange={handleSelectChange} addAll={true} />
-          <CountryList onCountryChange={handleCountryChange} addAll={true} />
-          <ExportToExcel exportExcelData={exportData} excelName={"Course Analytics"} />
-        </div>
-
-      </div>
-      <div className="trainee-body">
-        <div className="trainee-admincoursemanagement d-flex flex-column" style={{ minHeight: '70vh', height: 'unset' }}>
-          <div className="box-1-admincoursemanagement"></div>
-          <div className="box-2-admincoursemanagement"></div>
-          <div className="trainee-tag-admincoursemanagement">
-            <p>Analytics</p>
+          <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+            <CategoryList onCategoryChange={handleSelectChange} addAll={true} defaultVal={topicDrop} />
+            <CountryList onCountryChange={handleCountryChange} addAll={true} defaultVal={countryDrop} />
+            <ExportToExcel exportExcelData={exportData} excelName={"Course Analytics"} />
           </div>
-          {isLoading ||
-            <DataTable
-              columns={columns}
-              data={courses?.data}
-              progressPending={isLoading}
-              sortServer
-              onSort={handleSort}
-              className='table'
-              customStyles={config.dataTableStyle}
-            />
-          }
-        </div>
-      </div>
-      <div className="trainer-pagination ">
-        <nav className="pagination-container d-flex justify-content-end">
-          <ReactPaginate
-            threeDots={true}
-            pageCount={courses?.meta?.total_page}
-            disableInitialCallback={true}
-            initialPage={courses?.meta?.current_page}
-            pageRangeDisplayed={10}
-            prevNext
-            breakLabel="..."
-            onPageChange={pagginationHandler}
-            className="pagination float-end float-right"
-            pageLinkClassName='page-link pagination-link'
-            pageClassName="page-item border-0"
-            renderOnZeroPageCount={null}
-          />
-        </nav>
-      </div>
+
+        </div><div className="trainee-body">
+            <div className="trainee-admincoursemanagement d-flex flex-column" style={{ minHeight: '70vh', height: 'unset' }}>
+              <div className="box-1-admincoursemanagement"></div>
+              <div className="box-2-admincoursemanagement"></div>
+              <div className="trainee-tag-admincoursemanagement">
+                <p>Analytics</p>
+              </div>
+              {isLoading ||
+                <DataTable
+                  columns={columns}
+                  data={courses?.data}
+                  progressPending={isLoading}
+                  sortServer
+                  onSort={handleSort}
+                  className='table'
+                  customStyles={config.dataTableStyle} />}
+            </div>
+          </div><div className="trainer-pagination ">
+            <nav className="pagination-container d-flex justify-content-end">
+              <ReactPaginate
+                threeDots={true}
+                pageCount={courses?.meta?.total_page}
+                disableInitialCallback={true}
+                initialPage={courses?.meta?.current_page}
+                pageRangeDisplayed={10}
+                prevNext
+                breakLabel="..."
+                onPageChange={pagginationHandler}
+                className="pagination float-end float-right"
+                pageLinkClassName='page-link pagination-link'
+                pageClassName="page-item border-0"
+                renderOnZeroPageCount={null} />
+            </nav>
+          </div></>
+      }
+        
     </>
   );
 }
