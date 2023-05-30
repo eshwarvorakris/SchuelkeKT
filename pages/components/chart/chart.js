@@ -24,7 +24,7 @@ const ChartComponent = ({ data, chartType = "bar" }) => {
   }, [data]);
 
   return (
-    <div style={{height:'450px'}}>
+    <div style={{height:'350px'}}>
       <canvas ref={chartRef} style={{height:'100%'}}/>
     </div>
   );
