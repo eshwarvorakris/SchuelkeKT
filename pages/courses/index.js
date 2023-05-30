@@ -15,10 +15,12 @@ import Select from 'react-select';
 import _ from 'lodash';
 import moment from 'moment';
 import YearDropdown from "../components/yearDropdown";
+import ExportToExcel from "../components/ExportToExcel";
 
 const admincoursemanagement = () => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Courses List") }
+    const [exportData, setExportData] = useState(null);
     const router = useRouter();
 
     const QueryParam = router.query;
@@ -33,7 +35,28 @@ const admincoursemanagement = () => {
     const couresList = async () => {
         setisLoading(true);
         await courseModel.list(QueryParam).then((result) => {
-            //console.log("data", result);
+            console.log("data", result);
+            if (result?.data?.length > 0) {
+                var tempData = [];
+                result?.data.map((item, index) => {
+                    let question_added = helper.Capitalize(item.question_added);
+                    let status = helper.Capitalize(item.status);
+                    tempData.push({
+                        'Course Namw': item.course_name,
+                        'Topic': item?.category?.category_name,
+                        'Quiz Added': question_added,
+                        'No. Of Modules': item?.total_modules,
+                        'Training Time': item?.total_training_hour,
+                        'Published By': item?.trainer?.full_name,
+                        'Published By Email': item?.trainer?.email,
+                        'Passing Rate (%)': item.passing_rate,
+                        'Average Score': item.average_score,
+                        'Country': item.country,
+                        'Approval Status': status,
+                    })
+                })
+                setExportData(tempData);
+            }
             setCourses(result);
             setisLoading(false);
         });
@@ -87,7 +110,7 @@ const admincoursemanagement = () => {
                 const dateToCheck = new Date(row.created_at);
                 const isCurrentMonth = dateToCheck.getMonth() === currentDate.getMonth() &&
                     dateToCheck.getFullYear() === currentDate.getFullYear();
-                if(isCurrentMonth) {
+                if (isCurrentMonth) {
                     return (
                         <><p><img src="/admin-images/new.png" height={20} /><br /> {row.course_name}</p></>
                     );
@@ -100,6 +123,7 @@ const admincoursemanagement = () => {
             sortable: true,
             sortField: "course_name",
             wrap: true,
+            width: '20%',
         },
         {
             name: 'Topic',
@@ -119,7 +143,7 @@ const admincoursemanagement = () => {
                     <span className="text-capitalize">{row.question_added}</span>
                 )
             },
-            width: '8%',
+            width: '5%',
         },
         {
             name: 'No. of Module',
@@ -129,7 +153,7 @@ const admincoursemanagement = () => {
         {
             name: 'Training time',
             selector: row => row?.week_duration,
-            width: '8%',
+            width: '5%',
         },
         // {
         //     name: 'Trainee enroll',
@@ -148,7 +172,7 @@ const admincoursemanagement = () => {
                 )
             },
             wrap: false,
-            width: '15%',
+            width: '10%',
         },
         {
             name: 'Published By Email',
@@ -169,11 +193,13 @@ const admincoursemanagement = () => {
             name: 'Passing Rate(%)',
             selector: row => row?.passing_rate,
             wrap: true,
+            width: '5%',
         },
         {
             name: 'Average Score',
             selector: row => row?.average_score,
             wrap: true,
+            width: '5%',
         },
         {
             name: 'Country',
@@ -441,7 +467,8 @@ const admincoursemanagement = () => {
                                             />
                                         </div>
                                     }
-                                    <div style={{width:'10rem'}}><YearDropdown handleYear={handleYearChange} /></div>
+                                    <div style={{ width: '10rem' }}><YearDropdown handleYear={handleYearChange} /></div>
+                                    <ExportToExcel exportExcelData={exportData} excelName={"Course Lists"} />
                                     {(layoutValues?.profile?.role == 'trainer') &&
                                         <div className=" create-course ">
                                             <Link href="/courses/create" className=" btn btn-primary create-course-btn " style={{ backgroundColor: '#008bd6' }}>

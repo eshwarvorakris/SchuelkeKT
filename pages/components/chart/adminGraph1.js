@@ -65,7 +65,7 @@ const AdminGraph1 = () => {
     labels: chartLabel,
     datasets: [
       {
-        label: 'Learning Hour',
+        label: 'Learning Hours',
         data: learningHour,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
