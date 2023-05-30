@@ -12,7 +12,8 @@ const ChartComponent = ({ data, chartType = "bar" }) => {
       type: chartType,
       data: data,
       options: {
-        // Chart options
+        maintainAspectRatio:false
+
       },
     });
 
@@ -22,7 +23,11 @@ const ChartComponent = ({ data, chartType = "bar" }) => {
     };
   }, [data]);
 
-  return <canvas ref={chartRef} />;
+  return (
+    <div style={{height:'450px'}}>
+      <canvas ref={chartRef} style={{height:'100%'}}/>
+    </div>
+  );
 };
 
 export default ChartComponent;

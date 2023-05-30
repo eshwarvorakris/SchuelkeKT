@@ -29,7 +29,7 @@ const GraphComponent = ({
   };
   return (
     <div className="score-analysis">
-      <div className="graph-header" style={{ padding: '0.1rem' }}>
+      <div className="graph-header" style={{ padding: '0.1rem', minHeight:'124px' }}>
         <div className="left">
           <h6>{Title}</h6>
           <span>{Description}</span>
