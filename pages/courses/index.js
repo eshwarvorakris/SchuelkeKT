@@ -59,6 +59,8 @@ const admincoursemanagement = () => {
             }
             setCourses(result);
             setisLoading(false);
+        }).catch((error) => {
+            console.log(error.message);
         });
     }
 
@@ -91,6 +93,11 @@ const admincoursemanagement = () => {
         })
 
     }
+    const isWithin30Days = (date1, date2) => {
+        const diffTime = Math.abs(date2 - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays <= 30;
+    };
     const currentDate = new Date();
     const columns = [
         {
@@ -101,18 +108,17 @@ const admincoursemanagement = () => {
                     <p>{curIndex}</p>
                 )
             },
-            width: '7%',
+            width: '5%',
         },
         {
             name: 'Course',
             selector: row => row.course_name,
             cell: (row, index) => {
                 const dateToCheck = new Date(row.created_at);
-                const isCurrentMonth = dateToCheck.getMonth() === currentDate.getMonth() &&
-                    dateToCheck.getFullYear() === currentDate.getFullYear();
+                const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
                 if (isCurrentMonth) {
                     return (
-                        <><p><img src="/admin-images/new.png" height={20} /><br /> {row.course_name}</p></>
+                        <><p><span style={{border: '1px solid green', padding: '1px', borderRadius:'2px', fontSize:'10px'}}>New</span> {row.course_name}</p></>
                     );
                 } else {
                     return (
