@@ -108,7 +108,20 @@ const admincoursemanagement = () => {
                     <p>{curIndex}</p>
                 )
             },
-            width: '5%',
+            width: '4%',
+        },
+        {
+            name: '',
+            cell: (row, index) => {
+                const dateToCheck = new Date(row.created_at);
+                const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
+                if (isCurrentMonth) {
+                    return (
+                        <><span style={{ border: '1px solid green', padding: '1px', borderRadius: '2px', fontSize: '10px', color: 'White', backgroundColor: '#10793F' }}>New</span></>
+                    );
+                }
+            },
+            width: '3%',
         },
         {
             name: 'Course',
@@ -118,7 +131,7 @@ const admincoursemanagement = () => {
                 const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
                 if (isCurrentMonth) {
                     return (
-                        <><p><span style={{border: '1px solid green', padding: '1px', borderRadius:'2px', fontSize:'10px'}}>New</span> {row.course_name}</p></>
+                        <><p>{row.course_name}</p></>
                     );
                 } else {
                     return (
@@ -257,10 +270,11 @@ const admincoursemanagement = () => {
                 if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
                         <>
-                            <div style={{ flexWrap: 'wrap' }}>
+                            <div style={{ display: 'contents' }}>
                                 <div className='btn-group  text-nowrap'>
-                                    <Link className='btn btn-outline-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
-                                    <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    <Link className='btn btn-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
+                                    <button className='btn btn-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+
                                     {(() => {
 
                                         if (layoutValues?.profile?.role == 'admin') {
@@ -269,14 +283,14 @@ const admincoursemanagement = () => {
                                                 if (curTime.isBefore(updateLate)) {
                                                     return (
                                                         <>
-                                                            <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                            <button className='btn btn-sm' style={{ background: '#4B0082', color: 'white' }} type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
                                                         </>
                                                     );
                                                 }
                                             } else if (row.status !== "pending") {
                                                 return (
                                                     <>
-                                                        <button className='btn btn-outline-warning btn-sm' type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                        <button className='btn btn-sm' style={{ background: '#4B0082', color: 'white' }} type='button' onClick={() => courseUnapprove(row.id)} title="Undu"><i class="fa fa-undo" aria-hidden="true"></i></button>
                                                     </>
                                                 );
                                             }
@@ -287,15 +301,13 @@ const admincoursemanagement = () => {
                                     if (row.status === "approved") {
                                         return (
                                             <>
-                                                <br />
-                                                <div className='text-nowrap'>
-                                                    <Link href={`/courses/${row.id}/assign_course`} className="btn btn-outline-success btn-sm p-1" title="Assign Course">
-                                                        <img src="/site_img/assign_course.svg" height={20} />
-                                                    </Link>
-                                                    <Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-outline-warning btn-sm p-1" title="Assigned Trainees">
-                                                        <img src="/site_img/assigned_trainees.svg" height={20} />
-                                                    </Link>
-                                                </div>
+
+                                                <Link href={`/courses/${row.id}/assign_course`} className="btn btn-sm p-1" title="Assign Course" style={{backgroundColor: '#10793F'}}>
+                                                    <img src="/site_img/assign-course-white.svg" height={20} />
+                                                </Link>
+                                                <Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-warning btn-sm p-1" title="Assigned Trainees">
+                                                    <img src="/site_img/assigned-trainee-white.svg" height={20} />
+                                                </Link>
                                             </>
                                         );
                                     }
