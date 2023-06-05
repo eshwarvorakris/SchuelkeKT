@@ -288,9 +288,14 @@ const admincoursemanagement = () => {
                                         return (
                                             <>
                                                 <br />
-                                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assign_course`} className="btn btn-outline-info btn-sm p-1">Assign Course</Link></div>
-
-                                                <div className='text-nowrap'><Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-outline-info btn-sm p-1">Assigned Trainees</Link></div>
+                                                <div className='text-nowrap'>
+                                                    <Link href={`/courses/${row.id}/assign_course`} className="btn btn-outline-success btn-sm p-1" title="Assign Course">
+                                                        <img src="/site_img/assign_course.svg" height={20} />
+                                                    </Link>
+                                                    <Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-outline-warning btn-sm p-1" title="Assigned Trainees">
+                                                        <img src="/site_img/assigned_trainees.svg" height={20} />
+                                                    </Link>
+                                                </div>
                                             </>
                                         );
                                     }
