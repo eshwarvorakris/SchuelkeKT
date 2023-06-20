@@ -6,6 +6,7 @@ const Course = require("../models/Course.model");
 const User = require("../models/User.model");
 const { Sequelize, Op, DataTypes } = require("sequelize");
 const Assigned_courses = require("../models/Assigned_courses.model");
+const { traineeCourseEnrollmentToTrainee } = require("../lib/emails")
 const courseAssignController = class {
   async index(req, res) {
     if (req?.query?.id) {

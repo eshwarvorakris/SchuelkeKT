@@ -9,7 +9,8 @@ const { Sequelize, Op, DataTypes } = require("sequelize");
 const Assigned_courses = require("../models/Assigned_courses.model");
 const CourseView = require("../models/Course_views.model");
 const AssignmentAttempt = require("../models/Assignment_attempt.model");
-const Revisit = require("../models/Course_revisit.model")
+const Revisit = require("../models/Course_revisit.model");
+const { newCourseAddedMail, courseModified, courseModifiedToTrainer } = require("../lib/emails")
 const courseController = class {
   async index(req, res) {
     let search = req.query.search;
@@ -252,6 +253,7 @@ const courseController = class {
     await Course
       .create(req.body)
       .then((result) => {
+        newCourseAddedMail(req?.body?.course_name, "", req?.userName, req?.body?.week_duration, req?.body?.course_description)
         User.increment({ course_count: 1 }, { where: { id: req.userId } })
         res.send(result);
       })
@@ -308,6 +310,8 @@ const courseController = class {
     const course = await Course.findByPk(req.params.id);
     if (course) {
       const courseup = await course.update(req.body);
+      courseModified(req?.body?.course_name, req?.userName);
+      courseModifiedToTrainer(req?.body?.course_name, req?.userName);
       return res.send({ data: courseup });
     }
     return res.status(422).send(

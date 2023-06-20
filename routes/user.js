@@ -15,6 +15,8 @@ router.post("/", userController.store);
 router.put("/:id", userController.update);
 router.delete("/:id", userController.destroy);
 
+router.post("/sendemailnoti", userController.sendMailNoti);
+
 router.put("/", verifyAuth.verifyUser, userController.updateProfile);
 
 module.exports = router;

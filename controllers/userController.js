@@ -1,5 +1,6 @@
 const express = require("express");
-const { getPaginate } = require("../lib/helpers");
+const { getPaginate, sendMail } = require("../lib/helpers");
+const { newCourseAddedMail, newTraineeAddedByTrainer, trainerProfileUpdated, traineeAddedToTrainee } = require("../lib/emails")
 const User = require("../models/User.model");
 const Course = require("../models/Course.model");
 const CourseView = require("../models/Course_views.model");
@@ -494,7 +495,10 @@ const userController = class {
     );
 
     if (await validation.passes()) {
-
+      console.clear();
+      console.log("=====================================starts here ============================================");
+      const sentmail = await sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
+      console.log("sentmail", sentmail)
       var userId = await User.max('user_id', { where: { role: "trainee" } });
       var userIdInitial = 50000000;
       if (req.body.role) {
@@ -511,6 +515,14 @@ const userController = class {
       const salt = bcrypt.genSaltSync(saltRounds);
       req.body.password = bcrypt.hashSync(req.body.password, salt);
       User.create(req.body).then((result) => {
+        if(req.userRole == "trainer") {
+          newTraineeAddedByTrainer(req?.body?.full_name, userId, req?.body?.email, req.userName);
+        }
+
+        if(req.body.role == "trainee") {
+          traineeAddedToTrainee(req?.body?.email, req?.body?.full_name, req?.body?.password);
+        }
+        //sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
         res.send({ data: result });
       }).catch((error) => {
         console.error("Unable To Add User : ", error);
@@ -530,7 +542,41 @@ const userController = class {
         }
       );
     }
-  };
+  }
+
+  async sendMailNoti(req, res) {
+    /* const nodemailer = require('nodemailer');
+
+    let config = {
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: process.env.EMAIL_SECURE, // true for 465, false for other ports
+      auth: {
+        user: process.env.EMAIL_USER, // generated ethereal user
+        pass: process.env.EMAIL_PASS, // generated ethereal password
+      },
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let message = {
+      from: process.env.EMAIL_FROM, // sender address
+      to: "wassupprabhakar@gmail.com", // list of receivers
+      subject: "Hello mail", // Subject line
+      text: "Successfully Register with us check again.", // plain text body
+      html: "<b>Successfully Register with us.</b>", // html body
+    }
+
+    transporter.sendMail(message).then(() => {
+      return res.status(201).json({
+        msg: "you should receive an email"
+      })
+    }).catch(error => {
+      return res.status(500).json({ error })
+    }) */
+    newCourseAddedMail();
+    return res.send("Mail Sent")
+  }
 
   async store(req, res) {
     await User
@@ -588,6 +634,9 @@ const userController = class {
     const user = await User.findByPk(req.params.id);
     if (user) {
       user.update(req.body);
+      if(req.userRole == "trainer") {
+        trainerProfileUpdated(req?.body?.full_name, req?.body?.email)
+      }
       return res.send({ data: user });
     }
     return res.status(422).send(
