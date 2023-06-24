@@ -7,6 +7,8 @@ import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
 import AppContext from "../../../lib/appContext";
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Link from "next/link";
 const addTrainee = () => {
     const router = useRouter();
@@ -141,7 +143,20 @@ const addTrainee = () => {
                         <div className="trainer-email-password">
                             <div className="d-flex gap-2 text-info">
                                 <h6>Create password</h6>
-                                <span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                <OverlayTrigger
+                                    delay={{ hide: 450, show: 300 }}
+                                    overlay={(props) => (
+                                        <Tooltip {...props} className="descTooltip">
+                                            Password must contain:
+                                            <ul>
+                                                <li>8 Characters</li>
+                                                <li>Combination of upper and lowercase letters, numbers, punctuation, and special symbols</li>
+                                            </ul>
+                                        </Tooltip>
+                                    )}
+                                    placement="bottom"
+                                ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                </OverlayTrigger>
                                 <span style={{ color: passwordStrengthColor, fontSize: '12px' }}>password strength -
                                     <strong>{passwordStrengthText}</strong></span>
                             </div>

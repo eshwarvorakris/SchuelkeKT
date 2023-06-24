@@ -79,7 +79,7 @@ const AdminGraph1 = () => {
         borderWidth: 1,
       },
       {
-        label: 'Time For Completion',
+        label: 'Time of Completion',
         data: completionHour,
         backgroundColor: 'rgba(74, 50, 168, 0.5)',
         borderColor: 'rgba(74, 50, 168, 1)',

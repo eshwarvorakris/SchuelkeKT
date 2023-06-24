@@ -289,91 +289,53 @@ const editTrainee = () => {
                             </div> */}
                         </div>
 
+                        {allAsignments?.length > 0 &&
+                                <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td style={{ width: '15%' }}>Course Name</td>
+                                            <td style={{ width: '10%' }}>Course Status</td>
+                                            <td style={{ width: '5%' }}>No. of Attempts</td>
+                                            <td style={{ width: '7%' }}>Average Time Spent</td>
+                                            <td style={{ width: '5%' }}>Average Score</td>
+                                            <td style={{ width: '5%' }}>Obtained Score</td>
+                                            <td style={{ width: '5%' }}>Status</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {allAsignments?.map((item, index) => {
+                                            curStatus = 'Submitted';
+                                            submitColor = 'text-success';
+                                            if (item?.curData?.status != "submitted") {
+                                                submitColor = 'text-danger';
+                                                curStatus = 'Not Submitted<';
+                                            }
+                                            passStatusColor = 'text-success';
+                                            passStatus = "Pass";
+                                            if (item?.maxPercent < 80) {
+                                                passStatusColor = 'text-danger';
+                                                passStatus = 'Fail';
+                                            }
+                                            averageScore = (item?.totalScore / item.totalAttempts)
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{item?.curData?.course?.course_name}</td>
+                                                    <td className={submitColor}><span>{curStatus}</span></td>
+                                                    <td>{item.totalAttempts}</td>
+                                                    <td>{item.averageTimeSpent} %</td>
+                                                    <td>{averageScore}%</td>
+                                                    <td className={passStatusColor}>{item?.maxPercent}%</td>
+                                                    <td className={passStatusColor}>{passStatus}</td>
+                                                </tr>
+                                            );
+                                        })}
 
-                        <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <td style={{ width: '15%' }}>Course Name</td>
-                                        <td style={{ width: '10%' }}>Course Status</td>
-                                        <td style={{ width: '5%' }}>No. of Attempts</td>
-                                        <td style={{ width: '7%' }}>Average Time Spent</td>
-                                        <td style={{ width: '5%' }}>Average Score</td>
-                                        <td style={{ width: '5%' }}>Obtained Score</td>
-                                        <td style={{ width: '5%' }}>Status</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {allAsignments?.map((item, index) => {
-                                        curStatus = 'Submitted';
-                                        submitColor = 'text-success';
-                                        if (item?.curData?.status != "submitted") {
-                                            submitColor = 'text-danger';
-                                            curStatus = 'Not Submitted<';
-                                        }
-                                        passStatusColor = 'text-success';
-                                        passStatus = "Pass";
-                                        if (item?.maxPercent < 80) {
-                                            passStatusColor = 'text-danger';
-                                            passStatus = 'Fail';
-                                        }
-                                        averageScore = (item?.totalScore / item.totalAttempts)
-                                        return (
-                                            <tr key={index}>
-                                                <td>{item?.curData?.course?.course_name}</td>
-                                                <td className={submitColor}><span>{curStatus}</span></td>
-                                                <td>{item.totalAttempts}</td>
-                                                <td>{item.averageTimeSpent} %</td>
-                                                <td>{averageScore}%</td>
-                                                <td className={passStatusColor}>{item?.maxPercent}%</td>
-                                                <td className={passStatusColor}>{passStatus}</td>
-                                            </tr>
-                                        );
-                                    })}
-
-                                    {/* <tr>
-                                        <td>Assignment 2</td>
-                                        <td className="text-danger">
-                                            <span>Not Submitted</span>
-                                        </td>
-                                        <td>-</td>
-                                        <td>90%</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Assignment 3</td>
-                                        <td className="text-success">
-                                            <span>Submitted</span>
-                                        </td>
-                                        <td>2</td>
-                                        <td>94%</td>
-                                        <td className="text-warning">86%</td>
-                                        <td className="text-success">Pass</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Assignment 4</td>
-                                        <td className="text-success">
-                                            <span>Submitted</span>
-                                        </td>
-                                        <td>1</td>
-                                        <td>93%</td>
-                                        <td className="text-danger">24%</td>
-                                        <td className="text-danger">Fail</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Final Assignment</td>
-                                        <td className="">
-                                            <span>Not Started</span>
-                                        </td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr> */}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        
                         <div className="btn-container d-flex justify-content-between mt-5 mb-5" style={{ padding: 'unset' }}>
                             <div className="left-col d-flex gap-4">
 

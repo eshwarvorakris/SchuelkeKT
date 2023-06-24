@@ -14,7 +14,7 @@ export default function adminWidgets() {
           <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
             <h1 className="text-light" >{traineeKpi?.totalCourse}</h1>
           </div>
-          <div className="explicit-info text-light">
+          <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Total Courses</p>
           </div>
         </div>
@@ -24,10 +24,10 @@ export default function adminWidgets() {
       </div>
       <div className="enrolled-trainees">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
             <h1 className="text-light">{traineeKpi?.totalCourse - traineeKpi?.totalCourseCompleted}</h1>
           </div>
-          <div className="explicit-info text-light">
+          <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Courses Pending</p>
           </div>
         </div>
@@ -37,10 +37,10 @@ export default function adminWidgets() {
       </div>
       <div className="training-hours">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+          <div className="numeric-info text-light"  style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
             <h1 className="text-light">{traineeKpi?.totalCourseCompleted}</h1>
           </div>
-          <div className="explicit-info text-light">
+          <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Courses Completed</p>
           </div>
         </div>
@@ -50,11 +50,11 @@ export default function adminWidgets() {
       </div>
       <div className="courses-completion">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset' }}>
+          <div className="numeric-info text-light"  style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
             <h1 className="text-light">{traineeKpi?.totalTrainingHour}</h1>
           </div>
-          <div className="explicit-info text-light">
-            <p>Total Learing Mins</p>
+          <div className="explicit-info text-light" style={{fontSize:'14px'}}>
+            <p>Total Learing Time</p>
           </div>
         </div>
         <div className="right-icon">

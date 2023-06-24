@@ -120,7 +120,7 @@ const addcourse = ({ categories }) => {
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip {...props}>
-                                                    Course Name
+                                                    A name that best describe your course
                                                 </Tooltip>
                                             )}
                                             placement="bottom"
@@ -137,7 +137,7 @@ const addcourse = ({ categories }) => {
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip {...props}>
-                                                    Course Category
+                                                    Blanket, Country-specific or Product-specific
                                                 </Tooltip>
                                             )}
                                             placement="bottom"
@@ -156,7 +156,7 @@ const addcourse = ({ categories }) => {
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip {...props}>
-                                                    Number of Modules
+                                                    Number of modules to attend within the course
                                                 </Tooltip>
                                             )}
                                             placement="bottom"
@@ -172,7 +172,7 @@ const addcourse = ({ categories }) => {
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip {...props}>
-                                                    Course Launch Date
+                                                    The proposed ‘go live’ date
                                                 </Tooltip>
                                             )}
                                             placement="bottom"
@@ -243,7 +243,7 @@ const addcourse = ({ categories }) => {
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip {...props}>
-                                                    Weeks Required for Completion
+                                                    Deadline in week(s) required for to complete the course
                                                 </Tooltip>
                                             )}
                                             placement="bottom"
@@ -258,7 +258,7 @@ const addcourse = ({ categories }) => {
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
                                                 <Tooltip {...props}>
-                                                    Total Training Hour
+                                                    Approximate no. of hours that the trainee has to spent doing this course (so as to give the trainee an approximate timing to plan their schedule accordingly)
                                                 </Tooltip>
                                             )}
                                             placement="bottom"
@@ -276,8 +276,12 @@ const addcourse = ({ categories }) => {
                                     Course Description <span><OverlayTrigger
                                         delay={{ hide: 450, show: 300 }}
                                         overlay={(props) => (
-                                            <Tooltip {...props}>
-                                                Course Description
+                                            <Tooltip {...props} className="descTooltip">
+                                                A short but informative description on what the course encompassed. Include:
+                                                <ul>
+                                                    <li>Background of the course</li>
+                                                    <li>Objectives to achieve for the trainees</li>
+                                                </ul>
                                             </Tooltip>
                                         )}
                                         placement="bottom"

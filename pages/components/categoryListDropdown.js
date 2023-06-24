@@ -18,9 +18,9 @@ export default function categorySelect(props) {
         //console.log(countries)
         if (props?.addAll) {
           if (props.addAll === true) {
-            opt.push({ value: 'all', label: 'All Topic' });
+            opt.push({ value: 'all', label: 'All Topics' });
             if (!props?.defaultVal) {
-              setSelectedOption({ value: 'all', label: 'All Topic' })
+              setSelectedOption({ value: 'all', label: 'All Topics' })
             }
           }
         }

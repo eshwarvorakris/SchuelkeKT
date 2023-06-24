@@ -16,8 +16,8 @@ export default function countrySelect(props) {
         let countries = _.orderBy(result, [function (o) { return o.name.common; }], ['asc']);
         if(props?.addAll) {
           if(props.addAll === true) {
-            opt.push({ value: 'all', label: 'All Country' })
-            setSelectCountry({ value: 'all', label: 'All Country' });
+            opt.push({ value: 'all', label: 'All Countries' })
+            setSelectCountry({ value: 'all', label: 'All Countries' });
           }
         }
         countries?.map((item, index) => {

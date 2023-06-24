@@ -102,6 +102,9 @@ const trainer = () => {
             name: 'No. of Courses Published',
             selector: row => row?.course_count,
             cell: row => {
+                if(row?.course_count < 0) {
+                    row.course_count = 0
+                }
                 return (
                     <p>{row?.course_count}</p>
                 )

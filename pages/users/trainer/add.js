@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Link from 'next/link';
 const addTrainer = () => {
     const router = useRouter();
@@ -31,7 +33,7 @@ const addTrainer = () => {
                     helper.sweetalert.toast("Trainer Added");
                     router.push("/users/trainer");
                 }).catch((error) => {
-                    if(error.response?.data?.errors?.[0]?.message == "email must be unique") {
+                    if (error.response?.data?.errors?.[0]?.message == "email must be unique") {
                         seterrorMessage("This email address is not available for creation.");
                         helper.sweetalert.toast("This email address is not available for creation.", "warning");
                     } else if (error.response?.data?.errors?.[0]?.message == "contact_no must be unique") {
@@ -40,7 +42,7 @@ const addTrainer = () => {
                     } else {
                         seterrorMessage(error.response?.data?.errors?.[0]?.message);
                     }
-                    
+
                     console.error(error.response?.data)
                     setFormErrors(error.response?.data?.errors);
                 })
@@ -92,7 +94,7 @@ const addTrainer = () => {
             strength += 1;
         }
 
-        if(strength < 2) {
+        if (strength < 2) {
             setPasswordStrengthText("Low");
             setPasswordStrengthColor("red");
         } else if (strength == 3) {
@@ -140,7 +142,20 @@ const addTrainer = () => {
                         <div className="trainer-email-password">
                             <div className="d-flex gap-2 text-info">
                                 <h6>Create password</h6>
-                                <span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                <OverlayTrigger
+                                    delay={{ hide: 450, show: 300 }}
+                                    overlay={(props) => (
+                                        <Tooltip {...props} className="descTooltip">
+                                            Password must contain:
+                                            <ul>
+                                                <li>8 Characters</li>
+                                                <li>Combination of upper and lowercase letters, numbers, punctuation, and special symbols</li>
+                                            </ul>
+                                        </Tooltip>
+                                    )}
+                                    placement="bottom"
+                                ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
+                                </OverlayTrigger>
                                 <span style={{ color: passwordStrengthColor, fontSize: '12px' }}>password strength -
                                     <strong>{passwordStrengthText}</strong></span>
                             </div>

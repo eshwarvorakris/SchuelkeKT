@@ -368,7 +368,7 @@ function index() {
                     of
                     infection prevention
                     control and wound
-                    care. All topics within this categories will be applicable to all trainees who will learn and acquire
+                    care. All topics within this category will be applicable to all trainees who will learn and acquire
                     the necessary knowledge to facilitate their work (sales, marketing etc.) within schülke product
                     offerings in IPC and wound care. </strong>
                 </h5>
@@ -388,13 +388,10 @@ function index() {
                 <h5 className="align-middle card-p" style={{ textAlign: 'center' }}>Information of the different products in your region</h5>
                 <h5 className="align-middle popup-p" style={{ width: '60%', margin: "auto" }}>
                   <strong>
-                    Product topics covers the different
+                    Product topics cover the different
                     information
-                    of the products within your region of concerns. Basic information of the products and field-specific
-                    questions derived from the individual trainers/colleagues will be shared. These modules will provide
-                    you
-                    with essential information to prepare individuals to speak about the products and to answer any common
-                    asked questions. </strong>
+                    of the products within your region of interest. Basic information of the products and field-specific
+                    questions derived from the individual trainers/colleagues will be shared. These modules will provide you with the essential information to speak about the products and to answer commonly asked questions. </strong>
                 </h5>
               </Modal.Body>
               <Modal.Footer>

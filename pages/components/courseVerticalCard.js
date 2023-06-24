@@ -26,7 +26,7 @@ export default function courseVerticalCard({ courseData, courseIndex }) {
               alt="Card image cap" />
             {courseStatus == "locked" &&
               <>
-                <div className="card-tagupdate" style={{zIndex:'1'}}><i className=" fa fa-lock" aria-hidden="true"></i></div>
+                {/* <div className="card-tagupdate" style={{zIndex:'1'}}><i className=" fa fa-lock" aria-hidden="true"></i></div> */}
               </>
             }
 

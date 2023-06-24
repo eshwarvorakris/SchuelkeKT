@@ -443,16 +443,8 @@ const admincoursemanagement = () => {
                                                 <option value="all">All Status</option>
                                                 <option value="approved">Approved</option>
                                                 <option value="pending">Pending</option>
-                                                {
-                                                    (() => {
-                                                        if (layoutValues?.profile?.role == 'admin') {
-                                                            return (
-                                                                <>
-                                                                    <option value="rejected">Rejected</option>
-                                                                </>);
-                                                        }
-                                                    })()
-                                                }
+                                                <option value="rejected">Rejected</option>
+                                                
                                             </select>
                                         </div>
                                     }

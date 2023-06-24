@@ -16,6 +16,7 @@ export default function adminDashboardGraph() {
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "created_at";
   QueryParam.order_in = router.query?.order_in || "desc";
+  QueryParam.status = "approved";
   const { data: courses, error: courseerror, isLoading: courseisLoading, mutate:loadCourse } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
   const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR(QueryParam ? "categorylist" : null, async () => await categoryModel.list(), config.swrConfig);
   const pagginationHandler = (page) => {
