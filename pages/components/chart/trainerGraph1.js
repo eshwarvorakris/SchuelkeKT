@@ -64,7 +64,7 @@ const TrainerGraph1 = () => {
         chartType={`bar`}
         isYear={false}
         isCategory={true}
-        Title={`Country Performance`}
+        Title={`Countries Performance`}
         Description={`Only showing data for trainees enrolled in your module`}
         showMore={true}
         showMoreLink="get_enrolled"

@@ -31,7 +31,7 @@ const mygrade = () => {
                         <div className="body-row">
                             <div style={{width:'30%'}}><span><strong>Grade Items</strong></span></div>
                             <div style={{width:'15%'}}><span><strong>Percentage</strong></span></div>
-                            <div style={{width:'15%'}}><span><strong>Assignment<br />Attempt<br />Count</strong></span></div>
+                            <div style={{width:'15%'}}><span><strong>Assessment<br />Attempt<br />Count</strong></span></div>
                             <div style={{width:'15%'}}><span><strong>Course<br />Attempt<br />Count</strong></span></div>
                             <div style={{width:'25%'}}><span><strong>Submitted On</strong></span></div>
                         </div>
