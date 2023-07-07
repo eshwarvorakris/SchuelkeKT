@@ -496,9 +496,9 @@ const userController = class {
 
     if (await validation.passes()) {
       console.clear();
-      console.log("=====================================starts here ============================================");
-      const sentmail = await sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
-      console.log("sentmail", sentmail)
+      
+      // const sentmail = await sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
+      // console.log("sentmail", sentmail)
       var userId = await User.max('user_id', { where: { role: "trainee" } });
       var userIdInitial = 50000000;
       if (req.body.role) {
@@ -513,14 +513,16 @@ const userController = class {
       req.body.user_id = userId;
       const saltRounds = 10;
       const salt = bcrypt.genSaltSync(saltRounds);
+      const userPass = req.body.password;
       req.body.password = bcrypt.hashSync(req.body.password, salt);
       User.create(req.body).then((result) => {
         if(req.userRole == "trainer") {
           newTraineeAddedByTrainer(req?.body?.full_name, userId, req?.body?.email, req.userName);
         }
-
-        if(req.body.role == "trainee") {
-          traineeAddedToTrainee(req?.body?.email, req?.body?.full_name, req?.body?.password);
+        console.log("req.body", req.body)
+        if(!req.body.role) {
+          console.log("================================mail send to trainee start============================");
+          traineeAddedToTrainee(req?.body?.email, req?.body?.full_name, userPass);
         }
         //sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
         res.send({ data: result });
