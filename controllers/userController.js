@@ -370,8 +370,8 @@ const userController = class {
   }
 
   async getTrainer(req, res) {
-    await sendMail("vasishta@outshade.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
-    await sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
+    // await sendMail("vasishta@outshade.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
+    // await sendMail("nirkkm94@gmail.com", "User Added", "A new User added please check", "<p>A new User added please check</p>");
     if (req.query.filter) {
       if (req.query.filter == "country") {
         if (req.query.filterParam != "all") {
