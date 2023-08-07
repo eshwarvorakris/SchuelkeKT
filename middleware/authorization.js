@@ -5,7 +5,7 @@ const Authorization = class {
 
   async verifyUser(req, res, next) {
     try {
-      console.log(req.headers["authorization"]);
+      //console.log(req.headers["authorization"]);
       const authHeader = req.headers["authorization"];
       const token = authHeader && authHeader.split(" ")[1];
       if (!token) {

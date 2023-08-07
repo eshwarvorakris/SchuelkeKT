@@ -489,7 +489,7 @@ const widgetController = class {
   async trainerGraph1(req, res) {
     var enrolledTrainee = 0;
     var traineeCompleted = 0;
-
+    console.clear();
     let temp = null;
     let temp2 = null;
     var traineeCondition = [];
@@ -506,13 +506,19 @@ const widgetController = class {
       temp.where = { category_id: req.body.category, trainer_id: req.userId };
     }
     traineeCondition.push(temp);
-    temp2 = temp;
+    temp2 = {
+      model: Course,
+      as: 'course',
+      attributes: [],
+      where: { trainer_id: req.userId },
+    };
     temp2.include = [
       {
         model: CourseView,
         where: { status: 'completed' },
       },
     ];
+    console.log(traineeCondition)
     traineeCondition2.push(temp2);
 
     if (req.body.country !== "all" && req.body.country !== undefined) {
@@ -525,7 +531,7 @@ const widgetController = class {
       traineeCondition.push(temp);
       traineeCondition2.push(temp);
     }
-
+    
     enrolledTrainee = await Assigned_courses.count({
       distinct: true,
       col: 'trainee_id',

@@ -5,6 +5,7 @@ const Content = require("../models/Module_content.model");
 const CourseView = require("../models/Course_views.model");
 const ModuleView = require("../models/Module_views.model");
 const ChapterView = require("../models/Chapter_views.model");
+const Assigned_courses = require("../models/Assigned_courses.model");
 const User = require("../models/User.model");
 const Module = require("../models/Module.model");
 const Revisit = require("../models/Course_revisit.model")
@@ -58,12 +59,14 @@ const courseController = class {
     //console.clear();
     //console.log(req.body);
     let allContentInCourse = await Content.count({ where: { course_id: req.body.course_id } });
+    let courseData = await Course.findByPk(req?.body?.course_id);
     let courseContentCompletedCount = await ChapterView.count({ where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id, status: 'completed' } });
     let totalCourseView = await CourseView.findOne({ where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id } });
     const data = {
       allContentInCourse: allContentInCourse,
       courseContentCompletedCount: courseContentCompletedCount,
-      totalCourseView: totalCourseView
+      totalCourseView: totalCourseView,
+      courseData
     }
     res.send(data);
   }
@@ -190,7 +193,7 @@ const courseController = class {
   }
 
   async getEachCourseStat(req, res) {
-    const countTrainee = await CourseView.count({ where: { course_id: req.body.course_id } });
+    const countTrainee = await Assigned_courses.count({ where: { course_id: req.body.course_id } });
     const countCourseCompletedUsers = await CourseView.count({ where: { course_id: req.body.course_id, status: 'completed' } });
     const timeSpentByUserInCourse = await CourseView.sum('viewed_seconds', { where: { course_id: req.body.course_id } });
     let userCompletePercent = 0;
@@ -235,8 +238,8 @@ const courseController = class {
                 viewed_seconds: 30,
               });
             } else {
-              await Revisit.increment({ viewed_seconds: req.body.viewed_seconds }, { 
-                where: { id: entryExists?.dataValues?.id } 
+              await Revisit.increment({ viewed_seconds: req.body.viewed_seconds }, {
+                where: { id: entryExists?.dataValues?.id }
               })
             }
           }
