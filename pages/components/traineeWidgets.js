@@ -24,8 +24,8 @@ export default function adminWidgets() {
       </div>
       <div className="enrolled-trainees">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light">{traineeKpi?.totalCourse - traineeKpi?.totalCourseCompleted}</h1>
+          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText">{traineeKpi?.totalCourse - traineeKpi?.totalCourseCompleted}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Courses Pending</p>
@@ -37,8 +37,8 @@ export default function adminWidgets() {
       </div>
       <div className="training-hours">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light"  style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light">{traineeKpi?.totalCourseCompleted}</h1>
+          <div className="numeric-info text-light"  style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText">{traineeKpi?.totalCourseCompleted}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Courses Completed</p>
@@ -50,8 +50,8 @@ export default function adminWidgets() {
       </div>
       <div className="courses-completion">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light"  style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light">{traineeKpi?.totalTrainingHour}</h1>
+          <div className="numeric-info text-light"  style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText">{traineeKpi?.totalTrainingHour}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Total Learing Time</p>

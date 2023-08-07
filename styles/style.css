@@ -1156,3 +1156,8 @@ th {
 #pdf-download {
   display: none !important;
 }
+
+.widgetText {
+  margin-left: unset !important;
+  float: left !important;
+}

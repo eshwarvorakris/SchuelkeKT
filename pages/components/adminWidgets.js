@@ -12,8 +12,8 @@ export default function adminWidgets() {
     <>
       <div className="total-courses">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light" >{courseCount?.data?.total}</h1>
+          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText" >{courseCount?.data?.total}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Total Courses</p>
@@ -25,8 +25,8 @@ export default function adminWidgets() {
       </div>
       <div className="enrolled-trainees">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light">{totalTrainee?.data?.total}</h1>
+          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText">{totalTrainee?.data?.total}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Total Trainees</p>
@@ -44,8 +44,8 @@ export default function adminWidgets() {
       </div>
       <div className="training-hours">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light">{totalTrainer?.data?.total}</h1>
+          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText">{totalTrainer?.data?.total}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Total Trainers</p>
@@ -57,8 +57,8 @@ export default function adminWidgets() {
       </div>
       <div className="courses-completion">
         <div className="left-info" style={{ justifySelf: 'unset' }}>
-          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative', left:'2vw' }}>
-            <h1 className="text-light">{7*24*courseWeek?.data?.total}</h1>
+          <div className="numeric-info text-light" style={{ marginTop: 'unset', position:'relative' }}>
+            <h1 className="text-light widgetText">{7*24*courseWeek?.data?.total}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
             <p>Training Hours</p>
