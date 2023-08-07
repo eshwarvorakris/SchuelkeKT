@@ -27,11 +27,11 @@ const editTrainee = () => {
     const [courses, setCourses] = useState(null);
 
     const couresList = async () => {
-        if(router.query.id !== "" && router.query.id !== undefined && router.query.id !== null) {
+        if (router.query.id !== "" && router.query.id !== undefined && router.query.id !== null) {
             const formData = new FormData();
             formData.append("trainee_id", router.query.id)
             await courseModel.getTraineeAssignedCourses(formData).then(async (result) => {
-                if(result) {
+                if (result) {
                     //console.clear();
                     console.log(result?.data);
                     setCourses(result);
@@ -103,7 +103,7 @@ const editTrainee = () => {
                         <p>Trainee Status</p>
                     </div>
 
-                    <div className="assignment-table" style={{marginTop:'0.5rem'}}>
+                    <div className="assignment-table" style={{ marginTop: '0.5rem' }}>
                         {(layoutValues?.profile?.role == 'admin') &&
                             <div className="dashboard-info" style={{ padding: '2rem 0rem', marginTop: 'unset' }}>
                                 <div className="total-courses" style={{ padding: '1rem 2rem' }}>
@@ -290,7 +290,7 @@ const editTrainee = () => {
                         </div>
 
                         {allAsignments?.length > 0 &&
-                                <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
+                            <div className="table-data" style={{ padding: '2rem 0rem 0rem 0rem', height: 'fit-content', overflow: 'unset', paddingBottom: '2rem' }}>
                                 <table>
                                     <thead>
                                         <tr>
@@ -335,7 +335,7 @@ const editTrainee = () => {
                                 </table>
                             </div>
                         }
-                        
+
                         <div className="btn-container d-flex justify-content-between mt-5 mb-5" style={{ padding: 'unset' }}>
                             <div className="left-col d-flex gap-4">
 

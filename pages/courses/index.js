@@ -417,7 +417,7 @@ const admincoursemanagement = () => {
                     if (layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin') {
                         return (
                             <>
-                                <div className=" SearchandSort ">
+                                <div className=" SearchandSort">
                                     <div className=" search-button-mycourse d-flex ">
                                         <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
                                         <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>

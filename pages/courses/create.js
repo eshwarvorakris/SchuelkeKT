@@ -39,7 +39,7 @@ const addcourse = ({ categories }) => {
             await courseModel.create(formData).then((res) => {
                 // console.clear();
                 // console.log(res.data.id)
-                setDisableBtn(false);
+                //setDisableBtn(false);
                 setModuleLink(`/courses/${res.data.id}/module`);
                 setAssignmentLink(`/courses/${res.data.id}/assessment`);
                 helper.sweetalert.toast("course Created");

@@ -16,7 +16,7 @@ const TrainerGraph1 = () => {
     setTraineeCompleted(0);
     setEnrolledTrainee(0);
     await widgetModel.trainerGraph1(formData).then((result) => {
-      //console.log(result.data);
+      console.log(result.data);
       if (result.data) {
         setTraineeCompleted(result.data.traineeCompleted);
         setEnrolledTrainee(result.data.enrolledTrainee);
@@ -40,7 +40,7 @@ const TrainerGraph1 = () => {
       },
       {
         label: 'Trainees Completed Courses',
-        data: [enrolledTrainee],
+        data: [traineeCompleted],
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,

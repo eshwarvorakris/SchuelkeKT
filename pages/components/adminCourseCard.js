@@ -29,13 +29,21 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
       moduleViewData.append("trainee_id", router.query.id);
       moduleViewData.append("course_id", courseData?.id);
       CourseViewModel.getCourseViewData(moduleViewData).then((res) => {
-        //console.log("current course data", res.data);
+        console.log("current course data", res.data);
         if (res?.data) {
           setCompletedContent(res?.data?.courseContentCompletedCount);
           setTotalContent(res?.data?.allContentInCourse);
           let percentage = 0
           if (res?.data?.allContentInCourse > 0) {
-            percentage = parseInt((res?.data?.courseContentCompletedCount / res?.data?.allContentInCourse) * 100);
+            let maxTrainingSec = parseInt(parseFloat(res?.data?.courseData?.total_training_hour) * 60 * 60);
+            let totalViewSec = parseInt(res?.data?.totalCourseView?.viewed_seconds);
+            console.log("max sec = ", maxTrainingSec);
+            console.log("total sec = ", totalViewSec);
+            if (totalViewSec > maxTrainingSec) {
+              percentage = 100;
+            } else {
+              percentage = parseInt((totalViewSec / maxTrainingSec) * 100);
+            }
           }
 
           setCoursePercent(percentage);
@@ -57,6 +65,8 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
             }
           }
         }
+      }).catch((error) => {
+
       });
     }
   }, [router.query.id])
@@ -94,7 +104,7 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
                   <div className="dot-label" style={{ backgroundColor: statusColor }}></div>
                   <span style={{ fontSize: '10px', color: statusColor }}>{courseStatus}</span>
                 </div>
-                <div className="time-left-info" style={{cursor:'pointer'}} onClick={() => setShowRevisitModal(true)}>Revisited {revisit.count} times</div>
+                <div className="time-left-info" style={{ cursor: 'pointer' }} onClick={() => setShowRevisitModal(true)}>Revisited {revisit.count} times</div>
                 {revisit.count > 0 &&
                   <Modal
                     show={showRevisitModal}

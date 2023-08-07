@@ -1138,16 +1138,21 @@ th {
 
 .sc-hLBbgP {
   padding: 3px !important;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
 }
 
 .descTooltip {
   --bs-tooltip-max-width: unset !important;
 }
-.descTooltip >.tooltip-inner {
+
+.descTooltip>.tooltip-inner {
   width: 320px !important;
   text-align: inherit;
   padding: 16px;
 }
+
 #pdf-download {
   display: none !important;
 }

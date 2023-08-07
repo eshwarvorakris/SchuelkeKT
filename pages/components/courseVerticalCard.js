@@ -11,9 +11,9 @@ export default function courseVerticalCard({ courseData, courseIndex }) {
   }
   let courseStatus = "locked";
 
-  let time = courseData?.week_duration * 7 * 24;
-  var Hours = Math.floor(time / 60);
-  var minutes = time % 60;
+  const totalMinutes = Math.round(courseData?.total_training_hour * 60);
+  var Hours = Math.floor(totalMinutes / 60);
+  var minutes = totalMinutes % 60;
   var hourOut = Hours + "hrs " + minutes + "mins";
   return (
     <>
@@ -22,7 +22,7 @@ export default function courseVerticalCard({ courseData, courseIndex }) {
           <div className="card-thumbnail">
             <img className="card-img card-img-top"
               src={courseImg}
-              style={{maxHeight:'145px'}}
+              style={{ maxHeight: '145px' }}
               alt="Card image cap" />
             {courseStatus == "locked" &&
               <>
@@ -32,7 +32,7 @@ export default function courseVerticalCard({ courseData, courseIndex }) {
 
             {courseStatus != "locked" &&
               <>
-                <div className="card-text-tag" style={{zIndex:'1'}}>
+                <div className="card-text-tag" style={{ zIndex: '1' }}>
                   <span
                     className="success-text-tag text-success">Completed</span>
                 </div>
