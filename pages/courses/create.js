@@ -32,22 +32,26 @@ const addcourse = ({ categories }) => {
         setDisableBtn(true);
         //console.log(event.target.course_name.value);
         if (event.target.course_name.value != "" && event.target.total_modules.value != "" && event.target.course_launch_date.value != "" && event.target.week_duration.value != "" && event.target.total_training_hour.value != "") {
-            const formData = new FormData(event.target);
-            var CurrentDate = moment().format();
-            formData.append('status_update_on', CurrentDate);
-            //console.log(data, formData);
-            await courseModel.create(formData).then((res) => {
-                // console.clear();
-                // console.log(res.data.id)
-                //setDisableBtn(false);
-                setModuleLink(`/courses/${res.data.id}/module`);
-                setAssignmentLink(`/courses/${res.data.id}/assessment`);
-                helper.sweetalert.toast("course Created");
-                //router.push("/courses");
-            }).catch((error) => {
-                setDisableBtn(false);
-                setFormErrors(error.response?.data?.errors);
-            })
+            if(event.target.total_training_hour.value > 0) {
+                const formData = new FormData(event.target);
+                var CurrentDate = moment().format();
+                formData.append('status_update_on', CurrentDate);
+                //console.log(data, formData);
+                await courseModel.create(formData).then((res) => {
+                    // console.clear();
+                    // console.log(res.data.id)
+                    //setDisableBtn(false);
+                    setModuleLink(`/courses/${res.data.id}/module`);
+                    setAssignmentLink(`/courses/${res.data.id}/assessment`);
+                    helper.sweetalert.toast("course Created");
+                    //router.push("/courses");
+                }).catch((error) => {
+                    setDisableBtn(false);
+                    setFormErrors(error.response?.data?.errors);
+                })
+            } else {
+                helper.sweetalert.toast("Total training hour must be greater than 0", "warning");
+            }
         } else {
             setDisableBtn(false);
             helper.sweetalert.toast("NOT ALL FIELDS are filled.", "warning");

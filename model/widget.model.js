@@ -30,6 +30,9 @@ const widgetModel=class {
     {
         return (await axiosInstance.get(`${this.baseUrl}/course/weekDuration`)).data;
     }
+    async courseHour() {
+        return (await axiosInstance.get(`${this.baseUrl}/course/courseHour`)).data;
+    }
     async moduleCount()
     {
         return (await axiosInstance.get(`${this.baseUrl}/module/total`)).data;

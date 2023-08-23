@@ -47,14 +47,18 @@ const editCourse = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
-        const formData = new FormData(event.target);
-        console.log(data, formData);
-        await courseModel.update(router.query.id, formData).then((res) => {
-            helper.sweetalert.toast("course Updated");
-            router.push("/courses");
-        }).catch((error) => {
-            setFormErrors(error.response?.data?.errors);
-        })
+        if(event.target.total_training_hour.value > 0) {
+            const formData = new FormData(event.target);
+            //console.log(data, formData);
+            await courseModel.update(router.query.id, formData).then((res) => {
+                helper.sweetalert.toast("course Updated");
+                router.push("/courses");
+            }).catch((error) => {
+                setFormErrors(error.response?.data?.errors);
+            })
+        } else {
+            helper.sweetalert.warningToast("Total training hour must be greater than 0");
+        }
     });
 
     const inputFileRef = useRef();
@@ -275,7 +279,7 @@ const editCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" {...register("total_training_hour")} step="any" />
+                                    <input type="number" {...register("total_training_hour")} step="any" min="0.1" />
                                 </div>
                             </div>
                         </div>
