@@ -33,6 +33,11 @@ const widgetController = class {
         //console.log(req.query);
         res.send({ data: { total: totalWeek || 0 } });
         break;
+      case "courseHour":
+        req["query"]["status"] = { [Op.or]: ['active', 'approved'] }
+        let totalHour = await Course.sum('total_training_hour', { where: req.query });
+        res.send({ data: { total: totalHour || 0 } });
+        break;
     }
   }
 
@@ -531,7 +536,7 @@ const widgetController = class {
       traineeCondition.push(temp);
       traineeCondition2.push(temp);
     }
-    
+
     enrolledTrainee = await Assigned_courses.count({
       distinct: true,
       col: 'trainee_id',
