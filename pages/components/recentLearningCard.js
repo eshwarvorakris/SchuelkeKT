@@ -17,9 +17,13 @@ export default function recentLearningCard() {
   const [totalChapterInCourse, setTotalChapterInCourse] = useState(0);
   const [completedChapter, setCompletedChapter] = useState(0);
   const [lastChapterId, setLastChapterId] = useState(0);
+  const [totalModule, setTotalModule] = useState(0);
+  const [completedModule, setCompletedModule] = useState(0);
   useEffect(() => {
     CourseViewModel.getRecentLearning().then((res) => {
-      //console.log("recent", res.data);
+      console.log("recent", res?.data?.moduleCompletedCount);
+      setTotalModule(res?.data?.moduleTotalCount);
+      setCompletedModule(res?.data?.moduleCompletedCount);
       if (res?.data?.lastChapter !== null && res?.data?.lastChapter != "") {
         setCourseName(res?.data?.lastChapter?.course?.course_name);
         setCourseImg(res?.data?.lastChapter?.course?.course_thumbnail);
@@ -79,7 +83,7 @@ export default function recentLearningCard() {
                     </div>
                   </div>
                   <div className="completed-info">
-                    <span><span className="text-primary">{completedChapter} </span>Out of {totalChapterInCourse} Completed</span>
+                    <span><span className="text-primary">{completedModule} </span>Out of {totalModule} Completed</span>
                   </div>
                 </div>
                 <div className="button-container" style={{ padding: 'unset' }}>
