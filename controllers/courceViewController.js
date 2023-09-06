@@ -25,6 +25,20 @@ const courseController = class {
   async getAnyCourseChapterViewed(req, res) {
     if (req.body.course_id !== undefined && req.body.course_id != "undefined") {
       const courseViewSec = await ChapterView.sum('viewed_seconds', { where: { course_id: req.body.course_id, trainee_id: req.userId } });
+      const moduleCompletedCount = await ModuleView.count({ 
+        where: { course_id: req.body.course_id, trainee_id: req.userId, status:'completed' },
+        include: [
+          {
+            model: Module,
+            as: 'module',
+            where: {
+              deleted_at: null
+            },
+            required: false
+          }
+        ]
+      });
+      const moduleTotalCount = await Module.count({ where: { course_id: req.body.course_id } });
       const courseReDoneCount = await CourseView.findOne({ attributes: ['id', 'viewed_seconds', 're_done_count'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
       const courseViewData = await ChapterView.findAll({ attributes: ['id', 'viewed_seconds'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
       const totalCourseContent = await Content.count({ where: { course_id: req.body.course_id } });
@@ -36,6 +50,8 @@ const courseController = class {
             courseViewData: courseViewData,
             totalCourseContent: totalCourseContent,
             courseReDoneCount: courseReDoneCount,
+            moduleCompletedCount,
+            moduleTotalCount,
             result: result
           }
           //console.log(result);
@@ -174,7 +190,20 @@ const courseController = class {
     const lastChapter = await ChapterView.findOne({ include: ['course'], where: { trainee_id: req.userId, status: 'ongoing' }, order: [['chapter_id', 'DESC']] });
     var data = null;
     if (lastChapter !== null) {
-      //console.log("lastChapter", lastChapter.dataValues);
+      const moduleCompletedCount = await ModuleView.count({ 
+        where: { course_id: lastChapter.dataValues.course_id, trainee_id: req.userId, status:'completed' },
+        include: [
+          {
+            model: Module,
+            as: 'module',
+            where: {
+              deleted_at: null
+            },
+            required: false
+          }
+        ]
+      });
+      const moduleTotalCount = await Module.count({ where: { course_id: lastChapter.dataValues.course_id } });
       let allContentInCourse = await Content.count({ where: { course_id: lastChapter.dataValues.course_id } });
       let courseContentCompletedCount = await ChapterView.count({ where: { course_id: lastChapter.dataValues.course_id, trainee_id: req.userId, status: 'completed' } });
       let totalCourseView = await ChapterView.sum('viewed_seconds', { where: { course_id: lastChapter.dataValues.course_id, trainee_id: req.userId } });
@@ -182,7 +211,9 @@ const courseController = class {
         allContentInCourse: allContentInCourse,
         courseContentCompletedCount: courseContentCompletedCount,
         totalCourseView: totalCourseView,
-        lastChapter: lastChapter
+        lastChapter: lastChapter,
+        moduleCompletedCount,
+        moduleTotalCount
       }
     } else {
       data = {

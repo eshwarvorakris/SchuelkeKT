@@ -517,6 +517,9 @@ const widgetController = class {
       attributes: [],
       where: { trainer_id: req.userId },
     };
+    if (req.body.category !== "all" && req.body.category !== undefined) {
+      temp2.where = { category_id: req.body.category, trainer_id: req.userId};
+    }
     temp2.include = [
       {
         model: CourseView,
