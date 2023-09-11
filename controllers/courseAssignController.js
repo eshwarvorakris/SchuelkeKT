@@ -21,7 +21,7 @@ const courseAssignController = class {
         ],
         offset: pageNumber * pageLimit, limit: pageLimit, order: [orderByColumn]
       })
-      .then((users) => res.send(getPaginate(users, pageNumber, pageLimit)))
+        .then((users) => res.send(getPaginate(users, pageNumber, pageLimit)))
 
       /* await User.sequelize.query('SELECT users.* FROM users INNER JOIN assigned_courses ON users.id=assigned_courses.trainee_id WHERE assigned_courses.course_id='+course_id+' LIMIT '+pageLimit+' OFFSET '+pageNumber * pageLimit, { type: User.sequelize.QueryTypes.SELECT })
         .then((result) => {
@@ -64,7 +64,20 @@ const courseAssignController = class {
             defaults: {
               assigned_by_id: req.userId,
             }
-          }).then((result) => {
+          }).then(async (result) => {
+            const user = await User.findByPk(trainee_id);
+            const course = await Course.findByPk(req.body.course_id);
+            const day_duration = course?.week_duration * 7;
+            const startDate = new Date(course?.course_launch_date);
+            startDate.setDate(startDate.getDate() + 28);
+            const endDateString = startDate.toISOString().split('T')[0];
+            
+            console.clear();
+            //console.log("user --------->", course);
+            console.log("course ------------------>", day_duration);
+            console.log("startdate ->", course?.course_launch_date);
+            console.log("endDateString ->", endDateString);
+            traineeCourseEnrollmentToTrainee(user?.email, course?.course_name, course?.course_launch_date, endDateString)
             inCount++;
           }).catch((error) => {
             console.error("Failed to retrieve data : ", error.message);
@@ -114,7 +127,7 @@ const courseAssignController = class {
         }
       );
     }
-    
+
   }
 };
 

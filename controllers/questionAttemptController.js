@@ -6,8 +6,10 @@ const QuestionOption = require("../models/Question_option.model");
 const ChapterView = require("../models/Chapter_views.model");
 const ModelView = require("../models/Module_views.model");
 const CourseView = require("../models/Course_views.model");
-//const Course = require("../models/Course.model");
+const Course = require("../models/Course.model");
+const User = require("../models/User.model");
 const sequelize = require("../lib/dbConnection");
+const { traineeSubmitAssignmentToTrainee } = require("../lib/emails")
 const { Op } = require("sequelize");
 const questionAttemptController = class {
   async index(req, res) {
@@ -40,9 +42,9 @@ const questionAttemptController = class {
           maxPercent = await AssignmentAttempt.max('correct_percentage',
             { where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
           );
-          attemptCount = await AssignmentAttempt.count( { where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
+          attemptCount = await AssignmentAttempt.count({ where: { trainee_id: req.body.trainee_id, status: 'submitted', course_id: curCourse.DISTINCT } }
           );
-          courseAttemptData = await CourseView.findOne({attributes: ['id','viewed_seconds','re_done_count'], where: { course_id: curCourse.DISTINCT, trainee_id: req.body.trainee_id } });
+          courseAttemptData = await CourseView.findOne({ attributes: ['id', 'viewed_seconds', 're_done_count'], where: { course_id: curCourse.DISTINCT, trainee_id: req.body.trainee_id } });
           curData = await AssignmentAttempt.findOne(
             {
               include: ['course'],
@@ -50,7 +52,7 @@ const questionAttemptController = class {
             }
           );
 
-          outResult.push({ maxPercent: maxPercent, curData: curData, attemptCount:attemptCount, courseAttemptData:courseAttemptData })
+          outResult.push({ maxPercent: maxPercent, curData: curData, attemptCount: attemptCount, courseAttemptData: courseAttemptData })
           i++;
         }
       }
@@ -118,7 +120,7 @@ const questionAttemptController = class {
           });
 
           averageTimeSpent = Math.round((timeSpentOnCourse / totalTimeSpent) * 100)
-          
+
           curData = await AssignmentAttempt.findOne(
             {
               include: ['course'],
@@ -126,10 +128,10 @@ const questionAttemptController = class {
             }
           );
 
-          outResult.push({ 
-            maxPercent: maxPercent, 
-            totalScore: totalScore, 
-            totalAttempts: totalAttempts, 
+          outResult.push({
+            maxPercent: maxPercent,
+            totalScore: totalScore,
+            totalAttempts: totalAttempts,
             curData: curData,
             averageTimeSpent: averageTimeSpent
           })
@@ -320,19 +322,30 @@ const questionAttemptController = class {
           where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted' }
         })
 
+        const user = await User.findByPk(req.body.trainee_id);
+        const course = await Course.findByPk(req.body.course_id);
+        const currentDate = new Date();
+
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+
+        const submissionDate = `${year}-${month}-${day}`;
+        traineeSubmitAssignmentToTrainee(user?.email, course?.course_name, submissionDate)
+
         if (assignmentAttempt > 1) {
           const assignmentCorrect = await AssignmentAttempt.count({
             where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id, status: 'submitted', correct_percentage: { [Op.gte]: 80 } }
           });
-          const courseReDoneCount = await CourseView.findOne({attributes: ['id','viewed_seconds','re_done_count'], where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id } });
+          const courseReDoneCount = await CourseView.findOne({ attributes: ['id', 'viewed_seconds', 're_done_count'], where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id } });
           //console.log("courseReDoneCount", courseReDoneCount.re_done_count)
           const perCourseAllowedAttempt = process.env.MAX_ATTEMPT_ALLOWED;
           const maxTotalAttempt = courseReDoneCount?.re_done_count * perCourseAllowedAttempt;
           //console.log("maxTotalAttempt", maxTotalAttempt);
           if (assignmentCorrect == 0 && assignmentAttempt >= maxTotalAttempt) {
-            CourseView.update({viewed_seconds:'0', status: 'ongoing', re_done_count:sequelize.literal('re_done_count + 1')}, { where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
-            ModelView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
-            ChapterView.destroy({ where :{trainee_id: req.body.trainee_id, course_id: req.body.course_id}});
+            CourseView.update({ viewed_seconds: '0', status: 'ongoing', re_done_count: sequelize.literal('re_done_count + 1') }, { where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id } });
+            ModelView.destroy({ where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id } });
+            ChapterView.destroy({ where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id } });
 
           }
         }

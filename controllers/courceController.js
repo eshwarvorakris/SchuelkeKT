@@ -300,18 +300,19 @@ const courseController = class {
   }
 
   async update(req, res) {
-    // console.clear();
-    // console.log("update query ", req.body);
+    //console.clear();
+    //console.log("update query ", req.body);
     if (req.body?.status) {
       if (req.body?.status == "approved") {
         //req.body.status_update_on = 
       }
     }
-    const course = await Course.findByPk(req.params.id);
+    const course = await Course.findByPk(req.params.id, { include: ["trainer"]});
     if (course) {
+      //console.log("course detail -> ", course?.trainer?.dataValues?.email)
       const courseup = await course.update(req.body);
       courseModified(req?.body?.course_name, req?.userName);
-      courseModifiedToTrainer(req?.body?.course_name, req?.userName);
+      courseModifiedToTrainer(req?.body?.course_name, course?.trainer?.dataValues?.email);
       return res.send({ data: courseup });
     }
     return res.status(422).send(
