@@ -72,11 +72,11 @@ const courseAssignController = class {
             startDate.setDate(startDate.getDate() + 28);
             const endDateString = startDate.toISOString().split('T')[0];
             
-            console.clear();
-            //console.log("user --------->", course);
-            console.log("course ------------------>", day_duration);
-            console.log("startdate ->", course?.course_launch_date);
-            console.log("endDateString ->", endDateString);
+            // console.clear();
+            // //console.log("user --------->", course);
+            // console.log("course ------------------>", day_duration);
+            // console.log("startdate ->", course?.course_launch_date);
+            // console.log("endDateString ->", endDateString);
             traineeCourseEnrollmentToTrainee(user?.email, course?.course_name, course?.course_launch_date, endDateString)
             inCount++;
           }).catch((error) => {

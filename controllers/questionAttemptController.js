@@ -9,7 +9,7 @@ const CourseView = require("../models/Course_views.model");
 const Course = require("../models/Course.model");
 const User = require("../models/User.model");
 const sequelize = require("../lib/dbConnection");
-const { traineeSubmitAssignmentToTrainee } = require("../lib/emails")
+const { traineeSubmitAssignmentToTrainee, traineeCompletesCourseToAdmin, traineeCompletesCourseToTrainer } = require("../lib/emails")
 const { Op } = require("sequelize");
 const questionAttemptController = class {
   async index(req, res) {
@@ -323,9 +323,12 @@ const questionAttemptController = class {
         })
 
         const user = await User.findByPk(req.body.trainee_id);
-        const course = await Course.findByPk(req.body.course_id);
+        const course = await Course.findByPk(req.body.course_id, { include: ["trainer"]});
         const currentDate = new Date();
-
+        const day_duration = course?.week_duration * 7;
+        const startDate = new Date(course?.course_launch_date);
+        startDate.setDate(startDate.getDate() + 28);
+        const endDateString = startDate.toISOString().split('T')[0];
         const year = currentDate.getFullYear();
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
         const day = String(currentDate.getDate()).padStart(2, '0');
@@ -347,6 +350,15 @@ const questionAttemptController = class {
             ModelView.destroy({ where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id } });
             ChapterView.destroy({ where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id } });
 
+          } else if (assignmentCorrect > 0) {
+            traineeCompletesCourseToAdmin(
+              course?.course_name, course?.week_duration, submissionDate,
+              user?.full_name, user?.user_id, course?.total_modules, course?.total_modules, answerPercent
+            );
+            traineeCompletesCourseToTrainer(
+              course?.course_name, course?.course_description, course?.course_launch_date, endDateString,
+              user?.full_name, user?.user_id, user?.email, course?.trainer?.dataValues?.email
+            )
           }
         }
       };
