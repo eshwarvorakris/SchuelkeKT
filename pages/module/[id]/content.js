@@ -36,12 +36,12 @@ const Page = () => {
   const { data: contents, mutate: contentList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await contentModel.list({ module_id: QueryParam?.id, course_id: QueryParam?.course }), config.swrConfig);
   //const { data: modules, mutate: moduleList, error: moduleError, isLoading: moduleLoading } = useSWR("moduleList", async () => await courseModule.modules(QueryParam?.course, QueryParam), config.swrConfig);
   const { register, handleSubmit, formState: { errors }, reset, setValue, getValues, watch } = useForm();
-  
+
   const [modules, setModules] = useState(null);
   const moduleList = async function () {
     await courseModule.modules(QueryParam?.course, QueryParam).then((result) => {
-      if(result?.data) {
-        if(result?.data.length > 0) {
+      if (result?.data) {
+        if (result?.data.length > 0) {
           setModules(result)
         } else {
           window.location.href = "/courses";
@@ -49,7 +49,7 @@ const Page = () => {
       } else {
         window.location.href = "/courses";
       }
-      
+
     }).catch((error) => {
 
     })
@@ -206,6 +206,16 @@ const Page = () => {
       }
     })
   }
+
+  const removeFile = (removeId) => {
+    //console.log("removeId", removeId)
+    document.getElementById("file_ext"+removeId).value = "";
+    document.getElementById("file_name"+removeId).value = "";
+    document.getElementById("file_key"+removeId).value = "";
+    document.getElementById("file_format"+removeId).value = "";
+    document.getElementById("file_url"+removeId).value = "";
+    document.getElementById("uploadOutFileName" + removeId).innerHTML = "<b>Drag and Drop here </b>";
+  }
   return (
     <>
       <div className="trainer-body">
@@ -322,19 +332,17 @@ const Page = () => {
                             <span>Upload</span>
                           </label>
                         </button>
-                        <input {...register(`content[${index}][file_ext]`)} hidden={true} id={`content[${index}][file_ext]`} defaultValue={item.file_ext} />
-                        <input {...register(`content[${index}][file_name]`)} hidden={true} defaultValue={item.file_name} />
-                        <input {...register(`content[${index}][file_key]`)} hidden={true} defaultValue={item.file_key} />
-                        <input {...register(`content[${index}][file_format]`)} hidden={true} defaultValue={item.file_ext} />
-                        <input {...register(`content[${index}][file_url]`)} defaultValue={item.file_url} hidden={true} />
+                        <input {...register(`content[${index}][file_ext]`)} hidden={true} id={`file_ext${index}`} defaultValue={item.file_ext} />
+                        <input {...register(`content[${index}][file_name]`)} hidden={true} id={`file_name${index}`} defaultValue={item.file_name} />
+                        <input {...register(`content[${index}][file_key]`)} hidden={true} id={`file_key${index}`} defaultValue={item.file_key} />
+                        <input {...register(`content[${index}][file_format]`)} hidden={true} id={`file_format${index}`} defaultValue={item.file_ext} />
+                        <input {...register(`content[${index}][file_url]`)} hidden={true} id={`file_url${index}`} defaultValue={item.file_url} />
                       </div>
                       <div className="right-col-btns black-border d-flex flex-column gap-4" style={{ width: 'unset', marginLeft: 'unset' }}>
-                        <a href="#!">
-                          <button type="button" className="btn d-flex justify-content-center gap-2">
-                            <img className="btn-icon" src="/trainer-images/dashboard images/Vector (2).png" alt="" />
-                            <span style={{ color: "rgba(0, 0, 0, 0.568)" }}>Remove</span>
-                          </button>
-                        </a>
+                        <button type="button" className="btn d-flex justify-content-center gap-2" onClick={() => {removeFile(index)}}>
+                          <img className="btn-icon" src="/trainer-images/dashboard images/Vector (2).png" alt="" />
+                          <span style={{ color: "rgba(0, 0, 0, 0.568)" }}>Remove</span>
+                        </button>
                       </div>
                     </div>
                   </div>

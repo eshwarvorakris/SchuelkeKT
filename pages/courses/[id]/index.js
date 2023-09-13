@@ -83,7 +83,8 @@ const Page = () => {
       
       CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
         let maxAttempt = 0;
-        //console.log("view data => ", res?.data?.moduleTotalCount);
+        /* console.clear();
+        console.log("view data => ", res?.data); */
         let allmoduleLeft = res?.data?.moduleTotalCount - res?.data?.moduleCompletedCount;
         if(allmoduleLeft > 0 ) {
           setModuleLeft(allmoduleLeft);
@@ -113,20 +114,21 @@ const Page = () => {
           });
           //courseViewSec = res?.data?.courseViewSec;
         }
-
-        if(courseViewSec > maxcoursesec) {
-          hourOut = "0 hrs 0 mins left";
-          setCoursePercent(100);
-          setTimeLeft(hourOut)
-        } else  {
-          let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
-          setCoursePercent(percentage);
-          let diff = maxcoursesec - courseViewSec;
-          let diffmin = Math.floor(diff / 60);
-          Hours = Math.floor(diffmin / 60);
-          minutes = diffmin % 60;
-          hourOut = Hours + "hrs " + minutes + "mins left";
-          setTimeLeft(hourOut)
+        if(!isNaN(+courseViewSec) && !isNaN(+maxcoursesec)) {
+          if(courseViewSec > maxcoursesec) {
+            hourOut = "0 hrs 0 mins left";
+            setCoursePercent(100);
+            setTimeLeft(hourOut)
+          } else  {
+            let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
+            setCoursePercent(percentage);
+            let diff = maxcoursesec - courseViewSec;
+            let diffmin = Math.floor(diff / 60);
+            Hours = Math.floor(diffmin / 60);
+            minutes = diffmin % 60;
+            hourOut = Hours + "hrs " + minutes + "mins left";
+            setTimeLeft(hourOut)
+          }
         }
         if(res?.data !== null && res?.data !== "") {
           //isAnyChapterViewed = true;

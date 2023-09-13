@@ -187,19 +187,22 @@ const AssignCourse = () => {
 
   const assignCourse = async e => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    helper.sweetalert.confirm("Are you sure you want to assign this course?", "info", true).then(async (result) => {
-      if (result.isConfirmed) {
-        await assignCourseModel.create(formData).then((res) => {
-          //console.log(res);
-          helper.sweetalert.toast("Course Assignment to trainees updated");
-          getTrainees();
-        }).catch((error) => {
-          console.log(error.response?.data?.errors);
-        })
-      }
-    })
-    
+    const countAssign = document.querySelectorAll('input[name="trainee_ids[]"]:checked').length;
+    if(countAssign > 0) {
+      const formData = new FormData(e.target);
+      helper.sweetalert.confirm("Are you sure you want to assign this course?", "info", true).then(async (result) => {
+        if (result.isConfirmed) {
+          await assignCourseModel.create(formData).then((res) => {
+            helper.sweetalert.toast("Course Assignment to trainees updated");
+            getTrainees();
+          }).catch((error) => {
+            console.log(error.response?.data?.errors);
+          })
+        }
+      })
+    } else {
+      helper.sweetalert.toast("Please select any trainee first", "warning");
+    }
   }
 
   const handleCheckAll = (async (e) => {
@@ -274,11 +277,11 @@ const AssignCourse = () => {
                   <table className="table w-100 ">
                     <thead>
                       <tr style={{ height: '52px', padding: '.5rem' }}>
-                        <th><input type="checkbox" name="checkAll" onChange={handleCheckAll} /> S.No</th>
+                        <th className="text-center"><input type="checkbox" name="checkAll" onChange={handleCheckAll} /> S.No</th>
                         <th></th>
-                        <th>Name</th>
-                        <th>Contact No.</th>
-                        <th>Email</th>
+                        <th className="text-center">Name</th>
+                        <th className="text-center">Contact No.</th>
+                        <th className="text-center">Email</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -286,13 +289,13 @@ const AssignCourse = () => {
                         return (
                           <>
                             <tr style={{ color: 'black', padding: '.5rem', borderBottomWidth: '1px', minHeight: '48px', backgroundColor: 'white' }}>
-                              <td style={{ fontSize: '13px', fontWeight: '400' }}>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }} className="text-center">
                                 <p><input type="checkbox" className="traineeCheck" name="trainee_ids[]" data-assignId={item.assigned_course} value={item.id} checked={checkedState[index]} onChange={() => handleOnChange(index, item.assigned_course)} /> {index + 1}</p>
                               </td>
-                              <td style={{ fontSize: '13px', fontWeight: '400' }}><img src={item.profile_img} height="50" className="" alt="User Image" /></td>
-                              <td style={{ fontSize: '13px', fontWeight: '400' }}>{item.full_name}</td>
-                              <td style={{ fontSize: '13px', fontWeight: '400' }}>{item.contact_no}</td>
-                              <td style={{ fontSize: '13px', fontWeight: '400' }}>{item.email}</td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }} className="text-center"><img src={item.profile_img} height="50" className="" alt="User Image" /></td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }} className="text-center">{item.full_name}</td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }} className="text-center">{item.contact_no}</td>
+                              <td style={{ fontSize: '13px', fontWeight: '400' }} className="text-center">{item.email}</td>
                             </tr>
                           </>
                         );

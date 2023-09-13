@@ -12,6 +12,7 @@ function Login() {
   const [errorMessage, seterrorMessage] = useState("");
   const [formErrors, setFormErrors] = useState([]);
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [isPasswordVisible, setIsPasswordVissible] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
@@ -66,9 +67,9 @@ function Login() {
             </div>
           </div>
         </div>
-        
-        <div className="section-login" style={{paddingTop: '0.1rem'}}>
-          
+
+        <div className="section-login" style={{ paddingTop: '0.1rem' }}>
+
           <Form className="form d-flex flex-column" onSubmit={onSubmit} encType="multipart/form-data" >
             <b className='text-danger'>{errorMessage}</b>
             <Form.Group className="form-group">
@@ -79,8 +80,15 @@ function Login() {
               {formErrors?.email && <p className="invalid-feedback">{formErrors?.email}</p>}
             </Form.Group>
             <Form.Group className="form-group">
-              <Form.Label htmlFor="password" style={{ fontFamily: `Co-light-2` }}><b>Password</b></Form.Label>
-              <Form.Control type="password" className="form-control mt-1" placeholder="Enter Your Password" {...register("password", { required: "Fill Password" })} isInvalid={formErrors?.password} />
+              <Form.Label htmlFor="password" style={{ fontFamily: `Co-light-2` }}>
+                <b>Password</b>
+                <i
+                  className={isPasswordVisible ? `fa fa-eye-slash` : `fa fa-eye`}
+                  style={{ cursor: 'pointer', paddingLeft:'5px'}}
+                  onClick={() => { setIsPasswordVissible(!isPasswordVisible) }}>
+                </i>
+              </Form.Label>
+              <Form.Control type={isPasswordVisible?'text':'password'} className="form-control mt-1" placeholder="Enter Your Password" {...register("password", { required: "Fill Password" })} isInvalid={formErrors?.password} />
               {formErrors?.password && <p className="invalid-feedback">{formErrors?.password}</p>}
             </Form.Group>
 
@@ -97,7 +105,7 @@ function Login() {
     </div>
   );
 }
-Login.getLayout = function getLayout(page){
+Login.getLayout = function getLayout(page) {
   return (
     <authLayout>{page}</authLayout>
   )

@@ -77,8 +77,9 @@ const addcourse = ({ categories }) => {
         setIsUploaded(true);
         await uploader.upload(data).then((res) => {
             helper.sweetalert.toast("File Uploaded Successfully");
-
-            console.log(res?.data);
+            document.getElementById("thumbnail-pic").classList.remove("d-none");
+            document.getElementById("pic-container").classList.add("d-none");
+            //console.log(res?.data);
             setImage(res?.data?.data?.Location);
         }).catch((error) => {
             helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -105,6 +106,11 @@ const addcourse = ({ categories }) => {
             })
         }
     });
+    const removeFile = () => {
+        document.getElementById("course_thumbnail").value = "";
+        document.getElementById("thumbnail-pic").classList.add("d-none");
+        document.getElementById("pic-container").classList.remove("d-none");
+    }
     return (
         <>
 
@@ -197,16 +203,25 @@ const addcourse = ({ categories }) => {
                                             (() => {
                                                 if (image.length > 0) {
                                                     return (
-                                                        <img className="thumbnail-pic" src={image} style={{ width: '10rem', height: '95%' }} alt="" />
+                                                        <>
+                                                            <img className="thumbnail-pic" id="thumbnail-pic" src={image} style={{ width: '10rem', height: '95%' }} alt="" />
+                                                            <div {...getRootProps({ className: '' })}>
+                                                                <div className="pic-container d-none" id="pic-container" style={{ width: '10rem', height: '95%' }}>
+                                                                    <p>Drag and Drop here</p>
+                                                                </div>
+                                                            </div>
+                                                        </>
                                                     );
                                                 } else {
                                                     return (
-                                                        <div {...getRootProps({ className: '' })}>
-                                                            <div className="pic-container" style={{ width: '10rem', height: '95%' }}>
-
-                                                                <p>Drag and Drop here</p>
+                                                        <>
+                                                            <img className="thumbnail-pic d-none" id="thumbnail-pic" src={image} style={{ width: '10rem', height: '95%' }} alt="" />
+                                                            <div {...getRootProps({ className: '' })}>
+                                                                <div className="pic-container" id="pic-container" style={{ width: '10rem', height: '95%' }}>
+                                                                    <p>Drag and Drop here</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </>
                                                     );
                                                 }
                                             })()
@@ -225,13 +240,13 @@ const addcourse = ({ categories }) => {
                                                         <span>Browse</span>
                                                     </button>
                                                     <input className="file-input" type="file" onChange={handleChangeImage} ref={inputFileRef} hidden />
-                                                    <input type="hidden" name="course_thumbnail" value={image} />
+                                                    <input type="hidden" name="course_thumbnail" id="course_thumbnail" value={image} />
                                                 </a>
                                             </div>
 
                                             <div className="right-col-btns black-border d-flex flex-column gap-4">
 
-                                                <button type="button" className="remove_button btn d-flex justify-content-center gap-2">
+                                                <button onClick={removeFile} type="button" className="remove_button btn d-flex justify-content-center gap-2">
                                                     <img className="btn-icon"
                                                         src="/trainer-images/dashboard images/Vector (2).png"
                                                         alt="" />
