@@ -47,7 +47,7 @@ function Page() {
     if (router?.query?.id !== undefined) {
       //console.log("in");
       courseModel.detail(router?.query?.id).then((res) => {
-        console.log("course Name = ", res.data);
+        //console.log("course Name = ", res.data);
         setCourseName(res?.data?.course_name);
       }).catch((error) => {
         console.log(error);
@@ -60,16 +60,23 @@ function Page() {
           const formDataget = new FormData();
           formDataget.append("course_id", router?.query?.id);
           await assignmentModel.getSubmitted(formDataget).then((submittedRes) => {
-            //console.log(submittedRes.data);
+            /* console.clear();
+            console.log(submittedRes.data); */
             if (submittedRes?.data?.is_attempted === true) {
 
               if (submittedRes?.data?.attemptData?.question_attempted) {
                 submittedRes?.data?.attemptData?.question_attempted.map((attempQuestion) => {
                   if (attempQuestion.answer) {
-                    //console.log(attempQuestion.answer);
-                    //checkedInput.push(attempQuestion.answer);
-                    //setCheckedInput([...checkedInput, attempQuestion.answer]);
-                    setCheckedInput(setCheckedInput => [...setCheckedInput, attempQuestion.answer]);
+                    const valueArray = attempQuestion.answer.split(',');
+                    /* valueArray?.map((value) => {
+                      setCheckedInput(setCheckedInput => [...setCheckedInput, value]);
+                    }) */
+                    setCheckedInput((checkedInput) => [...checkedInput, ...valueArray]);
+                    /* console.log("hereeee->", attempQuestion.answer);
+                    setCheckedInput(setCheckedInput => [...setCheckedInput, valueArray]);
+                    if (!checkedInput.includes(valueArray)) {
+                      setCheckedInput([...checkedInput, valueToAdd]);
+                    } */
                   }
                 });
               }
@@ -93,11 +100,11 @@ function Page() {
 
         if (submittedRes?.data?.assignmentAttempt > 0) {
           CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
-            if(res?.data?.courseReDoneCount?.re_done_count) {
+            if (res?.data?.courseReDoneCount?.re_done_count) {
               let maxAttempt = 0;
               maxAttempt = res?.data?.courseReDoneCount?.re_done_count * process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT;
               setMaxAttemptAllowed(maxAttempt);
-              if(assignmentSubmitCount < maxAttempt) {
+              if (assignmentSubmitCount < maxAttempt) {
                 setShowSubmitButton(true);
               }
             }
@@ -114,8 +121,8 @@ function Page() {
     const formData = new FormData(e.target);
     formData.append("status", submitButton);
     await assignmentModel.create(formData).then((res) => {
-      console.log(res.data);
-      
+      //console.log(res.data);
+
       if (submitButton == "drafted") {
         helper.sweetalert.toast("Assignment saved to draft");
       } else {
@@ -161,7 +168,7 @@ function Page() {
             }
           });
         }
-        console.log("show retry = ", showRetryButton);
+        //console.log("show retry = ", showRetryButton);
         helper.sweetalert.toast("Assignment Submitted");
       }
       //router.push("/dashboard");
@@ -176,6 +183,25 @@ function Page() {
   }
   var optionType = "radio";
   var isChecked = '';
+  const handleCheckboxChanged = (e) => {
+    // console.clear();
+    // console.log(e.target.value)
+    let isSelected = e.target.checked;
+    let answer = e.target.value;
+    if(isSelected) {
+      setCheckedInput([...checkedInput, answer]);
+    } else {
+      setCheckedInput((prevData) => {
+        return prevData.filter((id) => {
+          return id!==answer;
+        })
+      })
+    }
+  }
+
+  /* useEffect(()=>{
+    console.log("changed -> ", checkedInput)
+  }, [checkedInput]) */
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -239,6 +265,7 @@ function Page() {
                     </div>
                     <div className="question-options" id="group1">
                       {item?.options?.map((optionitem, optionindex) => {
+                        //console.log("checked = ", checkedInput)
                         isChecked = '';
                         if (checkedInput.length > 0) {
                           const isFound = checkedInput.some(element => {
@@ -255,15 +282,17 @@ function Page() {
                                 (() => {
                                   if (isChecked == "checked") {
                                     return (
-                                      <><input type={optionType} className={`${item.id}-questionAlloption`}
-                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`}
-                                        {...register(`questions[${index}][answer]`)} value={optionitem.id} checked /></>
+                                      <><input type={optionType} className={`${item.id}-questionAlloption checked`}
+                                        id={`${item.id}-optionitem-${optionitem.id}`} data-id={`${item.id}-option-${optionindex}`}
+                                        {...register(`questions[${index}][answer]`)} value={optionitem.id} checked={true}
+                                        onChange={handleCheckboxChanged}
+                                         /></>
                                     );
                                   } else {
                                     return (
                                       <><input type={optionType} className={`${item.id}-questionAlloption`}
-                                        id={`${item.id}-option`} data-id={`${item.id}-option-${optionindex}`}
-                                        {...register(`questions[${index}][answer]`)} value={optionitem.id} /></>
+                                        id={`${item.id}-optionitem-${optionitem.id}`} data-id={`${item.id}-option-${optionindex}`}
+                                        {...register(`questions[${index}][answer]`)} value={optionitem.id} onChange={handleCheckboxChanged} /></>
                                     );
                                   }
                                 })()
