@@ -11,6 +11,7 @@ import questionModel from "../../../model/questions.model";
 import courseModel from "../../../model/course.model";
 import assignmentModel from "../../../model/assignment.model";
 import CourseViewModel from "../../../model/cource_view.model"
+import Image from "next/image";
 function Page() {
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Quizzes") }
@@ -23,7 +24,7 @@ function Page() {
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm();
   const [formErrors, setFormErrors] = useState([]);
   const watchAllFields = watch();
-  //console.log(watch());
+  //// console.log(watch());
   const [questions, setQuestions] = useState([]);
   const [courseName, setCourseName] = useState("");
   const [submitButton, setSubmitButton] = useState("");
@@ -43,25 +44,25 @@ function Page() {
   }, [watch]);
 
   useEffect(() => {
-    //console.log("id = ", router?.query?.id);
+    //// console.log("id = ", router?.query?.id);
     if (router?.query?.id !== undefined) {
-      //console.log("in");
+      //// console.log("in");
       courseModel.detail(router?.query?.id).then((res) => {
-        //console.log("course Name = ", res.data);
+        //// console.log("course Name = ", res.data);
         setCourseName(res?.data?.course_name);
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
       setCourseId(router?.query?.id)
       questionModel.traineelist({ course_id: router?.query?.id, order_by: "sequence_no", order_in: "asc" }).then(async (res) => {
         if (res.data.length > 0) {
           setQuestions(res.data);
-          //console.log("course Name = ",res.data?.[0]?.course?.course_name);
+          //// console.log("course Name = ",res.data?.[0]?.course?.course_name);
           const formDataget = new FormData();
           formDataget.append("course_id", router?.query?.id);
           await assignmentModel.getSubmitted(formDataget).then((submittedRes) => {
             /* console.clear();
-            console.log(submittedRes.data); */
+            // console.log(submittedRes.data); */
             if (submittedRes?.data?.is_attempted === true) {
 
               if (submittedRes?.data?.attemptData?.question_attempted) {
@@ -72,7 +73,7 @@ function Page() {
                       setCheckedInput(setCheckedInput => [...setCheckedInput, value]);
                     }) */
                     setCheckedInput((checkedInput) => [...checkedInput, ...valueArray]);
-                    /* console.log("hereeee->", attempQuestion.answer);
+                    /* // console.log("hereeee->", attempQuestion.answer);
                     setCheckedInput(setCheckedInput => [...setCheckedInput, valueArray]);
                     if (!checkedInput.includes(valueArray)) {
                       setCheckedInput([...checkedInput, valueToAdd]);
@@ -84,15 +85,15 @@ function Page() {
           });
           reset(res.data);
         }
-        //console.log(res.data)
+        //// console.log(res.data)
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
 
       const countAttemptForm = new FormData();
       countAttemptForm.append("course_id", router?.query?.id);
       assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
-        //console.log("attempt result", submittedRes?.data);
+        //// console.log("attempt result", submittedRes?.data);
         setassignmentSubmitCount(submittedRes?.data?.assignmentAttempt)
         if (submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
           setShowSubmitButton(true);
@@ -121,7 +122,7 @@ function Page() {
     const formData = new FormData(e.target);
     formData.append("status", submitButton);
     await assignmentModel.create(formData).then((res) => {
-      //console.log(res.data);
+      //// console.log(res.data);
 
       if (submitButton == "drafted") {
         helper.sweetalert.toast("Assignment saved to draft");
@@ -168,7 +169,7 @@ function Page() {
             }
           });
         }
-        //console.log("show retry = ", showRetryButton);
+        //// console.log("show retry = ", showRetryButton);
         helper.sweetalert.toast("Assignment Submitted");
       }
       //router.push("/dashboard");
@@ -185,7 +186,7 @@ function Page() {
   var isChecked = '';
   const handleCheckboxChanged = (e) => {
     // console.clear();
-    // console.log(e.target.value)
+    // // console.log(e.target.value)
     let isSelected = e.target.checked;
     let answer = e.target.value;
     if(isSelected) {
@@ -200,7 +201,7 @@ function Page() {
   }
 
   /* useEffect(()=>{
-    console.log("changed -> ", checkedInput)
+    // console.log("changed -> ", checkedInput)
   }, [checkedInput]) */
   return (
     <>
@@ -257,7 +258,7 @@ function Page() {
                   optionType = "checkbox";
                 }
                 return (
-                  <div className="question-1">
+                  <div className="question-1" key={`quest${index}}`}>
                     <div className="question">
                       <span>{index + 1}. {item.question}</span>
                       <input type="hidden" {...register(`questions[${index}][question]`)} defaultValue={item.id} />
@@ -265,7 +266,7 @@ function Page() {
                     </div>
                     <div className="question-options" id="group1">
                       {item?.options?.map((optionitem, optionindex) => {
-                        //console.log("checked = ", checkedInput)
+                        //// console.log("checked = ", checkedInput)
                         isChecked = '';
                         if (checkedInput.length > 0) {
                           const isFound = checkedInput.some(element => {
@@ -273,10 +274,10 @@ function Page() {
                               isChecked = 'checked';
                             }
                           });
-                          //console.log(isFound);
+                          //// console.log(isFound);
                         }
                         return (
-                          <div className="d-flex justify-content-between option" id={`${item.id}-option-${optionindex}-div`}>
+                          <div className="d-flex justify-content-between option" key={`options${index}`} id={`${item.id}-option-${optionindex}-div`}>
                             <div>
                               {
                                 (() => {

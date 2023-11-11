@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
-
+import Image from "next/image";
 function topnavbar() {
     return (
         <nav class="navbar navbar-expand-lg navbar-light sticky-nav topnavbarr" style={{ width: '79.5vw', border: "none" }}>

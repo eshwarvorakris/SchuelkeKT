@@ -4,14 +4,15 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import auth from "../../model/auth.model";
 import Link from 'next/link';
+import Image from "next/image";
 function Login() {
     const {register,handleSubmit,formState:{errors}}=useForm();
     const [errorMessage, setErrorMessage] = useState(null);
     const onSubmit=(data)=>{
         setErrorMessage("");
-        console.log(data);
+        // console.log(data);
         auth.login(data).then((res)=>{
-            console.log(res.data);
+            // console.log(res.data);
             localStorage.setItem("access_token",res.data.token);
             window.location.assign("dashboard");
         }).catch((error) => {

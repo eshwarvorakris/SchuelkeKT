@@ -274,7 +274,7 @@ html {
 }
 
 body {
-  background: linear-gradient(to bottom, #fff 50%, #006ea9 50%);
+  /* background: linear-gradient(to bottom, #fff 50%, #006ea9 50%); */
 }
 
 .floting-element-login {

@@ -2,7 +2,9 @@ import Link from "next/link";
 import Router from "next/router";
 import { useContext } from "react";
 import AppContext from "../lib/appContext";
-function sidebar({ profile }) {
+import Image from "next/image";
+
+function Sidebar({ profile }) {
   const layoutValues = useContext(AppContext);
 
   const logout = function (e) {
@@ -134,4 +136,4 @@ function sidebar({ profile }) {
   );
 }
 
-export default sidebar;
+export default Sidebar;

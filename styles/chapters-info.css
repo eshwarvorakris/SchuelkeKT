@@ -1,0 +1,555 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"); */
+
+@font-face {
+    font-family: Co-1;
+    src: url(/fonts/co-text-font/Co\ Headline.otf);
+  }
+  
+  @font-face {
+    font-family: Co-bold;
+    src: url(/fonts/co-text-font/Co\ Headline\ Bold.otf);
+    src: url(/fonts/co-text-font/Co\ Headline\ Bold.otf);
+  }
+  
+  @font-face {
+    font-family: Co-Light;
+    src: url(/fonts/co-text-font/Co\ Headline\ Light.otf);
+  }
+  
+  @font-face {
+    font-family: Co-text;
+    src: url(/fonts/co-text-font/Co\ Text.otf);
+  }
+  
+  @font-face {
+    font-family: Co-bold-2;
+    src: url(/fonts/co-text-font/Co\ Text\ Bold.otf);
+  }
+  
+  @font-face {
+    font-family: Co-light-2;
+    src: url(/fonts/co-text-font/Co\ Text\ Light.otf);
+  }
+  
+  /* ////////////////////////////////////////////////// */
+  
+  @font-face {
+    font-family: myriad-bold-1;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-BOLD.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-bold-2;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-BOLDCOND.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-pro;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-BOLDCONDIT.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-pro-bold;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-BOLDIT.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-pro-2;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-COND.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-pro-3;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-CONDIT.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-light;
+    src: url(/fonts/myriad-pro-cufonfonts/MyriadPro-Light.otf);
+  }
+  
+  @font-face {
+    font-family: myriad-regular;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-REGULAR.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-semibold;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-SEMIBOLD.OTF);
+  }
+  
+  @font-face {
+    font-family: myriad-semibold-2;
+    src: url(/fonts/myriad-pro-cufonfonts/MYRIADPRO-SEMIBOLDIT.OTF);
+  }
+body{
+    font-family: Co-text !important;
+    overflow-x: hidden;
+}
+
+:root{
+    --sidebar-width:16.5%;
+    --navbar-height:4rem;
+}
+
+.course-page-main-content{
+    margin-left: var(--sidebar-width);
+    margin-top: var(--navbar-height);
+
+    padding-top: 2em;
+}
+
+.course-chapter-sidebar{
+    width: var(--sidebar-width);
+    box-shadow: 1px 1px 44px -7px rgba(150,143,143,0.67);
+    -webkit-box-shadow: 1px 1px 44px -7px rgba(150,143,143,0.67);
+    -moz-box-shadow: 1px 1px 44px -7px rgba(150,143,143,0.67);
+    overflow-x: hidden;
+   
+}
+
+.sidebar__logo{
+    width: 100%;
+    padding: 1.5rem calc(var(--sidebar-width)/1);
+    display: flex;
+    flex-direction: column;
+}
+.sidebar__logo small{
+    color: #007CC2;
+    padding-left: 1rem;
+}
+
+.sidebar_thumnail{
+    position: relative;
+    z-index: 5;
+}
+.sidebar_thumnail img{
+    z-index: 1;
+}
+.sidebar_thumnail .image-overlay{
+    position: absolute;
+    background-color:#007bc27c;
+    /* opacity: 0.3; */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;;
+    padding-left: 1rem;
+    padding-top: 10%;
+}
+.overlay-text{
+    color: #fff;
+    font-size: 13px;
+    opacity: 1 !important;
+}
+.overlay-progress-bar{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+.overlay-progress-bar span{
+    display: block;
+    border-radius: 10px;
+    /* width: 60%; */
+    min-height: 5px;
+    background-color: #fff;
+}
+.overlay-progress-bar small{
+    font-size: 10px;
+    color: #fff;
+}
+
+.chapter-list-root{
+    padding-left: 1rem;
+}
+
+.chapter-list-root .chapter-name{
+    list-style-type: none;
+    padding-top: 2em;
+    position: relative;
+    font-size: 12px;
+    width: 80%;
+}
+
+.chapter-name.active::after{
+    content: "";
+    display: block;
+    background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_24_214)'%3E%3Cpath d='M9 0C4.0372 0 0 4.0372 0 9C0 13.9628 4.0372 18 9 18C13.9628 18 18 13.9628 18 9C18 4.0372 13.9628 0 9 0Z' fill='%23007CC2'/%3E%3Cpath d='M13.5615 7.09296L8.68642 11.9679C8.54016 12.1141 8.34818 12.1877 8.15619 12.1877C7.9642 12.1877 7.77222 12.1141 7.62596 11.9679L5.18851 9.53041C4.89517 9.23721 4.89517 8.76315 5.18851 8.46996C5.4817 8.17662 5.95563 8.17662 6.24896 8.46996L8.15619 10.3772L12.501 6.0325C12.7942 5.73917 13.2681 5.73917 13.5615 6.0325C13.8547 6.3257 13.8547 6.79962 13.5615 7.09296Z' fill='%23FAFAFA'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_24_214'%3E%3Crect width='18' height='18' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    /* position: absolute; */
+    /* right: 15%;
+    top: 60%; */
+    float: right;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================================================= Nav ===================================================== */
+
+.course-chapter-nav{
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);  
+    min-height: var(--navbar-height);
+    position: fixed;
+    top: 0;
+    padding:1.25em 0px 1em 0px;
+    box-shadow: 1px 3px 9px -3px rgba(0,0,0,0.33);
+    -webkit-box-shadow: 1px 3px 9px -3px rgba(0,0,0,0.33);
+    -moz-box-shadow: 1px 3px 9px -3px rgba(0,0,0,0.33);
+    background-color: #fff;
+}
+
+.navbar__root{
+    width: 95%;
+    margin: 0px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.nav__user-actions{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+.nav__user-actions small, .nav__user-actions input{
+    color:  #383838;
+    font-size: 14px;
+
+}
+.nav-search{
+    background-color: #fff;
+    border: 1px solid #CACACA;
+    border-radius: 8px;
+    outline: none;
+    padding: 0.25em 1em;
+    position: relative;
+
+}
+
+.nav-search input{
+    outline: none;
+    border: none;
+    width: 20vw;
+    padding-left: 0.5em;
+}
+
+.nav-profile{
+    padding: 0px 1em;
+
+}
+
+.nav-profile img{
+    padding-right: 1em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================= COntent ========================= */
+.course-page-main-content__header{
+    text-decoration: none;
+    color: #383838;
+    padding-left: 2em;
+}
+.course-page-main-content__header h4{
+    margin-bottom: 0px;
+    font-family: myriad-regular !important;
+}
+.main-content_banner{
+    position: relative;
+    margin-top: 1.5em;
+}
+.main-content_banner img{
+width: 100%;
+}
+
+.main-content_banner__overlay{
+    position: absolute;
+    background-color:#007bc279;
+    /* opacity: 0.3; */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;;
+    padding-left: 15%;
+    padding-top: 8%;
+
+}
+
+.main-content_banner__overlay h3{
+    font-size: 35px;
+    font-weight: 700;
+    color: #fff;
+
+}
+
+p{
+    font-family: myriad-light;
+    letter-spacing: 1.5px;
+    line-height: 24px;
+    text-align: justify;
+}
+
+.chapter-content-area{
+    width: 80%;
+    margin: 0px auto;
+    margin-top: 2.5em;
+}
+
+.chapter-content-area .title{
+    font-size: 26px;
+    font-weight: 600;
+    border-bottom: 4px solid #007CC2;
+    padding-bottom: 0.25em;
+    width: max-content;
+    font-family: myriad-regular;
+}
+
+
+
+
+
+
+/* ============================================================== Image player ======================================== */
+
+
+
+.course-chapter-image-player{
+    /* float: left; */
+    width: 100%;
+    /* margin-bottom: 3rem; */
+    position: relative;
+    /* max-height: 50vh;
+    overflow: scroll; */
+    overflow: hidden;
+    
+}
+
+.course-chapter-image-player .image{
+
+
+}
+
+.course-chapter-image-player .image img{
+    width: 100%;
+    max-width: 80vw;
+    max-height: 85vh;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+
+.expand-player-button{
+   position: absolute;
+   right: 2em;
+   top: 0.75em;
+    /* padding: 0.75em 1em; */
+}
+
+.course-chapter-image-player .action-buttons{
+    width: 100%;
+    min-height: 3rem;
+    background-color: #292929   ;
+    
+}
+
+
+.action-buttons{
+    position: relative;
+}
+
+.action-buttons-container{
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75em 1em;
+
+
+}
+
+.action-buttons-container span{
+    color: #fff;
+}
+
+.player-modal{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(35, 36, 36, 0.541);
+    z-index: 3000;
+    top: 0;
+    left: 0;
+    padding-top: 2rem;
+}
+
+.player-modal.active{
+    display: block;
+}
+
+.player-modal .course-chapter-image-player{
+    /* background-color: transparent; */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.player-modal .course-chapter-image-player .image{
+padding-bottom: 2em;
+animation: zoomin 1s ease-in;
+}
+
+
+@keyframes zoomin {
+    0% {transform: scale(0);}
+    50% {transform: scale(0.7);}
+    100% {transform: scale(1);}
+  } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* ===================================================== Footer Navigation ========================================= */
+.footerNavigation-buttons{
+    margin: 2rem 0px!important;
+    display: flex;
+    justify-content: space-between;
+}
+.footer-buttons-container{
+display: flex;
+align-items: center;
+gap: 0.5em;
+}
+.footer-buttons-container.next{
+    flex-direction: row-reverse;
+}
+.doc-controls-button{
+    background-color: #007CC2;
+    height: 35px;
+    width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.doc-controls-button svg{
+width: 30px;
+height: 30px;
+}
+.btn-type{
+    font-size: 13px;
+    line-height: 10px;
+}
+.btn-value{
+    font-size: 14px !important;
+}
+
+iframe {
+    width: 100%;
+    height: 60vh;
+    padding: 0;
+    margin: 0;
+  }
+
+
+.links{
+    text-decoration: none !important;
+    color: #292929;
+}
+
+.links:hover{
+    color: #292929;
+}

@@ -10,7 +10,7 @@ import { helper } from '../../../lib/helper';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Link from 'next/link';
-const addTrainer = () => {
+const AddTrainer = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Add Trainer") }
@@ -26,9 +26,9 @@ const addTrainer = () => {
         if (data.password === data.password_confirmation) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)) {
                 const formData = new FormData(event.target);
-                //console.log(data, formData);
+                //// console.log(data, formData);
                 formData.append('role', 'trainer');
-                //console.log(data.password);
+                //// console.log(data.password);
                 await userModal.addUser(formData).then((res) => {
                     helper.sweetalert.toast("Trainer Added");
                     router.push("/users/trainer");
@@ -202,4 +202,4 @@ const addTrainer = () => {
         </>
     )
 }
-export default addTrainer;
+export default AddTrainer;

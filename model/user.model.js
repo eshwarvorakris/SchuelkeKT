@@ -22,7 +22,7 @@ const User = class {
 
     async addUser(data = []) {
         
-        //console.log(data);
+        //// console.log(data);
         axiosInstance.defaults.headers.common['Authorization'] = "Bearer " + sessionStorage.getItem("access_token");
         return (await axiosInstance.post(`${this.baseUrl}/addUser`, data));
     }

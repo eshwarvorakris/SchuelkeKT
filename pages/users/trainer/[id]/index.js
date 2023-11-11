@@ -8,7 +8,7 @@ import { config } from '../../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../../lib/helper';
 import Link from 'next/link';
-const editTrainer = () => {
+const EditTrainer = () => {
     const router = useRouter();
     const layoutValues=useContext(AppContext);
     {layoutValues.setPageHeading("Edit Trainer")}
@@ -17,7 +17,7 @@ const editTrainer = () => {
     const [errorMessage, seterrorMessage] = useState("");
     const { data: profile, error, isLoading } = useSWR('/', async () => await auth.profile());
     if (error) {
-        //console.log(error);
+        //// console.log(error);
         router.replace("/login");
     }
     const [formErrors, setFormErrors] = useState([]);
@@ -26,10 +26,10 @@ const editTrainer = () => {
     useEffect(() => {
         userModal.detail(router.query.id).then((res) => {
             setprofileData(res?.data);
-            console.log(res?.data);
+            // console.log(res?.data);
             reset(res?.data);
         }).catch((error) => {
-            console.log(error);
+            // console.log(error);
         });
     }, [router, reset]);
 
@@ -37,7 +37,7 @@ const editTrainer = () => {
         event.preventDefault();
         seterrorMessage("");
         const formData = new FormData(event.target);
-        //console.log(data.password);
+        //// console.log(data.password);
         await userModal.update(router.query.id, formData).then((res) => {
             helper.sweetalert.toast("Trainer Updated");
             router.push("/users/trainer");
@@ -105,4 +105,4 @@ const editTrainer = () => {
         </>
     )
 }
-export default editTrainer;
+export default EditTrainer;

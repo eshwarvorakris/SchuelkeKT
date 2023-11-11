@@ -8,7 +8,7 @@ import { config } from '../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../lib/helper';
 import Link from 'next/link';
-const editTrainee = () => {
+const EditTrainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Trainee Edit") }
@@ -21,10 +21,10 @@ const editTrainee = () => {
     useEffect(() => {
         userModal.detail(router.query.id).then((res) => {
             setprofileData(res?.data);
-            console.log(res?.data);
+            // console.log(res?.data);
             reset(res?.data);
         }).catch((error) => {
-            console.log(error);
+            // console.log(error);
         });
     }, [router, reset]);
 
@@ -32,7 +32,7 @@ const editTrainee = () => {
         event.preventDefault();
         seterrorMessage("");
         const formData = new FormData(event.target);
-        //console.log(data.password);
+        //// console.log(data.password);
         await userModal.update(router.query.id, formData).then((res) => {
             helper.sweetalert.toast("Trainee Updated");
             router.push("/users/trainee");
@@ -99,4 +99,4 @@ const editTrainee = () => {
         </>
     )
 }
-export default editTrainee;
+export default EditTrainee;

@@ -10,7 +10,7 @@ import AppContext from "../../../lib/appContext";
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Link from "next/link";
-const addTrainee = () => {
+const AddTrainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Add Trainee") }
@@ -26,7 +26,7 @@ const addTrainee = () => {
         if (data.password === data.password_confirmation) {
             if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(data.password)) {
                 const formData = new FormData(event.target);
-                //console.log(data, formData);
+                //// console.log(data, formData);
                 await userModal.addUser(formData).then((res) => {
                     helper.sweetalert.toast("Trainee Added");
                     router.push("/users/trainee");
@@ -201,4 +201,4 @@ const addTrainee = () => {
         </>
     )
 }
-export default addTrainee;
+export default AddTrainee;

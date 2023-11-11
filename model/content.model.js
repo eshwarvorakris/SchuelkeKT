@@ -28,6 +28,15 @@ const contentModel=class {
         return await axiosInstance.delete(`${this.baseUrl}/${id}`);
     }
 
+    async deleteCarousel(file,column,id)
+    {
+        let formData = new FormData();
+        formData.append('file',file);
+        formData.append('column',column);
+        formData.append('id',id);
+        return await axiosInstance.post(`${this.baseUrl}/delete-carousel`,formData);
+    }
+
 }
 
 export default new contentModel();

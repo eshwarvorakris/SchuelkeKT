@@ -4,7 +4,7 @@ import auth from "../../model/auth.model";
 import Sidebar from "./components/sidebar";
 import Topnavbar from "./components/topnavbar";
 import Router from "next/router";
-
+import Image from "next/image";
 const editmodule = () => {
   return (
     <>

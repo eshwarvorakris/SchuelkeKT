@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2";
 let counts = 0;
-export default function checkTimer({ sessionTimer = false}) {
+export default function CheckTimer({ sessionTimer = false}) {
 
   useEffect(() => {
     var isSwalFired = false;
     const handleCursor = (e) => {
       counts = 0;
-      //console.log("isSwalFired", isSwalFired);
+      //// console.log("isSwalFired", isSwalFired);
       if(isSwalFired) {
         Swal.close();
       }
@@ -22,7 +22,7 @@ export default function checkTimer({ sessionTimer = false}) {
       }
       const allSession = setInterval(function () {
         if (counts == process.env.NEXT_PUBLIC_TIMEOUT_SECOND) {
-          //console.log("count", counts);
+          //// console.log("count", counts);
           isSwalFired = true;
           Swal.fire({
             title: 'Please move your mouse to continue',

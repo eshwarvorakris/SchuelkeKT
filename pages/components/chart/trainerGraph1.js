@@ -16,7 +16,7 @@ const TrainerGraph1 = () => {
     setTraineeCompleted(0);
     setEnrolledTrainee(0);
     await widgetModel.trainerGraph1(formData).then((result) => {
-      console.log(result.data);
+      // console.log(result.data);
       if (result.data) {
         setTraineeCompleted(result.data.traineeCompleted);
         setEnrolledTrainee(result.data.enrolledTrainee);
@@ -49,13 +49,13 @@ const TrainerGraph1 = () => {
   };
 
   const handleCountryChangeParent = (country) => {
-    //console.log("parent", country.value)
+    //// console.log("parent", country.value)
     setSelectedCountry(country.value);
   };
 
   const handleTopicChangeParent = (topic) => {
     setSelectedTopic(topic.value);
-    //console.log("parent", topic.value)
+    //// console.log("parent", topic.value)
   };
   return (
     <>

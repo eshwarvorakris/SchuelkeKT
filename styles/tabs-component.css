@@ -1,0 +1,22 @@
+.tabs{
+    background-color: #006ea9;
+    padding: 1em 0em;
+    border: none;
+    font-weight: 600;
+    color: #ffffff;
+    min-width: 15rem ;
+    opacity: 0.6;
+    cursor: pointer;
+    
+}
+
+.tabs.active{opacity: 1;}
+
+.tab-container {
+    width: 90%;
+    margin: 0px auto;
+}
+
+.tab-content{
+    padding: 1em 0px;
+}

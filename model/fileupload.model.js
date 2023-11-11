@@ -2,7 +2,7 @@ import axiosInstance from "../lib/axiosInstance";
 
 const fileModel = class {
     async upload(data = []) {
-        //console.log(data);
+        //// console.log(data);
         return await axiosInstance.post("/upload", data);
     }
 }

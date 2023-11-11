@@ -2,6 +2,7 @@
 import auth from "../../model/auth.model";
 import Sidebar from "./component/sidebar";
 import Topnavbar from "./component/topnavbar";
+import Image from "next/image";
 const admincoursemanagement = () => {
   return (
     <>

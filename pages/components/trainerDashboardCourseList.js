@@ -10,7 +10,7 @@ import CourseCard from './courseCard';
 import ReactPaginate from 'react-paginate';
 import Link from "next/link";
 import TrainerGraph1 from "./chart/trainerGraph1";
-export default function adminDashboardGraph() {
+export default function AdminDashboardGraph() {
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
@@ -20,7 +20,7 @@ export default function adminDashboardGraph() {
   const { data: courses, error: courseerror, isLoading: courseisLoading, mutate:loadCourse } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
   const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR(QueryParam ? "categorylist" : null, async () => await categoryModel.list(), config.swrConfig);
   const pagginationHandler = (page) => {
-    //console.log("clicked");
+    //// console.log("clicked");
     page.selected++;
     QueryParam.page = page.selected ;
     router.push({
@@ -31,7 +31,7 @@ export default function adminDashboardGraph() {
   };
 
   const changeCategory = (value) => {
-    //console.log(value);
+    //// console.log(value);
     QueryParam.page = 1 ;
     QueryParam.category_id = value;
     if(value == "all") {

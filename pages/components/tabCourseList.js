@@ -7,7 +7,7 @@ import { config } from '../../lib/config';
 import { helper } from '../../lib/helper';
 import CourseCard from './courseVerticalCard';
 import ReactPaginate from 'react-paginate';
-export default function tabCourseList() {
+export default function TabCourseList() {
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;

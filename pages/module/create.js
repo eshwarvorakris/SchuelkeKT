@@ -19,7 +19,7 @@ function Page() {
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log(data, formData);
+    // console.log(data, formData);
     await moduleModel.create(formData).then((res) => {
       helper.sweetalert.toast("module Created");
       router.push("/module");
@@ -40,7 +40,7 @@ function Page() {
           <Form.Label>Courses</Form.Label>
           <Form.Select {...register("course_id")} isInvalid={formErrors?.course_id}>
             {courses?.data.map((item) => {
-              return (<option value={item.id}>{item.name}</option>)
+              return (<option key={`module${index}`} value={item.id}>{item.name}</option>)
             })}
           </Form.Select>
           {formErrors?.course_id && <p className="invalid-feedback">{formErrors?.course_id}</p>}

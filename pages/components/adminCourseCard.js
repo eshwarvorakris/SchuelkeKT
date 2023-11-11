@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import AppContext from "../../lib/appContext";
 import Modal from 'react-bootstrap/Modal';
 import { useRouter } from 'next/router';
-export default function adminCourseCard({ courseData, courseIndex, revisit }) {
+import Image from 'next/image';
+export default function AdminCourseCard({ courseData, courseIndex, revisit }) {
   const router = useRouter();
   const [showRevisitModal, setShowRevisitModal] = useState(false);
   let courseImg = "/site_img/elearning_def.svg";
@@ -29,7 +30,7 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
       moduleViewData.append("trainee_id", router.query.id);
       moduleViewData.append("course_id", courseData?.id);
       CourseViewModel.getCourseViewData(moduleViewData).then((res) => {
-        console.log("current course data", res.data);
+        // console.log("current course data", res.data);
         if (res?.data) {
           setCompletedContent(res?.data?.courseContentCompletedCount);
           setTotalContent(res?.data?.allContentInCourse);
@@ -37,8 +38,8 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
           if (res?.data?.allContentInCourse > 0) {
             let maxTrainingSec = parseInt(parseFloat(res?.data?.courseData?.total_training_hour) * 60 * 60);
             let totalViewSec = parseInt(res?.data?.totalCourseView?.viewed_seconds);
-            console.log("max sec = ", maxTrainingSec);
-            console.log("total sec = ", totalViewSec);
+            // console.log("max sec = ", maxTrainingSec);
+            // console.log("total sec = ", totalViewSec);
             if (totalViewSec > maxTrainingSec) {
               percentage = 100;
             } else {
@@ -50,7 +51,7 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
           if (res?.data?.totalCourseView !== null) {
             setCourseStatus("In Progress");
             setStatusColor("#ffc50f");
-            //console.log("courseData", courseData);
+            //// console.log("courseData", courseData);
             let week_duration = courseData.week_duration;
             var date = moment(courseData?.course_launch_date).add(courseData?.week_duration, 'weeks').format("Do MMM YY");
             var now = moment();
@@ -72,7 +73,7 @@ export default function adminCourseCard({ courseData, courseIndex, revisit }) {
   }, [router.query.id])
   const [revisitData, setRevisitData] = useState(null);
   useEffect(() => {
-    //console.log("got in here", courseData?.revisit)
+    //// console.log("got in here", courseData?.revisit)
 
   }, [])
   return (

@@ -5,6 +5,7 @@ import Sidebar from "./components/sidebar";
 import Topnavbar from "./components/topnavbar";
 import Router from "next/router";
 import thumbnaila from "../../public/trainer-images/dashboard images/thumbnails/thumbnaila.png"
+import Image from "next/image";
 const editcourse = () => {
   return (
     <>

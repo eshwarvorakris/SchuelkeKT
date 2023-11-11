@@ -7,7 +7,7 @@ const authModel = class {
         return (await axiosInstance.get("/auth/profile")).data?.data || null;
     }
     async login(data = []) {
-        // console.log(data);
+        // // console.log(data);
         return await axiosInstance.post("/auth/login", data);
     }
 

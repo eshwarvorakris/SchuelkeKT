@@ -15,7 +15,7 @@ const AdminGraph2 = () => {
     setBlanketTopic(0);
     setCountryTopic(0);
     await widgetModel.adminGraph2(formData).then((result) => {
-      console.log(result.data);
+      // console.log(result.data);
       if (result.data) {
         setProductTopic(result.data.productTopic);
         setBlanketTopic(result.data.blanketTopic);
@@ -47,7 +47,7 @@ const AdminGraph2 = () => {
   };
 
   const handleCountryChangeParent = (country) => {
-    //console.log("parent", country.value)
+    //// console.log("parent", country.value)
     setSelectedCountry(country.value);
   };
   return (

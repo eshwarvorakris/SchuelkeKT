@@ -13,6 +13,7 @@ function Index() {
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading(_.capitalize(layoutValues?.profile?.role) + " Dashboard") }
   const { data: courseCount } = useSWR('courseCount', async () => await widgetModel.courseCount());
+ // console.log(layoutValues?.profile?.role);
   return (
     <>
       <div style={{minHeight:'90vh'}}>

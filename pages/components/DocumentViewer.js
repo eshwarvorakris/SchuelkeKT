@@ -11,12 +11,12 @@ const DocumentViewer = ({ fileUrl }) => {
       toolbar: true,
       navbar: true,
       shown: function () {
-        console.log('Viewer shown');
+        // console.log('Viewer shown');
       }
     });
     
   }, []);
-  console.log("loaded", fileUrl);
+  // console.log("loaded", fileUrl);
   return <div id="viewer"></div>;
 };
 

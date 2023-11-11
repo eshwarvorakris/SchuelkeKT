@@ -29,7 +29,7 @@ const AdminGraph1 = () => {
     setCompletionHour([]);
     setChartLabel([]);
     await widgetModel.adminGraph1(formData).then((result) => {
-      //console.log(result.data);
+      //// console.log(result.data);
       if (result?.data?.chartData) {
         if (result?.data?.chartData.length > 0) {
           const labels = result?.data?.chartData.map(({ labels }) => labels);
@@ -89,7 +89,7 @@ const AdminGraph1 = () => {
   };
 
   const handleCountryChangeParent = (country) => {
-    console.log("parent", country)
+    // console.log("parent", country)
     let curCountry = [];
     country.map((item, index) => {
       curCountry.push(item.value);
@@ -106,7 +106,7 @@ const AdminGraph1 = () => {
       link = "category="+topic.value+"&topic="+topic.label;
     }
     setTopicLink(link);
-    //console.log("parent", topic.value)
+    //// console.log("parent", topic.value)
   };
 
   useEffect(() => {

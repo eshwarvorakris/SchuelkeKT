@@ -6,7 +6,7 @@ import TraineeWidgets from './components/traineeWidgets';
 import TabCourseList from "./components/tabCourseList"
 import RecentLearningCard from "./components/recentLearningCard"
 import AppContext from '../lib/appContext';
-const mygrade = () => {
+const Mygrade = () => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Trainee Dashboard") }
     return (
@@ -24,4 +24,4 @@ const mygrade = () => {
         </>
     )
 }
-export default mygrade;
+export default Mygrade;

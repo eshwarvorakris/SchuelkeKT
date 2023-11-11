@@ -12,6 +12,7 @@ import DataTable from 'react-data-table-component';
 import ReactPaginate from 'react-paginate';
 import Link from 'next/link';
 import moment from 'moment';
+import Image from "next/image";
 const AssignCourse = () => {
   const router = useRouter();
   const [courseName, setCourseName] = useState("");
@@ -33,10 +34,10 @@ const AssignCourse = () => {
   const loadCourse = async () => {
     if (router?.query?.id) {
       await courseModel.detail(router?.query?.id).then((res) => {
-        //console.log("course",res);
+        //// console.log("course",res);
         setCourse(res);
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
     }
   }
@@ -53,7 +54,7 @@ const AssignCourse = () => {
     userModel.traineeToAssignList(QueryParam).then((res) => {
       if (res?.data) {
         if ((res?.data).length > 0) {
-          console.log(res)
+          // console.log(res)
           setTraineesMeta(res.meta)
           let tempAr = checkedState;
           res?.data.map((item, index) => {
@@ -68,7 +69,7 @@ const AssignCourse = () => {
         }
       }
     }).catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -89,7 +90,7 @@ const AssignCourse = () => {
         if (result.isConfirmed) {
 
           assignCourseModel.delete(assignId).then((res) => {
-            //console.log(res.data)
+            //// console.log(res.data)
             helper.sweetalert.toast(res.data?.message);
             getTrainees();
           })
@@ -110,7 +111,7 @@ const AssignCourse = () => {
   }
 
   useEffect(() => {
-    //console.log("course",course?.data?.status_update_on);
+    //// console.log("course",course?.data?.status_update_on);
     if (course?.data !== undefined) {
       setCourseName("(" + course?.data.course_name + ")");
       setCourseId(course?.data?.id);
@@ -120,7 +121,7 @@ const AssignCourse = () => {
   useEffect(() => {
     loadCourse();
     const loginUser = JSON.parse(sessionStorage.getItem("userinfo"));
-    console.log("loginUser", loginUser);
+    // console.log("loginUser", loginUser);
     if (loginUser !== undefined) {
       setLoggedUserId(loginUser["id"]);
     }
@@ -196,7 +197,7 @@ const AssignCourse = () => {
             helper.sweetalert.toast("Course Assignment to trainees updated");
             getTrainees();
           }).catch((error) => {
-            console.log(error.response?.data?.errors);
+            // console.log(error.response?.data?.errors);
           })
         }
       })
@@ -227,7 +228,7 @@ const AssignCourse = () => {
             const formData = new FormData();
             formData.append("ids", assign_ids);
             assignCourseModel.deleteAll(formData).then((res) => {
-              //console.log(res.data)
+              //// console.log(res.data)
               helper.sweetalert.toast(res.data?.message);
               getTrainees();
             })

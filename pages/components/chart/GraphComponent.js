@@ -21,11 +21,11 @@ const GraphComponent = ({
 
   const handleCountryChange = (country) => {
     onCountryChangeParent(country)
-    console.log(country);
+    // console.log(country);
   };
   const handleSelectChange = (option) => {
     onTopicChanged(option)
-    //console.log("category option = ",option);
+    //// console.log("category option = ",option);
   };
   return (
     <div className="score-analysis">

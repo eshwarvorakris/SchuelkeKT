@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { helper } from '../../../../lib/helper';
 import moment from 'moment';
 import Link from 'next/link';
-const editTrainee = () => {
+const EditTrainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Trainer Status") }
@@ -29,23 +29,23 @@ const editTrainee = () => {
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: profileData });
 
     useEffect(() => {
-        //console.log("Courses => ", courses?.data)
+        //// console.log("Courses => ", courses?.data)
         if (router.query.id !== undefined) {
             userModal.detail(router.query.id).then((res) => {
                 setprofileData(res?.data);
-                //console.log(res?.data);
+                //// console.log(res?.data);
                 reset(res?.data);
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
             QueryParam.trainer_id = router.query.id;
             delete (QueryParam.id);
             courseModel.list(QueryParam).then((res) => {
-                //console.log("courses => ",res);
+                //// console.log("courses => ",res);
                 setCourseSubmitted(res?.data.length);
                 setAllCourses(res?.data);
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
         }
     }, [router, reset]);
@@ -54,7 +54,7 @@ const editTrainee = () => {
         event.preventDefault();
         seterrorMessage("");
         const formData = new FormData(event.target);
-        //console.log(data.password);
+        //// console.log(data.password);
         await userModal.update(router.query.id, formData).then((res) => {
             helper.sweetalert.toast("Trainee Updated");
             router.push("/users/trainee");
@@ -118,7 +118,7 @@ const editTrainee = () => {
                                             approveStatus = "Rejected";
                                         }
                                         return (
-                                            <tr>
+                                            <tr key={`table${index}`}>
                                                 <td>{index+1}</td>
                                                 <td>{item.course_name}</td>
                                                 <td>{item.category.category_name}</td>
@@ -157,4 +157,4 @@ const editTrainee = () => {
         </>
     )
 }
-export default editTrainee;
+export default EditTrainee;

@@ -1,11 +1,12 @@
 import widgetModel from "../../model/widget.model";
 import useSWR from 'swr';
 import { useEffect } from "react";
-export default function adminWidgets() {
+import Image from "next/image";
+export default function AdminWidgets() {
   const { data: traineeKpi, mutate: loadTraineeKpi } = useSWR('traineeKapi', async () => await widgetModel.traineeKpis());
   
   useEffect(() => {
-    console.log("traineeKpi", traineeKpi);
+    // console.log("traineeKpi", traineeKpi);
   }, [traineeKpi]);
   return (
     <>

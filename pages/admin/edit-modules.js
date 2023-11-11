@@ -1,7 +1,9 @@
 
+import Link from "next/link";
 import auth from "../../model/auth.model";
 import Sidebar from "./component/sidebar";
 import Topnavbar from "./component/topnavbar";
+import Image from "next/image";
 const admineditmodule = () => {
   return (
     <>
@@ -55,14 +57,14 @@ const admineditmodule = () => {
                                             <span class="text-success">Approved</span>
                                             <span>
                                                 <div class="editRemove-btns d-flex gap-4">
-                                                    <a href="/admin/edit-course">
+                                                    <Link href="/admin/edit-course">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                             class="w-6 h-6 edit-btn text-primary">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                                         </svg>
-                                                    </a>
+                                                    </Link>
 
                                                     <div data-toggle="modal" data-target="#myModal">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -90,18 +92,18 @@ const admineditmodule = () => {
                                             <span>4</span>
                                             <span>-</span>
                                             <span>Thomas</span>
-                                            <span><a href="/admin/admin-new-trainee-course-page.html"><button type="button"
-                                                        class="approve-btn">Approve</button></a></span>
+                                            <span><Link href="/admin/admin-new-trainee-course-page.html"><button type="button"
+                                                        class="approve-btn">Approve</button></Link></span>
                                             <span>
                                                 <div class="editRemove-btns d-flex gap-4">
-                                                    <a href="/admin/edit-course">
+                                                    <Link href="/admin/edit-course">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                             class="w-6 h-6 edit-btn text-primary">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                                         </svg>
-                                                    </a>
+                                                    </Link>
 
                                                     <div data-toggle="modal" data-target="#myModal">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -132,14 +134,14 @@ const admineditmodule = () => {
                                             <span class="text-danger">Rejected</span>
                                             <span>
                                                 <div class="editRemove-btns d-flex gap-4">
-                                                    <a href="/admin/edit-course">
+                                                    <Link href="/admin/edit-course">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                             class="w-6 h-6 edit-btn text-primary">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                                         </svg>
-                                                    </a>
+                                                    </Link>
 
                                                     <div data-toggle="modal" data-target="#myModal">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -170,14 +172,14 @@ const admineditmodule = () => {
                                             <span class="text-success">Approved</span>
                                             <span>
                                                 <div class="editRemove-btns d-flex gap-4">
-                                                    <a href="/admin/edit-course">
+                                                    <Link href="/admin/edit-course">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                             class="w-6 h-6 edit-btn text-primary">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                                         </svg>
-                                                    </a>
+                                                    </Link>
 
                                                     <div data-toggle="modal" data-target="#myModal">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -201,20 +203,20 @@ const admineditmodule = () => {
                             <div class="trainer-pagination ">
                                 <nav class="pagination-container d-flex justify-content-end">
                                     <div class="pagination">
-                                        <a class="pagination-newer" href="#">
+                                        <Link class="pagination-newer" href="#">
                                             <ion-icon name="chevron-back-outline"></ion-icon>
-                                        </a>
+                                        </Link>
                                         <span class="pagination-inner">
-                                            <a href="#">1</a>
-                                            <a class="pagination-active" href="#">2</a>
-                                            <a href="#">3</a>
-                                            <a href="#">4</a>
-                                            <a href="#">5</a>
-                                            <a href="#">6</a>
+                                            <Link href="#">1</Link>
+                                            <Link class="pagination-active" href="#">2</Link>
+                                            <Link href="#">3</Link>
+                                            <Link href="#">4</Link>
+                                            <Link href="#">5</Link>
+                                            <Link href="#">6</Link>
                                         </span>
-                                        <a class="pagination-older" href="#">
+                                        <Link class="pagination-older" href="#">
                                             <ion-icon name="chevron-forward-outline"></ion-icon>
-                                        </a>
+                                        </Link>
                                     </div>
                                 </nav>
                             </div>

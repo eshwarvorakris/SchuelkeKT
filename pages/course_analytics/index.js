@@ -14,7 +14,7 @@ import CategoryList from "../components/categoryListDropdown";
 import CountryList from "../components/countryListDropdown";
 import ExportToExcel from "../components/ExportToExcel";
 
-const analytics = () => {
+const Analytics = () => {
   const router = useRouter();
   const [isLoading, setisLoading] = useState(true);
   const [country, setCountry] = useState("all");
@@ -29,7 +29,7 @@ const analytics = () => {
   const handleCountryChange = (country) => {
     //onCountryChangeParent(country)
     setCountry(country.value);
-    //console.log(country);
+    //// console.log(country);
     QueryParam.country = country.value;
     router.push({
       pathname: router.pathname,
@@ -39,7 +39,7 @@ const analytics = () => {
   const handleSelectChange = (option) => {
     //onTopicChanged(option)
     setTopic(option.value);
-    console.log("category option = ", option);
+    // console.log("category option = ", option);
     delete(QueryParam.topic)
     QueryParam.category = option.value;
     router.push({
@@ -55,7 +55,7 @@ const analytics = () => {
 
   const pagginationHandler = (page) => {
     page.selected++;
-    console.log("page : ", page)
+    // console.log("page : ", page)
     QueryParam.page = page.selected;
     router.push({
       pathname: router.pathname,
@@ -81,13 +81,13 @@ const analytics = () => {
       formData.append("category", QueryParam.category);
     }
     await courseModel.getCourseAnalytics(formData, QueryParam).then((result) => {
-      console.log("data", result?.data);
+      // console.log("data", result?.data);
       setCourses(result?.data);
 
       if (result?.data) {
-        //console.log("here10");
+        //// console.log("here10");
         if (result?.data?.data?.length > 0) {
-          //console.log("here20");
+          //// console.log("here20");
           var tempData = [];
           result?.data?.data.map((item, index) => {
             tempData.push({
@@ -119,7 +119,7 @@ const analytics = () => {
   }, [])
 
   useEffect(() => {
-    //console.log("QueryParam", QueryParam);
+    //// console.log("QueryParam", QueryParam);
     if(QueryParam) {
       getAnalytics();
     }
@@ -229,4 +229,4 @@ const analytics = () => {
     </>
   );
 }
-export default analytics;
+export default Analytics;

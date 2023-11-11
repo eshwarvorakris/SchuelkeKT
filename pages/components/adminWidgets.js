@@ -1,6 +1,7 @@
 import widgetModel from "../../model/widget.model";
 import useSWR from 'swr';
-export default function adminWidgets() {
+import Image from "next/image";
+export default function AdminWidgets() {
   const { data: courseCount, mutate: loadTotal } = useSWR('courseCount', async () => await widgetModel.courseCount());
   
   const { data: totalHour, mutate: loadWeek } = useSWR('totalHour', async () => await widgetModel.courseHour());

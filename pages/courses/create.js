@@ -15,7 +15,8 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import Link from "next/link";
-const addcourse = ({ categories }) => {
+import Image from "next/image";
+const Addcourse = ({ categories }) => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Create Course") }
     const router = useRouter();
@@ -30,16 +31,16 @@ const addcourse = ({ categories }) => {
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         setDisableBtn(true);
-        //console.log(event.target.course_name.value);
+        //// console.log(event.target.course_name.value);
         if (event.target.course_name.value != "" && event.target.total_modules.value != "" && event.target.course_launch_date.value != "" && event.target.week_duration.value != "" && event.target.total_training_hour.value != "") {
             if(event.target.total_training_hour.value > 0) {
                 const formData = new FormData(event.target);
                 var CurrentDate = moment().format();
                 formData.append('status_update_on', CurrentDate);
-                //console.log(data, formData);
+                //// console.log(data, formData);
                 await courseModel.create(formData).then((res) => {
                     // console.clear();
-                    // console.log(res.data.id)
+                    // // console.log(res.data.id)
                     //setDisableBtn(false);
                     setModuleLink(`/courses/${res.data.id}/module`);
                     setAssignmentLink(`/courses/${res.data.id}/assessment`);
@@ -66,7 +67,7 @@ const addcourse = ({ categories }) => {
     };
 
     const fileDropped = () => {
-        console.log("dropped");
+        // console.log("dropped");
     };
     const handleChangeImage = (async (e) => {
         //setValue("uploadfile", e.target.files);
@@ -79,7 +80,7 @@ const addcourse = ({ categories }) => {
             helper.sweetalert.toast("File Uploaded Successfully");
             document.getElementById("thumbnail-pic").classList.remove("d-none");
             document.getElementById("pic-container").classList.add("d-none");
-            //console.log(res?.data);
+            //// console.log(res?.data);
             setImage(res?.data?.data?.Location);
         }).catch((error) => {
             helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -89,7 +90,7 @@ const addcourse = ({ categories }) => {
     });
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         onDrop: async files => {
-            console.log(files[0]);
+            // console.log(files[0]);
             var data = new FormData();
             var imagedata = files[0];
             data.append("uploadFile", imagedata);
@@ -98,7 +99,7 @@ const addcourse = ({ categories }) => {
             await uploader.upload(data).then((res) => {
                 helper.sweetalert.toast("File Uploaded Successfully");
 
-                console.log(res?.data);
+                // console.log(res?.data);
                 setImage(res?.data?.data?.Location);
             }).catch((error) => {
                 helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -351,4 +352,4 @@ const addcourse = ({ categories }) => {
         </>
     )
 }
-export default addcourse;
+export default Addcourse;

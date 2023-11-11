@@ -9,7 +9,8 @@ import ChapterCard from "./chapterCard"
 import contentModel from "../../model/content.model";
 import CourseViewModel from "../../model/cource_view.model"
 import AppContext from "../../lib/appContext";
-export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLeft = 0, perModuleMin }) {
+import Image from "next/image";
+export default function ModuleDetailCard({ moduleData, moduleIndex, moduleHourLeft = 0, perModuleMin }) {
   const router = useRouter();
   const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
@@ -27,7 +28,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
   const [moduleLeftHour, setModuleLeftHour] = useState("");
   const [lastChapterId, setLastChapterId] = useState(0);
   //const { data: contents, mutate: contentList, error, isLoading } = useSWR(moduleData?.id || null, async () => await contentModel.list({ module_id: moduleData?.id }), config.swrConfig);
-  //console.log(chapters);
+  //// console.log(chapters);
   useEffect(() => {
     if(moduleData?.id !== undefined)
     {
@@ -37,7 +38,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
       moduleViewData.append("sequence_no", moduleData?.sequence_no);
 
       CourseViewModel.getModuleView(moduleViewData).then((res) => {
-        //console.log("module view = "+moduleData?.id+" ",res);
+        //// console.log("module view = "+moduleData?.id+" ",res);
         if(layoutValues.profile.role == "trainee") {
           setmoduleStatus(res?.data?.moduleStatus);
         } else {
@@ -56,7 +57,8 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
           if(res?.data?.allContentInModule > 0) {
             percontentsec = parseInt(courseTimeInSec / res?.data?.allContentInCourse);
             currentModuleMaxSec = percontentsec * res?.data?.allContentInModule;
-            let curModuleViewSec = res?.data?.curModuleViews;
+            // let curModuleViewSec = res?.data?.curModuleViews;
+            let curModuleViewSec = res?.data?.moduleViewesCount;
             if(curModuleViewSec > currentModuleMaxSec) {
               percentage = 100;
               var hourOut = "0hrs 0mins left";
@@ -96,25 +98,26 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
       });
 
       contentModel.list({ module_id: moduleData?.id }).then((res) => {
-        //console.log("perModuleMin = ",perModuleMin);
+        //// console.log("perModuleMin = ",perModuleMin);
         if(perModuleMin > 0 && res?.data?.length > 0) {
           setPerContentMin(perModuleMin / res?.data?.length);
         }
         setContent(res);
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
     }
-    //console.log("all contents1111 => ", contents?.data)
+    //// console.log("all contents1111 => ", contents?.data)
   }, []);
 
   useEffect(() => {
-    //console.log("layoutValues", layoutValues.profile.role)
+    //// console.log("layoutValues", layoutValues.profile.role)
     if(lastChapterId === undefined || lastChapterId == 0) {
       //setLastChapterId(res?.data?.lastchapter?.chapter_id);
       if(contents?.data?.length > 0 && moduleStatus != 3) {
-        //console.log("found in module "+moduleData?.id+" -> ", contents?.data?.[0].id);
+        //// console.log("found in module "+moduleData?.id+" -> ", contents?.data?.[0].id);
         setLastChapterId(contents?.data?.[0].id);
+        // console.log('content-firstchapter-id ' + contents?.data?.[0].id);
       }
     }
   }, [contents, lastChapterId, moduleStatus])
@@ -139,12 +142,12 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
         </div>
         {
           (() => {
-            if (layoutValues?.profile?.role == 'trainee') {
+            if (layoutValues?.profile?.role == 'trainee' || layoutValues?.profile.role == 'trainer') {
               return (
                 <div className="button-progress-container">
-                  {(moduleStatus == 2 || moduleStatus == 1) &&
-                    <>
-                      <Link className="topic-link" href={`/chapter/${lastChapterId}`}>
+                  {(moduleStatus == 2 || moduleStatus == 1 ) && 
+                   layoutValues?.profile.role != 'trainer' ? <>
+                       <Link className="topic-link" href={`/chapter/${lastChapterId}`}>
                         <button type="button" className="start-learning-btn d-flex gap-2">
                           <div className="blank-class">
 
@@ -164,8 +167,8 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
                           <div className="progress-bar" role="progressbar" style={{ width: percentCompleted+'%' }} aria-valuenow="0"
                             aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                      </div>
-                    </>
+                      </div> 
+                    </> : ''
                   }
 
                   {moduleStatus == 3 &&
@@ -185,7 +188,7 @@ export default function moduleDetailCard({ moduleData, moduleIndex, moduleHourLe
           {
             (() => {
               if (contents?.data?.length > 0) {
-                //console.log("first  id = ", contents?.data?.[0].id);
+                //// console.log("first  id = ", contents?.data?.[0].id);
                 return (
                   <>
                     {contents?.data?.map((item, index) => {

@@ -14,8 +14,8 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-
-const trainer = () => {
+import Image from "next/image";
+const Trainer = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Trainer Lists") }
@@ -27,12 +27,12 @@ const trainer = () => {
 
     const { data: trainer, mutate: trainerList, error: trainererror, isLoading: trainerisLoading } = useSWR(QueryParam ? "trainerList" : null, async () => await userModal.trainerList(QueryParam), config.swrConfig);
     const userDelete = function (id) {
-        //console.log(id);
+        //// console.log(id);
         helper.sweetalert.confirm("Are you sure you want to delete this trainer", "info", true).then((result) => {
             if (result.isConfirmed) {
                 userModal.delete(id).then((res) => {
                     helper.sweetalert.toast(res.data?.message);
-                    //console.log(res);
+                    //// console.log(res);
                     mutate('trainerList');
                 })
             }
@@ -157,7 +157,7 @@ const trainer = () => {
         });
     };
     const handleSort = function (column, sortDirection) {
-        //console.log(rows)
+        //// console.log(rows)
         QueryParam.order_by = column.sortField;
         QueryParam.order_in = sortDirection;
         /* router.push({
@@ -204,7 +204,7 @@ const trainer = () => {
     });
 
     const onCountrySelect = (e) => {
-        //console.log(e.value);
+        //// console.log(e.value);
         QueryParam.filterParam = e.value;
         trainerList();
         setSelectCountry(e);
@@ -348,4 +348,4 @@ const trainer = () => {
         </>
     )
 }
-export default trainer;
+export default Trainer;

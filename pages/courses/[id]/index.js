@@ -17,13 +17,14 @@ const Page = () => {
   QueryParam.order_by = router.query?.order_by || "sequence_no";
   QueryParam.order_in = router.query?.order_in || "asc";
   const layoutValues = useContext(AppContext);
-  { layoutValues.setPageHeading("Trainee Center") }
+  { layoutValues.setPageHeading("Course Modules") }
   const [per_module_hour, setper_module_hour] = useState("0hrs 0mins");
   const [perModuleMin, setPerModuleMin] = useState(0);
   const [moduleCount, setModuleCount] = useState(0);
   const [showAssignmentButton, setShowAssignmentButton] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
   const [coursePercent, setCoursePercent] = useState(0);
+  const [profile, setprofile] = useState(layoutValues.profile)
   
   const [modules, setModules] = useState([]);
   const [courseData, setCourseData] = useState([]);
@@ -38,7 +39,7 @@ const Page = () => {
       courseModel.modules(QueryParam?.id, QueryParam).then((res) => {
         setModules(res);
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
     }
   }
@@ -48,7 +49,7 @@ const Page = () => {
       courseModel.detail(router?.query?.id).then((res) => {
         setCourseData(res);
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
     }
   }
@@ -74,7 +75,7 @@ const Page = () => {
       countAttemptForm.append("course_id", router?.query?.id);
       assignmentModel.countAttempt(countAttemptForm).then((submittedRes) => {
         //console.clear();
-        //console.log("attempt result",submittedRes?.data);
+        //// console.log("attempt result",submittedRes?.data);
         setassignmentSubmitCount(submittedRes?.data?.assignmentAttempt)
         if (submittedRes?.data?.assignmentAttempt < process.env.NEXT_PUBLIC_MAXIMUM_ASSIGNMENT_ATTEMPT_LIMIT) {
           setShowAssignmentButton(true);
@@ -84,7 +85,7 @@ const Page = () => {
       CourseViewModel.getAnyCourseChapterViewed(countAttemptForm).then((res) => {
         let maxAttempt = 0;
         /* console.clear();
-        console.log("view data => ", res?.data); */
+        // console.log("view data => ", res?.data); */
         let allmoduleLeft = res?.data?.moduleTotalCount - res?.data?.moduleCompletedCount;
         if(allmoduleLeft > 0 ) {
           setModuleLeft(allmoduleLeft);
@@ -95,7 +96,7 @@ const Page = () => {
             setShowAssignmentButton(true);
           }
         }
-        //console.log("course view", res.data.courseReDoneCount.re_done_count);
+        //// console.log("course view", res.data.courseReDoneCount.re_done_count);
 
         let maxcoursemin = Math.floor(courseData?.data?.total_training_hour * 60);
         let maxcoursesec = maxcoursemin * 60;
@@ -110,7 +111,7 @@ const Page = () => {
             } else {
               courseViewSec += viewedElement.viewed_seconds;
             }
-            //console.log("id = "+viewedElement.id+" view = "+viewedElement.viewed_seconds+" courseView = "+courseViewSec)
+            //// console.log("id = "+viewedElement.id+" view = "+viewedElement.viewed_seconds+" courseView = "+courseViewSec)
           });
           //courseViewSec = res?.data?.courseViewSec;
         }
@@ -136,7 +137,7 @@ const Page = () => {
         }
         
       }).catch((error) => {
-        console.log("module error", error);
+        // console.log("module error", error);
       });
     }
     if (modules?.data && total_training_hour != undefined) {
@@ -154,17 +155,17 @@ const Page = () => {
     <>
       <form style={{ backgroundColor: 'white' }}>
 
-        <div className="header-heading">
-          <h5>My Progress</h5>
-        </div>
+      {profile?.role != 'trainer' ? <div className="header-heading">
+          <h5>My Progress </h5>
+        </div>  :'' }
 
-        <div className="progress-card">
+        {profile?.role != 'trainer' ?  <div className="progress-card">
 
           <div className="info">
             <div className="progress-card-heading">
               <span style={{ color: '#212529' }}>{courseData?.data?.course_name}</span>
             </div>
-            <div className="remaining-info-card">
+            {profile?.role != 'trainer' ?<div className="remaining-info-card">
               <span>
                 {moduleLeft > 0 ? (
                   <>{moduleLeft} Module Remaining</>
@@ -172,7 +173,7 @@ const Page = () => {
                   <>All Modules Completed</>
                 )}
               </span>
-            </div>
+            </div> : ''}
             <div className="date-assessment-info d-flex gap-2">
               <div className="date-label-1">
                 <span style={{ color: '#212529' }}>Due Date: {moment(courseData?.data?.course_launch_date).add(courseData?.week_duration, 'weeks').format("Do MMM YY")}, 12:00 AM</span>
@@ -198,13 +199,14 @@ const Page = () => {
               <span style={{ color: '#212529' }}>{timeLeft}</span>
             </div>
           </div>
-        </div>
-
+        </div> : ''}
+        
         <div className="modules-heading">
-          <h5>Modules</h5>
+          <h5>Modules </h5>
         </div>
 
-        <div>
+        {profile?.role != 'trainer' ? <div>
+        
           <div className="module-cards">
             {modules?.data?.map((item, index) => {
               return (
@@ -213,7 +215,7 @@ const Page = () => {
             })}
           </div>
 
-        </div>
+        </div> : ''}
 
         {modules?.data?.map((item, index) => {
           return (

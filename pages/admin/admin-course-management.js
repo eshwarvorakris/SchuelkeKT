@@ -1,3 +1,4 @@
+import Image from "next/image";
 import auth from "../../model/auth.model";
 import Sidebar from "./component/sidebar";
 import Topnavbar from "./component/topnavbar";

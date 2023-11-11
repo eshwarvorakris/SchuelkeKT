@@ -6,7 +6,7 @@ import { helper } from '../../lib/helper';
 import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import AppContext from "../../lib/appContext";
-export default function chapterCard({ chapterData, chapterIndex, perContentMin, moduleData, firstChapterId }) {
+export default function ChapterCard({ chapterData, chapterIndex, perContentMin, moduleData, firstChapterId }) {
   const router = useRouter();
   const layoutValues = useContext(AppContext);
   const QueryParam = router.query;
@@ -19,13 +19,14 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin, 
   const [percent, setPercent] = useState(0);
   var curChapterViewSeconds = 0;
   useEffect(() => {
-    //console.log("chapterData.isLocked", chapterData.isLocked)
+    //// console.log("chapterData.isLocked", chapterData.isLocked)
     if(layoutValues.profile.role == "trainee") {
       const chapterForm = new FormData();
       chapterForm.append("chapter_id", chapterData.id);
       chapterForm.append("course_id", chapterData.course_id);
       chapterForm.append("module_id", chapterData.module_id);
       chapterForm.append("module_sequence_no", moduleData.sequence_no);
+      chapterForm.append("chapter_order", chapterData.order);
       let isModuleFirstChapter = false;
       if(firstChapterId == chapterData.id) {
         isModuleFirstChapter = true;
@@ -33,7 +34,7 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin, 
       chapterForm.append("module_first_chapter_id", firstChapterId);
       chapterForm.append("isModuleFirstChapter", isModuleFirstChapter);
       CourseViewModel.getChapterView(chapterForm).then((res) => {
-        //console.log("cur course view chapter id ->"+chapterData.id+" = ", res.data)
+        //// console.log("cur course view chapter id ->"+chapterData.id+" = ", res.data)
         if(res?.data !== null || res?.data !== "") {
           if(res?.data?.curChapterViews !== undefined) {
             let courseTotalSec = (res?.data?.courseData?.total_training_hour * 60 * 60);
@@ -56,11 +57,12 @@ export default function chapterCard({ chapterData, chapterIndex, perContentMin, 
               } else if(res?.data?.isCurrentChapterLocked){
                 setchapterStatus("locked");
               }
+              
             }
           }
         }
       }).catch((error) => {
-        console.log("module error", error);
+        // console.log("module error", error);
       });
     }
   },[]);

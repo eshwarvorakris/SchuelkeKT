@@ -19,7 +19,7 @@ function Page() {
   const onSubmit = handleSubmit(async (data) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log(data, formData);
+    // console.log(data, formData);
     await contentModel.create(formData).then((res) => {
       helper.sweetalert.toast("module Created");
       router.push("/module");
@@ -39,8 +39,8 @@ function Page() {
       <Form.Group className="mb-3">
           <Form.Label>Content Type</Form.Label>
           <Form.Select {...register("content_id")} isInvalid={formErrors?.content_id}>
-            {["title","content","file"].map((item) => {
-              return (<option>{item}</option>)
+            {["title","content","file"].map((item,index) => {
+              return (<option key={`form${index}`}>{item}</option>)
             })}
           </Form.Select>
           {formErrors?.content_id && <p className="invalid-feedback">{formErrors?.content_id}</p>}
@@ -49,8 +49,8 @@ function Page() {
         <Form.Group className="mb-3">
           <Form.Label>Module</Form.Label>
           <Form.Select {...register("content_id")} isInvalid={formErrors?.content_id}>
-            {modules?.data.map((item) => {
-              return (<option value={item.id}>{item.name}</option>)
+            {modules?.data.map((item,index) => {
+              return (<option key={`module${index}`} value={item.id}>{item.name}</option>)
             })}
           </Form.Select>
           {formErrors?.content_id && <p className="invalid-feedback">{formErrors?.content_id}</p>}

@@ -11,6 +11,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap';
 import AppContext from "../../../lib/appContext";
 import { useForm } from "react-hook-form";
+import Image from "next/image";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 function Page() {
   const [modalStatus, setModalStatus] = useState(false);
@@ -35,7 +36,7 @@ function Page() {
   //const { data: modules, mutate: moduleList, error, isLoading } = useSWR(QueryParam?.id || null, async () => await courseModule.modules(QueryParam?.id), config.swrConfig);
 
   // useEffect(() => {
-  //   console.log("moduleData",moduleData);
+  //   // console.log("moduleData",moduleData);
   // }, []);
 
   const updateList = function () {
@@ -43,7 +44,7 @@ function Page() {
     courseModule.modules(QueryParam?.id, QueryParam).then((res) => {
       setModuleData(res?.data);
     }).catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -66,7 +67,7 @@ function Page() {
   }
 
   const moduleUpdate = function (id) {
-    //console.log(document.getElementById('description' + id).value);
+    //// console.log(document.getElementById('description' + id).value);
     setupdateId(id);
     setupdateName(document.getElementById('name' + id).value);
     setupdateDesc(document.getElementById('description' + id).value);
@@ -77,7 +78,7 @@ function Page() {
     event.preventDefault();
     setModuleUpdateBtn(true);
     const formData = new FormData(event.target);
-    //console.log(event.target)
+    //// console.log(event.target)
     await moduleModel.update(formData.get("id"), formData).then((res) => {
       helper.sweetalert.toast("Module Updated");
       moduleHide();
@@ -127,7 +128,7 @@ function Page() {
       seq++;
       item.sequence_no = seq;
     });
-    console.log("reorder", newItems);
+    // console.log("reorder", newItems);
     updateAllModule(newItems)
     //setModuleData(newItems);
     //saveModuleButton.current.click()
@@ -145,7 +146,7 @@ function Page() {
     });
     //moduleForm.append('modules', JSON.stringify(newItems));
     await moduleModel.updateAll(moduleForm).then((res) => {
-      //console.log("check update res", res.data);
+      //// console.log("check update res", res.data);
       helper.sweetalert.toast("Modules Updated");
       setModuleData(newItems);
     }).catch((error) => {

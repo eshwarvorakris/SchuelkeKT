@@ -6,7 +6,7 @@ import auth from "../model/auth.model";
 import Link from 'next/link';
 import authLayout from "../components/authLayout";
 import Layout from "../components/layout";
-
+import Image from "next/image";
 function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, seterrorMessage] = useState("");
@@ -18,7 +18,7 @@ function Login() {
     event.preventDefault();
     seterrorMessage("")
     const formData = new FormData(event.target);
-    //console.log(data, formData);
+    //// console.log(data, formData);
     await auth.login(formData).then((res) => {
       sessionStorage.setItem("access_token", res.data.access_token);
       sessionStorage.setItem("userinfo", JSON.stringify(res.data.data));
@@ -71,7 +71,7 @@ function Login() {
         <div className="section-login" style={{ paddingTop: '0.1rem' }}>
 
           <Form className="form d-flex flex-column" onSubmit={onSubmit} encType="multipart/form-data" >
-            <b className='text-danger'>{errorMessage}</b>
+            {/* <b className='text-danger'>{errorMessage}</b> */}
             <Form.Group className="form-group">
               <h1 style={{ fontFamily: `Co-bold-2` }}>Your Journey starts here</h1>
               <Form.Label htmlFor="email" style={{ fontFamily: `Co-bold-2` }}><b>Email</b></Form.Label>

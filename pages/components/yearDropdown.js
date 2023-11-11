@@ -1,7 +1,7 @@
 import Select from 'react-select';
 import { useContext, useState } from "react";
 import { useEffect } from 'react';
-export default function yearDropdown({handleYear}) {
+export default function YearDropdown({handleYear}) {
   const [isLoading, setisLoading] = useState(true);
   const curYear = new Date().getFullYear();
 
@@ -13,7 +13,7 @@ export default function yearDropdown({handleYear}) {
           (() => {
             let optionItem = [];
             for (var preYear = curYear; preYear >= curYear - 2; preYear--) {
-              //console.log("year - ", curYear);
+              //// console.log("year - ", curYear);
               optionItem.push(<option value={preYear}>{preYear}</option>)
             }
             return (<>{optionItem}</>);

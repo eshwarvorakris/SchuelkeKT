@@ -4,7 +4,8 @@ import auth from "../../model/auth.model";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import AppContext from "../../lib/appContext";
-const myprofile = () => {
+import Image from "next/image";
+const Myprofile = () => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Profile") }
     const router = useRouter();
@@ -20,10 +21,10 @@ const myprofile = () => {
                 setImage(res.profile_img);
             }
             setprofileData(res);
-            console.log(res);
+            // console.log(res);
         }).catch((error) => {
             router.replace("/login");
-            console.log(error);
+            // console.log(error);
         });
     }, [router]);
     return (
@@ -157,4 +158,4 @@ const myprofile = () => {
         </>
     )
 }
-export default myprofile;
+export default Myprofile;

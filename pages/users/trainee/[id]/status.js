@@ -12,7 +12,8 @@ import { config } from '../../../../lib/config';
 import { useForm } from 'react-hook-form';
 import { helper } from '../../../../lib/helper';
 import Link from 'next/link';
-const editTrainee = () => {
+import Image from "next/image";
+const EditTrainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Trainee Status") }
@@ -33,11 +34,11 @@ const editTrainee = () => {
             await courseModel.getTraineeAssignedCourses(formData).then(async (result) => {
                 if (result) {
                     //console.clear();
-                    console.log(result?.data);
+                    // console.log(result?.data);
                     setCourses(result);
                 }
             }).catch((error) => {
-                console.log(error.message);
+                // console.log(error.message);
             });
         }
     }
@@ -48,27 +49,27 @@ const editTrainee = () => {
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ defaultValues: profileData });
     const [statusKpis, setStatusKpis] = useState([]);
     useEffect(() => {
-        //console.log("Courses => ", courses?.data)
+        //// console.log("Courses => ", courses?.data)
         if (router.query.id !== undefined) {
             couresList();
             userModal.detail(router.query.id).then((res) => {
                 setprofileData(res?.data);
-                //console.log(res?.data);
+                //// console.log(res?.data);
                 reset(res?.data);
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
             const assignmentUser = new FormData();
             assignmentUser.append("trainee_id", router.query.id);
             assignmentModel.traineeAttempts(assignmentUser).then((submittedRes) => {
-                //console.log("list", submittedRes);
+                //// console.log("list", submittedRes);
                 setAllAsignments(submittedRes);
             });
             widgetModel.traineeStatusKpis(assignmentUser).then((res) => {
-                console.log("kpi response", res);
+                // console.log("kpi response", res);
                 setStatusKpis(res);
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
         }
     }, [router, reset]);
@@ -77,7 +78,7 @@ const editTrainee = () => {
         event.preventDefault();
         seterrorMessage("");
         const formData = new FormData(event.target);
-        //console.log(data.password);
+        //// console.log(data.password);
         await userModal.update(router.query.id, formData).then((res) => {
             helper.sweetalert.toast("Trainee Updated");
             router.push("/users/trainee");
@@ -184,7 +185,7 @@ const editTrainee = () => {
 
                     <div className="trainee-topic-cards row" style={{ marginBottom: 'unset' }}>
                         {courses?.data?.map((item, index) => {
-                            //console.log("item->",item);
+                            //// console.log("item->",item);
                             return (
                                 <AdminCourseCard key={`courseCard${index}`} courseData={item.course} revisit={item.revisit} courseIndex={index} />
                             )
@@ -356,4 +357,4 @@ const editTrainee = () => {
         </>
     )
 }
-export default editTrainee;
+export default EditTrainee;

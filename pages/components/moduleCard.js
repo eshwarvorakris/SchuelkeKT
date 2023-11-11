@@ -4,7 +4,8 @@ import AppContext from "../../lib/appContext";
 import CourseViewModel from "../../model/cource_view.model";
 import { useContext, useState } from "react";
 import { useEffect } from 'react';
-export default function moduleCard({ moduleData, moduleIndex }) {
+import Image from "next/image";
+export default function ModuleCard({ moduleData, moduleIndex }) {
   //const rand = 1 + Math.random() * (100 - 1);
   const rand = 0;
   const [percentCompleted, setPercentCompleted] = useState(0);
@@ -15,7 +16,7 @@ export default function moduleCard({ moduleData, moduleIndex }) {
     moduleViewData.append("module_id", moduleData?.id);
     
     CourseViewModel.getModuleView(moduleViewData).then((res) => {
-      //console.log("module view = ",res);
+      //// console.log("module view = ",res);
       let percontentsec = 0;
       
       let courseTimeInHour = res?.data?.courseData?.total_training_hour;
@@ -24,8 +25,9 @@ export default function moduleCard({ moduleData, moduleIndex }) {
       let currentModuleMaxSec = 0;
       if (res?.data?.allContentInModule > 0) {
         percontentsec = parseInt(courseTimeInSec / res?.data?.allContentInCourse);
-        currentModuleMaxSec = percontentsec * res?.data?.allContentInModule;
-        let curModuleViewSec = res?.data?.curModuleViews;
+        currentModuleMaxSec = percontentsec * res?.data?.allContentInModule; 
+        // let curModuleViewSec = res?.data?.curModuleViews;
+        let curModuleViewSec = res?.data?.moduleViewesCount;
         percentage = 0;
         if (currentModuleMaxSec > curModuleViewSec) {
           percentage = parseInt((curModuleViewSec / currentModuleMaxSec) * 100);

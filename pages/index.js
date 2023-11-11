@@ -10,7 +10,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
 import authLayout from "../components/authLayout";
 import { useState } from 'react';
-function index() {
+import Image from "next/image";
+function Index() {
   const [blanketModal, setBlanketModal] = useState(false);
   const [productModal, setProductModal] = useState(false);
   const [countryModal, setCountryModal] = useState(false);
@@ -706,9 +707,9 @@ function index() {
     </>
   );
 }
-index.getLayout = function getLayout(page) {
+Index.getLayout = function getLayout(page) {
   return (
     <authLayout>{page}</authLayout>
   )
 }
-export default index;
+export default Index;

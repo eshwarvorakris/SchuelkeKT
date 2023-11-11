@@ -38,7 +38,7 @@ const questionModel=class {
     async submitAssignment(data=[])
     {
         //return await axiosInstance.post(this.baseUrl,data);
-        console.log(data);
+        // console.log(data);
         return "done";
     }
     async update(id,data=[])

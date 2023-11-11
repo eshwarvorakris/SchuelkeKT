@@ -14,7 +14,8 @@ import Link from "next/link";
 import AppContext from "../../../lib/appContext";
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-const editCourse = () => {
+import Image from "next/image";
+const EditCourse = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Edit Course") }
@@ -33,15 +34,15 @@ const editCourse = () => {
                 setImage(res.data.course_thumbnail);
             }
             setcourseData(res.data)
-            console.log(res.data);
+            // console.log(res.data);
             reset(res.data);
         }).catch((error) => {
-            console.log(error.response);
+            // console.log(error.response);
         });
         category.list().then((res) => {
             setCategories(res);
         }).catch((error) => {
-            console.log(error);
+            // console.log(error);
         });
     }, [router, reset]);
 
@@ -49,7 +50,7 @@ const editCourse = () => {
         event.preventDefault();
         if(event.target.total_training_hour.value > 0) {
             const formData = new FormData(event.target);
-            //console.log(data, formData);
+            //// console.log(data, formData);
             await courseModel.update(router.query.id, formData).then((res) => {
                 helper.sweetalert.toast("course Updated");
                 router.push("/courses");
@@ -78,7 +79,7 @@ const editCourse = () => {
             helper.sweetalert.toast("File Uploaded Successfully");
             document.getElementById("thumbnail-pic").classList.remove("d-none");
             document.getElementById("pic-container").classList.add("d-none");
-            console.log(res?.data);
+            // console.log(res?.data);
             setImage(res?.data?.data?.Location);
         }).catch((error) => {
             helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -96,7 +97,7 @@ const editCourse = () => {
 
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         onDrop: async files => {
-            //console.log(files[0]);
+            //// console.log(files[0]);
             var data = new FormData();
             var imagedata = files[0];
             data.append("uploadFile", imagedata);
@@ -106,7 +107,7 @@ const editCourse = () => {
                 helper.sweetalert.toast("File Uploaded Successfully");
                 document.getElementById("thumbnail-pic").classList.remove("d-none");
                 document.getElementById("pic-container").classList.add("d-none");
-                console.log(res?.data);
+                // console.log(res?.data);
                 setImage(res?.data?.data?.Location);
             }).catch((error) => {
                 helper.sweetalert.warningToast("Unable To Upload File Try Again Later");
@@ -338,4 +339,4 @@ const editCourse = () => {
         </>
     )
 }
-export default editCourse;
+export default EditCourse;

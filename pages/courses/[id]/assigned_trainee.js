@@ -12,6 +12,7 @@ import DataTable from 'react-data-table-component';
 import ReactPaginate from 'react-paginate';
 import Link from 'next/link';
 import moment from 'moment';
+import Image from "next/image";
 const AssignCourse = () => {
   const router = useRouter();
   const [courseName, setCourseName] = useState("");
@@ -37,7 +38,7 @@ const AssignCourse = () => {
           setCourseId(res?.data?.id);
         }
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
     }
   }
@@ -52,7 +53,7 @@ const AssignCourse = () => {
         setIsLoading(false);
       }
     }).catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -73,7 +74,7 @@ const AssignCourse = () => {
         if (result.isConfirmed) {
 
           assignCourseModel.delete(assignId).then((res) => {
-            //console.log(res.data)
+            //// console.log(res.data)
             helper.sweetalert.toast(res.data?.message);
             getTrainees();
           })
@@ -97,7 +98,7 @@ const AssignCourse = () => {
     loadCourse();
     getTrainees();
     const loginUser = JSON.parse(sessionStorage.getItem("userinfo"));
-    //console.log("loginUser", loginUser);
+    //// console.log("loginUser", loginUser);
     if (loginUser !== undefined) {
       setLoggedUserId(loginUser["id"]);
     }
@@ -153,15 +154,15 @@ const AssignCourse = () => {
   const assignCourse = async e => {
     e.preventDefault();
     // console.clear();
-    // console.log(e.target);
-    // console.log(sessionStorage.getItem("userinfo"))
+    // // console.log(e.target);
+    // // console.log(sessionStorage.getItem("userinfo"))
     const formData = new FormData(e.target);
     await assignCourseModel.create(formData).then((res) => {
-      //console.log(res);
+      //// console.log(res);
       helper.sweetalert.toast("Course Assignment to trainees updated");
       getTrainees();
     }).catch((error) => {
-      console.log(error.response?.data?.errors);
+      // console.log(error.response?.data?.errors);
     })
   }
 

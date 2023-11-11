@@ -16,8 +16,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import YearDropdown from "../components/yearDropdown";
 import ExportToExcel from "../components/ExportToExcel";
-
-const admincoursemanagement = () => {
+import Image from "next/image";
+const Admincoursemanagement = () => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Courses List") }
     const [exportData, setExportData] = useState(null);
@@ -35,7 +35,7 @@ const admincoursemanagement = () => {
     const couresList = async () => {
         setisLoading(true);
         await courseModel.list(QueryParam).then((result) => {
-            console.log("data", result);
+            // console.log("data", result);
             if (result?.data?.length > 0) {
                 var tempData = [];
                 result?.data.map((item, index) => {
@@ -60,7 +60,7 @@ const admincoursemanagement = () => {
             setCourses(result);
             setisLoading(false);
         }).catch((error) => {
-            console.log(error.message);
+            // console.log(error.message);
         });
     }
 
@@ -266,12 +266,14 @@ const admincoursemanagement = () => {
         {
             name: 'Action',
             cell: row => {
-                //console.log(cell);
+                //// console.log(cell);
                 if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
                         <>
                             <div style={{ display: 'contents' }}>
                                 <div className='btn-group  text-nowrap'>
+
+                                {layoutValues?.profile?.role == 'trainer' ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Edit"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
                                     <Link className='btn btn-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
                                     <button className='btn btn-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 
@@ -302,7 +304,7 @@ const admincoursemanagement = () => {
                                         return (
                                             <>
 
-                                                <Link href={`/courses/${row.id}/assign_course`} className="btn btn-sm p-1" title="Assign Course" style={{backgroundColor: '#10793F'}}>
+                                                <Link href={`/courses/${row.id}/assign_course`} className="btn btn-sm p-1 mx-1" title="Assign Course" style={{backgroundColor: '#10793F'}}>
                                                     <img src="/site_img/assign-course-white.svg" height={20} />
                                                 </Link>
                                                 <Link href={`/courses/${row.id}/assigned_trainee`} className="btn btn-warning btn-sm p-1" title="Assigned Trainees">
@@ -325,7 +327,7 @@ const admincoursemanagement = () => {
 
     const pagginationHandler = (page) => {
         page.selected++;
-        console.log("page : ", page)
+        // console.log("page : ", page)
         QueryParam.page = page.selected;
         router.push({
             pathname: router.pathname,
@@ -384,7 +386,7 @@ const admincoursemanagement = () => {
         couresList()
     });
     const onCountrySelect = (e) => {
-        //console.log(e.value);
+        //// console.log(e.value);
         QueryParam.filterParam = e.value;
         couresList();
         setSelectCountry(e);
@@ -401,7 +403,7 @@ const admincoursemanagement = () => {
 
     // useEffect(() => {
     //     console.clear();
-    //     console.log(courses);
+    //     // console.log(courses);
     // }, [courses]);
     const handleYearChange = (e) => {
         QueryParam.year = e.target.value;
@@ -551,4 +553,4 @@ const admincoursemanagement = () => {
         </>
     )
 }
-export default admincoursemanagement;
+export default Admincoursemanagement;

@@ -7,7 +7,7 @@ import { helper } from '../../lib/helper';
 export default function ExportExcelButton({ exportExcelData, excelName = "" }) {
 
   useEffect(() => {
-    console.log("exportExcelData", exportExcelData);
+    // console.log("exportExcelData", exportExcelData);
   }, [])
   var curDate = new Date().toISOString().slice(0, 10);
   const handleExport = () => {
@@ -21,7 +21,7 @@ export default function ExportExcelButton({ exportExcelData, excelName = "" }) {
       helper.sweetalert.toast("Excel Saved");
     } catch(err) {
       helper.sweetalert.toast("Please Try Again Later");
-      console.log(err.message);
+      // console.log(err.message);
     }
     
   };

@@ -11,12 +11,12 @@ export default function Layout({ children }) {
   const [profile,setProfile]=useState(null);
   const layoutValues={pageHeading,setPageHeading,profile,setProfile};
   useEffect(()=>{
-    //console.log(1)
+    //// console.log(1)
     let tempProfile=JSON.parse(sessionStorage.getItem("userinfo"));
     setProfile(tempProfile);
-    //console.log(2)
-    console.log(profile);
-    //console.log(3)
+    //// console.log(2)
+
+    //// console.log(3)
   },[])
   return (
     <AppContext.Provider value={layoutValues}>

@@ -3,6 +3,7 @@ import auth from "../../model/auth.model";
 import Sidebar from "./component/sidebar";
 import Topnavbar from "./component/topnavbar";
 import admintopicpagetwo from "./admin-topic-page-2";
+import Image from "next/image";
 const admintopicpage = () => {
   return (
     <>

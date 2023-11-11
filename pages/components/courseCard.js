@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { useState } from "react";
 import { useEffect } from "react";
 import CourseViewModel from "../../model/cource_view.model";
-export default function courseCard({ courseData }) {
+import Image from "next/image";
+export default function CourseCard({ courseData }) {
   let courseImg = "/trainer-images/dashboard images/thumbnails/thumbnaila.png";
   if(courseData?.course_thumbnail !== null && courseData?.course_thumbnail != "")
   {
@@ -14,7 +15,7 @@ export default function courseCard({ courseData }) {
     const form = new FormData();
     form.append("course_id", courseData.id);
     CourseViewModel.getEachCourseStat(form).then((res)=> {
-      //console.log("resonse each", res.data);
+      //// console.log("resonse each", res.data);
       setStatData(res?.data)
     })
   },[])

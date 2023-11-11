@@ -1,304 +1,469 @@
-import { useRouter } from 'next/router'
-import useSWR, { mutate } from 'swr';
-import moduleModel from "../../model/module.model";
+import readChapterLayout from "../../components/readChapterLayout";
+import useSWR, { mutate } from "swr";
+import Chapternavbar from "../../components/chapternavbar";
+import Chaptersidebar from "../../components/chaptersidebar";
+// import Imageplayer from "./component/imageplayer";
+import Documentviewer from "../admin/component/documentsviewer";
 import contentModel from "../../model/content.model";
-import Link from 'next/link';
-import { config } from '../../lib/config';
-import { helper } from '../../lib/helper';
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Modal } from 'react-bootstrap';
-import AppContext from '../../lib/appContext';
-import Checktimer from '../../components/checkTimer';
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 import CourseViewModel from "../../model/cource_view.model";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
-import { Player } from 'video-react';
-const topicpage = () => {
-    const [nextContent, setNextContent] = useState([]);
-    const [prevContent, setPrevContent] = useState([]);
-    const [curContent, setCurContent] = useState([]);
-    const [moduleId, setModuleId] = useState(null);
-    const [courseId, setCourseId] = useState(null);
-    const [contentUrl, setContentUrl] = useState(null);
-    const [chapterId, setChapterId] = useState(null);
-    const [curExt, setCurExt] = useState("");
-    const router = useRouter();
-    const layoutValues = useContext(AppContext);
-    const QueryParam = router.query;
-    QueryParam.page = router.query.page || 1;
-    //const { data: contentData, mutate: loadContent, error, isLoading } = useSWR("contentData", async () => await contentModel.detail(QueryParam?.id), config.swrConfig);
-    const [contentData, setContentData] = useState([]);
-    const loadContent = function () {
-        setContentData([]);
-        if (QueryParam.id !== undefined) {
-            contentModel.detail(QueryParam?.id).then((res) => {
-                console.log(res)
-                setContentData(res);
-            }).catch((error) => {
-                console.log(error);
-            });
+import Link from "next/link";
+import courseModel from "../../model/course.model";
+import AppContext from "../../lib/appContext";
+import { Player } from "video-react";
+import Imageplayer from "../../components/imageplayer";
+import Image from "next/image";
+function ChapterInfo() {
+  const layoutValues = useContext(AppContext);
+  const [modal, setModal] = useState("");
+  const [carouselModal, setCarouselModal] = useState("");
+  const [content, setContent] = useState(null);
+  const [extension, setExtension] = useState("");
+  const [chapterList, setChapterList] = useState([]);
+  const [chapterStatus, setChapterStatus] = useState(null);
+  const [courseData, setcourseData] = useState(null);
+  const [moduleId, setmoduleId] = useState(null);
+  const [courseId, setcourseId] = useState(null);
+  const [showNextChapter, setShowNextChapter] = useState(false);
+  const [secondsPerModule, setsecondsPerModule] = useState(0);
+  const [nextContent, setNextContent] = useState(null);
+  const [prevContent, setPrevContent] = useState(null);
+  const [moduleName, setmoduleName] = useState("");
+  const [profile, setprofile] = useState(null);
+  const [timer, settimer] = useState(null);
+  const router = useRouter();
+  const chapterId = router.query?.id || 1;
+  function handleModalSwitch(event, data) {
+    modal == "" ? setModal("active") : setModal("");
+  }
+
+  function handleCarouselModalSwitch(event, data) {
+    carouselModal == "" ? setCarouselModal("active") : setCarouselModal("");
+  }
+
+  async function getModuleStatus(moduleId, courseId, chapterId) {
+    const chapterForm = new FormData();
+    chapterForm.append("module_id", moduleId);
+    chapterForm.append("course_id", courseId);
+    chapterForm.append("chapter_id", chapterId);
+    const response = await CourseViewModel.getChapterView(chapterForm);
+    return response.data;
+  }
+
+  function getUserProfile() {
+    let tempProfile = JSON.parse(sessionStorage.getItem("userinfo"));
+    setprofile(tempProfile);
+    return tempProfile;
+  }
+  async function getChapterInfo() {
+    try {
+      const response = await contentModel.detail(chapterId);
+
+      if (response?.data != undefined) {
+        const chapterStatus = await getModuleStatus(
+          response.data.module_id,
+          response.data.course_id,
+          chapterId
+        );
+        setChapterStatus(chapterStatus);
+
+        if (
+          chapterStatus.isCurrentChapterLocked == false ||
+          profile.role == "trainer"
+        ) {
+          setContent(response.data);
+
+          setExtension(
+            response.data.file_url.split(".")[
+              response.data.file_url.split(".").length - 1
+            ]
+          );
+
+          
+          setViewsSeconds(
+            response.data.course_id,
+            response.data.module_id,
+            chapterId
+          );
+          getChapterViewData(chapterId);
+
+          setmoduleId(response.data.module_id);
+          setcourseId(response.data.course_id);
+        } else {
+          setContent(null);
+          // router.back();
         }
+
+        return response.data.course_id;
+      }
+    } catch (error) {}
+  }
+
+  async function getModules(course_id, chapterId, module_id) {
+    try {
+      // const response = await courseModel.modules(course_id,'order_by=sequence_no&order_in=asc');
+      const response = await contentModel.list();
+      setChapterList(response.data);
+
+      if ((response?.data).length > 1) {
+        var i = 0;
+        response?.data.map((item, index) => {
+          // console.log(module_id);
+          if (item.module_id === module_id) {
+            if (item.id < chapterId) {
+              setPrevContent(item.id);
+            }
+            if (item.id > chapterId) {
+              setNextContent(item.id);
+            }
+            // if (typeof response?.data?.[i + 1] !== 'undefined') {
+            //     //// console.log("sequece = ", response?.data?.[i + 1]?.sequence_no)
+            //     setNextContent(response?.data?.[i + 1]?.id);
+            // }
+          }
+          i++;
+        });
+      }
+    } catch (error) {}
+  }
+
+  function setViewsSeconds(course_id, module_id, chapter_id) {
+    const apiTimer = setInterval(async () => {
+      const courseFormData = new FormData();
+      courseFormData.append("course_id", course_id);
+      courseFormData.append("module_id", module_id);
+      courseFormData.append("chapter_id", chapter_id);
+      courseFormData.append(
+        "viewed_seconds",
+        process.env.NEXT_PUBLIC_TIMEOUT_UPDATE_SECOND
+      );
+      await CourseViewModel.create(courseFormData);
+    }, 30000);
+
+    settimer(apiTimer);
+  }
+
+  async function courseDetail(course_id) {
+    try {
+      const response = await courseModel.detail(course_id);
+      // setcourseData(response.data);
+      calculatetimePermodule(
+        response.data.total_training_hour,
+        response.data.total_modules
+      );
+    } catch (error) {
+      // console.log(error);
     }
-    useEffect(() => {
-        loadContent();
-    }, [QueryParam?.id])
-    const [showDocs, setShowDocs] = useState("d-none");
-    const [showNextChapter, setShowNextChapter] = useState(false);
-    useEffect(() => {
-        setShowDocs("d-none");
-        setNextContent([]);
-        setPrevContent([]);
-        setContentUrl(null);
-        if (contentData?.data !== undefined) {
-            //console.log("contentData?.data", contentData?.data);
-            setModuleId(contentData?.data?.module_id);
-            setCurContent(contentData?.data);
-            //setContentUrl("https://qrstaff.s3.ap-south-1.amazonaws.com/1/Courses/1674902660851.pdf");
-            setContentUrl(contentData?.data?.file_url);
-            if (contentData?.data?.file_url) {
-                const fileNameAr = contentData?.data?.file_url.split('.');
-                const fileExt = fileNameAr[fileNameAr.length - 1];
-                setCurExt(fileExt)
-                if (fileExt != "mp4") {
-                    setShowDocs("");
-                }
-            }
-            //console.log(contentData?.data?.file_url);
-            contentModel.list({ module_id: contentData?.data?.module_id }).then((res) => {
-                //console.log("contents - ", res.data);
-                if ((res?.data).length > 1) {
-                    var i = 0;
-                    res?.data.map((item, index) => {
-                        if (item.id == QueryParam?.id) {
-                            setChapterId(item.id);
-                            if (i > 0) {
-                                //console.log("prev");
-                                setPrevContent({ id: res?.data?.[i - 1]?.id, sequence_no: res?.data?.[i - 1]?.sequence_no, title: res?.data?.[i - 1]?.title });
-                            }
-                            if (typeof res?.data?.[i + 1] !== 'undefined') {
-                                //console.log("sequece = ", res?.data?.[i + 1]?.sequence_no)
-                                setNextContent({ id: res?.data?.[i + 1]?.id, sequence_no: res?.data?.[i + 1]?.sequence_no, title: res?.data?.[i + 1]?.title });
-                            }
-                        }
-                        i++;
-                    });
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
+  }
 
-
-            //document.getElementById("video1").muted = false; 
-
-            moduleModel.detail(contentData?.data?.module_id).then((res) => {
-                //console.log("module", res.data);
-                setCourseId(res?.data?.course_id);
-                //console.log("prev=", prevContent.length);
-                //console.log("next=", nextContent.length);
-            }).catch((error) => {
-                console.log("module error", error);
-            });
-            const chapterForm = new FormData();
-            //console.log("chapter id", contentData?.data?.id)
-            if (layoutValues?.profile?.role == 'trainee') {
-                chapterForm.append("chapter_id", contentData?.data?.id);
-                CourseViewModel.getChapterViewData(chapterForm).then((chapterRes) => {
-                    if (chapterRes !== null) {
-                        if (chapterRes?.data?.status === "completed") {
-                            setShowNextChapter(true);
-                        }
-                    }
-                    //console.log("chapterRes", chapterRes);
-                });
-            } else {
-                setShowNextChapter(true);
-            }
-
+  async function getChapterViewData(chapterId) {
+    const chapterForm = new FormData();
+    if (profile?.role == "trainee") {
+      chapterForm.append("chapter_id", chapterId);
+      CourseViewModel.getChapterViewData(chapterForm).then((chapterRes) => {
+        if (chapterRes !== null) {
+          if (chapterRes?.data?.status === "completed") {
+            setShowNextChapter(true);
+          }
         }
-    }, [contentData, QueryParam?.id]);
-
-    const contentLink = function () {
-        helper.sweetalert.warningToast("Please complete current chapters.");
+        //// console.log("chapterRes", chapterRes);
+      });
+    } else {
+      // setShowNextChapter(true);
     }
+  }
 
-    useEffect(() => {
-        setChapterId(QueryParam?.id);
-        //console.clear();
-        let apiUpdateCounter = 1;
-        // console.log("CourseId = ", courseId);
-        // console.log("moduleId = ", moduleId);
-        // console.log("chapterId = ", chapterId);
-        const handleExit = function () {
-            clearInterval(myTimer);
-        }
-        //console.log("inside");
-        const myTimer = setInterval(function () {
-            //console.log("inside sec");
-            if ((apiUpdateCounter % process.env.NEXT_PUBLIC_TIMEOUT_UPDATE_SECOND) == 0) {
-                // console.log("inside tim");
-                // console.log("CourseId = ", courseId);
-                // console.log("moduleId = ", moduleId);
-                // console.log("chapterId = ", chapterId);
-                if (courseId != null && moduleId != null && chapterId != null) {
-                    const courseFormData = new FormData();
-                    courseFormData.append("course_id", courseId);
-                    courseFormData.append("module_id", moduleId);
-                    courseFormData.append("chapter_id", chapterId);
-                    courseFormData.append("viewed_seconds", process.env.NEXT_PUBLIC_TIMEOUT_UPDATE_SECOND);
-                    CourseViewModel.create(courseFormData).then((res) => {
-                        console.log("course view create result", res.data);
-                        if (res?.data?.curChapterViewSeconds >= res?.data?.perContentSecond) {
-                            setShowNextChapter(true);
-                        }
-                    }).catch((error) => {
-                        console.log(error);
-                    });
-                }
-            }
-            apiUpdateCounter++;
-        }, 1000);
-        return () => handleExit();
+  async function calculatetimePermodule(totalCourseTime, totalModules) {
+    const totalcourseSeconds = Math.floor(totalCourseTime * 3600);
+    setsecondsPerModule(totalcourseSeconds / totalModules);
+  }
 
-    }, [courseId, moduleId, chapterId]);
-    return (
-        <>
-            {/* {courseId &&
-                <Checktimer startTimer={true} courseId={courseId} moduleId={moduleId} chapterId={QueryParam?.id} />
-            } */}
+  useEffect(() => {
+    const user = getUserProfile();
 
-            <div className="content-header d-flex gap-3 align-items-center">
-                {(layoutValues?.profile?.role == 'trainee') &&
-                    <Link href={`/courses/${courseId}`}>
-                        <div className="left-icon">
-                            <i className="fa fa-chevron-left go-left-icon" aria-hidden="true"></i>
-                        </div>
-                    </Link>
-                }
+    return () => {};
+  }, []);
 
-                {(layoutValues?.profile?.role != 'trainee') &&
-                    <Link href={`/courses/${courseId}/update_status`}>
-                        <div className="left-icon">
-                            <i className="fa fa-chevron-left go-left-icon" aria-hidden="true"></i>
-                        </div>
-                    </Link>
-                }
-                <div className="icon-detail">
-                    <h6>Course Outcome</h6>
-                </div>
+  useEffect(() => {
+    // console.log(timer);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [timer]);
+
+
+  useEffect(() => {
+    
+    if(content != null)
+    {
+      getModules(
+        content.course_id,
+        content.id,
+        content.module_id
+      );
+    }
+  
+    return () => {
+      
+    }
+  }, [content])
+  
+
+  useEffect(() => {
+    getChapterInfo().then((res) => {
+      // console.log(res);
+      if (res != undefined) {
+        courseDetail(res);
+      }
+    });
+  }, [chapterId, prevContent, nextContent, profile]);
+
+  return content == null ? (
+    <>Loading..</>
+  ) : (
+    <>
+      <div>
+        <Chaptersidebar
+          chapters={chapterList}
+          moduleId={content.module_id}
+          secondsPerModule={secondsPerModule}
+          courseId={content.course_id}
+          profile={profile}
+          chapterOrder={content.order}
+        />
+        <main class="course-page-main-content">
+          <div className={"player-modal " + modal}>
+            {modal == "active" ? (
+              <Documentviewer
+                modalSwitch={handleModalSwitch}
+                file={content.file_url}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+          <div className={"player-modal " + carouselModal}>
+            {carouselModal == "active" ? (
+              <img alt=""player
+                modalSwitch={handleCarouselModalSwitch}
+                images={[
+                  content.carousel_image_one,
+                  content.carousel_image_two,
+                  content.carousel_image_three,
+                  content.carousel_image_four,
+                  content.carousel_image_five,
+                ]}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+          <Link
+            href={"/courses/" + content.course_id}
+            className="course-page-main-content__header d-flex gap-3 align-items-center links"
+          >
+            <img
+              src="data:image/svg+xml,%3Csvg width='39' height='39' viewBox='0 0 39 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='19.5' cy='19.5' r='19.5' fill='%23F4F4F4'/%3E%3Cpath d='M18 13L14.5 16.5L11 20H27' stroke='%23565656' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M18 27L14.5 23.5L11 20H27' stroke='%23565656' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A"
+              alt=""
+            />
+
+            <h4>Course Outcome</h4>
+          </Link>
+
+          <div className="main-content_banner">
+            <div className="main-content_banner__overlay">
+              <h3 class="w-75">{content.title}</h3>
+            </div>
+            <img src="/trainee-images/course-bannner.png" height="250" alt="" />
+          </div>
+
+          <div className="chapter-content-area">
+            <h2 className="title">{content.title}</h2>
+            <p>{content.paragraph1}</p>
+            <p>{content.paragraph2}</p>
+            <br />
+
+            {/* <img alt=""player modalSwitch={handleModalSwitch}/> */}
+            {content.file_url != "" && content.file_url != null  ? (
+              <div>
+                {/* {extension == "ppt" || extension == "pptx" ? <iframe src={"https://docs.google.com/gview?url="+content.file_url+"&embedded=true"}  frameborder="0">
+        </iframe> : <Documentviewer modalSwitch={handleModalSwitch} file={content.file_url}/>} */}
+                {extension == "mp4" ? (
+                  <Player>
+                    <source src={content?.file_url} />
+                  </Player>
+                ) : (
+                  <Documentviewer
+                    modalSwitch={handleModalSwitch}
+                    file={content.file_url}
+                  />
+                )}
+                {/* <Documentviewer modalSwitch={handleModalSwitch} file={content.file_url}/> */}
+                {/* <iframe src="https://docs.google.com/gview?url=https://betaschulke.s3.ap-south-1.amazonaws.com/demo.pptx&embedded=true"  frameborder="0">
+        </iframe> */}
+              </div>
+            ) : (
+              ""
+            )}
+            <br />
+            {content.content_video != null ? (
+              <div>
+                <Player>
+                  <source src={content?.content_video} />
+                </Player>
+              </div>
+            ) : (
+              ""
+            )}
+            <br />
+
+            <p>{content.paragraph3}</p>
+
+            {content.carousel_image_one != null ||
+            content.carousel_image_two != null ||
+            content.carousel_image_three != null ||
+            content.carousel_image_four != null ||
+            content.carousel_image_five != null ? (
+              <>
+                <img alt=""player
+                  modalSwitch={handleCarouselModalSwitch}
+                  images={[
+                    content.carousel_image_one,
+                    content.carousel_image_two,
+                    content.carousel_image_three,
+                    content.carousel_image_four,
+                    content.carousel_image_five,
+                  ]}
+                />
+              </>
+            ) : (
+              ""
+            )}
+
+            <div className="row my-5">
+              <div className="col-lg-12">
+                {content.dos.length > 0 ?<ul class="list-group list-group-flush">
+                  <li class="list-group-item text-primary">
+                    Do's
+                  </li>
+                  {
+                    content.dos.map((result,index)=>{
+                      return <li key={`dos${index}`} class="list-group-item border-0"><img src="data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_24_214)'%3E%3Cpath d='M9 0C4.0372 0 0 4.0372 0 9C0 13.9628 4.0372 18 9 18C13.9628 18 18 13.9628 18 9C18 4.0372 13.9628 0 9 0Z' fill='%23007CC2'/%3E%3Cpath d='M13.5615 7.09296L8.68642 11.9679C8.54016 12.1141 8.34818 12.1877 8.15619 12.1877C7.9642 12.1877 7.77222 12.1141 7.62596 11.9679L5.18851 9.53041C4.89517 9.23721 4.89517 8.76315 5.18851 8.46996C5.4817 8.17662 5.95563 8.17662 6.24896 8.46996L8.15619 10.3772L12.501 6.0325C12.7942 5.73917 13.2681 5.73917 13.5615 6.0325C13.8547 6.3257 13.8547 6.79962 13.5615 7.09296Z' fill='%23FAFAFA'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_24_214'%3E%3Crect width='18' height='18' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A" alt="" /> {result.title}</li>
+
+                    })
+                  }
+                  
+                </ul> : ''}
+              </div>
+              <div className="col-lg-12 mt-5">
+                {content.donts.length > 0 ? <ul class="list-group list-group-flush">
+                  <li class="list-group-item text-primary">
+                    Don'ts
+                  </li>
+                  {
+                    content.donts.map((result,index)=>{
+                      return <li key={`donts${index}`} class="list-group-item border-0"> <img src="data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_24_214)'%3E%3Cpath d='M9 0C4.0372 0 0 4.0372 0 9C0 13.9628 4.0372 18 9 18C13.9628 18 18 13.9628 18 9C18 4.0372 13.9628 0 9 0Z' fill='%23007CC2'/%3E%3Cpath d='M13.5615 7.09296L8.68642 11.9679C8.54016 12.1141 8.34818 12.1877 8.15619 12.1877C7.9642 12.1877 7.77222 12.1141 7.62596 11.9679L5.18851 9.53041C4.89517 9.23721 4.89517 8.76315 5.18851 8.46996C5.4817 8.17662 5.95563 8.17662 6.24896 8.46996L8.15619 10.3772L12.501 6.0325C12.7942 5.73917 13.2681 5.73917 13.5615 6.0325C13.8547 6.3257 13.8547 6.79962 13.5615 7.09296Z' fill='%23FAFAFA'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_24_214'%3E%3Crect width='18' height='18' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A" alt="" /> {result.title}</li>
+
+                    })
+                  }
+                </ul> : ''}
+              </div>
             </div>
 
-            <div className="body-content">
-                <div className="body-heading" style={{ padding: 'unset', textShadow: 'unset' }}>
-                    <span style={{ padding: 'unset', fontWeight: '400' }}>{curContent?.title}</span>
-                </div>
-
-                <div className="body-paragraph">
-                    <p>{curContent?.paragraph1}
-                    </p>
-
-                    <p>{curContent?.paragraph2}</p>
-                </div>
-
-                <div className="presentation">
-                    {
-                        (() => {
-                            if (curExt != "") {
-                                if (curExt == "mp4") {
-                                    return (
-                                        <div key={Math.random()}>
-                                            <Player>
-                                                <source src={curContent?.file_url} />
-                                            </Player>
-                                        </div>
-                                        // <video controls muted autoplay id='video1' style={{ height: '500px', width:'56vw' }}><source src={curContent?.file_url} /></video>
-                                    );
-                                }
-                            }
-                        })()
-                    }
-                    {curContent?.file_url &&
-                        <div key={Math.random()} className={showDocs}>
-                            <DocViewer
-                                pluginRenderers={DocViewerRenderers}
-                                documents={
-                                    [
-                                        { uri: contentUrl }
-                                    ]
-                                }
-                                config={{
-                                    header: {
-                                        disableHeader: true,
-                                        disableFileName: true,
-                                        retainURLParams: false
-                                    }
-                                }}
-                                style={{ height: 500 }}
-                            />
-                        </div>
-                    }
-                </div>
-
-                <div className="body-paragraph">
-                    <p>{curContent?.paragraph3}</p>
-                </div>
-            </div>
-
-            <div className="section2topic" style={{ border: '1px solid rgba(0, 0, 0, 0.212)' }}>
-                <div className="blank"></div>
-                <div className="trainee-footer">
-                    <div className="trainee-footer-left d-flex">
-                        {prevContent?.title &&
-                            <>
-                                <a href={`/chapter/${prevContent?.id}`}>
-                                    <i className="fa fa-arrow-left footer-icon text-light" aria-hidden="true"></i>
-                                </a>
-
-                                <div className="icon-content-1">
-                                    <a href={`/chapter/${prevContent?.id}`}>
-                                        <p>PREVIOUS</p>
-                                    </a>
-                                    <span>Chapter {prevContent?.sequence_no} - {prevContent?.title}</span>
-                                </div>
-                            </>
-                        }
+            {chapterList.length > 1 ? (
+              <div className="footerNavigation-buttons">
+                {prevContent != null ? (
+                  <Link className="links" href={"/chapter/" + prevContent}>
+                    <div className="footer-buttons-container">
+                      <span className="doc-controls-button">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M10.999 5L7.49902 8.5L3.99902 12H19.999"
+                            stroke="white"
+                            stroke-width="2.66667"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M10.999 19L7.49902 15.5L3.99902 12H19.999"
+                            stroke="white"
+                            stroke-width="2.66667"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <div>
+                        <span className="btn-type">previous</span> <br />
+                        <span className="btn-value">
+                          Chaspanter 1 - Introduction
+                        </span>
+                      </div>
                     </div>
-                    <div className="trainee-footer-right d-flex">
-                        {nextContent?.title &&
-                            <>
-                                {showNextChapter ?
-                                    (
-                                        <>
-                                            <div className="icon-content-2">
-                                                <a href={`/chapter/${nextContent?.id}`}>
-                                                    <p>NEXT</p>
-                                                </a>
-                                                <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
-                                            </div>
-                                            <a href={`/chapter/${nextContent?.id}`}>
-                                                <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
-                                            </a>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="icon-content-2" onClick={() => contentLink()}>
-                                                <a>
-                                                    <p>NEXT</p>
-                                                </a>
-                                                <span>Chapter {nextContent?.sequence_no} - {nextContent?.title}</span>
-                                            </div>
-                                            <a onClick={() => contentLink()}>
-                                                <i className="fa fa-arrow-right footer-icon text-light" aria-hidden="true"></i>
-                                            </a>
-                                        </>
-                                    )
+                  </Link>
+                ) : (
+                  ""
+                )}
 
-                                }
-
-                            </>
-                        }
+                {nextContent != null && showNextChapter != false ? (
+                  <Link className="links" href={"/chapter/" + nextContent}>
+                    <div className="footer-buttons-container next">
+                      <span className="doc-controls-button ">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M13.001 5L16.501 8.5L20.001 12H4.00098"
+                            stroke="white"
+                            stroke-width="2.66667"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M13.001 19L16.501 15.5L20.001 12H4.00098"
+                            stroke="white"
+                            stroke-width="2.66667"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <div>
+                        <span className="btn-type">Next</span> <br />
+                        <span className="btn-value">
+                          Chaspanter 1 - Introduction
+                        </span>
+                      </div>
                     </div>
-                </div>
-            </div>
-        </>
-    )
+                  </Link>
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </main>
+        <Chapternavbar profile={profile} />
+      </div>
+    </>
+  );
 }
-export default topicpage;
+
+ChapterInfo.getLayout = function getLayout(page) {
+  return <readChapterLayout>{page}</readChapterLayout>;
+};
+export default ChapterInfo;

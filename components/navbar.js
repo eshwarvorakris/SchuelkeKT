@@ -1,12 +1,13 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+// import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Link from "next/link";
 import { useContext, useEffect, useState } from 'react';
 import AppContext from '../lib/appContext';
+import Image from 'next/image';
 
-function navbar() {
+function Navbar() {
     const layoutValues = useContext(AppContext);
 
     return (
@@ -14,7 +15,7 @@ function navbar() {
             <a className="navbar-brand" style={{ fontWeight: "700", color: 'black' }} href="#">
                 {layoutValues?.pageHeading}
             </a>
-            {console.log("profile data",layoutValues?.profile?.role)}
+       
             <div className="collapse navbar-collapse flex-row-reverse">
                 <ul className="navbar-nav align-content-center">
                     {/* <li className="notify-btn nav-item active" style={{marginTop:'0.5rem'}}>
@@ -107,4 +108,4 @@ function navbar() {
     );
 }
 
-export default navbar;
+export default Navbar;

@@ -4,13 +4,14 @@ import auth from "../model/auth.model";
 import Router from "next/router";
 import AppContext from '../lib/appContext';
 import assignmentModel from "../model/assignment.model";
-const mygrade = () => {
+import Image from "next/image";
+const Mygrade = () => {
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("My Grades") }
     const [allAsignments, setAllAsignments] = useState([]);
     useEffect(() => {
         assignmentModel.list().then((submittedRes) => {
-            console.log("list", submittedRes);
+            // console.log("list", submittedRes);
             setAllAsignments(submittedRes);
         });
     }, []);
@@ -81,4 +82,4 @@ const mygrade = () => {
         </>
     )
 }
-export default mygrade;
+export default Mygrade;

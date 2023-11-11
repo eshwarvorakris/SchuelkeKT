@@ -4,6 +4,7 @@ import auth from "../../model/auth.model";
 import Sidebar from "./component/sidebar";
 import Topnavbar from "./component/topnavbar";
 import Router from "next/router";
+import Image from "next/image";
 const traineequiz = () => {
   return (
     <>

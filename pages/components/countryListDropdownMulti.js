@@ -3,7 +3,7 @@ import BaseModel from "../../model/base.model";
 import { useContext, useState } from "react";
 import { useEffect } from 'react';
 import _ from 'lodash';
-export default function countrySelect(props) {
+export default function CountrySelect(props) {
   const [isLoading, setisLoading] = useState(true);
   const [selectCountry, setSelectCountry] = useState(null);
   const [countryOptions, setCountryOptions] = useState([]);
@@ -36,7 +36,7 @@ export default function countrySelect(props) {
   }, []);
 
   const onCountrySelect = (e) => {
-    //console.log(e.value);
+    //// console.log(e.value);
     props.onCountryChange(e);
     setSelectCountry(e);
   };

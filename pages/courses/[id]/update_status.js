@@ -10,7 +10,7 @@ import { helper } from '../../../lib/helper';
 import AppContext from "../../../lib/appContext";
 import Link from 'next/link';
 import moment from 'moment';
-const updateStatus = () => {
+const UpdateStatus = () => {
   const router = useRouter();
   const layoutValues = useContext(AppContext);
   const [moduleCount, setModuleCount] = useState(0);
@@ -33,7 +33,7 @@ const updateStatus = () => {
           helper.sweetalert.toast('Course Approved');
           router.push("/courses");
         }).catch((error) => {
-          console.log(error)
+          // console.log(error)
           return {};
         });
       }
@@ -49,7 +49,7 @@ const updateStatus = () => {
           helper.sweetalert.toast('Course Rejected');
           router.push("/courses");
         }).catch((error) => {
-          console.log(error)
+          // console.log(error)
           return {};
         });
       }
@@ -57,11 +57,11 @@ const updateStatus = () => {
   }
 
   useEffect(() => {
-    //console.log("called");
+    //// console.log("called");
     loadModule();
-    //console.log("modules = ", modules);
+    //// console.log("modules = ", modules);
     var CurrentDate = moment().format();
-    console.log("CurrentDate",CurrentDate);
+    // console.log("CurrentDate",CurrentDate);
     
     if (modules?.data) {
       setModuleCount(modules.data.length);
@@ -69,15 +69,15 @@ const updateStatus = () => {
   }, [router, modules]);
 
   useEffect(() => {
-    //console.log("course",course?.data?.status_update_on);
+    //// console.log("course",course?.data?.status_update_on);
     if(course?.data !== undefined) {
       var updateLate = moment(course?.data?.status_update_on).add(process.env.NEXT_PUBLIC_MAXIMUM_MIN_UNDU_ALLOWED, 'minutes');
       var curTime = moment();
-      //console.log("status update option = ",curTime.isBefore(updateLate));
+      //// console.log("status update option = ",curTime.isBefore(updateLate));
       if(curTime.isBefore(updateLate) === false) {
         //setStatusUpdateAllowed(false)
       }
-      //console.log("updateLate",updateLate.format());
+      //// console.log("updateLate",updateLate.format());
     }
   }, [course]);
   return (
@@ -111,7 +111,7 @@ const updateStatus = () => {
           <div>
             <div className="module-cards">
               {modules?.data?.map((item, index) => {
-                console.log("item.id", item.id);
+                // console.log("item.id", item.id);
                 return (
                   <ModuleCard key={`module${item.id}`} moduleData={item} moduleIndex={index} />
                 )
@@ -145,4 +145,4 @@ const updateStatus = () => {
     </>
   )
 }
-export default updateStatus;
+export default UpdateStatus;

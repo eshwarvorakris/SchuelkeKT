@@ -8,6 +8,7 @@ import AppContext from "../../../lib/appContext";
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import questionModel from "../../../model/questions.model";
+import Image from "next/image";
 function Page() {
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Course Assessment") }
@@ -21,7 +22,7 @@ function Page() {
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm();
   const [formErrors, setFormErrors] = useState([]);
   const watchAllFields = watch();
-  //console.log(watch());
+  //// console.log(watch());
   const initialQuestion = {
     id: "",
     course_id: QueryParam?.id,
@@ -64,15 +65,15 @@ function Page() {
   }
 
   const deleteQuestion = function (index) {
-    //console.log("delete = ", index);
+    //// console.log("delete = ", index);
     questions.splice(index, 1);
     reset();
-    //console.log("questions :", questions);
+    //// console.log("questions :", questions);
   }
 
   useEffect(() => {
     const subscription = watch((data) => {
-      //console.log(data.questions);
+      //// console.log(data.questions);
       if (data.questions !== undefined) {
         setQuestions(data.questions);
       }
@@ -88,9 +89,9 @@ function Page() {
           setQuestions(res.data);
           reset(res.data);
         }
-        //console.log(res.data)
+        //// console.log(res.data)
       }).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
     }
   }, [router, questionUpdated]);
@@ -102,9 +103,9 @@ function Page() {
     setIsButtonDisabled(true);
     console.clear();
     const formData = new FormData(event.target);
-    //console.log('data',data.questions);
+    //// console.log('data',data.questions);
     await questionModel.create(formData).then((res) => {
-      //console.log(res)
+      //// console.log(res)
       helper.sweetalert.toast("Assignment Added");
       setIsButtonDisabled(false);
       //setQuestionUpdated(Math.random());
@@ -131,7 +132,7 @@ function Page() {
       document.getElementById(curId).type = inputType;
       if(inputType == "radio") {
         document.getElementById(curId).checked = false;
-        //console.log("questionId = "+questionId,tempAr[questionId]["options"]);
+        //// console.log("questionId = "+questionId,tempAr[questionId]["options"]);
         tempAr[questionId]["options"][i]["is_answer"] = false;
       }
     }
@@ -146,14 +147,14 @@ function Page() {
       if (isChecked) {
         let qid = e.target.attributes["data-qid"].nodeValue;
         let aqsid = e.target.attributes["data-ansid"].nodeValue;
-        //console.log("aqsid", aqsid);
+        //// console.log("aqsid", aqsid);
         let tempAr = questions;
         for (let i = 0; i < 4; i++) {
           let curId = "answer" + qid + "-" + i;
           tempAr[qid]["options"][i]["is_answer"] = true;
-          //console.log(curId)
+          //// console.log(curId)
           if (i != aqsid) {
-            console.log("false = ",curId)
+            // console.log("false = ",curId)
             document.getElementById(curId).checked = false;
             tempAr[qid]["options"][i]["is_answer"] = false;
           }
@@ -181,7 +182,7 @@ function Page() {
 
               <div className="wrapper-exercise d-flex flex-column gap-3">
                 {questions?.map((item, index) => {
-                  //console.log("question - ", item);
+                  //// console.log("question - ", item);
                   let input_type = "checkbox";
                   if (item?.question_type == "single") {
                     input_type = "radio";

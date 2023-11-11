@@ -4,6 +4,8 @@ import auth from "../../model/auth.model";
 import Sidebar from "./component/sidebar";
 import Topnavbar from "./component/topnavbar";
 import Router from "next/router";
+import Image from "next/image";
+import Link from "next/link";
 
 const editmodulecontent = () => {
   return (
@@ -36,27 +38,27 @@ const editmodulecontent = () => {
                                 {/* <!-- <div class="blank"></div> --> */}
                                 <div class="trainer-header">
                                     <div class="trainer-header-left d-flex">
-                                        <a href="#">
+                                        <Link href="#">
                                             <ion-icon name="arrow-back-outline" class="header-icon"></ion-icon>
-                                        </a>
+                                        </Link>
 
                                         <div class="icon-content-1">
-                                            <a href="#">
+                                            <Link href="#">
                                                 <p>PREVIOUS</p>
-                                            </a>
+                                            </Link>
                                             <span>Module 1 - introduction</span>
                                         </div>
                                     </div>
                                     <div class="trainer-header-right d-flex">
                                         <div class="icon-content-2">
-                                            <a href="#">
+                                            <Link href="#">
                                                 <p>NEXT</p>
-                                            </a>
+                                            </Link>
                                             <span>Module 2</span>
                                         </div>
-                                        <a href="#">
+                                        <Link href="#">
                                             <ion-icon name="arrow-forward-outline" class="header-icon"></ion-icon>
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +175,7 @@ const editmodulecontent = () => {
                                         </div>
 
                                         <div class="right-col-btns black-border d-flex flex-column gap-4">
-                                            <a href="#!">
+                                            <Link href="#!">
                                                 <button type="button" 
                                                     class="btn d-flex justify-content-center gap-2">
                                                     <img class="btn-icon"
@@ -181,7 +183,7 @@ const editmodulecontent = () => {
                                                         alt=""/>
                                                     <span style={{color: "rgba(0, 0, 0, 0.568)"}}>Remove</span>
                                                 </button>
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -386,17 +388,17 @@ const editmodulecontent = () => {
 
                             <div class="footer-btn-container d-flex justify-content-end gap-4">
                                 <div class="back-btn">
-                                    <a href="prepare-modules.html">
+                                    <Link href="prepare-modules.html">
                                         <button type="button"  class="btn btn-light" 
                                             style={{backgroundColor: "#efefef"}}>Back</button>
-                                    </a>
+                                    </Link>
                                 </div>
 
                                 <div class="Save-btn">
-                                    <a href="final-assessment.html">
+                                    <Link href="final-assessment.html">
                                         <button type="button" class="btn btn-primary" 
                                             style={{backgroundColor: "#008bd6"}}>Save</button>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </form>

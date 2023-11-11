@@ -3,7 +3,7 @@ import categoryModel from "../../model/category.model";
 import { useContext, useState } from "react";
 import { useEffect } from 'react';
 import _ from 'lodash';
-export default function categorySelect(props) {
+export default function CategorySelect(props) {
   const [isLoading, setisLoading] = useState(true);
   const [selectedOptions, setSelectedOption] = useState(null);
   const [selectOptions, setSelectOptions] = useState([]);
@@ -15,7 +15,7 @@ export default function categorySelect(props) {
 
         const opt = [];
         let countries = _.orderBy(result.data, [function (o) { return o.category_name; }], ['asc']);
-        //console.log(countries)
+        //// console.log(countries)
         if (props?.addAll) {
           if (props.addAll === true) {
             opt.push({ value: 'all', label: 'All Topics' });
@@ -45,7 +45,7 @@ export default function categorySelect(props) {
   }, []);
 
   const onOptionSelect = (e) => {
-    //console.log(e.value);
+    //// console.log(e.value);
     props.onCategoryChange(e);
     setSelectedOption(e);
   };

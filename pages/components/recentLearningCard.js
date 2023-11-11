@@ -6,7 +6,8 @@ import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import AppContext from "../../lib/appContext";
 import { useRouter } from 'next/router';
-export default function recentLearningCard() {
+import Image from "next/image";
+export default function RecentLearningCard() {
   const router = useRouter();
   const rand = 1 + Math.random() * (100 - 1);
   const [isRecent, setIsRecent] = useState(false);
@@ -21,7 +22,7 @@ export default function recentLearningCard() {
   const [completedModule, setCompletedModule] = useState(0);
   useEffect(() => {
     CourseViewModel.getRecentLearning().then((res) => {
-      console.log("recent", res?.data?.moduleCompletedCount);
+      // console.log("recent", res?.data?.moduleCompletedCount);
       setTotalModule(res?.data?.moduleTotalCount);
       setCompletedModule(res?.data?.moduleCompletedCount);
       if (res?.data?.lastChapter !== null && res?.data?.lastChapter != "") {

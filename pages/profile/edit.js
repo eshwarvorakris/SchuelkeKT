@@ -13,8 +13,9 @@ import AppContext from '../../lib/appContext';
 import moment from 'moment';
 import Link from "next/link";
 import Select from 'react-select';
+import Image from "next/image";
 import _ from 'lodash';
-const myprofile = () => {
+const Myprofile = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     { layoutValues.setPageHeading("Edit Profile") }
@@ -43,23 +44,23 @@ const myprofile = () => {
             setprofileData(res);
             setSelectCountry({ label: res.country, value: res.country });
             setselectedYear({ label: res.joining_year, value: res.joining_year })
-            console.log(res);
+            // console.log(res);
             reset(res);
         }).catch((error) => {
             router.replace("/login");
-            console.log(error);
+            // console.log(error);
         });
     }, [router, reset]);
 
     useEffect(() => {
         //console.clear();
-        console.log("countries", countryLists);
+        // console.log("countries", countryLists);
         const opt = [];
         let countries = _.orderBy(countryLists, [function(o) { return o.name.common; }],['asc']);
         
         countries?.map((item, index) => {
-            //console.log(item.flags.png);
-            //console.log(item.name.common);
+            //// console.log(item.flags.png);
+            //// console.log(item.name.common);
             opt.push({ value: item.name.common, label: item.name.common })
         });
         if (opt.length > 0) {
@@ -82,12 +83,12 @@ const myprofile = () => {
         if (isUploaded) {
             formData.delete("uploadfile");
         }
-        //console.log("data ", formData);
+        //// console.log("data ", formData);
         await user.updateProfile(formData).then((res) => {
             helper.sweetalert.toast("Profile Updated");
             sessionStorage.setItem("userinfo", JSON.stringify(res.data));
             { layoutValues.setProfile(res.data) }
-            console.log(res.data);
+            // console.log(res.data);
             router.push("/profile");
         }).catch((error) => {
             helper.sweetalert.warningToast("Unable To Update Profile");
@@ -115,7 +116,7 @@ const myprofile = () => {
         await uploader.upload(data).then((res) => {
             helper.sweetalert.toast("File Uploaded Successfully");
 
-            console.log(res?.data);
+            // console.log(res?.data);
             setprofileUrl(res?.data?.data?.Location);
             setImage(res?.data?.data?.Location);
         }).catch((error) => {
@@ -132,7 +133,7 @@ const myprofile = () => {
             allYear.push({ value: preYear, label: preYear });
         }
         setYearOptions(allYear);
-        //console.log("allyear",allYear);
+        //// console.log("allyear",allYear);
     },[])
     
     return (
@@ -265,4 +266,4 @@ const myprofile = () => {
     )
 }
 
-export default myprofile;
+export default Myprofile;

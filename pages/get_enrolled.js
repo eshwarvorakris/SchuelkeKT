@@ -16,7 +16,7 @@ import _ from 'lodash';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
-const trainee = () => {
+const Trainee = () => {
     const router = useRouter();
     const layoutValues = useContext(AppContext);
     const [courseCount, setCourseCount] = useState(0);
@@ -32,20 +32,20 @@ const trainee = () => {
 
     useEffect(() => {
         widgetModal.approvedCourseCount().then((reswidget) => {
-            //console.log("reswidget", reswidget?.data);
+            //// console.log("reswidget", reswidget?.data);
             setCourseCount(reswidget?.data?.total);
         }).catch((error) => {
-            console.log(error);
+            // console.log(error);
         });
     }, [])
 
     const userDelete = function (id) {
-        //console.log(id);
+        //// console.log(id);
         helper.sweetalert.confirm("Are you sure you want to delete this trainee", "info", true).then((result) => {
             if (result.isConfirmed) {
                 userModal.delete(id).then((res) => {
                     helper.sweetalert.toast(res.data?.message);
-                    //console.log(res);
+                    //// console.log(res);
                     mutate('traineeList');
                 })
             }
@@ -166,7 +166,7 @@ const trainee = () => {
     });
 
     const onCountrySelect = (e) => {
-        //console.log(e.value);
+        //// console.log(e.value);
         QueryParam.filterParam = e.value;
         traineeList();
         setSelectCountry(e);
@@ -308,4 +308,4 @@ const trainee = () => {
         </>
     )
 }
-export default trainee;
+export default Trainee;
