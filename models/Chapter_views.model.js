@@ -46,5 +46,5 @@ ChapterView.belongsTo(User, { foreignKey: "trainee_id", as: "trainee" });
 ChapterView.belongsTo(Course, { foreignKey: "course_id", as: "course" });
 ChapterView.belongsTo(Module, { foreignKey: "module_id", as: "module" });
 ChapterView.belongsTo(Chapter, { foreignKey: "chapter_id", as: "module_content" });
-sequelize.sync();
+//sequelize.sync();
 module.exports = ChapterView;

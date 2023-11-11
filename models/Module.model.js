@@ -36,5 +36,5 @@ Module.init({
 
 
 Module.belongsTo(Course,{foreignKey:"course_id",as:"course"});
-sequelize.sync();
+//sequelize.sync();
 module.exports = Module;

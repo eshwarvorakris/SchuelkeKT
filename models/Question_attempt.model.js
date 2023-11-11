@@ -36,5 +36,5 @@ QuestionAttempt.init({
 
 QuestionAttempt.belongsTo(Question,{foreignKey:"question",as:"questions"});
 //QuestionAttempt.belongsTo(AssignmentAttempt,{foreignKey:"assignment_attempt_id",as:"assignment_attempt"});
-sequelize.sync();
+//sequelize.sync();
 module.exports = QuestionAttempt;

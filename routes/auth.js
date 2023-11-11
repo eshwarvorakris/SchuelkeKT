@@ -5,7 +5,7 @@ const authController = require("../controllers/authController");
 const verifyAuth = require("../middleware/authorization");
 
 router.post("/login",authController.login);
-//router.post("/registration",authController.registration);
+router.post("/registration",authController.registration);
 
 router.get("/profile", verifyAuth.verifyUser, authController.profile);
 router.post("/profile", authController.updateProfile);

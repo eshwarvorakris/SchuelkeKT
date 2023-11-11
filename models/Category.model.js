@@ -28,5 +28,5 @@ Category.init({
 });
 
 //Category.hasMany(Course,{foreignKey:"category_id",as:"courses"});
-sequelize.sync();
+//sequelize.sync();
 module.exports = Category;

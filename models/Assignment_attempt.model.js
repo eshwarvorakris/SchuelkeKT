@@ -45,5 +45,5 @@ AssignmentAttempt.init({
 AssignmentAttempt.belongsTo(Course,{foreignKey:"course_id",as:"course"});
 AssignmentAttempt.belongsTo(User, { foreignKey: "trainee_id", as: "trainere" });
 AssignmentAttempt.hasMany(QuestionAttemps,{foreignKey:"assignment_attempt_id",as:"question_attempted"});
-sequelize.sync();
+//sequelize.sync();
 module.exports = AssignmentAttempt;

@@ -31,5 +31,5 @@ Notification.init({
   deletedAt: "deleted_at",
   paranoid: true
 });
-sequelize.sync();
+//sequelize.sync();
 module.exports = Notification;

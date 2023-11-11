@@ -1,11 +1,11 @@
 const validator = require("Validator");
 const _ = require("lodash");
-const { getPaginate } = require("../lib/helpers");
+const { getPaginate, deleteFileFromS3 } = require("../lib/helpers");
 const Content = require("../models/Module_content.model");
 const moduleContentController = class {
   async index(req, res) {
     await Content
-      .findAndCountAll({ include: ['module'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order:[['id', 'ASC']]  })
+      .findAndCountAll({ include: ['module','dos','donts'], offset: pageNumber * pageLimit, limit: pageLimit, where: req.query ?? [], order:[['sequence_no', 'ASC']]  })
       .then((result) => {
         res.send(getPaginate(result, pageNumber, pageLimit));
       })
@@ -22,6 +22,8 @@ const moduleContentController = class {
       module_id: "required"
     };
     const validation = validator.make(data, rules);
+    
+    
     if (validation.fails()) {
       return res.status(422).send(
         {
@@ -40,7 +42,9 @@ const moduleContentController = class {
       });
   }
   async show(req, res) {
-    const content = await Content.findByPk(req.params.id);
+    const content = await Content.findByPk(req.params.id,{
+      include:['dos','donts']
+    });
     if (content) {
       return res.send({ data: content });
     }
@@ -67,6 +71,68 @@ const moduleContentController = class {
       return { message: "Content Deleted" };
     });
     res.send(content);
+  }
+
+  async deleteCarouselImage(req,res){
+    console.log(req.body);
+    const response = deleteFileFromS3(req.body.file,async (error,data)=>{
+      if(error){
+        console.log(error);
+          return res.send({error:"Can not delete file, Please try again later"});
+      }
+
+      const content = await Content.findByPk(req.body.id);
+      content[req.body.column] = null;
+      console.log(content);
+
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'carousel_image_one')
+      {
+        await content.update({carousel_image_one:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'carousel_image_two')
+      {
+        await content.update({carousel_image_two:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'carousel_image_three')
+      {
+        await content.update({carousel_image_three:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'carousel_image_four')
+      {
+        await content.update({carousel_image_four:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'carousel_image_five')
+      {
+        await content.update({carousel_image_five:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'content_video')
+      {
+        await content.update({content_video:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'file_url')
+      {
+        await content.update({file_url:null});
+
+      }
+      if(req.body.column.substring(0,req.body.column.length - 2) == 'banner_url')
+      {
+        await content.update({banner_url:null});
+
+      }
+      
+
+
+
+      return res.send({message:data});
+
+  })
+    console.log(response);
   }
 };
 

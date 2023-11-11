@@ -4,6 +4,11 @@ class User extends Model { }
 
 User.init({
   // Model attributes are defined here
+  id:{
+    type:DataTypes.BIGINT,
+    autoIncrement:true,
+    primaryKey:true
+  },
   full_name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -74,5 +79,5 @@ User.init({
   deletedAt: "deleted_at",
   paranoid: true
 });
-sequelize.sync();
+sequelize.sync({alter:true});
 module.exports = User;

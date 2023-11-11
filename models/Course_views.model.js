@@ -37,5 +37,5 @@ CourseView.init({
 });
 CourseView.belongsTo(User, { foreignKey: "trainee_id", as: "trainee" });
 CourseView.belongsTo(Course, { foreignKey: "course_id", as: "course" });
-sequelize.sync();
+//sequelize.sync();
 module.exports = CourseView;

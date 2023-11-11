@@ -97,9 +97,11 @@ const courseController = class {
         {
           where: {
             course_id: req.body.course_id, module_id: req.body.module_id,
-            id: { [Op.lt]: req.body.chapter_id }
-          }, order: [['id', 'DESC']]
+            order: { [Op.lt]: req.body.chapter_order }
+          }, order: [['order', 'DESC']]
         });
+        console.log(prevContentInModule);
+
       if (prevContentInModule === null) {
         let curModuleSequence = req.body.module_sequence_no;
         if (curModuleSequence > 1) {
@@ -111,6 +113,7 @@ const courseController = class {
             isCurrentChapterLocked = true;
           }
         }
+        
       }
       else {
         let prevContentId = prevContentInModule.dataValues.id;
@@ -150,6 +153,10 @@ const courseController = class {
       attributes: ['total_training_hour'],
       where: { id: req.body.course_id }
     });
+
+    const moduleViewesCount = await ModuleView.findOne({
+      attributes: ['viewed_seconds'],where:{course_id: req.body.course_id ,  module_id: req.body.module_id , trainee_id: req.userId}
+    })
     if (curModuleContentCompletedCount == allContentInModule) {
       moduleStatus = 1;
     } else {
@@ -181,7 +188,8 @@ const courseController = class {
       courseData: courseData,
       curModuleViews: curModuleViews,
       moduleStatus: moduleStatus,
-      lastchapter: lastchapter
+      lastchapter: lastchapter,
+      moduleViewesCount:moduleViewesCount?.dataValues.viewed_seconds
     };
     res.send(data);
   }
@@ -240,6 +248,174 @@ const courseController = class {
     res.send(data);
   }
 
+  // async store(req, res) {
+  //   req.body.trainee_id = req.userId;
+  //   const currentDate = new Date();
+  //   const formattedDate = currentDate.toISOString().substring(0, 10);
+  //   const alreadyView = await CourseView.findOne({
+  //     attributes: ['id', 'status'],
+  //     where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id }
+  //   }).then(async (result) => {
+  //     if (result !== null) {
+  //       //res.send(result);
+  //       console.log("view result=>", result?.dataValues?.id);
+  //       if (result?.dataValues?.id) {
+  //         if (result?.dataValues?.status === "completed") {
+  //           const entryExists = await Revisit.findOne({
+  //             attributes: ['id', 'visit_date'],
+  //             where: {
+  //               trainee_id: req.body.trainee_id,
+  //               course_id: req.body.course_id,
+  //               visit_date: formattedDate,
+  //             },
+  //           });
+
+  //           if (!entryExists) {
+  //             await Revisit.create({
+  //               trainee_id: req.body.trainee_id,
+  //               course_id: req.body.course_id,
+  //               viewed_seconds: 30,
+  //             });
+  //           } else {
+  //             await Revisit.increment({ viewed_seconds: req.body.viewed_seconds }, {
+  //               where: { id: entryExists?.dataValues?.id }
+  //             })
+  //           }
+  //         }
+  //         await CourseView
+  //           .increment({ viewed_seconds: req.body.viewed_seconds }, { where: { id: result?.dataValues?.id } })
+  //       }
+  //     }
+  //     else {
+  //       await CourseView
+  //         .create(req.body)
+  //         .then((resultCreate) => {
+  //           //res.send(resultCreate);
+  //           User.increment({ course_count: 1 }, { where: { id: req.userId } })
+  //         })
+  //         .catch((error) => {
+  //           console.error("Failed to retrieve data : ", error);
+  //         });
+  //     }
+  //     //console.log("inside course");
+  //     await moduleViewed();
+  //     await chapterViewed();
+  //   }).catch((error) => {
+  //     console.clear();
+  //     console.log(error)
+  //     return res.status(422).send(
+  //       {
+  //         message: "Unable To Submit Please Try Again Later.",
+  //       }
+  //     );
+  //   });
+
+  //   async function moduleViewed() {
+  //     const alreadyView = await ModuleView.findOne({
+  //       attributes: ['id'],
+  //       where: { trainee_id: req.body.trainee_id, module_id: req.body.module_id }
+  //     }).then(async (moduleResult) => {
+  //       if (moduleResult !== null) {
+  //         //res.send(result);
+  //         console.log("module view result=>", moduleResult?.dataValues?.id);
+  //         if (moduleResult?.dataValues?.id) {
+  //           await ModuleView
+  //             .increment({ viewed_seconds: req.body.viewed_seconds }, { where: { id: moduleResult?.dataValues?.id } })
+  //         }
+  //       }
+  //       else {
+  //         await ModuleView.create(req.body)
+  //       }
+  //       //console.log("inside module");
+  //     })
+  //   }
+
+  //   async function chapterViewed() {
+  //     const alreadyView = await ChapterView.findOne({
+  //       attributes: ['id', 'viewed_seconds'],
+  //       where: { trainee_id: req.body.trainee_id, chapter_id: req.body.chapter_id }
+  //     }).then(async (chapterResult) => {
+  //       if (chapterResult !== null) {
+  //         //res.send(result);
+  //         console.log("Chapter view result=>", chapterResult?.dataValues);
+  //         if (chapterResult?.dataValues?.id) {
+  //           await ChapterView
+  //             .increment({ viewed_seconds: req.body.viewed_seconds },
+  //               { where: { id: chapterResult?.dataValues?.id } }
+  //             )
+  //         }
+  //       }
+  //       else {
+  //         await ChapterView.create(req.body)
+  //       }
+  //     })
+  //     //console.log("inside chapter");
+  //     await updateAll();
+  //   }
+
+  //   async function updateAll() {
+  //     //console.log("inside update");
+  //     const courseData = await Course.findOne({
+  //       attributes: ['total_training_hour'],
+  //       where: { id: req.body.course_id }
+  //     });
+  //     //console.log("courseData = ", courseData.dataValues.total_training_hour);
+  //     const maxCourseContentId = await Content.max('id', { where: { course_id: req.body.course_id } });
+  //     console.log("maxCourseContentId = ", maxCourseContentId);
+  //     var isCourseLastContent = false;
+  //     if (maxCourseContentId == req.body.chapter_id) {
+  //       isCourseLastContent = true;
+  //     }
+
+  //     const maxModuleContentId = await Content.max('id', { where: { module_id: req.body.module_id } });
+  //     console.log("maxModuleContentId = ", maxModuleContentId);
+  //     var isModuleLastContent = false;
+  //     if (maxModuleContentId == req.body.chapter_id) {
+  //       console.log("lastmodulecontent")
+  //       isModuleLastContent = true;
+  //     }
+
+  //     const totalCourseContent = await Content.count({ where: { course_id: req.body.course_id } });
+  //     console.log("totalCourseContent = ", totalCourseContent);
+  //     var perContentSecond = 0;
+  //     if (courseData.dataValues.total_training_hour > 0) {
+  //       let courseTrainingSecond = courseData.dataValues.total_training_hour * 60 * 60;
+  //       perContentSecond = courseTrainingSecond / totalCourseContent;
+  //     }
+
+  //     const curChapterViewSeconds = await ChapterView.findOne({
+  //       attributes: ['status', 'viewed_seconds'],
+  //       where: { trainee_id: req.body.trainee_id, chapter_id: req.body.chapter_id }
+  //     });
+  //     if (curChapterViewSeconds.dataValues.viewed_seconds >= perContentSecond) {
+  //       if (curChapterViewSeconds.dataValues.status != "completed") {
+  //         const curChapterUpdate = await ChapterView.update({ status: 'completed' },
+  //           { where: { trainee_id: req.body.trainee_id, chapter_id: req.body.chapter_id } });
+
+  //         if (isModuleLastContent) {
+  //           const curModuleUpdate = await ModuleView.update({ status: 'completed' },
+  //             { where: { trainee_id: req.body.trainee_id, module_id: req.body.module_id } });
+  //         }
+
+  //         if (isCourseLastContent) {
+  //           const curCourseUpdate = await CourseView.update({ status: 'completed' },
+  //             { where: { trainee_id: req.body.trainee_id, course_id: req.body.course_id } });
+  //         }
+  //       }
+  //     }
+  //     console.log("perContentSecond = ", perContentSecond);
+  //     console.log("curChapterViewSeconds = ", curChapterViewSeconds.dataValues.viewed_seconds);
+  //     console.log("isCourseLastContent = " + isCourseLastContent + " isModuleLastContent " + isModuleLastContent + ", currentChapterId " + req.body.chapter_id);
+  //     const resultData = {
+  //       perContentSecond: perContentSecond,
+  //       curChapterViewSeconds: curChapterViewSeconds.dataValues.viewed_seconds
+  //     };
+  //     res.send(resultData)
+  //   }
+  // }
+
+
+
   async store(req, res) {
     req.body.trainee_id = req.userId;
     const currentDate = new Date();
@@ -290,8 +466,9 @@ const courseController = class {
           });
       }
       //console.log("inside course");
-      await moduleViewed();
       await chapterViewed();
+
+      await moduleViewed();
     }).catch((error) => {
       console.clear();
       console.log(error)
@@ -303,23 +480,77 @@ const courseController = class {
     });
 
     async function moduleViewed() {
-      const alreadyView = await ModuleView.findOne({
-        attributes: ['id'],
-        where: { trainee_id: req.body.trainee_id, module_id: req.body.module_id }
-      }).then(async (moduleResult) => {
-        if (moduleResult !== null) {
-          //res.send(result);
-          console.log("module view result=>", moduleResult?.dataValues?.id);
-          if (moduleResult?.dataValues?.id) {
-            await ModuleView
-              .increment({ viewed_seconds: req.body.viewed_seconds }, { where: { id: moduleResult?.dataValues?.id } })
+      const courseData = await Course.findOne({
+        attributes: ['total_training_hour'],
+        where: { id: req.body.course_id }
+      });
+      const maxCourseContent = await Content.count({ where: { course_id: req.body.course_id } });
+      const secondsPerContent = (courseData.dataValues.total_training_hour * 3600) / maxCourseContent;
+
+      const curChapterViewSeconds = await ChapterView.findOne({
+        attributes: ['status', 'viewed_seconds'],
+        where: { trainee_id: req.body.trainee_id, chapter_id: req.body.chapter_id }
+      });
+
+      const totalCompletedChapters = await ChapterView.count({
+       
+        where:{
+        trainee_id: req.body.trainee_id, module_id: req.body.module_id ,status:'completed'
+      }})
+      const totalOngoingChapters = await ChapterView.min('id',{
+       
+        where:{
+        trainee_id: req.body.trainee_id, module_id: req.body.module_id ,status:'ongoing'
+      }})
+      
+      const ongoingChapterViewSeconds = await ChapterView.findOne({
+        attributes: ['status', 'viewed_seconds'],
+        where: { trainee_id: req.body.trainee_id, id: totalOngoingChapters }
+      });
+      
+      let totalViewedTime = totalCompletedChapters * secondsPerContent;
+
+      if(ongoingChapterViewSeconds != null)
+      {
+        if(ongoingChapterViewSeconds?.dataValues.viewed_seconds >= secondsPerContent){
+          totalViewedTime = totalViewedTime + secondsPerContent;
+        }
+        else
+        {
+          
+          totalViewedTime = totalViewedTime + ongoingChapterViewSeconds?.dataValues.viewed_seconds;
+  
+        }
+      }
+      
+
+      // if(curChapterViewSeconds?.dataValues.viewed_seconds >= secondsPerContent){
+
+        const alreadyView = await ModuleView.findOne({
+          attributes: ['id','viewed_seconds'],
+          where: { trainee_id: req.body.trainee_id, module_id: req.body.module_id }
+        }).then(async (moduleResult) => {
+          if (moduleResult !== null) {
+            //res.send(result);
+            console.log("module view result=>", moduleResult?.dataValues?.id);
+            if (moduleResult?.dataValues?.id ) {
+
+              if(moduleResult.dataValues.viewed_seconds < totalViewedTime)
+              // await ModuleView
+              //   .increment({ viewed_seconds: totalViewedTime }, { where: { id: moduleResult?.dataValues?.id } })
+      console.log('totalviewed time '+totalViewedTime);
+
+                await ModuleView
+                .update({ viewed_seconds: totalViewedTime }, { where: { id: moduleResult?.dataValues?.id } })
+            }
           }
-        }
-        else {
-          await ModuleView.create(req.body)
-        }
-        //console.log("inside module");
-      })
+          else {
+            await ModuleView.create(req.body)
+          }
+          //console.log("inside module");
+        })
+      // }
+      
     }
 
     async function chapterViewed() {
@@ -405,6 +636,9 @@ const courseController = class {
       res.send(resultData)
     }
   }
+
+
+  
   async show(req, res) {
     const course = await Course.findByPk(req.params.id);
     res.send({ data: Course });

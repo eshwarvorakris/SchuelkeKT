@@ -33,5 +33,5 @@ CourseRevisit.init({
 });
 CourseRevisit.belongsTo(User, { foreignKey: "trainee_id", as: "trainee" });
 CourseRevisit.belongsTo(Course, { foreignKey: "course_id", as: "course" });
-sequelize.sync();
+//sequelize.sync();
 module.exports = CourseRevisit;

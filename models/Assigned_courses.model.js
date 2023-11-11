@@ -32,5 +32,5 @@ Assigned_courses.init({
 Assigned_courses.belongsTo(User, { foreignKey: "trainee_id", as: "trainee" });
 Assigned_courses.belongsTo(User, { foreignKey: "assigned_by_id", as: "asignee" });
 Assigned_courses.belongsTo(Course, { foreignKey: "course_id", as: "course" });
-sequelize.sync();
+//sequelize.sync();
 module.exports = Assigned_courses;

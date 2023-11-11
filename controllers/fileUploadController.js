@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const { deleteFileFromS3 } = require("../lib/helpers");
 
 const bucketName = process.env.AWS_BUCKETNAME;
 
@@ -72,3 +73,14 @@ exports.uploadFile = async function (req, res) {
     });
   }
 };
+
+
+exports.deleteFile = async function(req,res){
+  const file = req.body.file;
+  deleteFileFromS3(file,(error,data)=>{
+    if(error){
+        return res.send({error:"Can not delete file, Please try again later"});
+    }
+    return res.send({message:"File has been deleted successfully"});
+})
+}

@@ -125,8 +125,9 @@ const Authorization = class {
       }
 
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      if (payload.role != "trainee") {
+      if (payload.role != "trainee" && payload.role != "trainer") {
         console.log("You Are Not Authorized To Perform This Operation");
+        
         return res.status(401).json("You Are Not Authorized");
       }
       req.userId = payload.id;

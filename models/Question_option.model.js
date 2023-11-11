@@ -34,5 +34,5 @@ QuestionOption.init({
 
 //QuestionOption.belongsTo(Question);
 
-sequelize.sync();
+//sequelize.sync();
 module.exports = QuestionOption;

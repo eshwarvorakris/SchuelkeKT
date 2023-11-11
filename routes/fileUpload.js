@@ -27,5 +27,6 @@ const fileController = require("../controllers/fileUploadController");
 
 //router.post("/", upload.single("image"), verifyAuth.verifyUser, fileController.uploadFile);
 router.post("/", verifyAuth.verifyUser, fileController.uploadFile);
+router.post("/delete", verifyAuth.verifyUser, fileController.deleteFile);
 
 module.exports = router;

@@ -36,5 +36,5 @@ Question.init({
 });
 Question.belongsTo(Course,{foreignKey:"course_id",as:"course"});
 Question.hasMany(QuestionOption,{foreignKey:"question_id",as:"options"});
-sequelize.sync();
+//sequelize.sync();
 module.exports = Question;

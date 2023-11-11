@@ -66,6 +66,6 @@ Course.init({
 );
 Course.belongsTo(User, { foreignKey: "trainer_id", as: "trainer" });
 Course.belongsTo(Category, { foreignKey: "category_id", as: "category" });
-sequelize.sync();
+//sequelize.sync();
 
 module.exports = Course;

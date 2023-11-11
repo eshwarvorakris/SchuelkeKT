@@ -1,127 +1,12 @@
-const validator = require("Validator");
-const _ = require("lodash");
-const { getPaginate, uploadToS3, generateUploadFileName } = require("../lib/helpers");
-const Module = require("../models/Module.model");
-const Course = require("../models/Course.model");
-const Content = require("../models/Module_content.model");
-const { promises } = require("nodemailer/lib/xoauth2");
-const Do = require("../models/Do");
-const Dont = require("../models/Dont");
-const { request } = require("express");
-const moduleController = class {
-  async index(req, res) {
-    await Module.findAndCountAll({
-      include: ["course"],
-      offset: pageNumber * pageLimit,
-      limit: pageLimit,
-      where: req.query,
-      order: [orderByColumn],
-    })
-      .then((result) => {
-        res.send(getPaginate(result, pageNumber, pageLimit));
-      })
-      .catch((error) => {
-        console.error("Failed to retrieve data : ", error);
-      });
-  }
-  async store(req, res) {
-    let sequence_no = await Module.max("sequence_no", {
-      where: { course_id: req.body.course_id },
-    });
-    if (sequence_no === null || sequence_no == 0) {
-      sequence_no = 0;
-    }
-    sequence_no++;
-    req.body.sequence_no = sequence_no;
-    //console.log("module sequence", sequence_no);
-    const data = req.body;
-    const rules = {
-      module_name: "required",
-      //description: "required"
-    };
-    const validation = validator.make(data, rules);
-    if (validation.fails()) {
-      return res.status(422).send({
-        message: _.chain(validation.getErrors()).flatMap().head(),
-        errors: validation.getErrors(),
-      });
-    }
-    await Module.create(req.body)
-      .then(async (result) => {
-        const moduleCount = await Module.count({
-          where: { course_id: req.body.course_id },
-        });
-        await Course.update(
-          { total_modules: moduleCount },
-          { where: { id: req.body.course_id } }
-        );
-        res.send(result);
-      })
-      .catch((error) => {
-        console.error("Failed to retrieve data : ", error);
-      });
-  }
-  async show(req, res) {
-    const module = await Module.findByPk(req.params.id);
-    if (module) {
-      return res.send({ data: module });
-    }
-    return res.status(422).send({
-      message: "Module not Found",
-    });
-  }
-  async update(req, res) {
-    const module = await Module.findByPk(req.params.id);
-    if (module) {
-      module.update(req.body);
-      return res.send({ data: module });
-    }
-    return res.status(422).send({
-      message: "Module not update",
-    });
-  }
-
-  async updateAll(req, res) {
-    //console.log(req.body);
-    let updated = 0;
-    let notUpdated = 0;
-    req.body.modules.forEach(async (curModule) => {
-      const module = await Module.findByPk(curModule.id);
-      if (module) {
-        module.update(curModule);
-        updated++;
-      } else {
-        notUpdated++;
-      }
-      //console.log("curmodule = ", curModule);
-    });
-    res.send({ updated: updated, notUpdated: notUpdated });
-  }
-
-  async destroy(req, res) {
-    const moduleData = await Module.findByPk(req.params.id);
-    //console.log("moduleData", moduleData.course_id);
-    const module = await Module.destroy({ where: { id: req.params.id } }).then(
-      async (result) => {
-        const moduleCount = await Module.count({
-          where: { course_id: moduleData.course_id },
-        });
-        await Course.update(
-          { total_modules: moduleCount },
-          { where: { id: moduleData.course_id } }
-        );
-        return { message: "Module Deleted" };
-      }
-    );
-    res.send(module);
-  }
-
-  async storeModuleContent(req, res) {
+async storeModuleContent(req, res) {
     var allContentCount = 0;
     var addedContentCount = 0;
     let fileUploadQueue = [];
     let allPromises = [];
-    let uploadStatus = false;
+
+    
+
+
 
     const allContentUpload = req.body.content.map(async (element, index) => {
       let content_id = "";
@@ -130,18 +15,8 @@ const moduleController = class {
 
       let filesToUpload = [...req.files];
 
-      fileUploadQueue = filesToUpload.map(async (uploadedFile)=>{
-        // let uploadedFile = filesToUpload.reverse().find(x => { 
-        //   return x.fieldname === `carousel_image_one_${index}` || 
-        //    x.fieldname === `carousel_image_two_${index}` || 
-        //    x.fieldname === `carousel_image_three_${index}` || 
-        //    x.fieldname === `carousel_image_four_${index}` ||
-        //    x.fieldname === `carousel_image_five_${index}` ||
-        //    x.fieldname === `content_video_${index}`
-         
-        //  })
-        uploadStatus = false;
-        
+       fileUploadQueue = filesToUpload.map(async (uploadedFile)=>{
+
         if(uploadedFile.fieldname === `carousel_image_one_${index}`)
         {
           if(uploadedFile != undefined)
@@ -166,8 +41,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);   
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -199,8 +74,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);   
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -232,8 +107,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);   
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -265,8 +140,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);   
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -298,8 +173,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);   
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -326,15 +201,13 @@ const moduleController = class {
                   fileName,
                   uploadedFile.mimeType
                 )
+                console.log(uploadResponse);
                 element[uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2)] = uploadResponse.Location;
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);  
-                console.log('upload-response'); 
-                console.log(uploadResponse);
-                uploadStatus = true;
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -367,8 +240,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // allPromises.push(uploadResponse);   
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -401,9 +274,8 @@ const moduleController = class {
                 console.log('column-name');
       
                   console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-                // // allPromises.push(uploadResponse);   
-                uploadStatus = true;
-                return uploadResponse;
+                allPromises.push(uploadResponse);   
+                // // return uploadResponse;
               } catch (error) {
                 console.log(error);
                 return error;
@@ -411,46 +283,12 @@ const moduleController = class {
               
               }  
         }
-        // const indexOfFile =  filesToUpload.indexOf(uploadedFile);
-        // filesToUpload = filesToUpload.splice(indexOfFile,1);
-      
-      //    if(uploadedFile != undefined)
-      // {
-      //   const fileNameAr =
-      //   uploadedFile.originalname.split(".");
-      //     const fileExt = fileNameAr[fileNameAr.length - 1];
-      //     const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
-      //     const random = (
-      //       "abcdefghijklmnopqrstuvwxyz" + Math.round(Math.random() * 5000)
-      //     ).substring(2, 8);
-      //     const fileName = timestamp + random + "." + fileExt;
-
-      //     try {
-      //       const uploadResponse = await uploadToS3(
-      //         uploadedFile.buffer,
-      //         fileName,
-      //         uploadedFile.mimeType
-      //       )
-      //       console.log(uploadResponse);
-      //       element[uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2)] = uploadResponse.Location;
-      //       console.log('column-name');
-  
-      //         console.log(uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2));
-      // //       allPromises.push(uploadResponse);   
-      //       return uploadResponse;
-      //     } catch (error) {
-      //       console.log(error);
-      //       return error;
-      //     }
-          
-      //     }
       });
 
-      if (element?.id != "") {
-        
-        Promise.allSettled(fileUploadQueue).then(async(result)=>{
-
-          
+      if(element?.id != "") {
+        console.log('upload-queue');
+        console.log(fileUploadQueue);
+         Promise.allSettled(fileUploadQueue).then(async(result)=>{
           const contentDet = await Content.findByPk(element.id);
           content_id = element.id;
   
@@ -493,17 +331,7 @@ const moduleController = class {
                   }
                 });
               }
-                
-              allPromises.push(true);
-              if(allPromises.length == req.body.content.length)
-              {
-                res.send(
-                        "allcontents = " +
-                          allContentCount +
-                          " added content = " +
-                          addedContentCount
-                      );
-              }
+                  
             });
             
           } else {
@@ -512,7 +340,6 @@ const moduleController = class {
             Promise.allSettled(fileUploadQueue).then(async (result) => {
               await Content.create(element).then((result) => {
                 addedContentCount++;
-
                 if (element.do != undefined) {
                   element.do.forEach(async (value) => {
                     if (value != "" && value != null) {
@@ -539,26 +366,14 @@ const moduleController = class {
                 }
                 
               });
-
-              allPromises.push(true);
-          if(allPromises.length == req.body.content.length)
-          {
-            res.send(
-                    "allcontents = " +
-                      allContentCount +
-                      " added content = " +
-                      addedContentCount
-                  );
-          }
             });
           }
         });
         
       } else {
         delete element.id;
-        Promise.allSettled(fileUploadQueue).then(async (result) => {
-          
-
+       
+         Promise.allSettled(fileUploadQueue).then(async (result) => {
           Content.create(element).then((result) => {
             addedContentCount++;
 
@@ -589,37 +404,22 @@ const moduleController = class {
             }
 
           });
-          allPromises.push(true);
-          if(allPromises.length == req.body.content.length)
-          {
-            res.send(
-                    "allcontents = " +
-                      allContentCount +
-                      " added content = " +
-                      addedContentCount
-                  );
-          }
         });
-
-
       }
 
-
     });
+    console.log('promises');
+    console.log(fileUploadQueue);
+    Promise.allSettled(fileUploadQueue).then(async (result) =>{
+      // Promise.al
+      res.send(
+        "allcontents = " +
+          allContentCount +
+          " added content = " +
+          addedContentCount
+      );
+    })
 
-    // if(uploadStatus == true)
-    // {
-    //   Promise.allSettled(fileUploadQueue).then(async (result) =>{
-    //     res.send(
-    //       "allcontents = " +
-    //         allContentCount +
-    //         " added content = " +
-    //         addedContentCount
-    //     );
-    //   })
-    // }
-    
+    //console.clear();
+    //console.log("allcontents = " + allContentCount + " added content = " + addedContentCount);
   }
-};
-
-module.exports = new moduleController();
