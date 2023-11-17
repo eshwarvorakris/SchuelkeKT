@@ -10,15 +10,15 @@ export default function TabComponent({position,item})  {
       <div class="tab-container ">
         <div className="row">
         <div className="col-lg-4">
-          <span  onClick={()=>setTab('video')} className={`tabs d-flex align-items-center justify-content-center gap-1 ${tab == 'video' ? 'active' :''}`}>
+          <small  onClick={()=>setTab('video')} className={`tabs d-flex align-items-center justify-content-center gap-1 ${tab == 'video' ? 'active' :''}`}>
             Upload Video / Document / Banner
-          </span>
+          </small>
         </div>
         <div className="col-lg-4 ">
-          <span onClick={()=>setTab('carousel')} className={`tabs d-flex align-items-center justify-content-center gap-1 ${tab == 'carousel' ? 'active' :''}`}>Upload Carousel</span>
+          <small onClick={()=>setTab('carousel')} className={`tabs d-flex align-items-center justify-content-center gap-1 ${tab == 'carousel' ? 'active' :''}`}>Upload Carousel</small>
         </div>
         <div className="col-lg-4">
-          <span  onClick={()=>setTab('dos')} className={`tabs d-flex align-items-center justify-content-center gap-1 ${tab == 'dos' ? 'active' :''}`}>Do's & Don'ts</span>
+          <small  onClick={()=>setTab('dos')} className={`tabs d-flex align-items-center justify-content-center gap-1 ${tab == 'dos' ? 'active' :''}`}>Do's & Don'ts</small>
         </div>
         </div>
         

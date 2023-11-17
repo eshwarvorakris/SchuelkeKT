@@ -297,6 +297,7 @@ h6 {
     flex-direction: column;
     background-color: #f5f6f8;
     z-index: 2;
+    overflow-x: scroll;
 }
 
 .trainee-right {

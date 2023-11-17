@@ -1,4 +1,4 @@
-import readChapterLayout from "../../components/readChapterLayout";
+import ReadChapterLayout from "../../components/readChapterLayout";
 import useSWR, { mutate } from "swr";
 import Chapternavbar from "../../components/chapternavbar";
 import Chaptersidebar from "../../components/chaptersidebar";
@@ -232,6 +232,7 @@ function ChapterInfo() {
           courseId={content.course_id}
           profile={profile}
           chapterOrder={content.order}
+          bannerUrl={content.banner_url}
         />
         <main class="course-page-main-content">
           <div className={"player-modal " + modal}>
@@ -276,7 +277,7 @@ function ChapterInfo() {
             <div className="main-content_banner__overlay">
               <h3 class="w-75">{content.title}</h3>
             </div>
-            <img src="/trainee-images/course-bannner.png" height="250" alt="" />
+            <img src={content.banner_url != null ? content.banner_url : "/trainee-images/course-bannner.png"} height="250" alt="" />
           </div>
 
           <div className="chapter-content-area">
@@ -464,6 +465,6 @@ function ChapterInfo() {
 }
 
 ChapterInfo.getLayout = function getLayout(page) {
-  return <readChapterLayout>{page}</readChapterLayout>;
+  return <ReadChapterLayout>{page}</ReadChapterLayout>;
 };
 export default ChapterInfo;

@@ -15,7 +15,8 @@ function Chaptersidebar({
   secondsPerModule,
   courseId,
   profile,
-  chapterOrder
+  chapterOrder,
+  bannerUrl
 }) {
 
   // // console.log(moduleId);
@@ -106,7 +107,7 @@ function Chaptersidebar({
           ""
         )}
 
-        <img alt="" src="/admin-images/sidebar/sidebar-thumbnail.png"  />
+        <img alt="" style={{width:"100%",height:"8rem"}} src={bannerUrl != null ? bannerUrl :"/admin-images/sidebar/sidebar-thumbnail.png"}  />
       </div>
       <div className="chapter-list-container">
         <ul className="chapter-list-root">

@@ -25,7 +25,7 @@ import { useEffect } from 'react';
       // { uri: "https://betaschulke.s3.ap-south-1.amazonaws.com/103/Courses/1696823682828.pdf" }, // Remote file
       { uri: file }, // Remote file
       // { uri: 'https://betaschulke.s3.ap-south-1.amazonaws.com/This+is+a+test+pdf.docx' }, // Local File
-      // { uri: require('/public/docs/pptexamples.ppt') }, // Local File
+      // { uri: 'https://betaschulke.s3.ap-south-1.amazonaws.com/JmNyDWh5KOQDmi46bvnP20231116T064012707Z6.pdf' }, // Local File
       // { uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Taj_Mahal%2C_Agra%2C_India_edit3.jpg/250px-Taj_Mahal%2C_Agra%2C_India_edit3.jpg' }, // Local File
     ];
   return (
