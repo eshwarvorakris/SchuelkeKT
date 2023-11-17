@@ -356,11 +356,14 @@ const moduleController = class {
               // ).substring(2, 8);
               const fileName = generateUploadFileName() +  "6." + fileExt;
     
+
+              console.log('file-url-mimetype ');
+              console.log(uploadedFile);
               try {
                 const uploadResponse = await uploadToS3(
                   uploadedFile.buffer,
                   fileName,
-                  uploadedFile.mimeType
+                  uploadedFile.mimetype
                 )
                 console.log(uploadResponse);
                 element[uploadedFile.fieldname.substring(0, uploadedFile.fieldname.length - 2)] = uploadResponse.Location;
