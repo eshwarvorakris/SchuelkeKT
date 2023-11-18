@@ -295,8 +295,8 @@ function ChapterInfo() {
 
           <div className="chapter-content-area">
             <h2 className="title">{content.title}</h2>
-            <p>{content.paragraph1}</p>
-            <p>{content.paragraph2}</p>
+            <p dangerouslySetInnerHTML={{ __html: content.paragraph1}}></p>
+            <p dangerouslySetInnerHTML={{ __html: content.paragraph2 }}></p>
             <br />
 
             {/* <img alt=""player modalSwitch={handleModalSwitch}/> */}
@@ -337,7 +337,7 @@ function ChapterInfo() {
             )}
             <br />
 
-            <p>{content.paragraph3}</p>
+            <p dangerouslySetInnerHTML={{ __html: content.paragraph3 }}></p>
 
             {content.carousel_image_one != null ||
             content.carousel_image_two != null ||

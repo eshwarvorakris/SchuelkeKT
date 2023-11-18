@@ -8,7 +8,7 @@
 .player-modal .fVoudr{
     height: 100vh !important;
 }
-.hwSWdx {
+.hwSWdx , .PJHxW {
     display: flex;
     position: sticky;
     top: 455px !important;
@@ -27,7 +27,7 @@
 .eVWDLc{
     overflow: hidden !important;
 }
-.eVWDLc::-webkit-scrollbar{
+.eVWDLc::-webkit-scrollbar , .iculIm::-webkit-scrollbar{
 display: none !important;
 }
 #pdf-zoom-out{

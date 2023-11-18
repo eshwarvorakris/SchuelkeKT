@@ -34,7 +34,7 @@ import { useEffect } from 'react';
       <div className="course-chapter-image-player">
      
       <DocViewer
-         pluginRenderers={[PDFRenderer, PNGRenderer]}
+         pluginRenderers={DocViewerRenderers}
         documents={docs}
         prefetchMethod="GET"
         config={{
