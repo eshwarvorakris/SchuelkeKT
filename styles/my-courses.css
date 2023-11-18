@@ -487,9 +487,9 @@ html {
 }
 
 .search-mycourse {
-  width: 15rem;
+  /* width: 15rem; */
   border-radius: 5px;
-  width: 15rem;
+  /* width: 15rem; */
     border-radius: 5px;
     float: right;
     padding: 6px;

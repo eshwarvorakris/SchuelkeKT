@@ -122,8 +122,8 @@ const VideoTab = ({item,position}) => {
   return (
     <div>
       <input {...register(`content_video_${position}`)} ref={filePicekerRef}  accept="video/*" onChange={previewFile} type="file" hidden/>
-      <input {...register(`file_url_${position}`)} ref={docPickerRef}   onChange={previewDocument} type="file" hidden/>
-      <input {...register(`banner_url_${position}`)} ref={bannerPickerRef}   onChange={previewBanner} type="file" hidden/>
+      <input {...register(`file_url_${position}`)} ref={docPickerRef}   onChange={previewDocument} type="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf" hidden/>
+      <input {...register(`banner_url_${position}`)} ref={bannerPickerRef}   onChange={previewBanner} accept="image/*" type="file" hidden/>
       <div className="row gap-3">
         <div className="col-lg-2 d-flex flex-column    border-primary border rounded p-2">
           <label htmlFor="" class="mb-3">Select video</label>

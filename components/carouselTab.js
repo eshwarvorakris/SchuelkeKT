@@ -97,7 +97,7 @@ const CarouselTab = ({position , item}) => {
           >
             <img alt=""  src="/trainer-images/trash.svg"  /> Remove
           </span>
-          <input type="file"  {...register(`carousel_image_one_${position}`)}  onChange={handleFileChange}  class="d-none" id="" />
+          <input type="file"  {...register(`carousel_image_one_${position}`)}  onChange={handleFileChange}  class="d-none" id="" accept="image/*"/>
         </div>
         <div className="col-lg-2 d-flex flex-column justify-content-center align-items-center gap-2 mb-5 border border-primary rounded p-2 mx-3 py-3">
           <img alt="" 
@@ -114,7 +114,7 @@ const CarouselTab = ({position , item}) => {
           >
             <img alt=""  src="/trainer-images/trash.svg"  /> Remove
           </span>
-          <input {...register(`carousel_image_two_${position}`)}type="file"  onChange={handleFileChange}   class="d-none" id="" />
+          <input {...register(`carousel_image_two_${position}`)}type="file"  onChange={handleFileChange}   class="d-none" id="" accept="image/*"/>
         </div>
         <div className="col-lg-2 d-flex flex-column justify-content-center align-items-center gap-2 mb-5 border border-primary rounded p-2 mx-3 py-3">
           <img alt="" 
@@ -131,7 +131,7 @@ const CarouselTab = ({position , item}) => {
           >
             <img alt=""  src="/trainer-images/trash.svg"  /> Remove
           </span>
-          <input {...register(`carousel_image_three_${position}`)} type="file" onChange={handleFileChange}   class="d-none" id="" />
+          <input {...register(`carousel_image_three_${position}`)} type="file" onChange={handleFileChange}   class="d-none" id="" accept="image/*"/>
         </div>
         <div className="col-lg-2 d-flex flex-column justify-content-center align-items-center gap-2 mb-5 border border-primary rounded p-2 mx-3 py-3">
           <img alt="" 
@@ -148,7 +148,7 @@ const CarouselTab = ({position , item}) => {
           >
             <img alt=""  src="/trainer-images/trash.svg"  /> Remove
           </span>
-          <input {...register(`carousel_image_four_${position}`)} type="file" onChange={handleFileChange}  class="d-none" id="" />
+          <input {...register(`carousel_image_four_${position}`)} type="file" onChange={handleFileChange}  class="d-none" id="" accept="image/*"/>
         </div>
         <div className="col-lg-2 d-flex flex-column justify-content-center align-items-center gap-2 mb-5 border border-primary rounded p-2 mx-3 py-3 border">
         <img alt="" 
@@ -165,7 +165,7 @@ const CarouselTab = ({position , item}) => {
           >
             <img alt=""  src="/trainer-images/trash.svg"  /> Remove
           </span>
-          <input {...register(`carousel_image_five_${position}`)} type="file" onChange={handleFileChange}   class="d-none" id="" />
+          <input {...register(`carousel_image_five_${position}`)} type="file" onChange={handleFileChange}   class="d-none" id="" accept="image/*"/>
         </div>
         
       </div>

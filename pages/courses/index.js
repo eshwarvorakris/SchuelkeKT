@@ -425,9 +425,9 @@ const Admincoursemanagement = () => {
                                         <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
                                     </div>
 
-                                    <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                    <div className=" category d-flex gap-3 align-items-center " >
                                         <select name="category"
-                                            className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                            className="select-mycourse" style={{ padding: '1px' }}
                                             onChange={handleFilterChange}>
                                             <option value="all">All</option>
                                             {/* <option value="course_name">Course Name</option> */}
@@ -438,9 +438,9 @@ const Admincoursemanagement = () => {
                                     </div>
 
                                     {!hideStatusDropdown &&
-                                        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                        <div className=" category d-flex gap-3 align-items-center " >
                                             <select name="statusChange"
-                                                className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                className="select-mycourse" style={{ padding: '1px' }}
                                                 onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
                                                 <option value="all">All Status</option>
                                                 <option value="approved">Approved</option>
@@ -452,7 +452,7 @@ const Admincoursemanagement = () => {
                                     }
 
                                     {!hideTopicDropdown &&
-                                        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                        <div className=" category d-flex gap-3 align-items-center " >
                                             <select name="topicChange"
                                                 className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
                                                 onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
@@ -464,7 +464,7 @@ const Admincoursemanagement = () => {
                                         </div>
                                     }
                                     {!hideCountryDropdown &&
-                                        <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
+                                        <div className=" category d-flex gap-3 align-items-center " >
                                             {/* <select name="topicChange"
                                                 className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
                                                 onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
@@ -495,7 +495,7 @@ const Admincoursemanagement = () => {
                                     }
                                 </div>
                                 <div className="trainee-body">
-                                    <div className="trainee-admincoursemanagement d-flex flex-column" style={{ minHeight: '70vh', height: 'unset' }}>
+                                    <div className="trainee-admincoursemanagement d-flex flex-column" style={{ minHeight: '70vh', height: 'unset', marginTop:"15rem" }}>
                                         <div className="box-1-admincoursemanagement"></div>
                                         <div className="box-2-admincoursemanagement"></div>
                                         <div className="trainee-tag-admincoursemanagement">

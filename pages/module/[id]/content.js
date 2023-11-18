@@ -422,6 +422,7 @@ const Page = () => {
                         defaultValue={item.title}
                         type="text"
                         placeholder=""
+                        required
                       />
                     </div>
                   </div>
@@ -480,7 +481,7 @@ const Page = () => {
                         placeholder=""
                       ></textarea> */}
 
-<TextEditor name={`content[${index}][paragraph3]`} defaultValue={item.paragraph3}/>
+                    <TextEditor name={`content[${index}][paragraph3]`} defaultValue={item.paragraph3}/>
 
                     </div>
                   </div>
