@@ -68,6 +68,14 @@ const EditCourse = () => {
     const fileClick = () => {
         inputFileRef.current.click();
     };
+    useEffect(() => {
+        window.addEventListener('wheel', { passive: false })
+    
+      return () => {
+      
+      }
+    }, [])
+    
     const handleChangeImage = (async (e) => {
         //setValue("uploadfile", e.target.files);
         var data = new FormData();
@@ -115,6 +123,13 @@ const EditCourse = () => {
             })
         }
     });
+
+
+
+    const handleWheel = (e) => {
+        e.preventDefault()
+        console.log(e);
+    }
 
     return (
         <>
@@ -178,7 +193,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" {...register("total_modules")} />
+                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_modules")} />
                                 </div>
                                 <div className="launch-date">
                                     <h6>Course Launch Date <span><OverlayTrigger
@@ -266,7 +281,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" {...register("week_duration")} />
+                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("week_duration")} />
                                 </div>
                                 <div className="course-completion">
                                     <h6>Total Training Hour <span><OverlayTrigger
@@ -280,7 +295,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" {...register("total_training_hour")} step="any" min="0.1" />
+                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_training_hour")}     min="0.1" />
                                 </div>
                             </div>
                         </div>

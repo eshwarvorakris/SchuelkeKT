@@ -155,11 +155,11 @@ const Page = () => {
     <>
       <form style={{ backgroundColor: 'white' }}>
 
-      {profile?.role != 'trainer' ? <div className="header-heading">
-          <h5>My Progress </h5>
+      {profile?.role == 'trainee' ? <div className="header-heading">
+          <h5>My Progress {profile?.role} </h5>
         </div>  :'' }
 
-        {profile?.role != 'trainer' ?  <div className="progress-card">
+        {profile?.role == 'trainee' ?  <div className="progress-card">
 
           <div className="info">
             <div className="progress-card-heading">
@@ -205,7 +205,7 @@ const Page = () => {
           <h5>Modules </h5>
         </div>
 
-        {profile?.role != 'trainer' ? <div>
+        {profile?.role == 'trainee' ? <div>
         
           <div className="module-cards">
             {modules?.data?.map((item, index) => {

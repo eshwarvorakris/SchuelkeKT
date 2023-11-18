@@ -3,7 +3,8 @@ import useSWR, { mutate } from 'swr';
 import Link from 'next/link';
 
 import { Modal } from 'react-bootstrap';
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import DocViewer, { DocViewerRenderers , PDFRenderer, PNGRenderer } from "@cyntler/react-doc-viewer";
+  
 import { Player } from 'video-react';
 import Script from 'next/script';
 import { useEffect } from 'react';
@@ -33,8 +34,9 @@ import { useEffect } from 'react';
       <div className="course-chapter-image-player">
      
       <DocViewer
-        pluginRenderers={DocViewerRenderers}
+         pluginRenderers={[PDFRenderer, PNGRenderer]}
         documents={docs}
+        prefetchMethod="GET"
         config={{
           header: {
             disableHeader:true,

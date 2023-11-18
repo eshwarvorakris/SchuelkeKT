@@ -125,9 +125,9 @@ const VideoTab = ({item,position}) => {
       <input {...register(`file_url_${position}`)} ref={docPickerRef}   onChange={previewDocument} type="file" hidden/>
       <input {...register(`banner_url_${position}`)} ref={bannerPickerRef}   onChange={previewBanner} type="file" hidden/>
       <div className="row gap-3">
-        <div className="col-lg-3 d-flex flex-column  justify-content-start border-primary border rounded p-2">
+        <div className="col-lg-2 d-flex flex-column    border-primary border rounded p-2">
           <label htmlFor="" class="mb-3">Select video</label>
-        {videoPreview != null ? <video width={"100%"} controls src={videoPreview}></video> : <img alt="" onClick={() => filePicekerRef.current.click()} width="30%" className='m-auto ' src="/trainer-images/upload.svg" />}
+        {videoPreview != null ? <video width={"100%"} controls src={videoPreview}></video> : <img alt="" onClick={() => filePicekerRef.current.click()} width="20%" className='m-auto mt-2' src="/trainer-images/upload.svg" />}
         
         {videoPreview != null && <span
                   className="text-nowrap text-muted verticla-align-center d-flex align-items-center mt-1"
@@ -220,11 +220,11 @@ const VideoTab = ({item,position}) => {
                   Remove
                 </span>}
         </div>
-        <div className="col-lg-3 d-flex flex-column  justify-content-start border-primary border rounded p-2">
+        <div className="col-lg-2 d-flex flex-column   border-primary border rounded p-2">
         <label htmlFor="" class="mb-3">Select Document</label>
 
-        { <img alt="" onClick={() => docPickerRef.current.click()} width={"30%"} className='m-auto' src="/trainer-images/upload.svg" />}
-        <p className='text-break text-center'>{selectedDocument}</p>
+        { <img alt="" onClick={() => docPickerRef.current.click()} width={"20%"} className='m-auto mt-2' src="/trainer-images/upload.svg" />}
+       {selectedDocument != null ?  <p className='text-break text-center'>{selectedDocument}</p> : ''}
         {selectedDocument != null  && <span
                   className="text-nowrap text-muted verticla-align-center d-flex align-items-center mt-2"
                   
@@ -316,10 +316,10 @@ const VideoTab = ({item,position}) => {
                   Remove
                 </span>}
         </div>
-        <div className="col-lg-3 d-flex flex-column  justify-content-start border-primary border rounded p-2 ">
+        <div className="col-lg-2 d-flex flex-column   border-primary border rounded p-2 ">
         <label htmlFor="" class="mb-3">Select Banner</label>
 
-        { <img alt="" onClick={() => bannerPickerRef.current.click()} width={selectedBanner != null && selectedBanner != "" ? "100%" : "30%"} className={`m-auto ${selectedBanner != null ? `mt-0` : ``}`} src={selectedBanner != null && selectedBanner != "" ? selectedBanner : "/trainer-images/upload.svg"} />}
+        { <img alt="" onClick={() => bannerPickerRef.current.click()} width={selectedBanner != null && selectedBanner != "" ? "100%" : "20%"} className={`m-auto ${selectedBanner != null ? `mt-2` : `mt-2`}`} src={selectedBanner != null && selectedBanner != "" ? selectedBanner : "/trainer-images/upload.svg"} />}
         {/* <p className='text-break text-center'>{selectedBanner != null ? selectedBanner : item.banner_url != "" ? item.banner_url.split('/')[item.banner_url.split('/').length -1] : ''}</p> */}
         
         {selectedBanner != null  && <span

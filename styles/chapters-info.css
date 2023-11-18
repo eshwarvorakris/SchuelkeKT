@@ -321,10 +321,15 @@ body{
 
 
 
+.react-pdf__Page__textContent.textLayer{
+    display: none;
+}
 
 
+.glETgD::-webkit-scrollbar{
+    display: none;
 
-
+}
 
 
 

@@ -4,6 +4,7 @@ import Chapternavbar from "../../components/chapternavbar";
 import Chaptersidebar from "../../components/chaptersidebar";
 // import Imageplayer from "./component/imageplayer";
 import Documentviewer from "../admin/component/documentsviewer";
+// import DocumentViewer from "../components/DocumentViewer";
 import contentModel from "../../model/content.model";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -12,8 +13,6 @@ import Link from "next/link";
 import courseModel from "../../model/course.model";
 import AppContext from "../../lib/appContext";
 import { Player } from "video-react";
-import Imageplayer from "../../components/imageplayer";
-import Image from "next/image";
 function ChapterInfo() {
   const layoutValues = useContext(AppContext);
   const [modal, setModal] = useState("");
@@ -100,7 +99,7 @@ function ChapterInfo() {
     } catch (error) {}
   }
 
-  async function getModules(course_id, chapterId, module_id) {
+  async function getModules(course_id, order, module_id) {
     try {
       // const response = await courseModel.modules(course_id,'order_by=sequence_no&order_in=asc');
       const response = await contentModel.list();
@@ -108,14 +107,27 @@ function ChapterInfo() {
 
       if ((response?.data).length > 1) {
         var i = 0;
+        let nextPageStatus = false;
+        let previousPageStatus = false;
         response?.data.map((item, index) => {
           // console.log(module_id);
           if (item.module_id === module_id) {
-            if (item.id < chapterId) {
-              setPrevContent(item.id);
+            // if (item.sequence_no < order && previousPageStatus == false) {
+            //   setPrevContent(item);
+            //   previousPageStatus = true;
+            // }
+            // if (item.sequence_no > order && nextPageStatus == false) {
+            //   setNextContent(item);
+            //   nextPageStatus = false;
+            // }
+
+            if (item.sequence_no == order - 1) {
+              setPrevContent(item);
+            
             }
-            if (item.id > chapterId) {
-              setNextContent(item.id);
+            if (item.sequence_no == order + 1) {
+              setNextContent(item);
+           
             }
             // if (typeof response?.data?.[i + 1] !== 'undefined') {
             //     //// console.log("sequece = ", response?.data?.[i + 1]?.sequence_no)
@@ -200,7 +212,7 @@ function ChapterInfo() {
     {
       getModules(
         content.course_id,
-        content.id,
+        content.sequence_no,
         content.module_id
       );
     }
@@ -218,7 +230,7 @@ function ChapterInfo() {
         courseDetail(res);
       }
     });
-  }, [chapterId, prevContent, nextContent, profile]);
+  }, [chapterId,  profile]);
 
   return content == null ? (
     <>Loading..</>
@@ -241,6 +253,7 @@ function ChapterInfo() {
                 modalSwitch={handleModalSwitch}
                 file={content.file_url}
               />
+         
             ) : (
               ""
             )}
@@ -298,8 +311,12 @@ function ChapterInfo() {
                 ) : (
                   <Documentviewer
                     modalSwitch={handleModalSwitch}
-                    file={content.file_url}
+                    file={content?.file_url}
                   />
+                  // <object
+                  // <iframe />
+                  // <DocViewer documents={[
+                  //   { uri:content?.file_url  }]} pluginRenderers={DocViewerRenderers} />
                 )}
                 {/* <Documentviewer modalSwitch={handleModalSwitch} file={content.file_url}/> */}
                 {/* <iframe src="https://docs.google.com/gview?url=https://betaschulke.s3.ap-south-1.amazonaws.com/demo.pptx&embedded=true"  frameborder="0">
@@ -376,7 +393,7 @@ function ChapterInfo() {
             {chapterList.length > 1 ? (
               <div className="footerNavigation-buttons">
                 {prevContent != null ? (
-                  <Link className="links" href={"/chapter/" + prevContent}>
+                  <Link className="links" href={"/chapter/" + prevContent.id}>
                     <div className="footer-buttons-container">
                       <span className="doc-controls-button">
                         <svg
@@ -405,7 +422,7 @@ function ChapterInfo() {
                       <div>
                         <span className="btn-type">previous</span> <br />
                         <span className="btn-value">
-                          Chaspanter 1 - Introduction
+                          {prevContent.title}
                         </span>
                       </div>
                     </div>
@@ -414,8 +431,8 @@ function ChapterInfo() {
                   ""
                 )}
 
-                {nextContent != null && showNextChapter != false ? (
-                  <Link className="links" href={"/chapter/" + nextContent}>
+                {(nextContent != null && showNextChapter != false) || (profile.role == 'trainer' && nextContent != null) ? (
+                  <Link className="links" href={"/chapter/" + nextContent.id}>
                     <div className="footer-buttons-container next">
                       <span className="doc-controls-button ">
                         <svg
@@ -444,7 +461,7 @@ function ChapterInfo() {
                       <div>
                         <span className="btn-type">Next</span> <br />
                         <span className="btn-value">
-                          Chaspanter 1 - Introduction
+                          {nextContent.title}
                         </span>
                       </div>
                     </div>

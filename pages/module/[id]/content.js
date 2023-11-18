@@ -7,6 +7,7 @@ import uploader from "../../../model/fileupload.model";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import Link from "next/link";
+import TextEditor from "../../../components/textEditor";
 import { config } from "../../../lib/config";
 import { helper } from "../../../lib/helper";
 import React, {
@@ -432,14 +433,15 @@ const Page = () => {
                     </div>
                     <span className="content-title">Paragraph 1 -</span>
                     <div className="input-container">
-                      <textarea
+                      {/* <textarea
                         {...register(`content[${index}][paragraph1]`)}
                         defaultValue={item.paragraph1}
                         className="content-paragraph"
                         cols="100"
                         rows="5"
                         placeholder=""
-                      ></textarea>
+                      ></textarea> */}
+                      <TextEditor name={`content[${index}][paragraph1]`} defaultValue={item.paragraph1}/>
                     </div>
                   </div>
                   <div className="module-paragraph-1">
@@ -449,14 +451,16 @@ const Page = () => {
                     </div>
                     <span className="content-title">Paragraph 2 -</span>
                     <div className="input-container">
-                      <textarea
+                      {/* <textarea
                         {...register(`content[${index}][paragraph2]`)}
                         defaultValue={item.paragraph2}
                         className="content-paragraph"
                         cols="100"
                         rows="5"
                         placeholder=""
-                      ></textarea>
+                      ></textarea> */}
+                      <TextEditor name={`content[${index}][paragraph2]`} defaultValue={item.paragraph2}/>
+
                     </div>
                   </div>
                 
@@ -467,14 +471,17 @@ const Page = () => {
                     </div>
                     <span className="content-title">Paragraph 3 -</span>
                     <div className="input-container">
-                      <textarea
+                      {/* <textarea
                         {...register(`content[${index}][paragraph3]`)}
                         defaultValue={item.paragraph3}
                         className="content-paragraph"
                         cols="100"
                         rows="5"
                         placeholder=""
-                      ></textarea>
+                      ></textarea> */}
+
+<TextEditor name={`content[${index}][paragraph3]`} defaultValue={item.paragraph3}/>
+
                     </div>
                   </div>
 
