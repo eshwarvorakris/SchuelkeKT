@@ -193,7 +193,7 @@ const DosAndDontsTab = ({position , item}) => {
             </div>
           );
         })}
-        <span className="btn btn-primary w-75 rounded-0" onClick={() => {
+        <span className="btn btn-primary w-75 rounded-0" style={{backgroundColor:'#008bd6'}}  onClick={() => {
             append({ title: ""});
           }}>Add more content</span>
         
@@ -312,7 +312,7 @@ nt              /> */}
             </div>
           );
         })}
-        <span className="btn btn-primary w-75 rounded-0" onClick={() => {
+        <span className="btn btn-primary w-75 rounded-0" style={{backgroundColor:'#008bd6'}} onClick={() => {
             dontAppend({ title: ""});
           }}>Add more content</span>
       

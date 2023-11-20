@@ -125,7 +125,7 @@ const VideoTab = ({item,position}) => {
       <input {...register(`file_url_${position}`)} ref={docPickerRef}   onChange={previewDocument} type="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf" hidden/>
       <input {...register(`banner_url_${position}`)} ref={bannerPickerRef}   onChange={previewBanner} accept="image/*" type="file" hidden/>
       <div className="row gap-3">
-        <div className="col-lg-2 d-flex flex-column    border-primary border rounded p-2">
+        <div className="col-lg-2 d-flex flex-column justify-content-between   border-primary border rounded p-2">
           <label htmlFor="" class="mb-3">Select video</label>
         {videoPreview != null ? <video width={"100%"} controls src={videoPreview}></video> : <img alt="" onClick={() => filePicekerRef.current.click()} width="20%" className='m-auto mt-2' src="/trainer-images/upload.svg" />}
         

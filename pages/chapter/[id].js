@@ -69,7 +69,7 @@ function ChapterInfo() {
 
         if (
           chapterStatus.isCurrentChapterLocked == false ||
-          profile.role == "trainer"
+          profile.role == "trainer" || profile.role == "admin"
         ) {
           setContent(response.data);
 
@@ -428,10 +428,10 @@ function ChapterInfo() {
                     </div>
                   </Link>
                 ) : (
-                  ""
+                  <div></div>
                 )}
 
-                {(nextContent != null && showNextChapter != false) || (profile.role == 'trainer' && nextContent != null) ? (
+                {(nextContent != null && showNextChapter != false) || (profile.role == 'trainer' && nextContent != null) || (profile.role == 'admin' && nextContent != null) ? (
                   <Link className="links" href={"/chapter/" + nextContent.id}>
                     <div className="footer-buttons-container next">
                       <span className="doc-controls-button ">

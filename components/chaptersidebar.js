@@ -87,7 +87,7 @@ function Chaptersidebar({
         <small>Knowledge Centre</small>
       </div>
       <div className="sidebar_thumnail">
-        {profile.role != "trainer" ? (
+        {profile.role != "trainer" || profile.role != "admin"  ? (
           <div className="image-overlay">
             <p className="overlay-text">{moduleName}</p>
             <div class="overlay-progress-bar">
@@ -107,7 +107,7 @@ function Chaptersidebar({
           ""
         )}
 
-        <img alt="" style={{width:"100%",height:"8rem"}} src={bannerUrl != null ? bannerUrl :"/admin-images/sidebar/sidebar-thumbnail.png"}  />
+        <img alt="" style={{width:"100%",height:"8rem"}} src={bannerUrl != null ? bannerUrl :"/trainee-images/course-bannner.png"}  />
       </div>
       <div className="chapter-list-container">
         <ul className="chapter-list-root">

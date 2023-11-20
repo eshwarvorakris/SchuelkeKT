@@ -27,7 +27,7 @@ const Chaptersidebarlist = ({moduleId , name , courseId, chapterId, status,profi
         }
       }, [])
       
-    if(moduleStatus.isCurrentChapterLocked == false || profile.role == 'trainer'){
+    if(moduleStatus.isCurrentChapterLocked == false || profile.role == 'trainer' || profile.role == 'admin'){
       return (
         <li class="chapter-name active"> <Link className="links" href={"/chapter/"+chapterId}>{name}</Link> </li>
       )

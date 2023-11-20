@@ -106,9 +106,47 @@ const Page = () => {
       .catch((error) => {});
   };
 
+  
+
+  const validateForm = async(event) => {
+    let formStatus = true;
+    Array.from(event.target).forEach((result,index)=>{
+      if(result.type == "text" || result.type == "textarea")
+      {
+        // console.log(result.nextElementSibling);
+        // console.log(result.type , result.required);
+        if((result.value == "" || result.value == null) && result.name != "")
+        {
+          // console.log(result);
+          result.nextElementSibling.nextElementSibling != null ? result.nextElementSibling.nextElementSibling.innerHTML = "Field is required" : ''
+          formStatus = false
+        }
+        else
+        {
+          result.nextElementSibling.nextElementSibling != null ? result.nextElementSibling.nextElementSibling.innerHTML = "" : ''
+          
+
+        }
+          
+          
+        
+      }
+    })
+    return formStatus;
+  }
+
   const onSubmit = handleSubmit(async (data) => {
-    setLoading(true);
     event.preventDefault();
+
+    const status = await validateForm(event);
+    console.log('shibli', status);
+
+    if(status == false)
+    {
+      return;
+    }
+    setLoading(true);
+
     const formData = new FormData(event.target);
     if (isUploaded) {
       formData.delete("uploadfile");
@@ -413,7 +451,7 @@ const Page = () => {
                       })()}
                     </div>
                     <div className="module-title">
-                      <span className="content-title">Title -</span>
+                      <span className="content-title">Title - </span>
                     </div>
                     <div className="input-container">
                       <input
@@ -422,8 +460,9 @@ const Page = () => {
                         defaultValue={item.title}
                         type="text"
                         placeholder=""
-                        required
-                      />
+                        
+                      /> <br></br>
+                      <small className="text-danger" id={`title-error`+index}></small>
                     </div>
                   </div>
 
@@ -432,7 +471,7 @@ const Page = () => {
                       {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
-                    <span className="content-title">Paragraph 1 -</span>
+                    <span className="content-title">Paragraph 1 - </span>
                     <div className="input-container">
                       {/* <textarea
                         {...register(`content[${index}][paragraph1]`)}
@@ -450,7 +489,7 @@ const Page = () => {
                       {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
-                    <span className="content-title">Paragraph 2 -</span>
+                    <span className="content-title">Paragraph 2 - </span>
                     <div className="input-container">
                       {/* <textarea
                         {...register(`content[${index}][paragraph2]`)}
@@ -470,7 +509,7 @@ const Page = () => {
                       {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
                     </div>
-                    <span className="content-title">Paragraph 3 -</span>
+                    <span className="content-title">Paragraph 3 - </span>
                     <div className="input-container">
                       {/* <textarea
                         {...register(`content[${index}][paragraph3]`)}

@@ -13,7 +13,7 @@ export default function TabCourseList() {
   QueryParam.page = router.query.page || 1;
   QueryParam.order_by = router.query?.order_by || "created_at";
   QueryParam.order_in = router.query?.order_in || "desc";
-
+QueryParam.category_id = router.query?.category_id || 1
   const { data: categoryData, error: categoryerror, isLoading: categoryisLoading } = useSWR("categorylist", async () => await categoryModel.list(), config.swrConfig);
   const { data: courses, error: courseerror, isLoading: courseisLoading, mutate: loadCourse } = useSWR(QueryParam ? "courseList" : null, async () => await courseModel.list(QueryParam), config.swrConfig);
 
@@ -27,8 +27,13 @@ export default function TabCourseList() {
 
   const [activeTab, setActiveTab] = useState("tab1");
   const fetchCourse = function (indexId, catId) {
+    console.log(catId);
+    console.log(indexId);
     QueryParam.category_id = catId;
-    setActiveTab("tab" + indexId);
+    console.log(QueryParam);
+    let activeTabId = "tab" + indexId
+    console.log(activeTabId);
+    setActiveTab(activeTabId);
     router.push({
       pathname: router.pathname,
       query: QueryParam,
@@ -37,13 +42,15 @@ export default function TabCourseList() {
   }
 
   useEffect(() => {
-    QueryParam.category_id = categoryData?.data?.[0]["id"];
+    // QueryParam.category_id = categoryData?.data?.[0]["id"];
     router.push({
       pathname: router.pathname,
       query: QueryParam,
     });
     loadCourse();
   }, [categoryData]);
+
+  
   return (
     <>
       <div className="pc-tab">

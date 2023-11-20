@@ -159,7 +159,7 @@ const EditCourse = () => {
                                         </OverlayTrigger>
                                         </span>
                                     </h6>
-                                    <input type="text" {...register("course_name")} placeholder="Gastroentrology" />
+                                    <input type="text" {...register("course_name")} placeholder="Gastroentrology" required/>
                                 </div>
                                 <div className="category">
                                     <h6 htmlFor="category">
@@ -193,7 +193,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_modules")} />
+                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_modules")} required/>
                                 </div>
                                 <div className="launch-date">
                                     <h6>Course Launch Date <span><OverlayTrigger
@@ -207,7 +207,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input className="min-date" type="date" {...register("course_launch_date")} min={moment(courseData.course_launch_date).format("YYYY-MM-DD")} />
+                                    <input className="min-date" type="date" {...register("course_launch_date")} min={moment(courseData.course_launch_date).format("YYYY-MM-DD")} required/>
                                 </div>
                             </div>
 
@@ -281,7 +281,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("week_duration")} />
+                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("week_duration")} required/>
                                 </div>
                                 <div className="course-completion">
                                     <h6>Total Training Hour <span><OverlayTrigger
@@ -295,7 +295,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_training_hour")}     min="0.1" />
+                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_training_hour")}     min="1" required/>
                                 </div>
                             </div>
                         </div>
@@ -317,7 +317,7 @@ const EditCourse = () => {
                                     </OverlayTrigger>
                                     </span></h6>
                             </div>
-                            <textarea {...register("course_description")} cols="30" rows="30" className="text-type-box"></textarea>
+                            <textarea {...register("course_description")} cols="30" rows="30" className="text-type-box" required></textarea>
 
 
                             <div className="btn-container d-flex justify-content-between mt-5" style={{ padding: 'unset' }}>

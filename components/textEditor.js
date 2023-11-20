@@ -41,6 +41,8 @@ function TextEditor({name,defaultValue}) {
     ['clean']                                         // remove formatting button
   ]}} />
   <textarea name={name} id="" value={value} cols="30" rows="10" hidden></textarea>
+  <br></br>
+  <small className="text-danger"></small>
   </>;
 }
 

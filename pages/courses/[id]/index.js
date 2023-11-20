@@ -165,7 +165,7 @@ const Page = () => {
             <div className="progress-card-heading">
               <span style={{ color: '#212529' }}>{courseData?.data?.course_name}</span>
             </div>
-            {profile?.role != 'trainer' ?<div className="remaining-info-card">
+            {profile?.role != 'trainer' || profile?.role != 'admin' ?<div className="remaining-info-card">
               <span>
                 {moduleLeft > 0 ? (
                   <>{moduleLeft} Module Remaining</>

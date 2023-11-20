@@ -172,7 +172,7 @@ function Page() {
           <form onSubmit={updateModule} className="row g-1">
             <div className="col">
               <input type="hidden" name="id" value={row.id} />
-              <input type="text" className='form-control form-control-sm' name="module_name" defaultValue={row.module_name} />
+              <input type="text" className='form-control form-control-sm' name="module_name" defaultValue={row.module_name} required/>
             </div>
             <div className="col-auto">
               <button type="submit" className='btn btn-sm btn-primary'>Edit</button>

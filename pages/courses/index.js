@@ -273,7 +273,7 @@ const Admincoursemanagement = () => {
                             <div style={{ display: 'contents' }}>
                                 <div className='btn-group  text-nowrap'>
 
-                                {layoutValues?.profile?.role == 'trainer' ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Edit"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
+                                {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Edit"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
                                     <Link className='btn btn-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
                                     <button className='btn btn-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 
