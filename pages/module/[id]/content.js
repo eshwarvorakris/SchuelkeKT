@@ -139,7 +139,7 @@ const Page = () => {
     event.preventDefault();
 
     const status = await validateForm(event);
-    console.log('shibli', status);
+    
 
     if(status == false)
     {

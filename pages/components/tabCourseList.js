@@ -26,7 +26,9 @@ QueryParam.category_id = router.query?.category_id || 1
   };
 
   const [activeTab, setActiveTab] = useState("");
+  const [loading, setLoading] = useState(true)
   const fetchCourse = function (indexId, catId) {
+    // setLoading(true);
     console.log(catId);
     console.log(indexId);
     QueryParam.category_id = catId;
@@ -39,10 +41,12 @@ QueryParam.category_id = router.query?.category_id || 1
       query: QueryParam,
     });
     loadCourse();
+    setLoading(false)
   }
 
   useEffect(() => {
     // QueryParam.category_id = categoryData?.data?.[0]["id"];
+    setLoading(false)
     router.push({
       pathname: router.pathname,
       query: QueryParam,
@@ -79,13 +83,18 @@ QueryParam.category_id = router.query?.category_id || 1
             <div className="trainee-cards">
               <div className="container">
                 <div className="row d-flex flex-column gap-5">
-                  <div className="row">
+
+                {loading ? <><div class="d-flex align-items-start justify-content-center" style={{minHeight:'100vh'}}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>{" "}</> : <div className="row">
                     {courses?.data?.map((item, index) => {
                       return (
                         <CourseCard key={`course${item.id}`} courseData={item} courseIndex={index} />
                       )
                     })}
-                  </div>
+                  </div>}
                 </div>
               </div>
             </div>

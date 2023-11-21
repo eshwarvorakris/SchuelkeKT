@@ -65,9 +65,11 @@ function Chaptersidebar({
         let curModuleViewSec = res?.data?.moduleViewesCount;
         // let curModuleViewSec = res?.data?.curModuleViews;
         percentage = 0;
-
+        console.log(curModuleViewSec);
+        console.log(currentModuleMaxSec);
         if (currentModuleMaxSec > curModuleViewSec) {
           percentage = parseInt((curModuleViewSec / currentModuleMaxSec) * 100);
+          console.log(percentage);
         } else {
           percentage = 100;
           settotalTimeLeft(0);
@@ -79,6 +81,13 @@ function Chaptersidebar({
     });
     calculateTimeLeftforCurrentModule();
   }, [courseId,moduleId]);
+  
+  useEffect(() => {
+    console.log(totalTimeLeft);
+  
+   
+  }, [totalTimeLeft])
+  
 
   return (
     <div class="container-1 sticky-side-bar course-chapter-sidebar">

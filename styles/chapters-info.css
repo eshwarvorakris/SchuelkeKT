@@ -171,6 +171,7 @@ body{
     position: relative;
     font-size: 12px;
     width: 80%;
+    
 }
 
 .chapter-name.active::after{
@@ -184,6 +185,9 @@ body{
     /* right: 15%;
     top: 60%; */
     float: right;
+    position: absolute;
+    right: -21px;
+    top: 55%;
 
 }
 
