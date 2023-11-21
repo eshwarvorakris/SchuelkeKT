@@ -186,10 +186,11 @@ html {
 }
 
 .navbar-brand span {
-  padding-left: 2rem;
+  padding-left: 1.75rem;
   font-size: 12px;
   font-weight: 400;
   font-family: myriad-regular;
+  line-height: 30px;
 }
 
 .trainee-right .navbar-nav {

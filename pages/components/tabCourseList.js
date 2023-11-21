@@ -25,7 +25,7 @@ QueryParam.category_id = router.query?.category_id || 1
     });
   };
 
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [activeTab, setActiveTab] = useState("");
   const fetchCourse = function (indexId, catId) {
     console.log(catId);
     console.log(indexId);
@@ -50,6 +50,12 @@ QueryParam.category_id = router.query?.category_id || 1
     loadCourse();
   }, [categoryData]);
 
+  useEffect(() => {
+    console.log(QueryParam);
+  setActiveTab('tab'+QueryParam.category_id);
+ 
+  }, [QueryParam])
+  
   
   return (
     <>
