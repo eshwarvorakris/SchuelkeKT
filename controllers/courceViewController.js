@@ -74,6 +74,7 @@ const courseController = class {
   async getCourseViewData(req, res) {
     //console.clear();
     //console.log(req.body);
+    req.body.trainee_id = req.userId;
     let allContentInCourse = await Content.count({ where: { course_id: req.body.course_id } });
     let courseData = await Course.findByPk(req?.body?.course_id);
     let courseContentCompletedCount = await ChapterView.count({ where: { course_id: req.body.course_id, trainee_id: req.body.trainee_id, status: 'completed' } });
@@ -195,7 +196,10 @@ const courseController = class {
   }
 
   async getRecentLearning(req, res) {
+
+
     const lastChapter = await ChapterView.findOne({ include: ['course'], where: { trainee_id: req.userId, status: 'ongoing' }, order: [['chapter_id', 'DESC']] });
+    
     var data = null;
     if (lastChapter !== null) {
       const moduleCompletedCount = await ModuleView.count({ 
