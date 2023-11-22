@@ -27,6 +27,12 @@ const moduleModel=class {
         return await axiosInstance.put(`${this.baseUrl}/${id}`,data);
     }
 
+    // async getModuleListByCourse(data=[]){
+        
+    //     return await axiosInstance.get(`${this.baseUrl}/getmodulesbycourse/`,data);
+
+    // }
+
     async updateAll(data=[])
     {
         return await axiosInstance.post(`${this.baseUrl}/update_all`,data);

@@ -13,6 +13,7 @@ import Link from "next/link";
 import courseModel from "../../model/course.model";
 import AppContext from "../../lib/appContext";
 import { Player } from "video-react";
+import ChapterNavigationButtons from "../../components/chapterNavigationButtons";
 function ChapterInfo() {
   const layoutValues = useContext(AppContext);
   const [modal, setModal] = useState("");
@@ -41,11 +42,12 @@ function ChapterInfo() {
     carouselModal == "" ? setCarouselModal("active") : setCarouselModal("");
   }
 
-  async function getModuleStatus(moduleId, courseId, chapterId) {
+  async function getModuleStatus(moduleId, courseId, chapterId,chapterOrder) {
     const chapterForm = new FormData();
     chapterForm.append("module_id", moduleId);
     chapterForm.append("course_id", courseId);
     chapterForm.append("chapter_id", chapterId);
+    chapterForm.append("chapter_order", chapterOrder);
     const response = await CourseViewModel.getChapterView(chapterForm);
     return response.data;
   }
@@ -63,7 +65,8 @@ function ChapterInfo() {
         const chapterStatus = await getModuleStatus(
           response.data.module_id,
           response.data.course_id,
-          chapterId
+          chapterId,
+          response.data.sequence_no
         );
         setChapterStatus(chapterStatus);
 
@@ -80,11 +83,7 @@ function ChapterInfo() {
           );
 
           
-          setViewsSeconds(
-            response.data.course_id,
-            response.data.module_id,
-            chapterId
-          );
+          
           getChapterViewData(chapterId);
 
           setmoduleId(response.data.module_id);
@@ -160,6 +159,8 @@ function ChapterInfo() {
     try {
       const response = await courseModel.detail(course_id);
       // setcourseData(response.data);
+      console.log('inside-course-details');
+      console.log(response);
       calculatetimePermodule(
         response.data.total_training_hour,
         response.data.total_modules
@@ -215,6 +216,13 @@ function ChapterInfo() {
         content.sequence_no,
         content.module_id
       );
+      setViewsSeconds(
+        content.course_id,
+        content.module_id,
+        content.id
+      );
+      courseDetail(content.course_id);
+
     }
   
     return () => {
@@ -227,7 +235,6 @@ function ChapterInfo() {
     getChapterInfo().then((res) => {
       // console.log(res);
       if (res != undefined) {
-        courseDetail(res);
       }
     });
   }, [chapterId,  profile]);
@@ -390,90 +397,11 @@ function ChapterInfo() {
               </div>
             </div>
 
-            {chapterList.length > 1 ? (
-              <div className="footerNavigation-buttons">
-                {prevContent != null ? (
-                  <Link className="links" href={"/chapter/" + prevContent.id}>
-                    <div className="footer-buttons-container">
-                      <span className="doc-controls-button">
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10.999 5L7.49902 8.5L3.99902 12H19.999"
-                            stroke="white"
-                            stroke-width="2.66667"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                          <path
-                            d="M10.999 19L7.49902 15.5L3.99902 12H19.999"
-                            stroke="white"
-                            stroke-width="2.66667"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </span>
-                      <div>
-                        <span className="btn-type">previous</span> <br />
-                        <span className="btn-value">
-                          {prevContent.title}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ) : (
-                  <div></div>
-                )}
+            
+          <ChapterNavigationButtons content={content}/>
 
-                {(nextContent != null && showNextChapter != false) || (profile.role == 'trainer' && nextContent != null) || (profile.role == 'admin' && nextContent != null) ? (
-                  <Link className="links" href={"/chapter/" + nextContent.id}>
-                    <div className="footer-buttons-container next">
-                      <span className="doc-controls-button ">
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M13.001 5L16.501 8.5L20.001 12H4.00098"
-                            stroke="white"
-                            stroke-width="2.66667"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                          <path
-                            d="M13.001 19L16.501 15.5L20.001 12H4.00098"
-                            stroke="white"
-                            stroke-width="2.66667"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </span>
-                      <div>
-                        <span className="btn-type">Next</span> <br />
-                        <span className="btn-value">
-                          {nextContent.title}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ) : (
-                  ""
-                )}
-              </div>
-            ) : (
-              ""
-            )}
           </div>
+
         </main>
         <Chapternavbar profile={profile} />
       </div>

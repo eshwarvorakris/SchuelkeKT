@@ -26,7 +26,7 @@ export default function ChapterCard({ chapterData, chapterIndex, perContentMin, 
       chapterForm.append("course_id", chapterData.course_id);
       chapterForm.append("module_id", chapterData.module_id);
       chapterForm.append("module_sequence_no", moduleData.sequence_no);
-      chapterForm.append("chapter_order", chapterData.order);
+      chapterForm.append("chapter_order", chapterData.sequence_no);
       let isModuleFirstChapter = false;
       if(firstChapterId == chapterData.id) {
         isModuleFirstChapter = true;

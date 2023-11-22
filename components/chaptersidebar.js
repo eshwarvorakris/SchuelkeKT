@@ -62,8 +62,8 @@ function Chaptersidebar({
           courseTimeInSec / res?.data?.allContentInCourse
         );
         currentModuleMaxSec = percontentsec * res?.data?.allContentInModule;
-        let curModuleViewSec = res?.data?.moduleViewesCount;
-        // let curModuleViewSec = res?.data?.curModuleViews;
+        // let curModuleViewSec = res?.data?.moduleViewesCount;
+        let curModuleViewSec = res?.data?.curModuleViews;
         percentage = 0;
         console.log(curModuleViewSec);
         console.log(currentModuleMaxSec);
