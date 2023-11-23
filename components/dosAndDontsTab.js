@@ -79,7 +79,7 @@ const DosAndDontsTab = ({position , item}) => {
   return (
     <div>
     <div className="row my-3">
-      <div className="col-lg-6">
+      <div className="col-lg-6" style={{paddingLeft:0}}>
         <h4 class="mb-5">Do's</h4>
      
        

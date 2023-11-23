@@ -126,7 +126,7 @@ const VideoTab = ({item,position}) => {
       <input {...register(`banner_url_${position}`)} ref={bannerPickerRef}   onChange={previewBanner} accept="image/*" type="file" hidden/>
       <div className="row gap-3">
         <div className="col-lg-2 d-flex flex-column justify-content-between   border-primary border rounded p-2">
-          <label htmlFor="" class="mb-3">Select video</label>
+          <small htmlFor="" class="mb-3">Select video</small>
         {videoPreview != null ? <video width={"100%"} controls src={videoPreview}></video> : <img alt="" onClick={() => filePicekerRef.current.click()} width="20%" className='m-auto mt-2' src="/trainer-images/upload.svg" />}
         
         {videoPreview != null && <span
@@ -221,7 +221,7 @@ const VideoTab = ({item,position}) => {
                 </span>}
         </div>
         <div className="col-lg-2 d-flex flex-column   border-primary border rounded p-2">
-        <label htmlFor="" class="mb-3">Select Document</label>
+        <small htmlFor="" class="mb-3 word-nowrap text-nowrap">Select Document</small>
 
         { <img alt="" onClick={() => docPickerRef.current.click()} width={"20%"} className='m-auto mt-2' src="/trainer-images/upload.svg" />}
        {selectedDocument != null ?  <p className='text-break text-center'>{selectedDocument}</p> : ''}
@@ -317,7 +317,7 @@ const VideoTab = ({item,position}) => {
                 </span>}
         </div>
         <div className="col-lg-2 d-flex flex-column   border-primary border rounded p-2 ">
-        <label htmlFor="" class="mb-3">Select Banner</label>
+        <small htmlFor="" class="mb-3">Select Banner</small>
 
         { <img alt="" onClick={() => bannerPickerRef.current.click()} width={selectedBanner != null && selectedBanner != "" ? "100%" : "20%"} className={`m-auto ${selectedBanner != null ? `mt-2` : `mt-2`}`} src={selectedBanner != null && selectedBanner != "" ? selectedBanner : "/trainer-images/upload.svg"} />}
         {/* <p className='text-break text-center'>{selectedBanner != null ? selectedBanner : item.banner_url != "" ? item.banner_url.split('/')[item.banner_url.split('/').length -1] : ''}</p> */}

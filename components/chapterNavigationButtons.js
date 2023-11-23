@@ -499,11 +499,42 @@ const ChapterNavigationButtons = ({ content }) => {
                   <span className="btn-value">Assesment</span>
                 </div>
               </div>
-            </Link> : '' )
+            </Link> : <div  className="links text-muted">
+              <div className="footer-buttons-container next">
+                <span className="doc-controls-button ">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13.001 5L16.501 8.5L20.001 12H4.00098"
+                      stroke="white"
+                      stroke-width="2.66667"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M13.001 19L16.501 15.5L20.001 12H4.00098"
+                      stroke="white"
+                      stroke-width="2.66667"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <span className="btn-type">Next</span> <br />
+                  <span className="btn-value">Chapter</span>
+                </div>
+              </div>
+            </div> )
           )}
         </div>
       ) : (
-        ""
+        "Next "
       )}
     </div>
   );

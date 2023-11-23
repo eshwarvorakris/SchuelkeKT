@@ -108,7 +108,7 @@ const Admincoursemanagement = () => {
                     <p>{curIndex}</p>
                 )
             },
-            width: '4%',
+            width: '4rem',
         },
         {
             name: '',
@@ -142,14 +142,14 @@ const Admincoursemanagement = () => {
             sortable: true,
             sortField: "course_name",
             wrap: true,
-            width: '20%',
+            width: '20rem',
         },
         {
             name: 'Topic',
             selector: row => row.category?.category_name,
             sortable: true,
             sortField: "category.category_name",
-            width: '8%',
+            width: '4rem',
             wrap: true,
         },
         {
@@ -162,7 +162,7 @@ const Admincoursemanagement = () => {
                     <span className="text-capitalize">{row.question_added}</span>
                 )
             },
-            width: '5%',
+            width: '5rem',
         },
         {
             name: 'No. of Module',
@@ -172,7 +172,7 @@ const Admincoursemanagement = () => {
         {
             name: 'Training time',
             selector: row => row?.week_duration,
-            width: '5%',
+            width: '5rem',
         },
         // {
         //     name: 'Trainee enroll',
@@ -261,7 +261,7 @@ const Admincoursemanagement = () => {
 
                 )
             },
-            width: '15%',
+            width: '15rem',
         },
         {
             name: 'Action',
@@ -270,7 +270,7 @@ const Admincoursemanagement = () => {
                 if (layoutValues?.profile?.role == 'admin' || layoutValues?.profile?.role == 'trainer') {
                     return (
                         <>
-                            <div style={{ display: 'contents' }}>
+                            <div style={{ display: 'contents',width:'100%' }}>
                                 <div className='btn-group  text-nowrap'>
 
                                 {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Edit"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
@@ -321,7 +321,7 @@ const Admincoursemanagement = () => {
                 }
 
             },
-
+            width:'10rem'
         },
     ];
 

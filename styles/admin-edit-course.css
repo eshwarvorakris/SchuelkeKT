@@ -459,9 +459,12 @@ h6 {
 
 .trainee-course-form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: 30rem;
+  grid-template-columns: 45% 45%;
+  /* height: 30rem; */
   padding: 3rem;
+  padding-bottom: 0;
+  grid-column-gap: 10%;
+  column-gap: 10%;
 }
 
 .course-name input[type="text"] {

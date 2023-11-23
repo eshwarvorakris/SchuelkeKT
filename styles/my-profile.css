@@ -254,7 +254,7 @@ html {
   box-shadow: rgba(67, 71, 85, 0.397) 0px 0px 0.25em,
     rgba(90, 125, 188, 0.05) 0px 0.25em 0.25em;
   display: grid;
-  grid-template-columns: 224px 1fr 150px;
+  grid-template-columns: 20% 60% 20%;
   background-color: #fff;
 }
 
