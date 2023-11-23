@@ -240,7 +240,11 @@ function ChapterInfo() {
   }, [chapterId,  profile]);
 
   return content == null ? (
-    <>Loading..</>
+    <><div class="d-flex align-items-center justify-content-center" style={{minHeight:'100vh'}}>
+    <div className="spinner-border text-primary" role="status">
+      <span className="sr-only">Loading...</span>
+    </div>
+  </div></>
   ) : (
     <>
       <div>

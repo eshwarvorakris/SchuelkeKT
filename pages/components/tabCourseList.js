@@ -29,12 +29,9 @@ QueryParam.category_id = router.query?.category_id || 1
   const [loading, setLoading] = useState(true)
   const fetchCourse = function (indexId, catId) {
     // setLoading(true);
-    console.log(catId);
-    console.log(indexId);
     QueryParam.category_id = catId;
-    console.log(QueryParam);
+
     let activeTabId = "tab" + indexId
-    console.log(activeTabId);
     setActiveTab(activeTabId);
     router.push({
       pathname: router.pathname,
@@ -46,12 +43,22 @@ QueryParam.category_id = router.query?.category_id || 1
 
   useEffect(() => {
     // QueryParam.category_id = categoryData?.data?.[0]["id"];
-    setLoading(false)
     router.push({
       pathname: router.pathname,
       query: QueryParam,
     });
-    loadCourse();
+    
+    loadCourse().then(result=>{
+      console.log('data');
+      console.log(result);
+      if(result.data != null)
+      {
+    setLoading(false)
+
+      }
+    });
+   
+
   }, [categoryData]);
 
   useEffect(() => {
