@@ -133,6 +133,19 @@ const questionController = class {
     });
     res.send(question);
   }
+
+  async getQuestionsCountBycourse(req,res){
+    const questions = await Question.count({where:{
+      course_id:req.body.course_id
+    }})
+
+    console.log(questions);
+    let data = {
+      questionsCount:questions
+    }
+    return res.send(data);
+
+  }
 };
 
 module.exports = new questionController();
