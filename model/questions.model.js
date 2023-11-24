@@ -39,6 +39,9 @@ const questionModel=class {
         return await axiosInstance.delete(`${this.baseUrl}/${id}`);
     }
 
+    async getQuestionsCountBycourse(data = []){
+        return await axiosInstance.post(`${this.baseUrl}/get-questions-count-by-course`,data);
+    }
 }
 
 export default new questionModel();

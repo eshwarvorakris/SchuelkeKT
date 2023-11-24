@@ -5,6 +5,7 @@ import moduleModel from "../model/module.model";
 import { useEffect } from "react";
 import cource_viewModel from "../model/cource_view.model";
 import Link from "next/link";
+import questionsModel from "../model/questions.model";
 
 const ChapterNavigationButtons = ({ content }) => {
   const [chapterList, setChapterList] = useState([]);
@@ -250,7 +251,17 @@ const ChapterNavigationButtons = ({ content }) => {
 
             if(courseStatus.data.totalCourseView?.status == 'completed')
             {
-                setassesmentStatus(true)
+                const assesmentCount = await questionsModel.getQuestionsCountBycourse(chapterForm)
+                if(assesmentCount.data.questionsCount > 0)
+                {
+                  setassesmentStatus(true)
+
+                }
+                else
+                {
+                setassesmentStatus(false)
+
+                }
             }
         
         }
@@ -499,7 +510,38 @@ const ChapterNavigationButtons = ({ content }) => {
                   <span className="btn-value">Assesment</span>
                 </div>
               </div>
-            </Link> : <div  className="links text-muted">
+            </Link> : (isLastChapter && isLastModule && assesmentStatus == false ? <div  className="links text-muted">
+              <div className="footer-buttons-container next">
+                <span className="doc-controls-button ">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13.001 5L16.501 8.5L20.001 12H4.00098"
+                      stroke="white"
+                      stroke-width="2.66667"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M13.001 19L16.501 15.5L20.001 12H4.00098"
+                      stroke="white"
+                      stroke-width="2.66667"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <span className="btn-type">Take</span> <br />
+                  <span className="btn-value">Assesment</span>
+                </div>
+              </div>
+            </div> : <div  className="links text-muted">
               <div className="footer-buttons-container next">
                 <span className="doc-controls-button ">
                   <svg
@@ -530,7 +572,7 @@ const ChapterNavigationButtons = ({ content }) => {
                   <span className="btn-value">Chapter</span>
                 </div>
               </div>
-            </div> )
+            </div>) )
           )}
         </div>
       ) : (

@@ -51,7 +51,7 @@ QueryParam.category_id = router.query?.category_id || 1
     loadCourse().then(result=>{
       console.log('data');
       console.log(result);
-      if(result.data != null)
+      if(result?.data != null)
       {
     setLoading(false)
 
