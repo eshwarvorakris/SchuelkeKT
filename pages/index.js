@@ -554,7 +554,7 @@ function Index() {
                     alt="Card image cap" />
                   <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Mr. V Rajaraman</h5>
-                    <div className="department-info" style={{ fontSize: '10px' }}>Marketing </div>
+                    <div className="department-info" >Marketing </div>
                     <div className="LMS-info">Trainer </div>
                     <div className="country-info">India</div>
                   </div>
