@@ -57,13 +57,13 @@ export default function AdminDashboardGraph() {
       <div className="category-create-btn d-flex justify-content-between">
 
         <div className="category d-flex gap-3 align-items-center">
-          <h6 htmlFor="category" style={{ color: "#7E878C", fontFamily: "Co-text" }}>Category: </h6>
+          {/* <h6 htmlFor="category" style={{ color: "#7E878C", fontFamily: "Co-text" }}>Category: </h6>
           <select name="category" id="cars" className='select-dashboard' onChange={() => { changeCategory(event.target.value) }}>
             <option value="all">All</option>
             {categoryData?.data?.map((item) => {
               return (<option key={item.id} value={item.id}>{item.category_name}</option>)
             })}
-          </select>
+          </select> */}
         </div>
         <div className="create-course-btnn">
           <div className="create-course">

@@ -502,7 +502,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Dr. Thomas.png"
                     style={{ height: "12rem" }} alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Dr. Thomas OH</h5>
                     <div className="department-info">Medical & Scientific Affairs (APAC) </div>
                     <div className="LMS-info">Administrator/Trainer </div>
@@ -514,7 +514,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Pearleen pic.png"
                     style={{ height: "12rem" }} alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Pearleen HO</h5>
                     <div className="department-info">Senior Application Specialist </div>
                     <div className="LMS-info">Trainer </div>
@@ -527,7 +527,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Mandy.png" style={{ height: "12rem" }}
                     alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Mandy MICHIE</h5>
                     <div className="department-info">National Trainer </div>
                     <div className="LMS-info">Trainer </div>
@@ -540,7 +540,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Rohit Bhatia.png"
                     style={{ height: "12rem" }} alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Mr. Rohit BHATIA</h5>
                     <div className="department-info">Sales & Marketing </div>
                     <div className="LMS-info">Trainer </div>
@@ -552,7 +552,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Raja.png" style={{ height: "12rem" }}
                     alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Mr. V Rajaraman</h5>
                     <div className="department-info" style={{ fontSize: '10px' }}>Marketing </div>
                     <div className="LMS-info">Trainer </div>
@@ -564,7 +564,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Hideo head pic.png"
                     style={{ height: "12rem" }} alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Mr. Hideo TAKAHASHI</h5>
                     <div className="department-info">Sales & Marketing </div>
                     <div className="LMS-info">Trainer </div>
@@ -576,7 +576,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Mariya.png" style={{ height: "12rem" }}
                     alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Mariya SOTA</h5>
                     <div className="department-info">Marketing </div>
                     <div className="LMS-info">Trainer </div>
@@ -588,9 +588,9 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Foto_Dr. Lars Paßvogel__Projektmanager.png" style={{ height: "12rem" }}
                     alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Dr. Lars PASSVOGEL</h5>
-                    <div className="department-info">Head of Microbiology & Strategic Innovation</div>
+                    <div className="department-info font-size-13">Microbiology & Strategic Innovation</div>
                     <div className="LMS-info">Guest trainer </div>
                     <div className="country-info">Germany</div>
                   </div>
@@ -600,7 +600,7 @@ function Index() {
                 <div className="card trainer-card indexcard" style={{ width: "13rem" }}>
                   <img className="card-img-top trainer-img" src="trainee-images/faces/Nadine.jpg" style={{ height: "12rem" }}
                     alt="Card image cap" />
-                  <div className="card-body">
+                  <div className="card-body p-2">
                     <h5 className="card-title card-names" style={{ color: '#007cc2' }}>Ms. Nadine RADISCHAT</h5>
                     <div className="department-info">Microbiology Expert</div>
                     <div className="LMS-info">Guest trainer </div>

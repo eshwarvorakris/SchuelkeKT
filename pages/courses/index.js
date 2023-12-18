@@ -131,11 +131,11 @@ const Admincoursemanagement = () => {
                 const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
                 if (isCurrentMonth) {
                     return (
-                        <><p>{row.course_name}</p></>
+                        <><p className="mb-0">{row.course_name}</p></>
                     );
                 } else {
                     return (
-                        <p>{row.course_name}</p>
+                        <p className="mb-0">{row.course_name}</p>
                     );
                 }
             },
@@ -153,7 +153,7 @@ const Admincoursemanagement = () => {
             wrap: true,
         },
         {
-            name: 'Quiz Added',
+            name: 'Assessement Added',
             selector: row => row.question_added,
             sortable: true,
             sortField: "row.question_added",
@@ -170,7 +170,7 @@ const Admincoursemanagement = () => {
             width: '5%',
         },
         {
-            name: 'Training time',
+            name: 'Week Duration',
             selector: row => row?.week_duration,
             width: '5rem',
         },
@@ -273,7 +273,7 @@ const Admincoursemanagement = () => {
                             <div style={{ display: 'contents',width:'100%' }}>
                                 <div className='btn-group  text-nowrap'>
 
-                                {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Edit"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
+                                {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Preview"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
                                     <Link className='btn btn-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
                                     <button className='btn btn-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 
@@ -419,15 +419,15 @@ const Admincoursemanagement = () => {
                     if (layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin') {
                         return (
                             <>
-                                <div className=" SearchandSort">
+                                <div className="SearchandSort w-75">
                                     <div className=" search-button-mycourse d-flex ">
                                         <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
-                                        <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
+                                        <div className=" search-trainer "><input className="form-control p-2" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; couresList() }} placeholder=" Search " /></div>
                                     </div>
 
-                                    <div className=" category d-flex gap-3 align-items-center " >
+                                    <div className=" category d-flex gap-3 align-items-center justify-content-center" >
                                         <select name="category"
-                                            className="select-mycourse" style={{ padding: '1px' }}
+                                            className="form-select p-2" style={{width:'10rem'}} 
                                             onChange={handleFilterChange}>
                                             <option value="all">All</option>
                                             {/* <option value="course_name">Course Name</option> */}
@@ -440,7 +440,7 @@ const Admincoursemanagement = () => {
                                     {!hideStatusDropdown &&
                                         <div className=" category d-flex gap-3 align-items-center " >
                                             <select name="statusChange"
-                                                className="select-mycourse" style={{ padding: '1px' }}
+                                                className="form-select p-2" 
                                                 onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
                                                 <option value="all">All Status</option>
                                                 <option value="approved">Approved</option>
@@ -454,7 +454,7 @@ const Admincoursemanagement = () => {
                                     {!hideTopicDropdown &&
                                         <div className=" category d-flex gap-3 align-items-center " >
                                             <select name="topicChange"
-                                                className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                                                className="form-select p-2"  style={{width:'8rem'}}  
                                                 onChange={(event) => { QueryParam.filterParam = event.target.value; couresList() }}>
                                                 <option value="all">All Topics</option>
                                                 <option value="country">Country</option>
@@ -480,11 +480,12 @@ const Admincoursemanagement = () => {
                                                 placeholder="Select Country"
                                                 value={selectCountry}
                                                 onChange={onCountrySelect}
+                                                className="form-select p-0"
                                                 styles={countryStyles}
                                             />
                                         </div>
                                     }
-                                    <div style={{ width: '10rem' }}><YearDropdown handleYear={handleYearChange} /></div>
+                                    <div style={{ width: '10rem' }} ><YearDropdown handleYear={handleYearChange}  /></div>
                                     <ExportToExcel exportExcelData={exportData} excelName={"Course Lists"} />
                                     {(layoutValues?.profile?.role == 'trainer') &&
                                         <div className=" create-course ">

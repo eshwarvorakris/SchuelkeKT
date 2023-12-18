@@ -7,7 +7,7 @@ export default function YearDropdown({handleYear}) {
 
   return (
     <>
-      <select className="year custom-scroll" onChange={handleYear}>
+      <select className="year custom-scroll form-select p-2" onChange={handleYear}>
         {/* <option value="">Select Year</option> */}
         {
           (() => {

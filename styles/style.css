@@ -845,12 +845,16 @@ h1 {
 .department-info,
 .LMS-info,
 .country-info {
-  font-size: 12px;
+  font-size: 11px;
   font-family: myriad-light;
 }
 
+
+
 .department-info {
   padding-top: 1rem;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* ////////////////////////////////////////////////// */
@@ -1047,6 +1051,13 @@ td {
   font-size: 17px;
 }
 
+
+.css-1dimb5e-singleValue{
+text-align: left;
+}
+.css-1abakog-control{
+  width: max-content !important;
+}
 /*****/
 .data {
   width: 70%;
