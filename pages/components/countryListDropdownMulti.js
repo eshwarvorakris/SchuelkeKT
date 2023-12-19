@@ -44,7 +44,7 @@ export default function CountrySelect(props) {
   const countryStyles = {
     control: base => ({
       ...base,
-      width: '100%',
+      // width: '100%',
       paddingTop: 0,
       paddingBottom: 0,
     })

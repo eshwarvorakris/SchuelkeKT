@@ -53,9 +53,9 @@ export default function CategorySelect(props) {
   const selectStyles = {
     control: base => ({
       ...base,
-      height: 30,
-      minHeight: 30,
-      width: '10rem',
+      // height: 30,
+      // minHeight: 30,
+      minWidth: '10rem',
       paddingTop: 0,
       paddingBottom: 0,
     })

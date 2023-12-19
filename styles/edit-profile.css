@@ -498,6 +498,7 @@ html {
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: flex-start;
+  gap:1rem;
 }
 
 .trainer-form h6 {

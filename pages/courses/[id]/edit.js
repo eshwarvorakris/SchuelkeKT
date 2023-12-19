@@ -145,7 +145,7 @@ const EditCourse = () => {
 
                         <div className="trainee-course-form d-grid">
                             <div className="course-form d-flex flex-column justify-content-between">
-                                <div className="course-name">
+                                <div className="course-name mb-3">
                                     <h6>
                                         Course Name <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
@@ -161,7 +161,7 @@ const EditCourse = () => {
                                     </h6>
                                     <input type="text" {...register("course_name")} placeholder="Gastroentrology" required/>
                                 </div>
-                                <div className="category">
+                                <div className="category mb-3">
                                     <h6 htmlFor="category">
                                         Category <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
@@ -181,7 +181,7 @@ const EditCourse = () => {
                                         })}
                                     </select>
                                 </div>
-                                <div className="course-completion">
+                                <div className="course-completion mb-3">
                                     <h6>Number of Modules <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
@@ -269,7 +269,7 @@ const EditCourse = () => {
                                     </div>
                                 </div>
 
-                                <div className="course-completion">
+                                <div className="course-completion mt-3">
                                     <h6>Weeks Required for Completion  <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
@@ -283,7 +283,7 @@ const EditCourse = () => {
                                         </span></h6>
                                     <input type="number" onWheel={(e) => e.target.blur()}  {...register("week_duration")} required/>
                                 </div>
-                                <div className="course-completion">
+                                <div className="course-completion mt-3">
                                     <h6>Total Training Hour <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (

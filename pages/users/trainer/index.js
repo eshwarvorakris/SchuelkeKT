@@ -213,9 +213,9 @@ const Trainer = () => {
     const countryStyles = {
         control: base => ({
             ...base,
-            height: 35,
-            minHeight: 35,
-            width: '10rem',
+            // height: 35,
+            // minHeight: 35,
+            minWidth: '10rem',
         })
     };
     const [trainersData, setTrainersData] = useState(null);
@@ -251,15 +251,15 @@ const Trainer = () => {
 
     return (
         <>
-            <div className=" SearchandSort ">
+            <div className=" SearchandSort">
                 <div className=" search-button-mycourse d-flex ">
                     <ion-icon name=" search-outline " className=" search-icon "></ion-icon>
-                    <div className=" search-trainer "><input className=" search-mycourse" type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; trainerList() }} placeholder=" Search " /></div>
+                    <div className=" search-trainer "><input className="form-control " type=" text " name="search" onChange={(event) => { QueryParam.search = event.target.value; trainerList() }} placeholder=" Search " /></div>
                 </div>
 
                 <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
                     <select name=" category "
-                        className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                        className="form-select"
                         onChange={handleFilterChange}>
                         <option value="all">All</option>
                         <option value="country">Country Name</option>
@@ -269,7 +269,7 @@ const Trainer = () => {
                 {!hideStatusDropdown &&
                     <div className=" category d-flex gap-3 align-items-center " style={{ marginRight: '2rem' }}>
                         <select name="statusChange"
-                            className="select-mycourse" style={{ padding: '1px', width: '8.5rem' }}
+                            className="form-select " 
                             onChange={(event) => { QueryParam.filterParam = event.target.value; trainerList() }}>
                             <option value="all">All Status</option>
                             <option value="active">Active</option>

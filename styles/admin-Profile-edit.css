@@ -479,6 +479,7 @@ html {
     justify-content: center;
     color: #5A656B;
     font-size: 11px;
+    text-wrap: nowrap;
 }
 
 .trainer-name input[type="text"] {

@@ -30,7 +30,7 @@ const GraphComponent = ({
   return (
     <div className="score-analysis">
       <div className="graph-header" style={{ padding: '0.1rem', minHeight:'124px' }}>
-        <div className="left">
+        <div className="left mb-3">
           <h6>{Title}</h6>
           <span>{Description}</span>
 
@@ -70,12 +70,12 @@ const GraphComponent = ({
         </div>
         {isMultiCountry &&
           <div>
-          <div style={{ marginTop: '5px', width:'100%' }}>
+          <div style={{ marginTop: '5px', width:'100%' }} class="mb-3">
             <CountryListsMulti onCountryChange={handleCountryChange} addAll={true} />
           </div>
           {isCategory &&
             <div className="country-select" style={{marginTop:'5px'}}>
-              <div style={{ marginLeft: '0.2rem' }}>
+              <div >
                 <CategoryList onCategoryChange={handleSelectChange} addAll={true} /> <br />
               </div>
             </div>
@@ -84,7 +84,7 @@ const GraphComponent = ({
         }
       </div>
       <Chart data={chartData} chartType={chartType} />
-      {showMore &&
+      {showMore && showMoreLink != "get_enrolled" &&
         <Link href={showMoreLink}>Show More</Link>
       }
 

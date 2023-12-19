@@ -125,7 +125,7 @@ const Addcourse = ({ categories }) => {
                         </div>
                         <div className="trainee-course-form d-grid">
                             <div className="course-form d-flex flex-column justify-content-between">
-                                <div className="course-name">
+                                <div className="course-name mb-3">
                                     <h6>
                                         Course Name <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
@@ -142,7 +142,7 @@ const Addcourse = ({ categories }) => {
 
                                     <input type="text" {...register("course_name")} placeholder="Gastroentrology" required />
                                 </div>
-                                <div className="category">
+                                <div className="category mb-3">
                                     <h6 htmlFor="category">
                                         Category <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
@@ -162,7 +162,7 @@ const Addcourse = ({ categories }) => {
                                         })}
                                     </select>
                                 </div>
-                                <div className="course-completion">
+                                <div className="course-completion mb-3">
                                     <h6>Number of Modules <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
@@ -175,9 +175,9 @@ const Addcourse = ({ categories }) => {
                                         </OverlayTrigger>
                                         </span>
                                     </h6>
-                                    <input type="number" {...register("total_modules")} min="1" required />
+                                    <input type="number" onWheel={(e) => e.target.blur()} {...register("total_modules")} min="1" required />
                                 </div>
-                                <div className="launch-date">
+                                <div className="launch-date mb-3">
                                     <h6>
                                         Course Launch Date <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
@@ -258,7 +258,7 @@ const Addcourse = ({ categories }) => {
                                     </div>
                                 </div>
                                 <br />
-                                <div className="course-completion">
+                                <div className="course-completion mt-3">
                                     <h6>Weeks Required for Completion <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
@@ -271,9 +271,9 @@ const Addcourse = ({ categories }) => {
                                         </OverlayTrigger>
                                         </span>
                                     </h6>
-                                    <input type="number" {...register("week_duration")} min="1" required />
+                                    <input type="number" onWheel={(e) => e.target.blur()} {...register("week_duration")} min="1" required />
                                 </div>
-                                <div className="course-completion">
+                                <div className="course-completion mt-2">
                                     <h6>Total Training Hour <span><OverlayTrigger
                                             delay={{ hide: 450, show: 300 }}
                                             overlay={(props) => (
@@ -286,7 +286,7 @@ const Addcourse = ({ categories }) => {
                                         </OverlayTrigger>
                                         </span>
                                     </h6>
-                                    <input type="number" {...register("total_training_hour")} min="0.1" required step="any" />
+                                    <input type="number" onWheel={(e) => e.target.blur()} {...register("total_training_hour")} min="0.1" required step="any" />
                                 </div>
                             </div >
                         </div >

@@ -104,8 +104,20 @@ const Admincoursemanagement = () => {
             name: 'S.No',
             cell: (row, index) => {
                 const curIndex = (((QueryParam.page - 1) * 15) + (index + 1));
+                const dateToCheck = new Date(row.created_at);
+                const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
+               
                 return (
-                    <p>{curIndex}</p>
+                    <p className="position-relative badge rounded-pill bg-light text-dark pt-2" style={{fontSize:'12px'}}>{curIndex}
+
+                    {
+                        isCurrentMonth ?  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                        new
+                        <span class="visually-hidden">new</span>
+                      </span>
+                                         : ''
+                    }
+                   </p>
                 )
             },
             width: '4rem',
@@ -117,7 +129,7 @@ const Admincoursemanagement = () => {
                 const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
                 if (isCurrentMonth) {
                     return (
-                        <><span style={{ border: '1px solid green', padding: '1px', borderRadius: '2px', fontSize: '10px', color: 'White', backgroundColor: '#10793F' }}>New</span></>
+                        <><span className="badge bg-success p-2" ></span></>
                     );
                 }
             },
@@ -241,7 +253,7 @@ const Admincoursemanagement = () => {
                                 else if (row.status == 'pending' && layoutValues?.profile?.role == 'admin') {
                                     return (
                                         <>
-                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="approve-btn p-1" title="Approve Course">To be Approved</button></Link></span>
+                                            <span><Link href={`/courses/${row.id}/update_status`} draggable="false"><button type="button" className="btn btn-outline-warning" title="Approve Course">To be Approved</button></Link></span>
                                         </>
                                     );
                                 }
@@ -273,7 +285,7 @@ const Admincoursemanagement = () => {
                             <div style={{ display: 'contents',width:'100%' }}>
                                 <div className='btn-group  text-nowrap'>
 
-                                {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Preview"><i class="fa fa-eye" aria-hidden="true"></i></Link> : ''}
+                                {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-warning btn-sm' href={`/courses/${row.id}`} title="Preview"><i class="fa fa-eye" style={{color:'#F4F4F4'}} aria-hidden="true"></i></Link> : ''}
                                     <Link className='btn btn-primary btn-sm' href={`/courses/${row.id}/edit`} title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></Link>
                                     <button className='btn btn-danger btn-sm' type='button' onClick={() => courseDelete(row.id)} title="Delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 
@@ -395,9 +407,10 @@ const Admincoursemanagement = () => {
     const countryStyles = {
         control: base => ({
             ...base,
-            height: 35,
-            minHeight: 35,
-            width: '10rem',
+            // height: 35,
+            // minHeight: 35,
+            minWidth: '10rem',
+            border:'none'
         })
     };
 
@@ -482,6 +495,7 @@ const Admincoursemanagement = () => {
                                                 onChange={onCountrySelect}
                                                 className="form-select p-0"
                                                 styles={countryStyles}
+                                                
                                             />
                                         </div>
                                     }

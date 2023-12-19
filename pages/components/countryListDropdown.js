@@ -50,8 +50,8 @@ export default function CountrySelect(props) {
   const countryStyles = {
     control: base => ({
       ...base,
-      height: 30,
-      minHeight: 30,
+      // height: 30,
+      // minHeight: 30,
       width: '10rem',
       paddingTop: 0,
       paddingBottom: 0,
@@ -68,6 +68,7 @@ export default function CountrySelect(props) {
           name={"country"}
           placeholder="Select Country"
           value={selectCountry}
+          className='form-select p-0'
           onChange={onCountrySelect}
           styles={countryStyles}
         />

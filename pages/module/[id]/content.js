@@ -504,7 +504,11 @@ const Page = () => {
                     </div>
                   </div>
                 
-                  <div className="module-paragraph-1">
+                  
+
+                  <TabComponent position={index} item={item} />
+
+                  <div className="module-paragraph-1 mt-2">
                     <div className="draggable-area">
                       {/* <img src="/trainer-images/edit-module/Vector (Stroke).png" className="drag-icon" alt="" /> */}
                       {/* <button type="button" className="delete-icon"><img className="delete" src="/trainer-images/edit-module/Vector delete black.png" alt="" /></button> */}
@@ -524,8 +528,6 @@ const Page = () => {
 
                     </div>
                   </div>
-
-                  <TabComponent position={index} item={item} />
                 </div>
               );
             })}

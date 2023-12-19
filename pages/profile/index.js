@@ -122,7 +122,7 @@ const Myprofile = () => {
                         </div> */}
 
                         <div className="trainer-Name">
-                            <h6>Contact<br />Number</h6>
+                            <h6>Contact Number</h6>
                             <input type="text" value={profile.contact_no} readOnly />
                         </div>
                         {
@@ -149,7 +149,7 @@ const Myprofile = () => {
                 </div>
                 <div className="edit-profile-btn">
                     <Link href="/profile/edit">
-                        <button type="button" className="btn edit-btn-profile text-light" style={{ backgroundColor: "#008bd6" }}>
+                        <button type="button" className="btn edit-btn-profile text-light p-2" style={{ backgroundColor: "#008bd6" }}>
                             Edit Profile 🖋
                         </button>
                     </Link>

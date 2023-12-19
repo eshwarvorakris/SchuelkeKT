@@ -485,6 +485,7 @@ html {
     display: grid;
     grid-template-columns: 1fr 2fr;
     align-items: flex-start;
+    gap: 1rem;
 }
 
 .trainer-form h6 {
@@ -494,6 +495,7 @@ html {
     justify-content: center;
     color: #5A656B;
     font-size: 11px;
+    text-wrap: nowrap !important;
 }
 
 .trainer-Name input[type="text"] {
