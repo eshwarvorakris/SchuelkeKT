@@ -52,7 +52,7 @@ const EditCourse = () => {
             const formData = new FormData(event.target);
             //// console.log(data, formData);
             await courseModel.update(router.query.id, formData).then((res) => {
-                helper.sweetalert.toast("course Updated");
+                helper.sweetalert.toast("Course Updated");
                 router.push("/courses");
             }).catch((error) => {
                 setFormErrors(error.response?.data?.errors);

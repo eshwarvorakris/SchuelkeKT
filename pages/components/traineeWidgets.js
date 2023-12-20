@@ -55,7 +55,7 @@ export default function AdminWidgets() {
             <h1 className="text-light widgetText">{traineeKpi?.totalTrainingHour}</h1>
           </div>
           <div className="explicit-info text-light" style={{fontSize:'14px'}}>
-            <p>Total Learing Time</p>
+            <p>Total Learning Time</p>
           </div>
         </div>
         <div className="right-icon">

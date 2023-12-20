@@ -12,8 +12,14 @@ const ChartComponent = ({ data, chartType = "bar" }) => {
       type: chartType,
       data: data,
       options: {
-        maintainAspectRatio:false
-
+        maintainAspectRatio:false,
+        scales: {
+          y: {
+            ticks: {
+              stepSize: 1
+            },
+          }
+        }
       },
     });
 
