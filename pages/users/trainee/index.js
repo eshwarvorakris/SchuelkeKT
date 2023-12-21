@@ -345,7 +345,7 @@ const Trainee = () => {
                         onPageChange={pagginationHandler}
                         className="pagination float-end float-right"
                         pageLinkClassName='page-link  pagination-link'
-                        pageClassName="page-item border-0"
+                        pageClassName="page-item border-0 mx-2"
                     />
                 </nav>
             </div>

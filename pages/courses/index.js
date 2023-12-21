@@ -108,15 +108,9 @@ const Admincoursemanagement = () => {
                 const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
                
                 return (
-                    <p className="position-relative badge rounded-pill bg-light text-dark pt-2" style={{fontSize:'12px'}}>{curIndex}
+                    <p className="mb-1" style={{fontSize:'12px'}}>{curIndex}
 
-                    {
-                        isCurrentMonth ?  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                        new
-                        <span class="visually-hidden">new</span>
-                      </span>
-                                         : ''
-                    }
+                    
                    </p>
                 )
             },
@@ -129,7 +123,9 @@ const Admincoursemanagement = () => {
                 const isCurrentMonth = isWithin30Days(currentDate, dateToCheck);
                 if (isCurrentMonth) {
                     return (
-                        <><span className="badge bg-success p-2" ></span></>
+                        <><span className="badge bg-success p-2" >
+                            new
+                            </span></>
                     );
                 }
             },

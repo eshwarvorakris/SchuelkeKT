@@ -305,7 +305,7 @@ const ChapterNavigationButtons = ({ content }) => {
                   </svg>
                 </span>
                 <div>
-                  <span className="btn-type">previous</span> <br />
+                  <span className="btn-type">Previous</span> <br />
                   <span className="btn-value">{prevContent.title}</span>
                 </div>
               </div>
@@ -337,7 +337,7 @@ const ChapterNavigationButtons = ({ content }) => {
               </svg>
             </span>
             <div>
-              <span className="btn-type">previous</span> <br />
+              <span className="btn-type">Previous</span> <br />
               <span className="btn-value">Module</span>
             </div>
           </div>

@@ -103,6 +103,10 @@ html {
 }
 
 /* section-1 */
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
 
 .section1 {
   background-color: #006ea9;

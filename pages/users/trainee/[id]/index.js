@@ -56,7 +56,7 @@ const EditTrainee = () => {
                             <p>Edit Trainee</p>
                         </div>
                         <b className='text-danger'>{errorMessage}</b>
-                        <div className="trainer-name" style={{ display: 'block' }}>
+                        <div className="trainer-name pt-5" style={{ display: 'block' }}>
                             <h6>Trainee Name</h6>
                             <input type="text" {...register("full_name", { required: "Fill Name" })} placeholder="Enter Trainee's full name" />
                         </div>

@@ -32,7 +32,7 @@ function Navbar() {
                                     (() => {
                                         if (layoutValues?.profile?.profile_img == '' || layoutValues?.profile?.profile_img === null) {
                                             return (
-                                                <img className="img-tag" src="/trainer-images/trainer.jpg" alt="" />);
+                                                <img className="img-tag" src="/admin-images/course-approval/Ellipse 163.png" alt="" />);
                                         }
                                         else {
                                             return (

@@ -84,9 +84,9 @@ const GraphComponent = ({
         }
       </div>
       <Chart data={chartData} chartType={chartType} />
-      {showMore && showMoreLink != "get_enrolled" &&
-        <Link href={showMoreLink}>Show More</Link>
-      }
+      {/* {showMore && showMoreLink != "get_enrolled" &&
+        <Link href={showMoreLink}>Show More</Link> 
+      } */}
 
     </div>
   );

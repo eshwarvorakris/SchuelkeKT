@@ -381,6 +381,8 @@ p{
     letter-spacing: 1.5px;
     line-height: 24px;
     text-align: justify;
+    margin-bottom: 0;
+    margin-top:5px
 }
 
 .chapter-content-area{
