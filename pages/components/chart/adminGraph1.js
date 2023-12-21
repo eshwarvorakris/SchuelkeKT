@@ -29,10 +29,19 @@ const AdminGraph1 = () => {
     setCompletionHour([]);
     setChartLabel([]);
     await widgetModel.adminGraph1(formData).then((result) => {
-      //// console.log(result.data);
+      console.log(result.data);
       if (result?.data?.chartData) {
         if (result?.data?.chartData.length > 0) {
-          const labels = result?.data?.chartData.map(({ labels }) => labels);
+          const labels = result?.data?.chartData.map(({ labels }) => {
+
+            if(labels == 'all')
+            {
+              return 'All Countries'
+            }
+          
+            return labels
+          
+          });
           const learnHour = result?.data?.chartData.map(({ learningHour }) => learningHour);
           const enroll = result?.data?.chartData.map(({ totalTraineeEnrolled }) => totalTraineeEnrolled);
           const complete = result?.data?.chartData.map(({ completionHour }) => completionHour);
