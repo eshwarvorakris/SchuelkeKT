@@ -37,19 +37,19 @@ const questionController = class {
     req.body.questions.forEach(async (curQuestion) => {
 
       let i = 0;
-      curQuestion?.options?.map((item, index) => {
-        //console.log(curQuestion?.options[index]?.is_answer);
-        if ((item?.is_answer === "false" || item?.is_answer === "true" || item?.is_answer === true) && curQuestion?.options[index]?.is_answer !== undefined) {
-          curQuestion.options[index].is_answer = "true";
-        } else {
-          curQuestion.options[index].is_answer = "false";
-        }
+      // curQuestion?.options?.map((item, index) => {
+      //   //console.log(curQuestion?.options[index]?.is_answer);
+      //   if ((item?.is_answer === "false" || item?.is_answer === "true" || item?.is_answer === true) && curQuestion?.options[index]?.is_answer !== undefined) {
+      //     curQuestion.options[index].is_answer = "true";
+      //   } else {
+      //     curQuestion.options[index].is_answer = "false";
+      //   }
 
-        if (item?.id == "") {
-          delete curQuestion.options[i].id;
-        }
-        i++;
-      });
+      //   if (item?.id == "") {
+      //     delete curQuestion.options[i].id;
+      //   }
+      //   i++;
+      // });
       //console.log(curQuestion?.options);
       const rules = {
         course_id: "required",
@@ -66,33 +66,137 @@ const questionController = class {
         //   }
         // );
         console.log(validation.getErrors())
+        // return res.status(422).send(validation.getErrors());
       }
       else {
         if (curQuestion?.id != "") {
           const question = await Question.findByPk(curQuestion?.id);
           if (question) {
             question.update(curQuestion)
-            const updateQuery = await QuestionOption.bulkCreate(curQuestion.options, { fields: ['id', 'option', 'is_answer'], updateOnDuplicate: ["id", "option", 'is_answer'] });
+         
+
+            
+            const updatedOptions = curQuestion.options.map(async (option,index)=>{
+
+              console.log(option.id);
+              let is_answer = false;
+              console.log(curQuestion.options_answers);
+              if(curQuestion.options_answer != undefined)
+              {
+                  if(typeof curQuestion.options_answer === 'string' && index == curQuestion.options_answer)
+                  {
+                    is_answer = true;
+                  }
+                  console.log(curQuestion.options_answer.includes(index.toString()));
+                  if(typeof curQuestion.options_answer === 'object' && curQuestion.options_answer.includes(index.toString()))
+                  {
+                    is_answer = true;
+
+                  }
+                  console.log(typeof curQuestion.options_answer);
+              }
+              if(option.id == "")
+              {
+                await QuestionOption.create({option:option.option,question_id:question.dataValues.id, is_answer});
+              }
+
+              if(option.id != "")
+              {
+                const optionResult = await QuestionOption.findByPk(option.id);
+
+                if(option)
+                {
+                  optionResult.update({option:option.option,question_id:question.dataValues.id, is_answer})
+                }
+
+              }
+              // let is_answer = false;
+              // console.log(curQuestion.options_answers);
+              // if(curQuestion.options_answer != undefined)
+              // {
+              //     if(typeof curQuestion.options_answer === 'string' && index == curQuestion.options_answer)
+              //     {
+              //       is_answer = true;
+              //     }
+              //     console.log(typeof curQuestion.options_answer);
+              // }
+              // await QuestionOption.create({...option,question_id:question.dataValues.id, is_answer});
+            })
+
+            
+
+            // const updateQuery = await QuestionOption.bulkCreate(curQuestion.options);
           }
           else {
             delete curQuestion.id;
+          
             await Question
-              .create(curQuestion, {
-                include: "options"
-              }).then(async (result) => {
+              .create(curQuestion).then(async (result) => {
                 //console.log("hereeeeeeeee");
+
+                const updatedOptions = curQuestion.options.map(async (option,index)=>{
+                  let is_answer = false;
+                  if(curQuestion.options_answer != undefined)
+                  {
+                      if(typeof curQuestion.options_answer === 'string' && index == curQuestion.options_answer)
+                      {
+                        is_answer = true;
+                      }
+                      console.log(curQuestion.options_answer.includes(index.toString()));
+                      if(typeof curQuestion.options_answer === 'object' && curQuestion.options_answer.includes(index.toString()))
+                      {
+                        is_answer = true;
+    
+                      }
+                      console.log(typeof curQuestion.options_answer);
+                  }
+                  
+                    await QuestionOption.create({option:option.option,question_id:result.dataValues.id, is_answer});
+                  
+
+                })
+
+
+
+
                 await Course.update({ question_added: "yes" }, { where: { id: curQuestion.course_id } });
               }).catch((error) => {
                 console.error("Failed to retrieve data : ", error);
               });
           }
         } else {
+          
           delete curQuestion.id;
+
+
+
           await Question
             .create(curQuestion, {
-              include: "options"
+          
             }).then(async (result) => {
-              //console.log("hereeeeeeeee");
+          
+              const updatedOptions = curQuestion.options.map(async (option,index)=>{
+                let is_answer = false;
+                if(curQuestion.options_answer != undefined)
+                {
+                    if(typeof curQuestion.options_answer === 'string' && index == curQuestion.options_answer)
+                    {
+                      is_answer = true;
+                    }
+                    console.log(curQuestion.options_answer.includes(index.toString()));
+                    if(typeof curQuestion.options_answer === 'object' && curQuestion.options_answer.includes(index.toString()))
+                    {
+                      is_answer = true;
+  
+                    }
+                    console.log(typeof curQuestion.options_answer);
+                }
+                
+                  await QuestionOption.create({option:option.option,question_id:result.dataValues.id, is_answer});
+                
+
+              })
+
               await Course.update({ question_added: "yes" }, { where: { id: curQuestion.course_id } });
             }).catch((error) => {
               console.error("Failed to retrieve data : ", error);
@@ -100,8 +204,10 @@ const questionController = class {
         }
       }
     });
-    res.send("Assignment Updated");
+    return res.send(req.body);
   }
+
+
   async show(req, res) {
     const question = await Question.findByPk(req.params.id, { include: ["course", "options"] });
     if (question) {
@@ -127,9 +233,22 @@ const questionController = class {
       }
     );
   }
+
+
+
+    async destroyOption(req, res) {
+
+
+  const question = await QuestionOption.destroy({ where: { id: req.params.id } }).then((result) => {
+    return { message: 'Option Removed' };
+  });
+  res.send(question);
+}
   async destroy(req, res) {
+
+
     const question = await Question.destroy({ where: { id: req.params.id } }).then((result) => {
-      return { message: "Question Deleted" };
+      return { message: 'Question Deleted' };
     });
     res.send(question);
   }

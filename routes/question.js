@@ -9,6 +9,7 @@ router.get("/:id", questionController.show);
 router.post("/", questionController.store);
 router.put("/:id", questionController.update);
 router.delete("/:id", questionController.destroy);
+router.delete("/option/:id", questionController.destroyOption);
 router.post("/get-questions-count-by-course", questionController.getQuestionsCountBycourse);
 
 module.exports = router;
