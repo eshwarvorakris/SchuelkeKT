@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import questionModel from "../../../model/questions.model";
 import Image from "next/image";
+import AssessmentOptions from '../../../components/AssessmentOptions';
 function Page() {
   const layoutValues = useContext(AppContext);
   { layoutValues.setPageHeading("Course Assessment") }
@@ -30,42 +31,48 @@ function Page() {
     sequence_no: "",
     question_type: "multiple",
     options: [
-      {
-        id: "",
-        question_id: "",
-        option: "",
-        is_answer: "no"
-      },
-      {
-        id: "",
-        question_id: "",
-        option: "",
-        is_answer: "no"
-      },
-      {
-        id: "",
-        question_id: "",
-        option: "",
-        is_answer: "no"
-      },
-      {
-        id: "",
-        question_id: "",
-        option: "",
-        is_answer: "no"
-      }
+      // {
+      //   id: "",
+      //   question_id: "",
+      //   option: "",
+      //   is_answer: "no"
+      // },
+      // {
+      //   id: "",
+      //   question_id: "",
+      //   option: "",
+      //   is_answer: "no"
+      // },
+      // {
+      //   id: "",
+      //   question_id: "",
+      //   option: "",
+      //   is_answer: "no"
+      // },
+      // {
+      //   id: "",
+      //   question_id: "",
+      //   option: "",
+      //   is_answer: "no"
+      // }
     ]
   };
   //console.clear();
   const [questions, setQuestions] = useState([initialQuestion]);
   const [courseId, setCourseId] = useState(router?.id);
   const [questionUpdated, setQuestionUpdated] = useState(0);
+  const [inputType , setInputType] = useState('checkbox');
   const addQuestion = function () {
     setQuestions([...questions, initialQuestion]);
   }
 
-  const deleteQuestion = function (index) {
+  const deleteQuestion = async function (index,id) {
     //// console.log("delete = ", index);
+    if(id != "" && id != undefined)
+    {
+      await questionModel.delete(id)
+
+    }
     questions.splice(index, 1);
     reset();
     //// console.log("questions :", questions);
@@ -107,6 +114,7 @@ function Page() {
     await questionModel.create(formData).then((res) => {
       //// console.log(res)
       helper.sweetalert.toast("Assignment Added");
+      window.location.reload()
       setIsButtonDisabled(false);
       //setQuestionUpdated(Math.random());
       //router.push("/courses/"+router?.query?.id);
@@ -121,23 +129,31 @@ function Page() {
   const handleTypeChange = (async (e) => {
     let type = e.target.value;
     let questionId = e.target.id;
-    let inputType = "checkbox";
+    // let inputType = "checkbox";
+
+    console.log(type);
     if (type == "single") {
-      inputType = "radio";
+      // inputType = "radio";
+      setInputType('radio')
     }
-    let tempAr = questions;
-    tempAr[questionId]["question_type"] = type;
-    for (let i = 0; i < 4; i++) {
-      let curId = "answer" + questionId + "-" + i;
-      document.getElementById(curId).type = inputType;
-      if(inputType == "radio") {
-        document.getElementById(curId).checked = false;
-        //// console.log("questionId = "+questionId,tempAr[questionId]["options"]);
-        tempAr[questionId]["options"][i]["is_answer"] = false;
-      }
+    else
+    {
+      setInputType('checkbox')
+
     }
-    reset(tempAr);
-    setQuestions(tempAr);
+    // let tempAr = questions;
+    // tempAr[questionId]["question_type"] = type;
+    // for (let i = 0; i < 4; i++) {
+    //   let curId = "answer" + questionId + "-" + i;
+    //   document.getElementById(curId).type = inputType;
+    //   if(inputType == "radio") {
+    //     document.getElementById(curId).checked = false;
+    //     //// console.log("questionId = "+questionId,tempAr[questionId]["options"]);
+    //     tempAr[questionId]["options"][i]["is_answer"] = false;
+    //   }
+    // }
+    // reset(tempAr);
+    // setQuestions(tempAr);
   });
 
   const handleAnswerChange = (async (e) => {
@@ -164,6 +180,26 @@ function Page() {
       }
     }
   });
+
+  const removeOption = (questionIndex,optionIndex) =>{
+    console.log('clicked');
+       const updatedQuestions =  questions.map((question,index) => {
+              if(index == questionIndex)
+              {
+                let filteredOption = question.options.filter((option,index)=>index != optionIndex);
+                // console.log(filteredOption);
+                return {...question,options:filteredOption} 
+              }
+
+            return question;
+        })
+
+        setQuestions(updatedQuestions);
+        // console.log(updatedQuestions);
+  }
+
+
+
   return (
     <>
       <div className="trainer-body">
@@ -183,10 +219,10 @@ function Page() {
               <div className="wrapper-exercise d-flex flex-column gap-3">
                 {questions?.map((item, index) => {
                   //// console.log("question - ", item);
-                  let input_type = "checkbox";
-                  if (item?.question_type == "single") {
-                    input_type = "radio";
-                  }
+                  // let input_type = "checkbox";
+                  // if (item?.question_type == "single") {
+                  //   input_type = "radio";
+                  // }
                   return (
                     <>
                       <section key={`question${index}`}>
@@ -196,7 +232,7 @@ function Page() {
                               <>
                                 <img src="/trainer-images/edit-module/Vector (Stroke).png"
                                   className="drag-icon" alt="" />
-                                <button type="button" className="delete-icon" onClick={() => deleteQuestion(index)}><img className="delete"
+                                <button type="button" className="delete-icon" onClick={() => deleteQuestion(index,item.id)}><img className="delete"
                                   src="/trainer-images/edit-module/Vector delete black.png"
                                   alt="" /></button>
                               </>
@@ -212,7 +248,7 @@ function Page() {
                               placeholder="Lorem ipstum dolor sit amet, consectetur aaipiscing eint. Integer mattis purus eu semper l0Dortis lacus, tristique et er. Eu ductor rusceodio enim morbi turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer mattis purus eu semper lobortis lacus, tristique eteros. Eu auctor fusce ultrices viverra arcu purus viverra vitae, aliquet. Sollicitudin ipsum mi condimentum orci tincidunt pretiumel. Magna ultrices odio enim morbi turpis.es"></textarea>
 
                             <div className="checkbox-options d-flex flex-column gap-3" style={{ width: '100%' }}>
-                              {item?.options?.map((optionitem, optionindex) => {
+                              {/* {item?.options?.map((optionitem, optionindex) => {
 
                                 return (
                                   <div className="option-1 d-flex justify-content-between" key={`q${index}o${optionindex}`}>
@@ -239,9 +275,17 @@ function Page() {
                                         }
                                       })()
                                     }
+
+
+                                    {
+                                      item?.options.length > 1 ? <span className="text-dark" onClick={()=>removeOption(index,optionindex)}>Remove</span> : ''
+                                    }
                                   </div>
                                 );
-                              })}
+                              })} */}
+
+
+                              <AssessmentOptions position={index} item={item} inputType={inputType} handleAnswerChange={handleAnswerChange} setInputType={setInputType}/>
                             </div>
                           </div>
 

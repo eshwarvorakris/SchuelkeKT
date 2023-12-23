@@ -39,6 +39,11 @@ const questionModel=class {
         return await axiosInstance.delete(`${this.baseUrl}/${id}`);
     }
 
+    async deleteOption(id)
+    {
+        return await axiosInstance.delete(`${this.baseUrl}/option/${id}`);
+    }
+
     async getQuestionsCountBycourse(data = []){
         return await axiosInstance.post(`${this.baseUrl}/get-questions-count-by-course`,data);
     }
