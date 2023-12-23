@@ -114,7 +114,7 @@ const AssessmentOptions = ({position , item, inputType, handleAnswerChange,setIn
                 
                 control={control}
               />
-              <span  class="text-nowrap text-muted verticla-align-center d-flex align-items-center" onClick={() => handleOptionRemove(index,item.options !=undefined ? item.options[index]?.id : undefined)}>
+              <span  class="text-nowrap text-muted verticla-align-center d-flex align-items-center cursor-pointer" style={{cursor:'pointer'}} onClick={() => handleOptionRemove(index,item.options !=undefined ? item.options[index]?.id : undefined)}>
               <svg 
                     width="22"
                     height="23"
