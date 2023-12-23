@@ -126,21 +126,22 @@ function Page() {
 
   });
 
-  const handleTypeChange = (async (e) => {
+  const handleTypeChange = (async (e,index) => {
     let type = e.target.value;
     let questionId = e.target.id;
     // let inputType = "checkbox";
-
-    console.log(type);
     if (type == "single") {
       // inputType = "radio";
       setInputType('radio')
+      questions[index].question_type = 'single'
     }
     else
     {
       setInputType('checkbox')
-
+      questions[index].question_type = 'multiple'
     }
+
+    setQuestions(questions);
     // let tempAr = questions;
     // tempAr[questionId]["question_type"] = type;
     // for (let i = 0; i < 4; i++) {
@@ -292,7 +293,7 @@ function Page() {
                           <span className="drop-box-question">Type of Question -</span>
 
                           <div className={`category ${item?.question_type}`} >
-                            <select {...register(`questions[${index}][question_type]`)} id={index} onChange={handleTypeChange} defaultValue={item.question_type}>
+                            <select {...register(`questions[${index}][question_type]`)} id={index} onChange={(e)=>handleTypeChange(e,index)} defaultValue={item.question_type}>
                               {
                                 (() => {
                                   if (item?.question_type == 'multiple') {
