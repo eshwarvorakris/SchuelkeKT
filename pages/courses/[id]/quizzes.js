@@ -14,7 +14,7 @@ import CourseViewModel from "../../../model/cource_view.model"
 import Image from "next/image";
 function Page() {
   const layoutValues = useContext(AppContext);
-  { layoutValues.setPageHeading("Quizzes") }
+  { layoutValues.setPageHeading("Assessment") }
   const router = useRouter();
   const QueryParam = router.query;
   QueryParam.page = router.query.page || 1;
@@ -213,7 +213,7 @@ function Page() {
             <li className="breadcrumb-item"><Link href="/dashboard">Home</Link></li>
             <li className="breadcrumb-item"><Link href="/courses">Courses</Link></li>
             <li className="breadcrumb-item"><Link href={`/courses/${router?.query?.id}`}>{courseName}</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">Quizzes</li>
+            <li className="breadcrumb-item active" aria-current="page">Assessment</li>
           </ol>
         </div>
 
@@ -242,7 +242,7 @@ function Page() {
               <div className="box-2" style={{ left: '75px', borderTop: 'unset' }}></div>
 
               <div className="trainee-tag">
-                <p style={{ zIndex: '1' }}>Quizzes</p>
+                <p style={{ zIndex: '1' }}>Assessment</p>
               </div>
             </div>
 

@@ -476,7 +476,7 @@ const ChapterNavigationButtons = ({ content }) => {
                 </span>
                 <div>
                   <span className="btn-type">Course</span> <br />
-                  <span className="btn-value">Assesment</span>
+                  <span className="btn-value">Assessment</span>
                 </div>
               </div>
             </Link> : (isLastChapter && isLastModule && assesmentStatus ==  true ? <Link href={"/courses/"+content.course_id+"/quizzes"} className="links">
@@ -507,7 +507,7 @@ const ChapterNavigationButtons = ({ content }) => {
                 </span>
                 <div>
                   <span className="btn-type">Course</span> <br />
-                  <span className="btn-value">Assesment</span>
+                  <span className="btn-value">Assessment</span>
                 </div>
               </div>
             </Link> : (isLastChapter && isLastModule && assesmentStatus == false ? <div  className="links text-muted">
@@ -538,7 +538,7 @@ const ChapterNavigationButtons = ({ content }) => {
                 </span>
                 <div>
                   <span className="btn-type">Take</span> <br />
-                  <span className="btn-value">Assesment</span>
+                  <span className="btn-value">Assessment</span>
                 </div>
               </div>
             </div> : <div  className="links text-muted">

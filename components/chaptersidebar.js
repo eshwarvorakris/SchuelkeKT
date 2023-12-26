@@ -93,7 +93,7 @@ function Chaptersidebar({
     <div class="container-1 sticky-side-bar course-chapter-sidebar">
       <div className="sidebar__logo">
         <img alt="" src="/admin-images/logo.png"  />
-        <small>Knowledge Centre</small>
+        <small>Knowledge Transfer</small>
       </div>
       <div className="sidebar_thumnail">
         {profile.role != "trainer" || profile.role != "admin"  ? (
