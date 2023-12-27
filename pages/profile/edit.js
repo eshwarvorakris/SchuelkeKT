@@ -169,7 +169,7 @@ const Myprofile = () => {
                                 </div>
                             </div>
 
-                            <p className="p-3"><strong>Note :</strong> Please upload an image of 315 x 315 dimension</p>
+                            <p className="p-3"><strong>Note :</strong> Please upload an image of 315 x 315 dimension for better visibility of the photo</p>
                         </div>
 
                         <div className="trainee-info" style={{paddingBottom:'unset', paddingTop:'2rem'}}>
