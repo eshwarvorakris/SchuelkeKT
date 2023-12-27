@@ -42,6 +42,7 @@ const courseController = class {
       const courseReDoneCount = await CourseView.findOne({ attributes: ['id', 'viewed_seconds', 're_done_count'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
       const courseViewData = await ChapterView.findAll({ attributes: ['id', 'viewed_seconds'], where: { course_id: req.body.course_id, trainee_id: req.userId } });
       const totalCourseContent = await Content.count({ where: { course_id: req.body.course_id } });
+      const course = await Course.findOne( {where: { id: req.body.course_id}});
       await ChapterView
         .findOne({ where: { trainee_id: req.userId, course_id: req.body.course_id }, order: [['chapter_id', 'DESC']] })
         .then((result) => {
@@ -52,7 +53,8 @@ const courseController = class {
             courseReDoneCount: courseReDoneCount,
             moduleCompletedCount,
             moduleTotalCount,
-            result: result
+            result: result,
+            course
           }
           //console.log(result);
           res.send(data);
