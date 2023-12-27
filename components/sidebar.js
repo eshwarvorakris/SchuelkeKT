@@ -1,23 +1,106 @@
 import Link from "next/link";
 import Router  from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../lib/appContext";
+// import axios from 'axios';
+
+
 import Image from "next/image";
+
 
 // import the icons you need
 import {
   faHome
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+
+
+
+
+
 function Sidebar({ profile }) {
   const layoutValues = useContext(AppContext);
   const router = useRouter()
   
+  const [coursePercent , setCoursePercent] = useState(0);
+  const [timeLeft, setTimeLeft] =  useState(0)
+ 
   const logout = function (e) {
     e.preventDefault();
     sessionStorage.removeItem("access_token");
     Router.replace("/login");
   }
+
+
+  useEffect(()=>{
+    if(router?.pathname.includes('courses') && router?.query?.id != undefined)
+    {
+      const moduleViewData = new FormData();
+      moduleViewData.append("trainee_id", layoutValues?.profile?.id);
+      moduleViewData.append("course_id", router?.query?.id);
+      
+
+       
+      // fetch('/courseView//get_course_view_data',moduleViewData)
+
+      fetch(
+        process.env.NEXT_PUBLIC_API_URL + "courseView/get_any_course_chapter_viewed",
+        {
+          method: "POST",
+          body: moduleViewData,
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem('access_token'),
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE",
+          },
+        }
+      ).then(result=>{
+        console.log(result);
+
+        return result.json();
+      }).then(res=>{
+        
+        let maxcoursemin = Math.floor(res?.course?.total_training_hour * 60);
+        let maxcoursesec = maxcoursemin * 60;
+        let courseViewSec = 0;
+        if(res?.courseViewData) {
+          let perContentSec = 0;
+          perContentSec = maxcoursesec / res?.data?.totalCourseContent;
+
+          res?.courseViewData.forEach(viewedElement => {
+            if(viewedElement.viewed_seconds > perContentSec) {
+              courseViewSec += perContentSec;
+            } else {
+              courseViewSec += viewedElement.viewed_seconds;
+            }
+            //// console.log("id = "+viewedElement.id+" view = "+viewedElement.viewed_seconds+" courseView = "+courseViewSec)
+          });
+          //courseViewSec = res?.data?.courseViewSec;
+        }
+        if(!isNaN(+courseViewSec) && !isNaN(+maxcoursesec)) {
+
+          if(courseViewSec > maxcoursesec) {
+            hourOut = "0 hrs 0 mins left";
+            setCoursePercent(100);
+            setTimeLeft(hourOut)
+          } else  {
+         
+            let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
+            setCoursePercent(percentage);
+            console.log(percentage);
+            let diff = maxcoursesec - courseViewSec;
+            let diffmin = Math.floor(diff / 60);
+            let Hours = Math.floor(diffmin / 60);
+            let minutes = diffmin % 60;
+            let hourOut = Hours + "hrs " + minutes + "mins left";
+            setTimeLeft(hourOut)
+          }
+        }
+      });;
+      console.log('ID'+ router.query.id);
+    }
+  },[])
+
   return (
     <div className="container-1 sticky-side-bar">
       <div className="col-md-2 trainee-sidebar">
@@ -138,7 +221,31 @@ function Sidebar({ profile }) {
               </a>
             </li>
             <hr className="under_menu_line" />
+
+            <li className="mt-5">
+            {layoutValues?.profile?.role != "trainer" && layoutValues?.profile?.role != "admin" && router.pathname.includes('course')  ? (
+          <div className="image-overlay">
+            <p className="overlay-text"></p>
+            <div class="overlay-progress-bar">
+              <div
+                style={{
+                  width: "60%",
+                  border: "1px solid #fff",
+                  borderRadius: "12px",
+                }}
+              >
+                <span style={{ width: coursePercent  + "%" }}></span>
+              </div>
+              <small>{coursePercent }% Completed</small>
+            </div>
+            <p> <small>{timeLeft}</small> </p>
+          </div>
+        ) : (
+          ""
+        )}
+            </li>
           </ul>
+        
         </div>
       </div>
     </div>
