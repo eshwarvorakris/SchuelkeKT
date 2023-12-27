@@ -35,6 +35,8 @@ function Sidebar({ profile }) {
   useEffect(()=>{
     if(router?.pathname.includes('courses') && router?.query?.id != undefined)
     {
+
+
       const moduleViewData = new FormData();
       moduleViewData.append("trainee_id", layoutValues?.profile?.id);
       moduleViewData.append("course_id", router?.query?.id);
@@ -65,7 +67,7 @@ function Sidebar({ profile }) {
         let courseViewSec = 0;
         if(res?.courseViewData) {
           let perContentSec = 0;
-          perContentSec = maxcoursesec / res?.data?.totalCourseContent;
+          perContentSec = maxcoursesec / res?.totalCourseContent;
 
           res?.courseViewData.forEach(viewedElement => {
             if(viewedElement.viewed_seconds > perContentSec) {
@@ -87,6 +89,7 @@ function Sidebar({ profile }) {
          
             let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
             setCoursePercent(percentage);
+
             console.log(percentage);
             let diff = maxcoursesec - courseViewSec;
             let diffmin = Math.floor(diff / 60);
@@ -99,7 +102,7 @@ function Sidebar({ profile }) {
       });;
       console.log('ID'+ router.query.id);
     }
-  },[])
+  },[router])
 
   return (
     <div className="container-1 sticky-side-bar">
