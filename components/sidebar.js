@@ -46,7 +46,7 @@ function Sidebar({ profile }) {
       // fetch('/courseView//get_course_view_data',moduleViewData)
 
       fetch(
-        process.env.NEXT_PUBLIC_API_URL + "courseView/get_any_course_chapter_viewed",
+        process.env.NEXT_PUBLIC_API_URL + "/courseView/get_any_course_chapter_viewed",
         {
           method: "POST",
           body: moduleViewData,
