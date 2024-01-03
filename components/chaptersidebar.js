@@ -96,7 +96,7 @@ function Chaptersidebar({
         <small>Knowledge Transfer</small>
       </div>
       <div className="sidebar_thumnail">
-        {profile.role != "trainer" || profile.role != "admin"  ? (
+        {profile.role != "trainer" && profile.role != "admin"  ? (
           <div className="image-overlay">
             <p className="overlay-text">{moduleName}</p>
             <div class="overlay-progress-bar">

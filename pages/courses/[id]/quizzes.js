@@ -317,10 +317,10 @@ function Page() {
             </div>
             {showSubmitButton &&
               <>
-                <div className="alert-box">
+                {/* <div className="alert-box">
                   <input className="checkbox-box" type="checkbox" required id="checkmark" />
                   <label for="checkmark"><span>Make sure that all the answers are marked</span></label>
-                </div>
+                </div> */}
                 <div className="button-container d-flex">
                   <button type="submit" className="submit-btn"
                     style={{ backgroundColor: "#008bd6" }} name="submitbtn1" onClick={() => assignSubmitButton("submitted")}>Submit</button>
