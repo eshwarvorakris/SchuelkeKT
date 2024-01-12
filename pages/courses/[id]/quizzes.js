@@ -248,6 +248,7 @@ function Page() {
 
             <div className="quiz-heading">
               <h5>Questions</h5>
+
             </div>
 
             <div className="quiz-container">
@@ -259,11 +260,19 @@ function Page() {
                 }
                 return (
                   <div className="question-1" key={`quest${index}}`}>
-                    <div className="question">
+                    <div className="question mb-3">
                       <span>{index + 1}. {item.question}</span>
+
+                      
                       <input type="hidden" {...register(`questions[${index}][question]`)} defaultValue={item.id} />
                       {/* <div className="points">1 point</div> */}
                     </div>
+                    <div>
+                    <small className="py-5 text-success">
+                        {item.question_type == 'multiple' ? 'Multiple options can be selected for this question.' : ''}
+                      </small>
+                    </div>
+                      
                     <div className="question-options" id="group1">
                       {item?.options?.map((optionitem, optionindex) => {
                         //// console.log("checked = ", checkedInput)
