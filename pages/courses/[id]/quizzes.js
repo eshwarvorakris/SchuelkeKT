@@ -125,7 +125,7 @@ function Page() {
       //// console.log(res.data);
 
       if (submitButton == "drafted") {
-        helper.sweetalert.toast("Assignment saved to draft");
+        helper.sweetalert.toast("Assessment saved to draft");
       } else {
         setShowSubmitButton(false);
         if (res.data?.assignmentAttempt < maxAttemptAllowed) {
@@ -170,7 +170,7 @@ function Page() {
           });
         }
         //// console.log("show retry = ", showRetryButton);
-        helper.sweetalert.toast("Assignment Submitted");
+        helper.sweetalert.toast("Assessment Submitted");
       }
       //router.push("/dashboard");
     }).catch((error) => {
@@ -223,7 +223,7 @@ function Page() {
             <h4 id='failH4' className='d-none'><img src="/trainee-images/trainee-quiz-images/carbon_warning-filled.png"
               alt="warning symbol" className="icon" /> Try again once you are ready</h4>
             <div className="header-content">
-              <h6>Your Received <span className="text-danger pr-2" id='gotPercent'>70%</span> <span className='d-none' id='passPercent'>To Pass <span
+              <h6>You Received <span className="text-danger pr-2" id='gotPercent'>70%</span> <span className='d-none' id='passPercent'>To Pass <span
                 style={{ color: "#007CC2" }}>80% or Above</span></span>
               </h6>
               {showRetryButton &&

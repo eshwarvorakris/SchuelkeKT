@@ -31,7 +31,7 @@ const quizresultresult = () => {
                                 <h4><img src="/trainee-images/trainee-quiz-images/carbon_warning-filled.png"
                                         alt="warning symbol" class="icon"/> Try again once you are ready</h4>
                                 <div class="header-content">
-                                    <h6>Your Received <span class="text-danger pr-2">70%</span> To Pass <span
+                                    <h6>You Received <span class="text-danger pr-2">70%</span> To Pass <span
                                             style={{color: "#007CC2"}}>80% or Above</span>
                                     </h6>
                                     <a class="try-again" href="./trainee-quiz">
