@@ -225,7 +225,7 @@ const Page = () => {
 
         {(showAssignmentButton && coursePercent == 100) &&
           <div className="p-4" style={{ marginLeft: '3rem' }}>
-            <Link href={`/courses/${router?.query?.id}/quizzes`} type="button" className="btn btn-primary">Course Assignment</Link>
+            <Link href={`/courses/${router?.query?.id}/quizzes`} type="button" className="btn btn-primary">Course Assessment</Link>
           </div>
         }
 

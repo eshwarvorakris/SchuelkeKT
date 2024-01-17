@@ -113,7 +113,7 @@ function Page() {
     //// console.log('data',data.questions);
     await questionModel.create(formData).then((res) => {
       //// console.log(res)
-      helper.sweetalert.toast("Assignment Added");
+      helper.sweetalert.toast("Assessment Added");
       window.location.reload()
       setIsButtonDisabled(false);
       //setQuestionUpdated(Math.random());
