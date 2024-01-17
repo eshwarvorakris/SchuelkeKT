@@ -269,6 +269,7 @@ const questionAttemptController = class {
           answerAr = [];
           answerString = "";
           totalQuestion++;
+
           if (curQuestion.answer) {
             answeredQuestion++;
             if (Array.isArray(curQuestion.answer)) {
@@ -278,10 +279,16 @@ const questionAttemptController = class {
               answerAr = curQuestion.answer.split(',');
               answerString = curQuestion.answer;
             }
+
+            const getCorrectOption = await QuestionOption.findAll(
+              { where: { question_id: curQuestion.question, is_answer: true }, attributes: ['id', 'is_answer'] }
+            )
+
             const getOption = await QuestionOption.findAll(
               { where: { question_id: curQuestion.question, is_answer: true, id: answerAr }, attributes: ['id', 'is_answer'] }
             ).then(async (optionResult) => {
-              if (answerAr.length == optionResult.length) {
+
+              if (answerAr.length == optionResult.length && answerAr.length == getCorrectOption.length) {
                 //console.log(curQuestion.question, "correct");
                 is_correct = true;
                 correctQues.push(curQuestion.question);
