@@ -414,6 +414,9 @@ const VideoTab = ({item,position}) => {
                 </span>}
         </div>
       </div>
+          <br />
+          <p>Note: Please upload banner image of 1600 x 400 dimension for better visibility of the photo.</p>
+          
     </div>
   )
 }

@@ -199,6 +199,8 @@ const Addcourse = ({ categories }) => {
                                 <div>
 
                                     <h6>Upload Thumbnail image</h6>
+                                    <p>Note: Please upload an image of 660 x 690 dimension for better visibility of the photo</p>
+                                    <br /><br />
                                     <div className="img-container-btns d-flex">
                                         {
                                             (() => {

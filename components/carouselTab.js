@@ -167,6 +167,7 @@ const CarouselTab = ({position , item}) => {
           </span>
           <input {...register(`carousel_image_five_${position}`)} type="file" onChange={handleFileChange}   class="d-none" id="" accept="image/*"/>
         </div>
+        <p>Note: Please upload images of 1600 x 900 dimension for better visibility of the photo.</p>
         
       </div>
     </div>
