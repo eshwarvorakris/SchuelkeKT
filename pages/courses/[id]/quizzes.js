@@ -221,7 +221,7 @@ function Page() {
           <h4 id='quizTextHead'>To Boost Your Understanding</h4>
           <div className='d-none' id="resultDiv">
             <h4 id='failH4' className='d-none'><img src="/trainee-images/trainee-quiz-images/carbon_warning-filled.png"
-              alt="warning symbol" className="icon" /> Try again once you are ready</h4>
+              alt="warning symbol" className="icon" /> You have failed 2 attempts so please kindly review content again prior to another attempt.</h4>
             <div className="header-content">
               <h6>You Received <span className="text-danger pr-2" id='gotPercent'>70%</span> <span className='d-none' id='passPercent'>To Pass <span
                 style={{ color: "#007CC2" }}>80% or Above</span></span>

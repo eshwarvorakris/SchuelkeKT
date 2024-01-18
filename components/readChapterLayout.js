@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import AppContext from '../lib/appContext'
 import { Container, SSRProvider } from 'react-bootstrap'
+import SessionTimer from './sessionTimer'
+
 
 export default function ReadChapterLayout({ children }) {
   const [pageHeading,setPageHeading]=useState("Chapters");
@@ -19,7 +21,7 @@ export default function ReadChapterLayout({ children }) {
   return (
     <AppContext.Provider value={layoutValues}>
     <SSRProvider>
-
+    <SessionTimer sessionTimer={true} />
      {children}
 
     </SSRProvider>

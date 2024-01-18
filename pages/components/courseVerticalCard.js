@@ -23,7 +23,7 @@ export default function courseVerticalCard({ courseData, courseIndex }) {
           <div className="card-thumbnail">
             <img className="card-img card-img-top"
               src={courseImg}
-              style={{ maxHeight: '145px' }}
+              // style={{ maxHeight: '145px' }}
               alt="Card image cap" />
             {courseStatus == "locked" &&
               <>

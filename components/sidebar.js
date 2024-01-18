@@ -113,7 +113,7 @@ function Sidebar({ profile }) {
           <div className="trainee-brand-logo">
             <img src="/trainee-images/Schuelke_Logo 1-min.png" alt="" />
           </div>
-          <span className="trainee-brand-info mt-1 text-light">Knowledge Transfer {}</span>
+          <span className="trainee-brand-info mt-1 text-light">Knowledge Transfer (Online) {}</span>
           </Link>
           <ul className="nav nav-pills flex-column mb-auto text-light">
             <li className="nav-item">

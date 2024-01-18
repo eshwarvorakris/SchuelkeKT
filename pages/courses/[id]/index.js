@@ -156,7 +156,7 @@ const Page = () => {
       <form style={{ backgroundColor: 'white' }}>
 
       {profile?.role == 'trainee' ? <div className="header-heading">
-          <h5>My Progress {profile?.role} </h5>
+          <h5>My Progress </h5>
         </div>  :'' }
 
         {profile?.role == 'trainee' ?  <div className="progress-card">

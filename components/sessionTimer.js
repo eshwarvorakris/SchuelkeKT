@@ -6,8 +6,9 @@ export default function CheckTimer({ sessionTimer = false}) {
   useEffect(() => {
     var isSwalFired = false;
     const handleCursor = (e) => {
+
       counts = 0;
-      //// console.log("isSwalFired", isSwalFired);
+      // console.log("isSwalFired", isSwalFired);
       if(isSwalFired) {
         Swal.close();
       }
@@ -21,8 +22,9 @@ export default function CheckTimer({ sessionTimer = false}) {
         clearInterval(allSession);
       }
       const allSession = setInterval(function () {
+        console.log("count", counts);
+
         if (counts == process.env.NEXT_PUBLIC_TIMEOUT_SECOND) {
-          //// console.log("count", counts);
           isSwalFired = true;
           Swal.fire({
             title: 'Please move your mouse to continue',
@@ -42,6 +44,11 @@ export default function CheckTimer({ sessionTimer = false}) {
               counts = 0;
             }
           })
+        }
+
+        if (counts === 900) {
+          sessionStorage.removeItem("access_token");
+          window.location.assign("/login");
         }
         counts++;
       }, 1000);
