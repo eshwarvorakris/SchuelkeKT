@@ -28,8 +28,8 @@ const quizresultresult = () => {
                             <div class="content-header">
                                 {/* <!-- <h4>To Boost Your Understanding</h4> --> */}
 
-                                <h4><img src="/trainee-images/trainee-quiz-images/carbon_warning-filled.png"
-                                        alt="warning symbol" class="icon"/> You have failed 2 attempts so please kindly review content again prior to another attempt.</h4>
+                                <p className="text-center text-danger"><img src="/trainee-images/trainee-quiz-images/carbon_warning-filled.png"
+                                        alt="warning symbol" class="icon"/> You have failed 2 attempts so please kindly review content again prior to another attempt.</p>
                                 <div class="header-content">
                                     <h6>You Received <span class="text-danger pr-2">70%</span> To Pass <span
                                             style={{color: "#007CC2"}}>80% or Above</span>
