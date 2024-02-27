@@ -46,6 +46,8 @@ const EditCourse = () => {
         });
     }, [router, reset]);
 
+
+
     const onSubmit = handleSubmit(async (data) => {
         event.preventDefault();
         if(event.target.total_training_hour.value > 0) {
@@ -177,7 +179,7 @@ const EditCourse = () => {
                                     </h6>
                                     <select {...register("category_id")} className="selectaddcourse">
                                         {categories?.data?.map((item) => {
-                                            return (<option key={item.id} value={item.id}>{item.category_name}</option>)
+                                            return (<option key={item.id} value={item.id} selected={courseData.category?.category_name == item.category_name ? true : ''}>{item.category_name}</option>)
                                         })}
                                     </select>
                                 </div>

@@ -115,9 +115,9 @@ const Page = () => {
       {
         // console.log(result.nextElementSibling);
         // console.log(result.type , result.required);
-        if((result.value == "" || result.value == null) && result.name != "")
+        if((result.value == "" || result.value == null) && result.name != "" && !result.name.includes('do'))
         {
-          // console.log(result);
+
           result.nextElementSibling.nextElementSibling != null ? result.nextElementSibling.nextElementSibling.innerHTML = "Field is required" : ''
           formStatus = false
         }
@@ -143,6 +143,8 @@ const Page = () => {
 
     if(status == false)
     {
+    console.log('submitted');
+
       return;
     }
     setLoading(true);

@@ -14,6 +14,7 @@ import courseModel from "../../model/course.model";
 import AppContext from "../../lib/appContext";
 import { Player } from "video-react";
 import ChapterNavigationButtons from "../../components/chapterNavigationButtons";
+import Imageplayer from "../../components/imageplayer";
 function ChapterInfo() {
   const layoutValues = useContext(AppContext);
   const [modal, setModal] = useState("");
@@ -271,7 +272,7 @@ function ChapterInfo() {
           </div>
           <div className={"player-modal " + carouselModal}>
             {carouselModal == "active" ? (
-              <img alt=""player
+              <Imageplayer alt=""player
                 modalSwitch={handleCarouselModalSwitch}
                 images={[
                   content.carousel_image_one,
@@ -356,7 +357,7 @@ function ChapterInfo() {
             content.carousel_image_four != null ||
             content.carousel_image_five != null ? (
               <>
-                <img alt=""player
+                <Imageplayer alt=""
                   modalSwitch={handleCarouselModalSwitch}
                   images={[
                     content.carousel_image_one,

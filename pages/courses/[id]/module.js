@@ -288,8 +288,10 @@ function Page() {
                 <button type="button" className="add-module-btn" onClick={() => setModalStatus(true)}>Add Module +</button>
               </div>
               <div className="back-save-btn d-flex gap-4">
+              {layoutValues?.profile?.role == 'trainer' || layoutValues?.profile?.role == 'admin'  ? <Link className='btn btn-primary btn-sm save-btn'  href={`/courses/${QueryParam?.id}`} title="Preview">Preview</Link> : ''}
                 <Link href={`/courses/${router.query.id}/edit`}><button type="button" className="back-btn remove_button">Back</button></Link>
                 {/* <button type="submit" className="save-btn" ref={saveModuleButton}>Save</button> */}
+                
               </div>
               {/* <button type='button' className='btn btn-primary' onClick={() => setModalStatus(true)}>Add Module</button> */}
             </div>
