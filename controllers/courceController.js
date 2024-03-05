@@ -282,7 +282,7 @@ const courseController = class {
 
   async modules(req, res) {
     if (req.params.id !== undefined && req.params.id != "undefined") {
-      const module = await Module.findAll({ where: { course_id: req.params.id }, order: ['sequence_no','asc'] });
+      const module = await Module.findAll({ where: { course_id: req.params.id }, order: ['sequence_no'] });
       if (module) {
         return res.send({ data: module });
       }
