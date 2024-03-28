@@ -299,7 +299,7 @@ const EditCourse = () => {
                                         ><span style={{ 'color': '#008bd6' }}>ⓘ</span>
                                         </OverlayTrigger>
                                         </span></h6>
-                                    <input type="number" onWheel={(e) => e.target.blur()}  {...register("total_training_hour")}     min="1" required/>
+                                    <input type="number" step="any" className="form-control" onWheel={(e) => e.target.blur()}  {...register("total_training_hour")}     min="0" required/>
                                 </div>
                             </div>
                         </div>

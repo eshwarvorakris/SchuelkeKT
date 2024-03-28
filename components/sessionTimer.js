@@ -22,7 +22,7 @@ export default function CheckTimer({ sessionTimer = false}) {
         clearInterval(allSession);
       }
       const allSession = setInterval(function () {
-        console.log("count", counts);
+       
 
         if (counts == process.env.NEXT_PUBLIC_TIMEOUT_SECOND) {
           isSwalFired = true;

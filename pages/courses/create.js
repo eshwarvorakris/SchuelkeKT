@@ -32,11 +32,17 @@ const Addcourse = ({ categories }) => {
         event.preventDefault();
         setDisableBtn(true);
         //// console.log(event.target.course_name.value);
+        
         if (event.target.course_name.value != "" && event.target.total_modules.value != "" && event.target.course_launch_date.value != "" && event.target.week_duration.value != "" && event.target.total_training_hour.value != "") {
             if(event.target.total_training_hour.value > 0) {
                 const formData = new FormData(event.target);
                 var CurrentDate = moment().format();
                 formData.append('status_update_on', CurrentDate);
+                if(event.target.course_description.value == "")
+        {
+            console.log();
+            helper.sweetalert.toast("Please enter Course description !", "warning"); 
+        }
                 //// console.log(data, formData);
                 await courseModel.create(formData).then((res) => {
                     // console.clear();
@@ -44,7 +50,7 @@ const Addcourse = ({ categories }) => {
                     //setDisableBtn(false);
                     setModuleLink(`/courses/${res.data.id}/module`);
                     setAssignmentLink(`/courses/${res.data.id}/assessment`);
-                    helper.sweetalert.toast("course Created");
+                    helper.sweetalert.toast("course Created and has been saved in the trainer course creation page");
                     //router.push("/courses");
                 }).catch((error) => {
                     setDisableBtn(false);

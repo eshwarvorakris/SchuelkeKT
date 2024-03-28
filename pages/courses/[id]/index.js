@@ -37,6 +37,7 @@ const Page = () => {
   const moduleList = function () {
     if(router?.query?.id !== undefined) {
       courseModel.modules(QueryParam?.id, QueryParam).then((res) => {
+        
         setModules(res);
       }).catch((error) => {
         // console.log(error);
@@ -99,8 +100,10 @@ const Page = () => {
         //// console.log("course view", res.data.courseReDoneCount.re_done_count);
 
         let maxcoursemin = Math.floor(courseData?.data?.total_training_hour * 60);
+        
         let maxcoursesec = maxcoursemin * 60;
         let courseViewSec = 0;
+        console.log({maxcoursemin,maxcoursesec});
         if(res?.data?.courseViewData) {
           let perContentSec = 0;
           perContentSec = maxcoursesec / res?.data?.totalCourseContent;
@@ -143,6 +146,7 @@ const Page = () => {
     if (modules?.data && total_training_hour != undefined) {
       setModuleCount(modules.data.length);
       const totalMin = total_training_hour * 60;
+
       const perCourseMin = totalMin / modules.data.length;
       setPerModuleMin(perCourseMin);
       const hours = Math.floor(perCourseMin / 60);
@@ -205,7 +209,7 @@ const Page = () => {
           <h5>Modules </h5>
         </div>
 
-        {profile?.role == 'trainee' ? <div>
+        {profile?.role == 'trainee' || profile?.role == 'admin' ? <div>
         
           <div className="module-cards">
             {modules?.data?.map((item, index) => {
@@ -218,6 +222,7 @@ const Page = () => {
         </div> : ''}
 
         {modules?.data?.map((item, index) => {
+        
           return (
             <ModuleDetailCard key={`moduleDetail${item.id}`} moduleData={item} moduleIndex={index} moduleHourLeft={per_module_hour} perModuleMin={perModuleMin} />
           )

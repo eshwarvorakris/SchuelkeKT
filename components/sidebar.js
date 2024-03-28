@@ -57,7 +57,7 @@ function Sidebar({ profile }) {
           },
         }
       ).then(result=>{
-        console.log(result);
+        // console.log(result);
 
         return result.json();
       }).then(res=>{
@@ -90,7 +90,7 @@ function Sidebar({ profile }) {
             let percentage = parseInt((courseViewSec / maxcoursesec) * 100);
             setCoursePercent(percentage);
 
-            console.log(percentage);
+            // console.log(percentage);
             let diff = maxcoursesec - courseViewSec;
             let diffmin = Math.floor(diff / 60);
             let Hours = Math.floor(diffmin / 60);
@@ -100,7 +100,7 @@ function Sidebar({ profile }) {
           }
         }
       });;
-      console.log('ID'+ router.query.id);
+      // console.log('ID'+ router.query.id);
     }
   },[router])
 
